@@ -1,9 +1,9 @@
-<title>HHMI Janelia Menu Structure</title>
+<title>HHMI Janelia Menu</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400&display=swap">
 <style>
-/* Layout: a working site header with cascading dropdowns; below it, a panel that shows where the selected page sits. */
+/* Layout: fixed site header with cascading dropdowns over a full-screen hero image. */
 :root{
   --bg:#f2f4ee; --surface:#ffffff; --ink:#123a35; --muted:#5a6b65; --line:#cfd8cb;
   --hover:#e7eedc; --accent:#d6e6a7; --accent-ink:#123a35; --flag:#8b6e12; --shadow:0 10px 28px rgba(18,58,53,.14);
@@ -16,24 +16,26 @@
   --bg:#0e1a18; --surface:#16261f; --ink:#e3ebe3; --muted:#9bafa7; --line:#2d413b;
   --hover:#213730; --accent:#3b5530; --accent-ink:#e4f1c8; --flag:#d8b85a; --shadow:0 10px 28px rgba(0,0,0,.45); color-scheme:dark}
 body{background:var(--bg);color:var(--ink);font:15px/1.45 var(--body)}
-body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--surface)}
 .wrap{max-width:1320px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 code{font-family:var(--mono);font-size:12px;color:var(--muted);overflow-wrap:anywhere}
 button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;text-align:left}
 a,button{-webkit-tap-highlight-color:transparent}
 :focus-visible{outline:3px solid var(--flag);outline-offset:2px}
 
-header.site{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--surface);border-bottom:1px solid var(--line)}
-.bar{display:flex;align-items:center;gap:20px;min-height:68px}
-.brand{font:700 28px/1 var(--body);letter-spacing:-1.5px;white-space:nowrap}
-.brand small{font-size:13px;font-weight:400;letter-spacing:0;margin-left:8px;color:var(--muted)}
-.toggle{display:none;margin-left:auto;border:1px solid var(--line);border-radius:6px;padding:8px 12px;font-size:14px}
+header.site{position:fixed;top:0;left:0;right:0;z-index:20;padding-top:env(safe-area-inset-top,0px);background:linear-gradient(rgba(0,0,0,.55),rgba(0,0,0,0));color:#fff}
+.hero{position:fixed;inset:0;background:#123a35 url("https://www.hhmi.org/sites/default/files/styles/3840x2400/public/2024-01/hhmi-homepage-hero-desktop-1v3.jpg?itok=HIjV0wqK") center/cover no-repeat}
+html,body{height:100%}body{overflow:hidden}
+.bar{display:flex;align-items:center;gap:20px;min-height:84px}
+.brand{display:flex;color:#fff;flex:none}.brand svg{display:block}
+.toggle{display:none;margin-left:auto;color:#fff;border:1px solid rgba(255,255,255,.6);border-radius:6px;padding:8px 12px;font-size:14px}
 
 ul{list-style:none;margin:0;padding:0}
 .menubar{display:flex;gap:2px;margin-left:auto}
 .menubar>li{position:relative}
 .menubar>li>.it{padding:10px 12px;border-radius:6px;font-size:14px;font-weight:500;display:flex;gap:6px;align-items:center;white-space:nowrap}
-.menubar>li:hover>.it,.menubar>li.open>.it{background:var(--hover)}
+.menubar>li>.it{color:#fff}
+.menubar>li:hover>.it,.menubar>li.open>.it{background:rgba(255,255,255,.16)}
+.menubar .sub{color:var(--ink)}
 .chev{font-size:10px;opacity:.6;transition:transform .15s}
 
 .sub{position:absolute;box-sizing:border-box;width:240px;background:var(--surface);border:1px solid var(--line);padding:6px;display:none;z-index:5}
@@ -59,27 +61,13 @@ ul{list-style:none;margin:0;padding:0}
 .tech:hover{background:var(--hover);color:var(--ink)}
 .tech.sel{background:var(--accent);color:var(--accent-ink);border-color:transparent}
 
-main{padding-block:36px 56px;display:grid;gap:28px}
-.eyebrow{font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
-h1{font:500 clamp(30px,4vw,44px)/1.08 var(--display);margin:6px 0 10px;text-wrap:balance;letter-spacing:-.01em}
-.lede{color:var(--muted);max-width:68ch;margin:0}
-.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:20px 22px;display:grid;gap:10px;max-width:760px}
-.crumbs{display:flex;flex-wrap:wrap;gap:4px 8px;font-size:14px;color:var(--muted)}
-.crumbs span:last-child{color:var(--ink);font-weight:600}
-.crumbs i{font-style:normal;opacity:.6}
-.panel h2{font:500 26px/1.15 var(--display);margin:0}
-.panel .route{font-size:13px}
-.stats{display:flex;flex-wrap:wrap;gap:6px 22px;font-size:14px;color:var(--muted)}
-.stats b{color:var(--ink);font-variant-numeric:tabular-nums}
-.legend{display:flex;flex-wrap:wrap;gap:8px 20px;font-size:13px;color:var(--muted);align-items:center}
-.legend .tech,.legend .flag{margin:0}
-
 @media (max-width:1060px){
   .sub.leaf{max-height:none;overflow:visible}
   .toggle{display:block}
   .menubar{display:none;position:absolute;left:0;right:0;top:100%;background:var(--surface);border-bottom:1px solid var(--line);box-shadow:var(--shadow);flex-direction:column;gap:0;max-height:calc(100vh - 80px);overflow:auto;padding:8px max(16px,env(safe-area-inset-right,0px)) 16px max(16px,env(safe-area-inset-left,0px))}
   .menubar.show{display:flex}
-  .menubar>li>.it{padding:12px 8px;font-size:16px;width:100%}
+  .menubar>li>.it{padding:12px 8px;font-size:16px;width:100%;color:var(--ink)}
+  .menubar>li:hover>.it,.menubar>li.open>.it{background:var(--hover)}
   .sub,.sub.wide,.sub .sub,.menubar>li>.sub{position:static;width:auto;min-height:0;box-shadow:none;border:0;border-left:1px solid var(--line);border-radius:0;min-width:0;max-width:none;margin-left:12px;padding:2px 0 2px 6px}
   .sub li.has:hover>.sub{display:none}
   .sub li.has.open>.sub,.menubar>li.open>.sub{display:block}
@@ -90,26 +78,17 @@ h1{font:500 clamp(30px,4vw,44px)/1.08 var(--display);margin:6px 0 10px;text-wrap
 </style>
 
 <header class="site"><div class="wrap bar">
-  <div class="brand">HHMI<small>Howard Hughes Medical Institute</small></div>
+  <a class="brand" href="#" aria-label="HHMI home"><svg width="113" height="34" viewBox="0 0 128 38" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="HHMI"><title>HHMI Logo</title><g fill="currentColor" fill-rule="evenodd"><path d="M0,0 L10.6326783,0 L10.6326783,13.3585568 L10.7405466,13.3585568 C12.5660116,11.2287875 14.9303817,9.68631694 19.4398916,9.68631694 C24.4354642,9.68631694 29,12.719323 29,19.0532334 L29,38 L18.3673217,38 L18.3673217,23.5222432 C18.3673217,20.3299697 17.9908742,18.0954648 14.8753558,18.0954648 C13.0498908,18.0954648 10.6326783,18.9991344 10.6326783,23.4175076 L10.6326783,38 L0,38 L0,0"/><path d="M33,0 L43.6324017,0 L43.6324017,13.3585568 L43.7402717,13.3585568 C45.5657641,11.2287875 47.9301699,9.68631694 52.4419312,9.68631694 C57.4353955,9.68631694 62,12.719323 62,19.0532334 L62,38 L51.3671616,38 L51.3671616,23.5222432 C51.3671616,20.3299697 50.9907084,18.0954648 47.8751431,18.0954648 C46.0500873,18.0954648 43.6324017,18.9991344 43.6324017,23.4175076 L43.6324017,38 L33,38 L33,0"/><path d="M66,10.6843569 L76.2404845,10.6843569 L76.2404845,14.3158571 L76.3481689,14.3158571 C78.4913943,11.1568585 81.6011638,10 85.4612366,10 C88.4637577,10 91.6794677,11.5257864 92.9673213,14.2619302 C93.3958791,13.9469292 95.5391046,10 102.456195,10 C109.586474,10 112,14.8422855 112,19.2617162 L112,38 L101.38371,38 L101.38371,23.2103574 C101.38371,20.6317141 101.115589,18.3141451 97.8998787,18.3141451 C95.2182311,18.3141451 94.3079271,20.3684999 94.3079271,23.2103574 L94.3079271,38 L83.691637,38 L83.691637,23.2103574 C83.691637,20.6317141 83.4235158,18.3141451 80.2078057,18.3141451 C77.5261582,18.3141451 76.6162901,20.3684999 76.6162901,23.2103574 L76.6162901,38 L66,38 L66,10.6843569"/><polygon points="116 38 127 38 127 10 116 10"/><path d="M127.750439,7 C127.911577,6.50960867 128,5.98823666 128,5.45015141 C128,2.43931982 125.314083,0 121.999327,0 C118.686366,0 116,2.43931982 116,5.45015141 C116,5.98823666 116.088872,6.50960867 116.250009,7 L127.750439,7"/></g></svg></a>
   <button class="toggle" id="toggle" aria-expanded="false" aria-controls="menubar">Menu</button>
   <ul class="menubar" id="menubar" role="menubar" aria-label="Site navigation"></ul>
 </div></header>
 
-<main class="wrap">
-  <div>
-    <div class="eyebrow">HHMI Web Redesign · Prototype 9.27</div>
-    <h1>Full site menu</h1>
-    <p class="lede">Every page in the prototype, placed in one header with dropdowns. Hover or click a menu to open it. Items with ▸ open another level. Click any page to see where it sits.</p>
-  </div>
-  <div class="stats" id="stats"></div>
-  <div class="legend"><span><span class="tech">Tech</span> opens the question’s technical statement</span><span><span class="flag">Flagged</span> page is unreachable or hard to find in the prototype</span></div>
-  <section class="panel" aria-live="polite" id="panel"></section>
-</main>
+<div class="hero" role="img" aria-label="HHMI homepage hero image"></div>
 
 <script>
 var TREE={{TREE}};
 (function(){
-  var bar=document.getElementById('menubar'),panel=document.getElementById('panel'),toggle=document.getElementById('toggle');
+  var bar=document.getElementById('menubar'),toggle=document.getElementById('toggle');
   var mobile=function(){return window.matchMedia('(max-width:1060px)').matches};
   var pages=0,depthMax=0,selEl=null;
   function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
@@ -170,13 +149,7 @@ var TREE={{TREE}};
     if(mobile()){bar.classList.remove('show');toggle.setAttribute('aria-expanded','false')}
     else [].forEach.call(bar.children,closeAll);
   }
-  function render(path,route,flag){
-    var levels=path.length;
-    panel.innerHTML='<div class="eyebrow">Selected page · level '+levels+' of the menu</div>'+
-      '<div class="crumbs">'+path.map(function(p){return '<span>'+esc(p)+'</span>'}).join('<i>›</i>')+'</div>'+
-      '<h2>'+esc(path[path.length-1])+'</h2><code class="route">#/'+esc(route)+'</code>'+
-      (flag?'<div class="flag">'+esc(flag)+'</div>':'');
-  }
+  function render(){}
 
   TREE.forEach(function(n){
     var li=document.createElement('li');li.setAttribute('role','none');
@@ -193,8 +166,5 @@ var TREE={{TREE}};
   document.addEventListener('keydown',function(e){if(e.key==='Escape'){[].forEach.call(bar.children,closeAll)}});
   toggle.addEventListener('click',function(e){e.stopPropagation();var s=bar.classList.toggle('show');toggle.setAttribute('aria-expanded',s)});
 
-  document.getElementById('stats').innerHTML='<span><b>'+TREE.length+'</b> top-level menus</span><span><b>'+pages+'</b> menu entries (some hub pages appear twice: as a menu and as its own “overview” link)</span><span><b>'+depthMax+'</b> levels deep at most</span>';
-  render(['Janelia','Science','Open questions','Biology','What is a circuit actually computing?'],'janelia/questions/circuit-algorithms');
-  panel.querySelector('.eyebrow').textContent='Example of the deepest path · pick any page in the menu';
 })();
 </script>
