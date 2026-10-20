@@ -37,5 +37,5 @@ tree=[
 ]
 def cnt(n): return (1 if 'r' in n and not n.get('k') else 0)+sum(cnt(c) for c in n.get('k',[]))
 print(sum(cnt(n) for n in tree))
-t=open('tmpl2.html').read().replace('{{TREE}}',json.dumps(tree,ensure_ascii=False))
+t=open('tmpl2.html').read().replace('{{TREE}}',json.dumps(tree,ensure_ascii=False)).replace('{{LOGO}}',open('logo.svg').read())
 open('janelia-menu.html','w').write(t)
