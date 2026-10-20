@@ -1,0 +1,178 @@
+<title>HHMI Janelia Prototype Sitemap</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a site-architecture drawing. Each header menu item is a column; pages hang beneath it as a tree. */
+:root{
+  --bg:#f2f4ee; --surface:#ffffff; --ink:#123a35; --muted:#5a6b65; --line:#cfd8cb;
+  --accent:#d6e6a7; --accent-ink:#123a35; --tab:#123a35; --tab-ink:#eef2e6; --warn:#8b6e12;
+  --display:"Newsreader",Georgia,serif; --body:"IBM Plex Sans",system-ui,sans-serif; --mono:"IBM Plex Mono",ui-monospace,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0e1a18; --surface:#15241f; --ink:#e3ebe3; --muted:#9bafa7; --line:#2b3e39;
+  --accent:#3b5530; --accent-ink:#e4f1c8; --tab:#20352f; --tab-ink:#e9f0e2; --warn:#d8b85a; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0e1a18; --surface:#15241f; --ink:#e3ebe3; --muted:#9bafa7; --line:#2b3e39;
+  --accent:#3b5530; --accent-ink:#e4f1c8; --tab:#20352f; --tab-ink:#e9f0e2; --warn:#d8b85a; color-scheme:dark}
+body{background:var(--bg);color:var(--ink);font:15px/1.5 var(--body)}
+.wrap{max-width:1400px;margin:0 auto;padding-block:0;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3{font-family:var(--display);font-weight:500;text-wrap:balance;margin:0;letter-spacing:-.01em}
+h1{font-size:clamp(32px,4vw,48px);line-height:1.05}
+h2{font-size:clamp(24px,2.6vw,32px);line-height:1.15}
+h3{font-size:20px}
+p{margin:0;max-width:70ch}
+code{font-family:var(--mono);font-size:12px;color:var(--muted);overflow-wrap:anywhere}
+.eyebrow{font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+header.top{padding-block:40px 24px;display:grid;gap:14px;border-bottom:1px solid var(--line)}
+.stats{display:flex;flex-wrap:wrap;gap:8px 22px;font-size:14px;color:var(--muted)}
+.stats b{color:var(--ink);font-weight:600;font-variant-numeric:tabular-nums}
+.find{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);border-bottom:1px solid var(--line)}
+.find .wrap{display:flex;gap:12px;align-items:center;padding-block:10px;flex-wrap:wrap}
+.find input{flex:1 1 260px;min-width:0;padding:9px 12px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font:14px var(--body);border-radius:6px}
+.find input:focus-visible{outline:3px solid var(--warn);outline-offset:2px}
+.find span{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+section.block{padding-block:40px;display:grid;gap:20px;border-bottom:1px solid var(--line)}
+.lede{color:var(--muted);max-width:75ch}
+
+/* menu bars */
+.bars{display:grid;gap:14px}
+.bar{border:1px solid var(--line);border-radius:8px;background:var(--surface);overflow:hidden}
+.bar .cap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:10px 14px;font-size:13px;color:var(--muted);border-bottom:1px solid var(--line)}
+.bar .cap b{color:var(--ink);font-weight:600}
+.items{display:flex;flex-wrap:wrap;gap:6px;padding:12px 14px}
+.items span{display:inline-flex;flex-direction:column;gap:2px;padding:8px 12px;border-radius:6px;background:var(--bg);font-size:14px;font-weight:500}
+.items span code{font-size:11px}
+.items span.hl{background:var(--accent);color:var(--accent-ink)}
+.items span.hl code{color:var(--accent-ink);opacity:.8}
+
+/* trees */
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px;align-items:start}
+.col,.qcol,.orph{background:var(--surface);border:1px solid var(--line);border-radius:8px;overflow:hidden;min-width:0}
+.tab,.qcol header{background:var(--tab);color:var(--tab-ink);padding:10px 14px;display:grid;gap:2px}
+.menu{font-weight:600;font-size:15px}
+.act{font-size:11.5px;opacity:.8}
+.act code{color:inherit}
+ul.tree,ul.tree ul,ul.qlist{list-style:none;margin:0;padding:0}
+ul.tree{padding:12px 14px 14px}
+ul.tree ul{margin-left:7px;padding-left:14px;border-left:1px solid var(--line)}
+ul.tree ul>li{position:relative}
+ul.tree ul>li::before{content:"";position:absolute;left:-14px;top:15px;width:10px;border-top:1px solid var(--line)}
+.row{display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 8px;padding:5px 0}
+.row code{flex-basis:100%}
+.lbl{font-weight:500}
+ul.tree>li>.row .lbl{font-family:var(--display);font-size:19px}
+li.grp>.row .lbl{font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-family:var(--body)}
+ul.tree>li.grp>.row .lbl{font-family:var(--body);font-size:11px}
+.note{font-size:12px;color:var(--muted);flex-basis:100%}
+.tag{font-size:10.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:1px 6px;border-radius:4px;background:var(--accent);color:var(--accent-ink)}
+.home{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:baseline;padding:14px;border:1px dashed var(--line);border-radius:8px}
+.home b{font-family:var(--display);font-size:22px;font-weight:500}
+.split{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;align-items:start}
+.orph .tab{background:transparent;color:var(--ink);border-bottom:1px solid var(--line)}
+
+/* question library */
+.qgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;align-items:start}
+.theme{padding:12px 14px;border-top:1px solid var(--line)}
+.qcol header+.theme{border-top:0}
+.theme h4{margin:0 0 6px;font:600 13px/1.35 var(--body);color:var(--muted)}
+.qlist .row{padding:4px 0;border-bottom:1px dotted var(--line)}
+.qlist li:last-child .row{border-bottom:0}
+.qlist .lbl{font-size:14px}
+.tech{font-family:var(--mono);font-size:11px;color:var(--warn)}
+
+table{width:100%;border-collapse:collapse;font-size:14px}
+.tbl{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:8px}
+th,td{text-align:left;padding:9px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:600}
+tr:last-child td{border-bottom:0}
+td:first-child{font-weight:500;white-space:nowrap}
+@media (max-width:600px){td:first-child{white-space:normal}}
+ol.issues{margin:0;padding-left:20px;display:grid;gap:10px;max-width:90ch}
+ol.issues code{color:var(--ink)}
+.dim{opacity:.22}
+.hit>.row .lbl{background:var(--accent);color:var(--accent-ink);border-radius:3px;padding:0 3px}
+footer{padding-block:28px 48px;font-size:13px;color:var(--muted)}
+@media (prefers-reduced-motion:no-preference){.dim,.hit{transition:opacity .15s}}
+</style>
+
+<header class="top wrap">
+  <div class="eyebrow">HHMI Web Redesign · Prototype 9.27</div>
+  <h1>Prototype sitemap</h1>
+  <p class="lede">Every page in the 9.27 prototype, grouped under the menu item that opens it. I mapped this by running the prototype and following every link, so it shows what a visitor can actually reach.</p>
+  <div class="stats">
+    <span><b>{{N}}</b> unique pages</span><span><b>2</b> menu bars</span><span><b>36</b> open questions (×2 pages each)</span><span><b>0</b> broken links</span><span><b>2</b> orphan pages</span>
+  </div>
+</header>
+
+<div class="find"><div class="wrap">
+  <input id="q" type="search" placeholder="Find a page by name or URL, e.g. “fellows” or “labs/”" aria-label="Find a page">
+  <span id="count" aria-live="polite"></span>
+</div></div>
+
+<main>
+<section class="block wrap" id="menus">
+  <div><div class="eyebrow">Navigation</div><h2>Two levels of menu</h2></div>
+  <p class="lede">The HHMI header shows on every page. Inside Janelia, a second campus bar appears underneath it, and the HHMI header keeps “Janelia” highlighted.</p>
+  <div class="bars">
+    <div class="bar"><div class="cap"><b>HHMI header</b><span>every page · logo links to <code>#/</code></span></div>
+      <div class="items"><span>Programs<code>#/programs</code></span><span>Our scientists<code>#/scientists</code></span><span class="hl">Janelia<code>#/janelia</code></span><span>Shaping science<code>#/shaping-science</code></span><span>Science for everyone<code>#/engagement</code></span></div></div>
+    <div class="bar"><div class="cap"><b>Janelia campus bar</b><span>only on <code>#/janelia/…</code> pages · “Janelia Research Campus” links to <code>#/janelia</code></span></div>
+      <div class="items"><span>About Janelia<code>#/janelia/about</code></span><span>Science<code>#/janelia/science</code></span><span>People<code>#/janelia/people</code></span><span>Resources<code>#/janelia/resources</code></span><span class="hl">Join Janelia<code>#/janelia/join</code></span></div></div>
+    <div class="bar"><div class="cap"><b>Footer and top banner</b><span>every page</span></div>
+      <div class="items"><span>Find a program<code>#/programs</code></span><span>About HHMI<code>#/about</code></span><span>Shaping science<code>#/shaping-science</code></span><span>Education &amp; engagement<code>#/engagement</code></span><span>Prototype guide<code>#/guide</code></span><span>Banner: Design and source notes<code>#/guide</code></span></div></div>
+  </div>
+</section>
+
+<section class="block wrap" id="hhmi">
+  <div><div class="eyebrow">Level 1</div><h2>HHMI site</h2></div>
+  <div class="home"><b>Home</b><code>#/</code><span class="note" style="flex-basis:auto">Links into every section below, plus Janelia and “Explore your path”.</span></div>
+  <div class="cols">{{HHMI}}</div>
+  <div class="split"><section class="orph">{{OFF}}</section></div>
+</section>
+
+<section class="block wrap" id="janelia">
+  <div><div class="eyebrow">Level 2 · under “Janelia”</div><h2>Janelia Research Campus</h2></div>
+  <div class="home"><b>Janelia home</b><code>#/janelia</code><span class="note" style="flex-basis:auto">Links to all five campus sections, four featured questions, the four units, and the 20-year story.</span></div>
+  <div class="cols">{{JANELIA}}</div>
+  <div class="split"><section class="orph">{{JORPH}}</section></div>
+</section>
+
+<section class="block wrap" id="questions">
+  <div><div class="eyebrow">Janelia › Science › Open questions</div><h2>Open questions library</h2></div>
+  <p class="lede">36 questions, grouped by field and then by theme. Each question page (<code>#/janelia/questions/&lt;id&gt;</code>) has a companion technical statement at <code>…/&lt;id&gt;/technical</code>. Breadcrumbs read “Janelia / The science / Open questions”.</p>
+  <div class="qgrid">{{QLIB}}</div>
+</section>
+
+<section class="block wrap" id="cross">
+  <div><div class="eyebrow">Connections</div><h2>Where sections link across</h2></div>
+  <p class="lede">Links inside page content that jump between sections, or between HHMI and Janelia. The menus above don’t show these.</p>
+  <div class="tbl"><table><thead><tr><th>From</th><th>Links to</th></tr></thead><tbody>{{CROSS}}</tbody></table></div>
+</section>
+
+<section class="block wrap" id="issues">
+  <div><div class="eyebrow">For the redesign</div><h2>Things to look at</h2></div>
+  <ol class="issues">{{ISSUES}}</ol>
+</section>
+</main>
+<footer class="wrap">Source: HHMI_Janelia_Prototype_9.27.html. Every link the prototype renders was followed in a headless browser. Routes in the code that nothing links to are listed as orphans.</footer>
+
+<script>
+(function(){
+  var input=document.getElementById('q'),count=document.getElementById('count');
+  var items=[].slice.call(document.querySelectorAll('li.pg'));
+  function run(){
+    var t=input.value.trim().toLowerCase();
+    var hits=0;
+    document.querySelectorAll('li').forEach(function(li){li.classList.remove('dim','hit')});
+    if(!t){count.textContent=items.length+' pages listed';return}
+    var keep=new Set();
+    items.forEach(function(li){
+      if(li.dataset.s.indexOf(t)>-1){hits++;li.classList.add('hit');var p=li;while(p){if(p.tagName==='LI')keep.add(p);p=p.parentElement}}
+    });
+    document.querySelectorAll('li').forEach(function(li){if(!keep.has(li)&&!li.querySelector('.hit'))li.classList.add('dim')});
+    count.textContent=hits+' match'+(hits===1?'':'es');
+  }
+  input.addEventListener('input',run);run();
+})();
+</script>

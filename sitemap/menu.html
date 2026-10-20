@@ -1,0 +1,202 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"></head><body>
+<title>HHMI Janelia Menu Structure</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400&display=swap">
+<style>
+/* Layout: a working site header with cascading dropdowns; below it, a panel that shows where the selected page sits. */
+:root{
+  --bg:#f2f4ee; --surface:#ffffff; --ink:#123a35; --muted:#5a6b65; --line:#cfd8cb;
+  --hover:#e7eedc; --accent:#d6e6a7; --accent-ink:#123a35; --flag:#8b6e12; --shadow:0 10px 28px rgba(18,58,53,.14);
+  --display:"Newsreader",Georgia,serif; --body:"IBM Plex Sans",system-ui,sans-serif; --mono:"IBM Plex Mono",ui-monospace,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0e1a18; --surface:#16261f; --ink:#e3ebe3; --muted:#9bafa7; --line:#2d413b;
+  --hover:#213730; --accent:#3b5530; --accent-ink:#e4f1c8; --flag:#d8b85a; --shadow:0 10px 28px rgba(0,0,0,.45); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0e1a18; --surface:#16261f; --ink:#e3ebe3; --muted:#9bafa7; --line:#2d413b;
+  --hover:#213730; --accent:#3b5530; --accent-ink:#e4f1c8; --flag:#d8b85a; --shadow:0 10px 28px rgba(0,0,0,.45); color-scheme:dark}
+body{background:var(--bg);color:var(--ink);font:15px/1.45 var(--body)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--surface)}
+.wrap{max-width:1320px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+code{font-family:var(--mono);font-size:12px;color:var(--muted);overflow-wrap:anywhere}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;text-align:left}
+a,button{-webkit-tap-highlight-color:transparent}
+:focus-visible{outline:3px solid var(--flag);outline-offset:2px}
+
+header.site{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--surface);border-bottom:1px solid var(--line)}
+.bar{display:flex;align-items:center;gap:20px;min-height:68px}
+.brand{font:700 28px/1 var(--body);letter-spacing:-1.5px;white-space:nowrap}
+.brand small{font-size:13px;font-weight:400;letter-spacing:0;margin-left:8px;color:var(--muted)}
+.toggle{display:none;margin-left:auto;border:1px solid var(--line);border-radius:6px;padding:8px 12px;font-size:14px}
+
+ul{list-style:none;margin:0;padding:0}
+.menubar{display:flex;gap:2px;margin-left:auto}
+.menubar>li{position:relative}
+.menubar>li>.it{padding:10px 12px;border-radius:6px;font-size:14px;font-weight:500;display:flex;gap:6px;align-items:center;white-space:nowrap}
+.menubar>li:hover>.it,.menubar>li.open>.it{background:var(--hover)}
+.chev{font-size:10px;opacity:.6;transition:transform .15s}
+
+.sub{position:absolute;box-sizing:border-box;width:240px;background:var(--surface);border:1px solid var(--line);padding:6px;display:none;z-index:5}
+.sub.wide{width:330px}
+.sub.leaf{max-height:calc(100vh - 100px);overflow-y:auto;overscroll-behavior:contain}
+.menubar>li>.sub{top:calc(100% + 6px);left:0;border-radius:8px;box-shadow:var(--shadow)}
+.sub li{position:static}
+.sub .sub{top:-1px;left:calc(100% - 1px);min-height:calc(100% + 2px);border-radius:0 8px 8px 0;box-shadow:var(--shadow)}
+.menubar>li.open>.sub{display:block}
+.sub li.has:hover>.sub,.sub li.has.open>.sub{display:block}
+.sub li.has:hover>.it{background:var(--hover)}
+.it{display:flex;align-items:center;gap:8px;width:100%;padding:7px 10px;border-radius:5px;font-size:14px}
+.sub .it:hover,.sub li.has.open>.it{background:var(--hover)}
+.it .lbl{flex:1;min-width:0}
+.it .arr{color:var(--muted);font-size:12px}
+.it.sel{background:var(--accent);color:var(--accent-ink)}
+.flag{font-size:10px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--flag)}
+.head{padding:9px 10px 3px;font-size:10.5px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;color:var(--muted)}
+.head:not(:first-child){border-top:1px solid var(--line);margin-top:4px}
+.q{display:flex;align-items:flex-start;gap:4px}
+.q>.it{flex:1;min-width:0}
+.tech{flex:none;font-size:10.5px;font-family:var(--mono);color:var(--muted);border:1px solid var(--line);border-radius:4px;padding:3px 6px;margin-top:5px}
+.tech:hover{background:var(--hover);color:var(--ink)}
+.tech.sel{background:var(--accent);color:var(--accent-ink);border-color:transparent}
+
+main{padding-block:36px 56px;display:grid;gap:28px}
+.eyebrow{font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+h1{font:500 clamp(30px,4vw,44px)/1.08 var(--display);margin:6px 0 10px;text-wrap:balance;letter-spacing:-.01em}
+.lede{color:var(--muted);max-width:68ch;margin:0}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:20px 22px;display:grid;gap:10px;max-width:760px}
+.crumbs{display:flex;flex-wrap:wrap;gap:4px 8px;font-size:14px;color:var(--muted)}
+.crumbs span:last-child{color:var(--ink);font-weight:600}
+.crumbs i{font-style:normal;opacity:.6}
+.panel h2{font:500 26px/1.15 var(--display);margin:0}
+.panel .route{font-size:13px}
+.stats{display:flex;flex-wrap:wrap;gap:6px 22px;font-size:14px;color:var(--muted)}
+.stats b{color:var(--ink);font-variant-numeric:tabular-nums}
+.legend{display:flex;flex-wrap:wrap;gap:8px 20px;font-size:13px;color:var(--muted);align-items:center}
+.legend .tech,.legend .flag{margin:0}
+
+@media (max-width:1060px){
+  .sub.leaf{max-height:none;overflow:visible}
+  .toggle{display:block}
+  .menubar{display:none;position:absolute;left:0;right:0;top:100%;background:var(--surface);border-bottom:1px solid var(--line);box-shadow:var(--shadow);flex-direction:column;gap:0;max-height:calc(100vh - 80px);overflow:auto;padding:8px max(16px,env(safe-area-inset-right,0px)) 16px max(16px,env(safe-area-inset-left,0px))}
+  .menubar.show{display:flex}
+  .menubar>li>.it{padding:12px 8px;font-size:16px;width:100%}
+  .sub,.sub.wide,.sub .sub,.menubar>li>.sub{position:static;width:auto;min-height:0;box-shadow:none;border:0;border-left:1px solid var(--line);border-radius:0;min-width:0;max-width:none;margin-left:12px;padding:2px 0 2px 6px}
+  .sub li.has:hover>.sub{display:none}
+  .sub li.has.open>.sub,.menubar>li.open>.sub{display:block}
+  .it{padding:10px 8px}
+  li.open>.it .chev,li.open>.it .arr{transform:rotate(90deg)}
+}
+@media (prefers-reduced-motion:reduce){.chev{transition:none}}
+</style>
+
+<header class="site"><div class="wrap bar">
+  <div class="brand">HHMI<small>Howard Hughes Medical Institute</small></div>
+  <button class="toggle" id="toggle" aria-expanded="false" aria-controls="menubar">Menu</button>
+  <ul class="menubar" id="menubar" role="menubar" aria-label="Site navigation"></ul>
+</div></header>
+
+<main class="wrap">
+  <div>
+    <div class="eyebrow">HHMI Web Redesign · Prototype 9.27</div>
+    <h1>Full site menu</h1>
+    <p class="lede">Every page in the prototype, placed in one header with dropdowns. Hover or click a menu to open it. Items with ▸ open another level. Click any page to see where it sits.</p>
+  </div>
+  <div class="stats" id="stats"></div>
+  <div class="legend"><span><span class="tech">Tech</span> opens the question’s technical statement</span><span><span class="flag">Flagged</span> page is unreachable or hard to find in the prototype</span></div>
+  <section class="panel" aria-live="polite" id="panel"></section>
+</main>
+
+<script>
+var TREE=[{"l": "Programs", "r": "programs", "k": [{"l": "All programs", "r": "programs"}, {"l": "Program finder", "r": "programs/finder"}, {"l": "Compare programs", "r": "programs/compare"}, {"l": "Program pages", "k": [{"l": "HHMI Investigators", "r": "programs/investigators"}, {"l": "Freeman Hrabowski Scholars", "r": "programs/freeman-hrabowski-scholars"}, {"l": "Hanna H. Gray Fellows", "r": "programs/hanna-gray-fellows"}, {"l": "Gilliam Fellows", "r": "programs/gilliam-fellows"}, {"l": "Cech Fellows", "r": "programs/cech-fellows"}]}]}, {"l": "Our scientists", "r": "scientists", "k": [{"l": "All scientists", "r": "scientists"}, {"l": "Science & discoveries", "r": "scientists/discoveries", "k": [{"l": "All discoveries", "r": "scientists/discoveries"}, {"l": "Targeting hard-to-treat cancers", "r": "scientists/discoveries/ras-cancers"}, {"l": "Fruit fly nervous system map", "r": "scientists/discoveries/fly-connectome"}, {"l": "Plant defenses and growth", "r": "scientists/discoveries/plants"}, {"l": "Designing new proteins", "r": "scientists/discoveries/proteins"}, {"l": "From bacterial defense to CRISPR", "r": "scientists/discoveries/crispr"}, {"l": "How a cell senses touch", "r": "scientists/discoveries/touch"}, {"l": "A first summer in an HHMI lab", "r": "scientists/discoveries/first-research"}]}, {"l": "Scientist profiles", "k": [{"l": "David Baker", "r": "scientists/baker"}, {"l": "Jennifer A. N. Brophy", "r": "scientists/brophy"}, {"l": "Jennifer A. Doudna", "r": "scientists/doudna"}, {"l": "Danica Dougan", "r": "scientists/dougan"}, {"l": "Ardem Patapoutian", "r": "scientists/patapoutian"}, {"l": "Kevan Shokat", "r": "scientists/shokat"}]}]}, {"l": "Janelia", "r": "janelia", "k": [{"l": "Janelia home", "r": "janelia"}, {"l": "About Janelia", "r": "janelia/about", "k": [{"l": "About Janelia", "r": "janelia/about"}, {"l": "Life at Janelia", "r": "janelia/life"}, {"l": "How we work", "r": "janelia/how-we-work"}, {"l": "Janelia and HHMI", "r": "janelia/connections"}, {"l": "Janelia at 20", "r": "janelia/anniversary", "k": [{"l": "20 years overview", "r": "janelia/anniversary"}, {"l": "2006 · A different place to do science", "r": "janelia/anniversary/beginning"}, {"l": "2013 · Making neural activity visible", "r": "janelia/anniversary/gcamp"}, {"l": "2014 · Seeing beyond the old limits", "r": "janelia/anniversary/nobel"}, {"l": "2015 · Small molecules, new views", "r": "janelia/anniversary/fluor"}, {"l": "2020 · A map to explore, together", "r": "janelia/anniversary/hemibrain"}, {"l": "2024 · A virtual fly takes flight", "r": "janelia/anniversary/virtual-fly"}]}]}, {"l": "Science", "r": "janelia/science", "k": [{"l": "The science", "r": "janelia/science"}, {"l": "Open questions", "r": "janelia/questions", "k": [{"l": "All open questions", "r": "janelia/questions"}, {"l": "Biology", "k": [{"l": "All biology questions", "r": "janelia/questions/for/biology"}, {"l": "What is a circuit computing?", "k": [{"l": "What is a circuit actually computing?", "r": "janelia/questions/circuit-algorithms", "t": "janelia/questions/circuit-algorithms/technical"}, {"l": "Which neurons does a behavior depend on?", "r": "janelia/questions/visual-cell-types", "t": "janelia/questions/visual-cell-types/technical"}, {"l": "How does the brain keep its internal compass aligned with the world?", "r": "janelia/questions/anchoring-maps", "t": "janelia/questions/anchoring-maps/technical"}]}, {"l": "How do cells and molecules implement computation?", "k": [{"l": "What changes inside a neuron when a memory forms?", "r": "janelia/questions/memory-molecules", "t": "janelia/questions/memory-molecules/technical"}, {"l": "How do cells and synapses build a neural compass?", "r": "janelia/questions/attractor-biophysics", "t": "janelia/questions/attractor-biophysics/technical"}, {"l": "How can a single experience create a memory?", "r": "janelia/questions/one-shot-memory", "t": "janelia/questions/one-shot-memory/technical"}]}, {"l": "How does a whole vertebrate brain and body generate behavior?", "k": [{"l": "How does a whole vertebrate brain turn sensing into action?", "r": "janelia/questions/whole-brain-zebrafish", "t": "janelia/questions/whole-brain-zebrafish/technical"}, {"l": "How do internal states reshape the whole brain?", "r": "janelia/questions/internal-states", "t": "janelia/questions/internal-states/technical"}, {"l": "How does a brain generate complex social behavior?", "r": "janelia/questions/social-behavior", "t": "janelia/questions/social-behavior/technical"}, {"l": "What carries over from fly to fish?", "r": "janelia/questions/fly-to-vertebrate", "t": "janelia/questions/fly-to-vertebrate/technical"}]}]}, {"l": "AI", "k": [{"l": "All AI questions", "r": "janelia/questions/for/ai"}, {"l": "Can AI help build the tools the science depends on?", "k": [{"l": "Can we design better sensors?", "r": "janelia/questions/better-sensors", "t": "janelia/questions/better-sensors/technical"}, {"l": "Can AI design a microscope?", "r": "janelia/questions/instrument-design", "t": "janelia/questions/instrument-design/technical"}]}, {"l": "How do we learn and verify mechanism from measurement?", "k": [{"l": "Can one model explain a whole animal?", "r": "janelia/questions/whole-system-models", "t": "janelia/questions/whole-system-models/technical"}, {"l": "Can a simulated animal serve as an experiment?", "r": "janelia/questions/digital-twins", "t": "janelia/questions/digital-twins/technical"}, {"l": "When can data reveal a mechanism?", "r": "janelia/questions/identifiability", "t": "janelia/questions/identifiability/technical"}]}, {"l": "How can AI agents help with open-ended science?", "k": [{"l": "When should a research agent pause?", "r": "janelia/questions/research-agents", "t": "janelia/questions/research-agents/technical"}, {"l": "Can we capture what experts know but never write down?", "r": "janelia/questions/tacit-knowledge", "t": "janelia/questions/tacit-knowledge/technical"}, {"l": "How should scientists and AI agents work together?", "r": "janelia/questions/agent-interface", "t": "janelia/questions/agent-interface/technical"}, {"l": "How do we keep AI-run research accountable?", "r": "janelia/questions/accountable-agents", "t": "janelia/questions/accountable-agents/technical"}]}]}, {"l": "Theory", "k": [{"l": "All theory questions", "r": "janelia/questions/for/theory"}, {"l": "What are the right abstractions?", "k": [{"l": "What is the right way to describe a computation?", "r": "janelia/questions/levels-of-explanation", "t": "janelia/questions/levels-of-explanation/technical"}, {"l": "How do molecules shape behavior?", "r": "janelia/questions/molecules-behavior", "t": "janelia/questions/molecules-behavior/technical"}, {"l": "Do different brains solve problems the same way?", "r": "janelia/questions/universal-solutions", "t": "janelia/questions/universal-solutions/technical"}]}, {"l": "How do we constrain these abstractions with data?", "k": [{"l": "Why does the same circuit compute differently at different times?", "r": "janelia/questions/context-dependence", "t": "janelia/questions/context-dependence/technical"}, {"l": "Which experiment should come next?", "r": "janelia/questions/next-experiment", "t": "janelia/questions/next-experiment/technical"}, {"l": "Can theory invent new ways to measure?", "r": "janelia/questions/theory-guided-measurement", "t": "janelia/questions/theory-guided-measurement/technical"}]}, {"l": "Why are biological systems organized as they are?", "k": [{"l": "How do brains learn quickly without forgetting?", "r": "janelia/questions/fast-flexible-learning", "t": "janelia/questions/fast-flexible-learning/technical"}, {"l": "How does a brain stay the same while its parts change?", "r": "janelia/questions/stable-function", "t": "janelia/questions/stable-function/technical"}, {"l": "Why are biological systems built the way they are?", "r": "janelia/questions/biological-tradeoffs", "t": "janelia/questions/biological-tradeoffs/technical"}]}]}, {"l": "Tools", "k": [{"l": "All tools questions", "r": "janelia/questions/for/tools"}, {"l": "What reagents do we need?", "k": [{"l": "Can we make brighter, longer-lasting fluorescent molecules?", "r": "janelia/questions/better-fluorophores", "t": "janelia/questions/better-fluorophores/technical"}, {"l": "How do we attach a label to exactly what we want to see?", "r": "janelia/questions/labeling-strategies", "t": "janelia/questions/labeling-strategies/technical"}, {"l": "Can we build biosensors faster?", "r": "janelia/questions/faster-biosensors", "t": "janelia/questions/faster-biosensors/technical"}, {"l": "How can we change a single synapse?", "r": "janelia/questions/single-synapse", "t": "janelia/questions/single-synapse/technical"}]}, {"l": "What instruments do we need?", "k": [{"l": "Can we map a whole brain at every scale at once?", "r": "janelia/questions/imaging-across-scales", "t": "janelia/questions/imaging-across-scales/technical"}, {"l": "Can computation see beyond the microscope?", "r": "janelia/questions/computational-microscopy", "t": "janelia/questions/computational-microscopy/technical"}, {"l": "What should we measure in a working brain?", "r": "janelia/questions/multimodal-imaging", "t": "janelia/questions/multimodal-imaging/technical"}, {"l": "How do we measure a brain in motion?", "r": "janelia/questions/brain-in-motion", "t": "janelia/questions/brain-in-motion/technical"}]}]}]}, {"l": "Research units", "r": "janelia/units", "k": [{"l": "All research units", "r": "janelia/units"}, {"l": "Biology", "r": "janelia/units/biology"}, {"l": "Tools@HHMI", "r": "janelia/units/tools"}, {"l": "AI@HHMI", "r": "janelia/units/ai"}, {"l": "Theory@HHMI", "r": "janelia/units/theory"}]}]}, {"l": "People", "r": "janelia/people", "k": [{"l": "People and teams", "r": "janelia/people"}, {"l": "Leadership", "r": "janelia/leadership", "k": [{"l": "All leadership", "r": "janelia/leadership"}, {"l": "Nelson Spruston", "r": "janelia/leadership/spruston"}, {"l": "Gerry Rubin", "r": "janelia/leadership/rubin"}, {"l": "Luke Lavis", "r": "janelia/leadership/lavis"}, {"l": "Stephan Saalfeld", "r": "janelia/leadership/saalfeld"}, {"l": "Ann Hermundstad", "r": "janelia/leadership/hermundstad"}]}, {"l": "Lab heads", "r": "janelia/labs", "k": [{"l": "All lab heads", "r": "janelia/labs"}, {"l": "Gerry Rubin", "r": "janelia/labs/rubin"}, {"l": "Luke Lavis", "r": "janelia/labs/lavis"}, {"l": "Stephan Saalfeld", "r": "janelia/labs/saalfeld"}, {"l": "Ann Hermundstad", "r": "janelia/labs/hermundstad"}, {"l": "Nelson Spruston", "r": "janelia/labs/spruston"}, {"l": "Joshua Dudman", "r": "janelia/labs/dudman"}]}]}, {"l": "Resources", "r": "janelia/resources", "k": [{"l": "All resources", "r": "janelia/resources"}, {"l": "Research tools", "r": "janelia/resources/tools"}, {"l": "Data and code", "r": "janelia/resources/data"}]}, {"l": "Join Janelia", "r": "janelia/join", "k": [{"l": "Scientific careers", "r": "janelia/join"}, {"l": "Principal Scientists", "r": "janelia/join/principal-scientists"}, {"l": "AI Scientists", "r": "janelia/join/ai-scientists"}, {"l": "Group Leaders", "r": "janelia/join/group-leaders"}, {"l": "Other roles", "r": "janelia/join/other-roles"}, {"l": "Opportunities", "r": "janelia/join/opportunities", "f": "Not linked in prototype"}]}]}, {"l": "Shaping science", "r": "shaping-science", "k": [{"l": "Shaping how science is done", "r": "shaping-science"}, {"l": "Open science", "r": "shaping-science/open-science"}, {"l": "Science leadership & lab culture", "r": "shaping-science/science-leadership-lab-culture"}]}, {"l": "Science for everyone", "r": "engagement", "k": [{"l": "Science for everyone", "r": "engagement"}, {"l": "BioInteractive", "r": "engagement/biointeractive"}, {"l": "Science Education Alliance", "r": "engagement/sea"}, {"l": "Tangled Bank Studios", "r": "engagement/tangled-bank"}]}, {"l": "More", "k": [{"l": "About HHMI", "r": "about", "f": "Footer only in prototype"}, {"l": "Explore your path", "r": "careers/interests", "k": [{"l": "Start here", "r": "careers/interests"}, {"l": "Lead a laboratory", "r": "careers/interests/lead"}, {"l": "Pursue hands-on research", "r": "careers/interests/research"}, {"l": "Build AI for science", "r": "careers/interests/ai"}, {"l": "Find fellowship support", "r": "careers/interests/fellowships"}, {"l": "Contribute technical or professional expertise", "r": "careers/interests/professional"}], "f": "Not in any menu in prototype"}, {"l": "Other roles at HHMI", "r": "careers/other-roles"}, {"l": "Prototype guide", "r": "guide"}, {"l": "Janelia prototype guide", "r": "janelia/prototype-guide", "f": "Not linked in prototype"}]}];
+(function(){
+  var bar=document.getElementById('menubar'),panel=document.getElementById('panel'),toggle=document.getElementById('toggle');
+  var mobile=function(){return window.matchMedia('(max-width:1060px)').matches};
+  var pages=0,depthMax=0,selEl=null;
+  function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+
+  function build(nodes,path,depth){
+    var ul=document.createElement('ul');ul.className='sub';ul.setAttribute('role','menu');
+    var wide=nodes.some(function(n){return n.t});
+    if(wide)ul.classList.add('wide');
+    if(!nodes.some(function(n){return n.k&&n.k.some(function(c){return c.k})||(n.k&&n.r)}))ul.classList.add('leaf');
+    nodes.forEach(function(n){
+      if(!n.r&&n.k&&depth>0&&!n.k.some(function(c){return c.k&&c.r})&&nodes.length>1&&n.k.every(function(c){return!c.k})){
+        // heading group: render inline
+        var h=document.createElement('li');h.className='head';h.textContent=n.l;h.setAttribute('role','presentation');ul.appendChild(h);
+        n.k.forEach(function(c){ul.appendChild(item(c,path.concat(n.l),depth))});
+      } else ul.appendChild(item(n,path,depth));
+    });
+    return ul;
+  }
+  function item(n,path,depth){
+    var li=document.createElement('li');li.setAttribute('role','none');
+    var here=path.concat(n.l);
+    depthMax=Math.max(depthMax,depth+1);
+    var b=document.createElement('button');b.className='it';b.setAttribute('role','menuitem');
+    b.innerHTML='<span class="lbl">'+esc(n.l)+(n.f?'<br><span class="flag">'+esc(n.f)+'</span>':'')+'</span>'+(n.k?'<span class="arr">▸</span>':'');
+    li.appendChild(b);
+    if(n.k){
+      li.className='has';b.setAttribute('aria-haspopup','true');b.setAttribute('aria-expanded','false');
+      li.appendChild(build(n.k,here,depth+1));
+            b.addEventListener('click',function(e){e.stopPropagation();
+        var open=!li.classList.contains('open');
+        [].forEach.call(li.parentElement.children,function(s){if(s!==li)closeAll(s)});
+        li.classList.toggle('open',open);b.setAttribute('aria-expanded',open);});
+    } else {
+      pages++;
+      b.addEventListener('click',function(e){e.stopPropagation();select(b,here,n.r,n.f)});
+      if(n.t){pages++;
+        li.className='q';
+        var t=document.createElement('button');t.className='tech';t.textContent='Tech';t.setAttribute('role','menuitem');t.setAttribute('aria-label','Technical statement: '+n.l);
+        t.addEventListener('click',function(e){e.stopPropagation();select(t,here.concat('Technical statement'),n.t)});
+        li.appendChild(t);
+      }
+    }
+    return li;
+  }
+  function closeAll(li){li.classList.remove('open');var b=li.querySelector(':scope>.it');if(b&&b.hasAttribute('aria-expanded'))b.setAttribute('aria-expanded','false');li.querySelectorAll('li.open').forEach(function(x){x.classList.remove('open')})}
+  function levels(n){var w=0,m=0;(n.k||[]).forEach(function(c){if(c.k&&!(c.r===undefined&&c.k.every(function(x){return!x.k})))m=Math.max(m,levels(c))});return 1+m}
+  function anyWide(n){return(n.k||[]).some(function(c){return c.t||anyWide(c)})}
+  function position(li,n){
+    var sub=li.querySelector(':scope>.sub');sub.style.left='0px';
+    var chain=(levels(n)-1)*239+(anyWide(n)?330:240);
+    var L=li.getBoundingClientRect().left,max=window.innerWidth-16;
+    var off=0;if(L+chain>max)off=Math.max(16-L,max-chain-L);
+    sub.style.left=off+'px';
+  }
+  function select(el,path,route,flag){
+    if(selEl)selEl.classList.remove('sel');selEl=el;el.classList.add('sel');
+    render(path,route,flag);
+    if(mobile()){bar.classList.remove('show');toggle.setAttribute('aria-expanded','false')}
+    else [].forEach.call(bar.children,closeAll);
+  }
+  function render(path,route,flag){
+    var levels=path.length;
+    panel.innerHTML='<div class="eyebrow">Selected page · level '+levels+' of the menu</div>'+
+      '<div class="crumbs">'+path.map(function(p){return '<span>'+esc(p)+'</span>'}).join('<i>›</i>')+'</div>'+
+      '<h2>'+esc(path[path.length-1])+'</h2><code class="route">#/'+esc(route)+'</code>'+
+      (flag?'<div class="flag">'+esc(flag)+'</div>':'');
+  }
+
+  TREE.forEach(function(n){
+    var li=document.createElement('li');li.setAttribute('role','none');
+    var b=document.createElement('button');b.className='it';b.setAttribute('role','menuitem');b.setAttribute('aria-haspopup','true');b.setAttribute('aria-expanded','false');
+    b.innerHTML='<span>'+esc(n.l)+'</span><span class="chev">▾</span>';
+    li.appendChild(b);li.appendChild(build(n.k,[n.l],1));
+    var t;
+    li.addEventListener('mouseenter',function(){if(mobile())return;clearTimeout(t);position(li,n);[].forEach.call(bar.children,function(s){if(s!==li)closeAll(s)});li.classList.add('open');b.setAttribute('aria-expanded','true')});
+    li.addEventListener('mouseleave',function(){if(mobile())return;t=setTimeout(function(){closeAll(li)},220)});
+    b.addEventListener('click',function(e){e.stopPropagation();var open=!li.classList.contains('open');[].forEach.call(bar.children,closeAll);if(open){if(!mobile())position(li,n);li.classList.add('open');b.setAttribute('aria-expanded','true')}});
+    bar.appendChild(li);
+  });
+  document.addEventListener('click',function(){if(!mobile())[].forEach.call(bar.children,closeAll)});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'){[].forEach.call(bar.children,closeAll)}});
+  toggle.addEventListener('click',function(e){e.stopPropagation();var s=bar.classList.toggle('show');toggle.setAttribute('aria-expanded',s)});
+
+  document.getElementById('stats').innerHTML='<span><b>'+TREE.length+'</b> top-level menus</span><span><b>'+pages+'</b> menu entries (some hub pages appear twice: as a menu and as its own “overview” link)</span><span><b>'+depthMax+'</b> levels deep at most</span>';
+  render(['Janelia','Science','Open questions','Biology','What is a circuit actually computing?'],'janelia/questions/circuit-algorithms');
+  panel.querySelector('.eyebrow').textContent='Example of the deepest path · pick any page in the menu';
+})();
+</script>
+</body></html>

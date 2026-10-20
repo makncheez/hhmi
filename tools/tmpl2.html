@@ -1,0 +1,200 @@
+<title>HHMI Janelia Menu Structure</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400&display=swap">
+<style>
+/* Layout: a working site header with cascading dropdowns; below it, a panel that shows where the selected page sits. */
+:root{
+  --bg:#f2f4ee; --surface:#ffffff; --ink:#123a35; --muted:#5a6b65; --line:#cfd8cb;
+  --hover:#e7eedc; --accent:#d6e6a7; --accent-ink:#123a35; --flag:#8b6e12; --shadow:0 10px 28px rgba(18,58,53,.14);
+  --display:"Newsreader",Georgia,serif; --body:"IBM Plex Sans",system-ui,sans-serif; --mono:"IBM Plex Mono",ui-monospace,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0e1a18; --surface:#16261f; --ink:#e3ebe3; --muted:#9bafa7; --line:#2d413b;
+  --hover:#213730; --accent:#3b5530; --accent-ink:#e4f1c8; --flag:#d8b85a; --shadow:0 10px 28px rgba(0,0,0,.45); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0e1a18; --surface:#16261f; --ink:#e3ebe3; --muted:#9bafa7; --line:#2d413b;
+  --hover:#213730; --accent:#3b5530; --accent-ink:#e4f1c8; --flag:#d8b85a; --shadow:0 10px 28px rgba(0,0,0,.45); color-scheme:dark}
+body{background:var(--bg);color:var(--ink);font:15px/1.45 var(--body)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--surface)}
+.wrap{max-width:1320px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+code{font-family:var(--mono);font-size:12px;color:var(--muted);overflow-wrap:anywhere}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;text-align:left}
+a,button{-webkit-tap-highlight-color:transparent}
+:focus-visible{outline:3px solid var(--flag);outline-offset:2px}
+
+header.site{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--surface);border-bottom:1px solid var(--line)}
+.bar{display:flex;align-items:center;gap:20px;min-height:68px}
+.brand{font:700 28px/1 var(--body);letter-spacing:-1.5px;white-space:nowrap}
+.brand small{font-size:13px;font-weight:400;letter-spacing:0;margin-left:8px;color:var(--muted)}
+.toggle{display:none;margin-left:auto;border:1px solid var(--line);border-radius:6px;padding:8px 12px;font-size:14px}
+
+ul{list-style:none;margin:0;padding:0}
+.menubar{display:flex;gap:2px;margin-left:auto}
+.menubar>li{position:relative}
+.menubar>li>.it{padding:10px 12px;border-radius:6px;font-size:14px;font-weight:500;display:flex;gap:6px;align-items:center;white-space:nowrap}
+.menubar>li:hover>.it,.menubar>li.open>.it{background:var(--hover)}
+.chev{font-size:10px;opacity:.6;transition:transform .15s}
+
+.sub{position:absolute;box-sizing:border-box;width:240px;background:var(--surface);border:1px solid var(--line);padding:6px;display:none;z-index:5}
+.sub.wide{width:330px}
+.sub.leaf{max-height:calc(100vh - 100px);overflow-y:auto;overscroll-behavior:contain}
+.menubar>li>.sub{top:calc(100% + 6px);left:0;border-radius:8px;box-shadow:var(--shadow)}
+.sub li{position:static}
+.sub .sub{top:-1px;left:calc(100% - 1px);min-height:calc(100% + 2px);border-radius:0 8px 8px 0;box-shadow:var(--shadow)}
+.menubar>li.open>.sub{display:block}
+.sub li.has:hover>.sub,.sub li.has.open>.sub{display:block}
+.sub li.has:hover>.it{background:var(--hover)}
+.it{display:flex;align-items:center;gap:8px;width:100%;padding:7px 10px;border-radius:5px;font-size:14px}
+.sub .it:hover,.sub li.has.open>.it{background:var(--hover)}
+.it .lbl{flex:1;min-width:0}
+.it .arr{color:var(--muted);font-size:12px}
+.it.sel{background:var(--accent);color:var(--accent-ink)}
+.flag{font-size:10px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--flag)}
+.head{padding:9px 10px 3px;font-size:10.5px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;color:var(--muted)}
+.head:not(:first-child){border-top:1px solid var(--line);margin-top:4px}
+.q{display:flex;align-items:flex-start;gap:4px}
+.q>.it{flex:1;min-width:0}
+.tech{flex:none;font-size:10.5px;font-family:var(--mono);color:var(--muted);border:1px solid var(--line);border-radius:4px;padding:3px 6px;margin-top:5px}
+.tech:hover{background:var(--hover);color:var(--ink)}
+.tech.sel{background:var(--accent);color:var(--accent-ink);border-color:transparent}
+
+main{padding-block:36px 56px;display:grid;gap:28px}
+.eyebrow{font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+h1{font:500 clamp(30px,4vw,44px)/1.08 var(--display);margin:6px 0 10px;text-wrap:balance;letter-spacing:-.01em}
+.lede{color:var(--muted);max-width:68ch;margin:0}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:20px 22px;display:grid;gap:10px;max-width:760px}
+.crumbs{display:flex;flex-wrap:wrap;gap:4px 8px;font-size:14px;color:var(--muted)}
+.crumbs span:last-child{color:var(--ink);font-weight:600}
+.crumbs i{font-style:normal;opacity:.6}
+.panel h2{font:500 26px/1.15 var(--display);margin:0}
+.panel .route{font-size:13px}
+.stats{display:flex;flex-wrap:wrap;gap:6px 22px;font-size:14px;color:var(--muted)}
+.stats b{color:var(--ink);font-variant-numeric:tabular-nums}
+.legend{display:flex;flex-wrap:wrap;gap:8px 20px;font-size:13px;color:var(--muted);align-items:center}
+.legend .tech,.legend .flag{margin:0}
+
+@media (max-width:1060px){
+  .sub.leaf{max-height:none;overflow:visible}
+  .toggle{display:block}
+  .menubar{display:none;position:absolute;left:0;right:0;top:100%;background:var(--surface);border-bottom:1px solid var(--line);box-shadow:var(--shadow);flex-direction:column;gap:0;max-height:calc(100vh - 80px);overflow:auto;padding:8px max(16px,env(safe-area-inset-right,0px)) 16px max(16px,env(safe-area-inset-left,0px))}
+  .menubar.show{display:flex}
+  .menubar>li>.it{padding:12px 8px;font-size:16px;width:100%}
+  .sub,.sub.wide,.sub .sub,.menubar>li>.sub{position:static;width:auto;min-height:0;box-shadow:none;border:0;border-left:1px solid var(--line);border-radius:0;min-width:0;max-width:none;margin-left:12px;padding:2px 0 2px 6px}
+  .sub li.has:hover>.sub{display:none}
+  .sub li.has.open>.sub,.menubar>li.open>.sub{display:block}
+  .it{padding:10px 8px}
+  li.open>.it .chev,li.open>.it .arr{transform:rotate(90deg)}
+}
+@media (prefers-reduced-motion:reduce){.chev{transition:none}}
+</style>
+
+<header class="site"><div class="wrap bar">
+  <div class="brand">HHMI<small>Howard Hughes Medical Institute</small></div>
+  <button class="toggle" id="toggle" aria-expanded="false" aria-controls="menubar">Menu</button>
+  <ul class="menubar" id="menubar" role="menubar" aria-label="Site navigation"></ul>
+</div></header>
+
+<main class="wrap">
+  <div>
+    <div class="eyebrow">HHMI Web Redesign · Prototype 9.27</div>
+    <h1>Full site menu</h1>
+    <p class="lede">Every page in the prototype, placed in one header with dropdowns. Hover or click a menu to open it. Items with ▸ open another level. Click any page to see where it sits.</p>
+  </div>
+  <div class="stats" id="stats"></div>
+  <div class="legend"><span><span class="tech">Tech</span> opens the question’s technical statement</span><span><span class="flag">Flagged</span> page is unreachable or hard to find in the prototype</span></div>
+  <section class="panel" aria-live="polite" id="panel"></section>
+</main>
+
+<script>
+var TREE={{TREE}};
+(function(){
+  var bar=document.getElementById('menubar'),panel=document.getElementById('panel'),toggle=document.getElementById('toggle');
+  var mobile=function(){return window.matchMedia('(max-width:1060px)').matches};
+  var pages=0,depthMax=0,selEl=null;
+  function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+
+  function build(nodes,path,depth){
+    var ul=document.createElement('ul');ul.className='sub';ul.setAttribute('role','menu');
+    var wide=nodes.some(function(n){return n.t});
+    if(wide)ul.classList.add('wide');
+    if(!nodes.some(function(n){return n.k&&n.k.some(function(c){return c.k})||(n.k&&n.r)}))ul.classList.add('leaf');
+    nodes.forEach(function(n){
+      if(!n.r&&n.k&&depth>0&&!n.k.some(function(c){return c.k&&c.r})&&nodes.length>1&&n.k.every(function(c){return!c.k})){
+        // heading group: render inline
+        var h=document.createElement('li');h.className='head';h.textContent=n.l;h.setAttribute('role','presentation');ul.appendChild(h);
+        n.k.forEach(function(c){ul.appendChild(item(c,path.concat(n.l),depth))});
+      } else ul.appendChild(item(n,path,depth));
+    });
+    return ul;
+  }
+  function item(n,path,depth){
+    var li=document.createElement('li');li.setAttribute('role','none');
+    var here=path.concat(n.l);
+    depthMax=Math.max(depthMax,depth+1);
+    var b=document.createElement('button');b.className='it';b.setAttribute('role','menuitem');
+    b.innerHTML='<span class="lbl">'+esc(n.l)+(n.f?'<br><span class="flag">'+esc(n.f)+'</span>':'')+'</span>'+(n.k?'<span class="arr">▸</span>':'');
+    li.appendChild(b);
+    if(n.k){
+      li.className='has';b.setAttribute('aria-haspopup','true');b.setAttribute('aria-expanded','false');
+      li.appendChild(build(n.k,here,depth+1));
+            b.addEventListener('click',function(e){e.stopPropagation();
+        var open=!li.classList.contains('open');
+        [].forEach.call(li.parentElement.children,function(s){if(s!==li)closeAll(s)});
+        li.classList.toggle('open',open);b.setAttribute('aria-expanded',open);});
+    } else {
+      pages++;
+      b.addEventListener('click',function(e){e.stopPropagation();select(b,here,n.r,n.f)});
+      if(n.t){pages++;
+        li.className='q';
+        var t=document.createElement('button');t.className='tech';t.textContent='Tech';t.setAttribute('role','menuitem');t.setAttribute('aria-label','Technical statement: '+n.l);
+        t.addEventListener('click',function(e){e.stopPropagation();select(t,here.concat('Technical statement'),n.t)});
+        li.appendChild(t);
+      }
+    }
+    return li;
+  }
+  function closeAll(li){li.classList.remove('open');var b=li.querySelector(':scope>.it');if(b&&b.hasAttribute('aria-expanded'))b.setAttribute('aria-expanded','false');li.querySelectorAll('li.open').forEach(function(x){x.classList.remove('open')})}
+  function levels(n){var w=0,m=0;(n.k||[]).forEach(function(c){if(c.k&&!(c.r===undefined&&c.k.every(function(x){return!x.k})))m=Math.max(m,levels(c))});return 1+m}
+  function anyWide(n){return(n.k||[]).some(function(c){return c.t||anyWide(c)})}
+  function position(li,n){
+    var sub=li.querySelector(':scope>.sub');sub.style.left='0px';
+    var chain=(levels(n)-1)*239+(anyWide(n)?330:240);
+    var L=li.getBoundingClientRect().left,max=window.innerWidth-16;
+    var off=0;if(L+chain>max)off=Math.max(16-L,max-chain-L);
+    sub.style.left=off+'px';
+  }
+  function select(el,path,route,flag){
+    if(selEl)selEl.classList.remove('sel');selEl=el;el.classList.add('sel');
+    render(path,route,flag);
+    if(mobile()){bar.classList.remove('show');toggle.setAttribute('aria-expanded','false')}
+    else [].forEach.call(bar.children,closeAll);
+  }
+  function render(path,route,flag){
+    var levels=path.length;
+    panel.innerHTML='<div class="eyebrow">Selected page · level '+levels+' of the menu</div>'+
+      '<div class="crumbs">'+path.map(function(p){return '<span>'+esc(p)+'</span>'}).join('<i>›</i>')+'</div>'+
+      '<h2>'+esc(path[path.length-1])+'</h2><code class="route">#/'+esc(route)+'</code>'+
+      (flag?'<div class="flag">'+esc(flag)+'</div>':'');
+  }
+
+  TREE.forEach(function(n){
+    var li=document.createElement('li');li.setAttribute('role','none');
+    var b=document.createElement('button');b.className='it';b.setAttribute('role','menuitem');b.setAttribute('aria-haspopup','true');b.setAttribute('aria-expanded','false');
+    b.innerHTML='<span>'+esc(n.l)+'</span><span class="chev">▾</span>';
+    li.appendChild(b);li.appendChild(build(n.k,[n.l],1));
+    var t;
+    li.addEventListener('mouseenter',function(){if(mobile())return;clearTimeout(t);position(li,n);[].forEach.call(bar.children,function(s){if(s!==li)closeAll(s)});li.classList.add('open');b.setAttribute('aria-expanded','true')});
+    li.addEventListener('mouseleave',function(){if(mobile())return;t=setTimeout(function(){closeAll(li)},220)});
+    b.addEventListener('click',function(e){e.stopPropagation();var open=!li.classList.contains('open');[].forEach.call(bar.children,closeAll);if(open){if(!mobile())position(li,n);li.classList.add('open');b.setAttribute('aria-expanded','true')}});
+    bar.appendChild(li);
+  });
+  document.addEventListener('click',function(){if(!mobile())[].forEach.call(bar.children,closeAll)});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'){[].forEach.call(bar.children,closeAll)}});
+  toggle.addEventListener('click',function(e){e.stopPropagation();var s=bar.classList.toggle('show');toggle.setAttribute('aria-expanded',s)});
+
+  document.getElementById('stats').innerHTML='<span><b>'+TREE.length+'</b> top-level menus</span><span><b>'+pages+'</b> menu entries (some hub pages appear twice: as a menu and as its own “overview” link)</span><span><b>'+depthMax+'</b> levels deep at most</span>';
+  render(['Janelia','Science','Open questions','Biology','What is a circuit actually computing?'],'janelia/questions/circuit-algorithms');
+  panel.querySelector('.eyebrow').textContent='Example of the deepest path · pick any page in the menu';
+})();
+</script>

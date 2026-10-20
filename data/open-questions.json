@@ -1,0 +1,233 @@
+{
+ "q": [
+  [
+   "better-sensors",
+   "ai",
+   "ai-1",
+   "Can we design better sensors?"
+  ],
+  [
+   "instrument-design",
+   "ai",
+   "ai-1",
+   "Can AI design a microscope?"
+  ],
+  [
+   "whole-system-models",
+   "ai",
+   "ai-2",
+   "Can one model explain a whole animal?"
+  ],
+  [
+   "digital-twins",
+   "ai",
+   "ai-2",
+   "Can a simulated animal serve as an experiment?"
+  ],
+  [
+   "identifiability",
+   "ai",
+   "ai-2",
+   "When can data reveal a mechanism?"
+  ],
+  [
+   "research-agents",
+   "ai",
+   "ai-3",
+   "When should a research agent pause?"
+  ],
+  [
+   "tacit-knowledge",
+   "ai",
+   "ai-3",
+   "Can we capture what experts know but never write down?"
+  ],
+  [
+   "agent-interface",
+   "ai",
+   "ai-3",
+   "How should scientists and AI agents work together?"
+  ],
+  [
+   "accountable-agents",
+   "ai",
+   "ai-3",
+   "How do we keep AI-run research accountable?"
+  ],
+  [
+   "levels-of-explanation",
+   "theory",
+   "theory-1",
+   "What is the right way to describe a computation?"
+  ],
+  [
+   "molecules-behavior",
+   "theory",
+   "theory-1",
+   "How do molecules shape behavior?"
+  ],
+  [
+   "universal-solutions",
+   "theory",
+   "theory-1",
+   "Do different brains solve problems the same way?"
+  ],
+  [
+   "context-dependence",
+   "theory",
+   "theory-2",
+   "Why does the same circuit compute differently at different times?"
+  ],
+  [
+   "next-experiment",
+   "theory",
+   "theory-2",
+   "Which experiment should come next?"
+  ],
+  [
+   "theory-guided-measurement",
+   "theory",
+   "theory-2",
+   "Can theory invent new ways to measure?"
+  ],
+  [
+   "fast-flexible-learning",
+   "theory",
+   "theory-3",
+   "How do brains learn quickly without forgetting?"
+  ],
+  [
+   "stable-function",
+   "theory",
+   "theory-3",
+   "How does a brain stay the same while its parts change?"
+  ],
+  [
+   "biological-tradeoffs",
+   "theory",
+   "theory-3",
+   "Why are biological systems built the way they are?"
+  ],
+  [
+   "better-fluorophores",
+   "tools",
+   "tools-1",
+   "Can we make brighter, longer-lasting fluorescent molecules?"
+  ],
+  [
+   "labeling-strategies",
+   "tools",
+   "tools-1",
+   "How do we attach a label to exactly what we want to see?"
+  ],
+  [
+   "faster-biosensors",
+   "tools",
+   "tools-1",
+   "Can we build biosensors faster?"
+  ],
+  [
+   "single-synapse",
+   "tools",
+   "tools-1",
+   "How can we change a single synapse?"
+  ],
+  [
+   "imaging-across-scales",
+   "tools",
+   "tools-2",
+   "Can we map a whole brain at every scale at once?"
+  ],
+  [
+   "computational-microscopy",
+   "tools",
+   "tools-2",
+   "Can computation see beyond the microscope?"
+  ],
+  [
+   "multimodal-imaging",
+   "tools",
+   "tools-2",
+   "What should we measure in a working brain?"
+  ],
+  [
+   "brain-in-motion",
+   "tools",
+   "tools-2",
+   "How do we measure a brain in motion?"
+  ],
+  [
+   "circuit-algorithms",
+   "biology",
+   "biology-1",
+   "What is a circuit actually computing?"
+  ],
+  [
+   "visual-cell-types",
+   "biology",
+   "biology-1",
+   "Which neurons does a behavior depend on?"
+  ],
+  [
+   "anchoring-maps",
+   "biology",
+   "biology-1",
+   "How does the brain keep its internal compass aligned with the world?"
+  ],
+  [
+   "memory-molecules",
+   "biology",
+   "biology-2",
+   "What changes inside a neuron when a memory forms?"
+  ],
+  [
+   "attractor-biophysics",
+   "biology",
+   "biology-2",
+   "How do cells and synapses build a neural compass?"
+  ],
+  [
+   "one-shot-memory",
+   "biology",
+   "biology-2",
+   "How can a single experience create a memory?"
+  ],
+  [
+   "whole-brain-zebrafish",
+   "biology",
+   "biology-3",
+   "How does a whole vertebrate brain turn sensing into action?"
+  ],
+  [
+   "internal-states",
+   "biology",
+   "biology-3",
+   "How do internal states reshape the whole brain?"
+  ],
+  [
+   "social-behavior",
+   "biology",
+   "biology-3",
+   "How does a brain generate complex social behavior?"
+  ],
+  [
+   "fly-to-vertebrate",
+   "biology",
+   "biology-3",
+   "What carries over from fly to fish?"
+  ]
+ ],
+ "themes": {
+  "ai-1": "Can AI help build the tools the science depends on?",
+  "ai-2": "How do we learn and verify mechanism from measurement?",
+  "ai-3": "How can AI agents help with open-ended science?",
+  "theory-1": "What are the right abstractions?",
+  "theory-2": "How do we constrain these abstractions with data?",
+  "theory-3": "Why are biological systems organized as they are?",
+  "tools-1": "What reagents do we need?",
+  "tools-2": "What instruments do we need?",
+  "biology-1": "What is a circuit computing?",
+  "biology-2": "How do cells and molecules implement computation?",
+  "biology-3": "How does a whole vertebrate brain and body generate behavior?"
+ }
+}
