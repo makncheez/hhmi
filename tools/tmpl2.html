@@ -19,7 +19,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;text-a
 .hero{position:fixed;inset:0;background:#111 url("https://www.hhmi.org/sites/default/files/styles/3840x2400/public/2024-01/hhmi-homepage-hero-desktop-1v3.jpg?itok=HIjV0wqK") center/cover no-repeat}
 
 header.site{position:fixed;top:0;left:0;right:0;z-index:20;padding-top:env(safe-area-inset-top,0px);background:var(--black)}
-.bar{display:flex;align-items:center;gap:24px;height:76px}
+.bar{display:flex;align-items:center;gap:24px;height:76px;padding-left:max(32px,env(safe-area-inset-left,0px));padding-right:max(32px,env(safe-area-inset-right,0px))}
 .brand{display:flex;color:var(--white);flex:none}
 .brand svg{display:block}
 .top{display:flex;gap:4px;margin:0 0 0 auto;list-style:none;padding:0}
@@ -93,7 +93,7 @@ header.site{position:fixed;top:0;left:0;right:0;z-index:20;padding-top:env(safe-
 </style>
 
 <div class="hero" role="img" aria-label="HHMI homepage hero image"></div>
-<header class="site"><div class="wrap bar">
+<header class="site"><div class="bar">
   <a class="brand" href="#" aria-label="HHMI home">{{LOGO}}</a>
   <button class="toggle" id="toggle" aria-expanded="false" aria-controls="top">Menu</button>
   <ul class="top" id="top"></ul>

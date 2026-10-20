@@ -7,8 +7,8 @@ Working files for the HHMI / Janelia website redesign.
 | Path | What it is |
 | --- | --- |
 | `prototype/HHMI_Janelia_Prototype_9.27.html` | The 9.27 clickable prototype (single-page app, hash routes like `#/janelia/science`). Open it in a browser. |
-| `sitemap/sitemap.html` | Sitemap: both menu bars, every page under its section, cross-section links, and issues to review. |
-| `sitemap/menu.html` | Full site menu: a working header with cascading dropdowns containing every page. |
+| `studies/sitemap.html` | Sitemap: both menu bars, every page under its section, cross-section links, and issues to review. |
+| `studies/menu.html` | Full site menu: a black mega menu containing every page, over a full-screen hero image. |
 | `data/pages.json` | Every page found by crawling the prototype: title, heading, breadcrumb, menus, and outbound links. |
 | `data/open-questions.json` | The 36 Janelia open questions with their field and theme. |
 | `tools/` | Scripts that crawl the prototype and generate the sitemap and menu pages. |
