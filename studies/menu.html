@@ -157,7 +157,7 @@ var INTRO={
     var rail='<ul class="rail" role="tablist" aria-label="Janelia sections">'+home.map(function(h){return '<li role="presentation"><a href="#" data-r="'+esc(h.r)+'">'+esc(h.l)+'</a></li>'}).join('')+
       secs.map(function(s,i){return '<li role="presentation"><button role="tab" id="jt'+i+'" aria-controls="jp'+i+'" aria-selected="'+(i===0)+'" data-i="'+i+'">'+esc(s.l)+'<span class="arr" aria-hidden="true">→</span></button></li>'}).join('')+'</ul>';
     var panels=secs.map(function(s,i){
-      return '<div class="tabpanel" role="tabpanel" id="jp'+i+'" aria-labelledby="jt'+i+'"'+(i?' hidden':'')+'><div class="tabhead"><h3>'+esc(s.l)+'</h3>'+(s.r?'<a href="#" data-r="'+esc(s.r)+'">Overview</a>':'')+'</div>'+columns(s,'Overview')+'</div>';
+      return '<div class="tabpanel" role="tabpanel" id="jp'+i+'" aria-labelledby="jt'+i+'"'+(i?' hidden':'')+'><div class="tabhead"><h3>'+esc(s.l)+'</h3>'+'</div>'+columns(s,'Overview')+'</div>';
     }).join('');
     return '<div class="railwrap">'+rail+'<div>'+panels+'</div></div>';
   }
