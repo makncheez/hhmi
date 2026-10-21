@@ -5,7 +5,7 @@
 <style>
 /* Layout: fixed black header; each top item opens a full-width black mega panel. Janelia uses a left rail of sections. */
 :root{
-  --black:#000; --white:#fff; --dim:#9a9a9a; --soft:#cfcfcf; --rule:#2b2b2b; --flag:#d8b85a;
+  --black:#000; --white:#fff; --dim:#9a9a9a; --soft:#cfcfcf; --rule:#2b2b2b; --flag:#d8b85a; --green:rgb(0,154,76);
   --font:"Instrument Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
   color-scheme:dark;
 }
@@ -24,14 +24,14 @@ header.site{position:fixed;top:0;left:0;right:0;z-index:20;padding-top:env(safe-
 .brand svg{display:block}
 .top{display:flex;gap:4px;margin:0 0 0 auto;list-style:none;padding:0}
 .top>li>button{display:flex;align-items:center;gap:8px;height:76px;padding:0 14px;font-size:15px;position:relative}
-.top>li>button::after{content:"";position:absolute;left:14px;right:14px;bottom:20px;height:1px;background:var(--white);transform:scaleX(0);transform-origin:left;transition:transform .2s}
+.top>li>button::after{content:"";position:absolute;left:14px;right:14px;bottom:20px;height:2px;background:var(--green);transform:scaleX(0);transform-origin:left;transition:transform .2s}
 .top>li>button:hover::after,.top>li.open>button::after{transform:scaleX(1)}
 .chev{width:9px;height:9px;transition:transform .2s}
 .top>li.open .chev{transform:rotate(180deg)}
 .toggle{display:none;margin-left:auto;border:1px solid var(--rule);padding:8px 14px}
 
-.mega{position:fixed;left:0;right:0;top:calc(76px + env(safe-area-inset-top,0px));background:var(--black);border-top:1px solid var(--rule);display:none;max-height:calc(100vh - 76px);overflow-y:auto;overscroll-behavior:contain}
-.top>li.open>.mega{display:block}
+.mega{position:fixed;left:0;right:0;top:calc(76px + env(safe-area-inset-top,0px));background:var(--black);border-top:1px solid var(--rule);max-height:calc(100vh - 76px);overflow-y:auto;overscroll-behavior:contain;z-index:1;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .22s ease,visibility 0s linear .22s}
+.top>li.open>.mega{z-index:2;opacity:1;visibility:visible;pointer-events:auto;transition:opacity .22s ease,visibility 0s}
 .mega .inner{display:grid;grid-template-columns:250px minmax(0,1fr);gap:48px;padding-block:40px 48px;padding-left:max(32px,env(safe-area-inset-left,0px));padding-right:max(32px,env(safe-area-inset-right,0px))}
 .intro h2{font-size:36px;line-height:1.05;letter-spacing:-.01em;margin:0 0 12px}
 .intro p{color:var(--dim);margin:0 0 18px;max-width:30ch}
@@ -79,7 +79,8 @@ header.site{position:fixed;top:0;left:0;right:0;z-index:20;padding-top:env(safe-
   .top>li{border-bottom:1px solid var(--rule)}
   .top>li>button{height:auto;padding:18px 0;font-size:20px;width:100%;justify-content:space-between}
   .top>li>button::after{display:none}
-  .mega{position:static;max-height:none;border:0;overflow:visible}
+  .mega{position:static;max-height:none;border:0;overflow:visible;display:none;opacity:1;visibility:visible;pointer-events:auto;transition:none}
+  .top>li.open>.mega{display:block}
   .mega .inner{padding-left:0;padding-right:0}
   .mega .inner,.railwrap{grid-template-columns:minmax(0,1fr);gap:24px;padding-block:4px 24px}
   .intro h2{display:none}
@@ -89,7 +90,7 @@ header.site{position:fixed;top:0;left:0;right:0;z-index:20;padding-top:env(safe-
   .cols,.cols.c4{grid-template-columns:1fr 1fr;gap:24px}
 }
 @media (max-width:560px){.cols,.cols.c4{grid-template-columns:minmax(0,1fr)}}
-@media (prefers-reduced-motion:reduce){.chev,.top>li>button::after,.arr{transition:none}}
+@media (prefers-reduced-motion:reduce){.chev,.top>li>button::after,.arr,.mega,.top>li.open>.mega{transition:none}}
 </style>
 
 <div class="hero" role="img" aria-label="HHMI homepage hero image"></div>
@@ -101,6 +102,7 @@ header.site{position:fixed;top:0;left:0;right:0;z-index:20;padding-top:env(safe-
 
 <script>
 var TREE={{TREE}};
+var CTA={'Janelia':['Join Janelia','janelia/join']};
 var INTRO={
   'Programs':'Find support for your next scientific chapter, from early career to an independent lab.',
   'Our scientists':'Meet the people asking the next questions, and follow what they discover.',
@@ -147,7 +149,7 @@ var INTRO={
     return '<div class="cols">'+(leaves.length?col(leadTitle,null,leaves):'')+cols.join('')+'</div>'+extra;
   }
   function intro(n){
-    return '<div class="intro"><h2>'+esc(n.l)+'</h2><p>'+esc(INTRO[n.l]||'')+'</p>'+(n.r?'<a class="go" href="#" data-r="'+esc(n.r)+'">Go to '+esc(n.l)+' <span aria-hidden="true">→</span></a>':'')+'</div>';
+    return '<div class="intro"><h2>'+esc(n.l)+'</h2><p>'+esc(INTRO[n.l]||'')+'</p>'+(n.r?'<a class="go" href="#" data-r="'+esc(CTA[n.l]?CTA[n.l][1]:n.r)+'">'+esc(CTA[n.l]?CTA[n.l][0]:'Go to '+n.l)+' <span aria-hidden="true">→</span></a>':'')+'</div>';
   }
   function janelia(n){
     var home=n.k.filter(function(c){return !c.k}),secs=n.k.filter(function(c){return c.k});
