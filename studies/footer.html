@@ -16,7 +16,7 @@ a{color:inherit;text-decoration:none}
 button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;text-align:left;padding:0}
 :focus-visible{outline:2px solid var(--white);outline-offset:3px}
 .wrap{max-width:1440px;margin:0 auto;padding-left:max(24px,env(safe-area-inset-left,0px));padding-right:max(24px,env(safe-area-inset-right,0px))}
-.hero{position:relative;height:100vh;height:100svh;background:#111 url("https://www.hhmi.org/sites/default/files/styles/3840x2400/public/2024-01/hhmi-homepage-hero-desktop-1v3.jpg?itok=HIjV0wqK") center/cover no-repeat}
+.hero{position:relative;height:200vh;height:200svh;background:#111 url("https://www.hhmi.org/sites/default/files/styles/3840x2400/public/2024-01/hhmi-homepage-hero-desktop-1v3.jpg?itok=HIjV0wqK") center/cover no-repeat}
 
 header.site{position:fixed;top:0;left:0;right:0;z-index:20;padding-top:env(safe-area-inset-top,0px);background:var(--black)}
 .bar{display:flex;align-items:center;gap:24px;height:76px;padding-left:max(32px,env(safe-area-inset-left,0px));padding-right:max(32px,env(safe-area-inset-right,0px))}
@@ -103,12 +103,12 @@ body{margin:0}
 .mf-cols li>a{font-size:14px}
 .mf-base{display:flex;justify-content:space-between;align-items:baseline;gap:24px;margin-top:56px;padding-top:20px;border-top:1px solid var(--rule);font-size:12px;color:var(--dim)}
 .mf-base p{margin:0;max-width:72ch}
-.totop{flex:none;color:var(--dim);border-bottom:1px solid var(--rule);padding-bottom:2px}
+.totop{flex:none;margin-left:auto;color:var(--dim);border-bottom:1px solid var(--rule);padding-bottom:2px}
 .totop:hover{color:var(--white);border-color:var(--dim)}
 
-.stage{position:fixed;left:0;right:0;bottom:0;z-index:0;height:var(--stage-h,calc(26.7vw + 80px));background:var(--black)}
+.stage{position:fixed;left:0;right:0;bottom:0;z-index:0;height:var(--stage-h,calc(25.2vw + 80px));background:var(--black)}
 .stage canvas{display:block;width:100%;height:100%;touch-action:pan-y}
-.reveal{height:var(--stage-h,calc(26.7vw + 80px))}
+.reveal{height:var(--stage-h,calc(25.2vw + 80px))}
 
 @media (max-width:1060px){
   .mf-cols{grid-template-columns:repeat(3,minmax(0,1fr))}
@@ -126,9 +126,9 @@ body{margin:0}
 <main class="curtain">
 <div class="hero" role="img" aria-label="HHMI homepage hero image"></div>
 <footer class="mfoot" id="mfoot"><div class="in">
-  <div class="mf-head"><h2>Howard Hughes Medical Institute</h2><p>Questions · People · Openness</p></div>
+  <div class="mf-head"></div>
   <nav class="mf-cols" id="mfcols" aria-label="Footer"></nav>
-  <div class="mf-base"><p>A design concept for supporting scientists and sharing what they discover. Program terms and applications are maintained on the official HHMI website.</p><a class="totop" href="#" id="totop">Back to top <span aria-hidden="true">↑</span></a></div>
+  <div class="mf-base"><a class="totop" href="#" id="totop">Back to top <span aria-hidden="true">↑</span></a></div>
 </div></footer>
 </main>
 <div class="reveal" id="reveal" aria-hidden="true"></div>
@@ -251,18 +251,19 @@ var INTRO={
   });
 })();
 
-/* Particle wordmark. The page above lifts away like a curtain to uncover it; particles rise into the HHMI wordmark. */
+/* Particle wordmark. The page above lifts away like a curtain to uncover it; the wordmark is already in place and reacts to the pointer. */
 (function(){
+  var COLORS=['#0086A4','#006B2A','#2DB44A','#8BD330','#8BD330']; // h, h, m, i stem, i dot (document order)
   var PATHS=[].map.call(document.querySelectorAll('.brand svg path, .brand svg polygon'),function(el){
-    return el.tagName.toLowerCase()==='polygon'?'M'+el.getAttribute('points').trim().split(/\s+/).join(' ').replace(/(\S+ \S+) /g,'$1 L')+' Z':el.getAttribute('d');
+    return new Path2D(el.tagName.toLowerCase()==='polygon'?'M'+el.getAttribute('points').trim().split(/\s+/).join(' ').replace(/(\S+ \S+) /g,'$1 L')+' Z':el.getAttribute('d'));
   });
-  var VB_W=128,VB_H=38,FILL=.9,TARGET=9000;
+  var VB_W=128,VB_H=38,FILL=.85;
   var cv=document.getElementById('particles'),ctx=cv.getContext('2d'),spacer=document.getElementById('reveal');
   var reduce=matchMedia('(prefers-reduced-motion: reduce)');
-  var P=[],W=0,H=0,r=1,R=80,lastW=-1,raf=0,visible=false,attract=false;
+  var P=[],G=[],W=0,H=0,r=1.5,R=80,lastW=-1,raf=0,visible=false;
   var mouse={x:-1e4,y:-1e4,on:false,f:4,base:4};
 
-  function scatter(p){p.x=Math.random()*W;p.y=H*(.45+Math.random()*.9);p.vx=p.vy=0}
+  function dot(w){return w>1060?3:w>560?2.5:1.5}   // particle diameter in CSS px
   function layout(){
     var w=document.documentElement.clientWidth;
     var pad=Math.max(40,Math.min(120,w*.06)),lw=w*FILL,lh=lw*VB_H/VB_W,h=Math.round(lh+pad*2);
@@ -270,25 +271,23 @@ var INTRO={
     if(w===lastW)return;lastW=w;W=w;H=h;
     var dpr=Math.min(window.devicePixelRatio||1,2);
     cv.width=Math.round(W*dpr);cv.height=Math.round(H*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);
-    var off=document.createElement('canvas');off.width=Math.ceil(lw);off.height=Math.ceil(lh);
-    var o=off.getContext('2d');o.scale(lw/VB_W,lh/VB_H);o.fillStyle='#fff';
-    PATHS.forEach(function(d){o.fill(new Path2D(d))});
-    var data=o.getImageData(0,0,off.width,off.height).data,filled=0,i;
-    for(i=3;i<data.length;i+=4)if(data[i]>127)filled++;
-    var gap=Math.max(2,Math.sqrt(filled/TARGET));
-    r=Math.max(.7,gap*.36);R=Math.max(50,W*.06);
-    var ox=(W-lw)/2,oy=(H-lh)/2,settled=attract||reduce.matches;
-    P=[];
-    for(var y=gap/2;y<off.height;y+=gap)for(var x=gap/2;x<off.width;x+=gap){
-      if(data[((y|0)*off.width+(x|0))*4+3]<128)continue;
-      var p={hx:x+ox,hy:y+oy,vx:0,vy:0,e:.7+Math.random()*.6};
-      if(settled){p.x=p.hx;p.y=p.hy}else scatter(p);
-      P.push(p);
+    var d=dot(w),gap=d*2,s=lw/VB_W,ox=(W-lw)/2,oy=(H-lh)/2;
+    r=d/2;R=Math.max(50,W*.06);
+    var t=document.createElement('canvas').getContext('2d');
+    var groups={};P=[];
+    for(var y=gap/2;y<lh;y+=gap)for(var x=gap/2;x<lw;x+=gap){
+      for(var i=0;i<PATHS.length;i++){
+        if(t.isPointInPath(PATHS[i],x/s,y/s)){
+          var p={hx:x+ox,hy:y+oy,x:x+ox,y:y+oy,vx:0,vy:0,e:.7+Math.random()*.6};
+          (groups[COLORS[i]]=groups[COLORS[i]]||[]).push(p);P.push(p);break;
+        }
+      }
     }
+    G=Object.keys(groups).map(function(c){return {c:c,p:groups[c]}});
     draw();
   }
   function step(){
-    var moving=0,R2=R*R,m=mouse.on&&!reduce.matches,k=.045;
+    var moving=0,R2=R*R,m=mouse.on,k=.045;
     mouse.f+=(mouse.base-mouse.f)*.06;
     for(var i=0;i<P.length;i++){
       var p=P[i],ax=(p.hx-p.x)*k*p.e,ay=(p.hy-p.y)*k*p.e;
@@ -300,22 +299,20 @@ var INTRO={
     return moving;
   }
   function draw(){
-    ctx.clearRect(0,0,W,H);ctx.fillStyle='#fff';ctx.beginPath();
-    for(var i=0;i<P.length;i++){var p=P[i];ctx.moveTo(p.x+r,p.y);ctx.arc(p.x,p.y,r,0,6.2832)}
-    ctx.fill();
+    ctx.clearRect(0,0,W,H);
+    for(var g=0;g<G.length;g++){
+      var a=G[g].p;ctx.fillStyle=G[g].c;ctx.beginPath();
+      for(var i=0;i<a.length;i++){var p=a[i];ctx.moveTo(p.x+r,p.y);ctx.arc(p.x,p.y,r,0,6.2832)}
+      ctx.fill();
+    }
   }
   function frame(){
-    raf=0;var moving=attract&&!reduce.matches?step():0;draw();
+    raf=0;var moving=step();draw();
     if(visible&&(moving||mouse.on||mouse.f>mouse.base+.1))raf=requestAnimationFrame(frame);
   }
   function kick(){if(!raf&&visible&&!reduce.matches)raf=requestAnimationFrame(frame)}
 
-  new IntersectionObserver(function(es){
-    var e=es[es.length-1];visible=e.isIntersecting;
-    if(visible&&e.intersectionRatio>=.35&&!attract)attract=true;          // footer has lifted enough: assemble
-    if(!visible&&attract&&!reduce.matches){attract=false;P.forEach(scatter);draw()} // fully covered again: reset for the next reveal
-    kick();
-  },{threshold:[0,.35]}).observe(spacer);
+  new IntersectionObserver(function(es){visible=es[es.length-1].isIntersecting;kick()},{threshold:0}).observe(spacer);
 
   function at(e){var b=cv.getBoundingClientRect();mouse.x=e.clientX-b.left;mouse.y=e.clientY-b.top}
   cv.addEventListener('pointermove',function(e){at(e);mouse.on=true;kick()});
