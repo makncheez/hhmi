@@ -106,9 +106,9 @@ body{margin:0}
 .totop{flex:none;margin-left:auto;color:var(--dim);border-bottom:1px solid var(--rule);padding-bottom:2px}
 .totop:hover{color:var(--white);border-color:var(--dim)}
 
-.stage{position:fixed;left:0;right:0;bottom:0;z-index:0;height:var(--stage-h,calc(19.3vw + 80px));background:var(--black)}
+.stage{position:fixed;left:0;right:0;bottom:0;z-index:0;height:var(--stage-h,calc(22.3vw + 80px));background:var(--black)}
 .stage canvas{display:block;width:100%;height:100%;touch-action:pan-y}
-.reveal{height:var(--stage-h,calc(19.3vw + 80px))}
+.reveal{height:var(--stage-h,calc(22.3vw + 80px))}
 
 @media (max-width:1060px){
   .mf-cols{grid-template-columns:repeat(3,minmax(0,1fr))}
@@ -257,10 +257,10 @@ var INTRO={
   var PATHS=[].map.call(document.querySelectorAll('.brand svg path, .brand svg polygon'),function(el){
     return new Path2D(el.tagName.toLowerCase()==='polygon'?'M'+el.getAttribute('points').trim().split(/\s+/).join(' ').replace(/(\S+ \S+) /g,'$1 L')+' Z':el.getAttribute('d'));
   });
-  var VB_W=128,VB_H=38,FILL=.65;
+  var VB_W=128,VB_H=38,FILL=.75;
   var cv=document.getElementById('particles'),ctx=cv.getContext('2d'),spacer=document.getElementById('reveal');
   var reduce=matchMedia('(prefers-reduced-motion: reduce)');
-  var P=[],G=[],W=0,H=0,r=1.5,R=80,lastW=-1,raf=0,visible=false;
+  var P=[],G=[],W=0,H=0,r=1.5,DPR=1,img=null,buf=null,R=80,lastW=-1,raf=0,visible=false;
   var mouse={x:-1e4,y:-1e4,on:false,f:4,base:4};
 
   function dot(){return 1}   // particle size in CSS px, all screens
@@ -271,6 +271,7 @@ var INTRO={
     if(w===lastW)return;lastW=w;W=w;H=h;
     var dpr=Math.min(window.devicePixelRatio||1,2);
     cv.width=Math.round(W*dpr);cv.height=Math.round(H*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);
+    DPR=dpr;img=ctx.createImageData(cv.width,cv.height);buf=new Uint32Array(img.data.buffer);
     var d=dot(w),gap=2,s=lw/VB_W,ox=(W-lw)/2,oy=(H-lh)/2;
     r=d/2;R=Math.max(50,W*.06);
     var t=document.createElement('canvas').getContext('2d');
@@ -298,12 +299,27 @@ var INTRO={
     }
     return moving;
   }
+  // Packs a #RRGGBB color into one 32-bit pixel (canvas pixels are RGBA bytes, read little-endian).
+  function px(hex){var n=parseInt(hex.slice(1),16);return (0xFF000000|((n&255)<<16)|(n&0xFF00)|(n>>16))>>>0}
   function draw(){
+    if(r<=.75){ // 1px dots: write squares straight into the pixel buffer (much faster than drawing shapes)
+      var cw=cv.width,ch=cv.height,sz=Math.max(1,Math.round(r*2*DPR));
+      buf.fill(0);
+      for(var g=0;g<G.length;g++){
+        var a=G[g].p,c=px(G[g].c);
+        for(var i=0;i<a.length;i++){
+          var x0=Math.round((a[i].x-r)*DPR),y0=Math.round((a[i].y-r)*DPR);
+          if(x0<0||y0<0||x0+sz>cw||y0+sz>ch)continue;
+          for(var yy=0;yy<sz;yy++){var o=(y0+yy)*cw+x0;for(var xx=0;xx<sz;xx++)buf[o+xx]=c}
+        }
+      }
+      ctx.putImageData(img,0,0);
+      return;
+    }
     ctx.clearRect(0,0,W,H);
     for(var g=0;g<G.length;g++){
       var a=G[g].p;ctx.fillStyle=G[g].c;ctx.beginPath();
-      if(r<=.75){for(var i=0;i<a.length;i++){var p=a[i];ctx.rect(p.x-r,p.y-r,r*2,r*2)}}
-      else for(var i=0;i<a.length;i++){var p=a[i];ctx.moveTo(p.x+r,p.y);ctx.arc(p.x,p.y,r,0,6.2832)}
+      for(var i=0;i<a.length;i++){var p=a[i];ctx.moveTo(p.x+r,p.y);ctx.arc(p.x,p.y,r,0,6.2832)}
       ctx.fill();
     }
   }
