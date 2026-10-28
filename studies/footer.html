@@ -272,7 +272,7 @@ var INTRO={
     var dpr=Math.min(window.devicePixelRatio||1,2);
     cv.width=Math.round(W*dpr);cv.height=Math.round(H*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);
     DPR=dpr;img=ctx.createImageData(cv.width,cv.height);buf=new Uint32Array(img.data.buffer);
-    var d=dot(w),gap=2,s=lw/VB_W,ox=(W-lw)/2,oy=(H-lh)/2;
+    var d=dot(w),gap=3,s=lw/VB_W,ox=(W-lw)/2,oy=(H-lh)/2;
     r=d/2;R=Math.max(50,W*.06);
     var t=document.createElement('canvas').getContext('2d');
     var groups={};P=[];
