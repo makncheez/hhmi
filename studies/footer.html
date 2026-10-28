@@ -106,9 +106,9 @@ body{margin:0}
 .totop{flex:none;margin-left:auto;color:var(--dim);border-bottom:1px solid var(--rule);padding-bottom:2px}
 .totop:hover{color:var(--white);border-color:var(--dim)}
 
-.stage{position:fixed;left:0;right:0;bottom:0;z-index:0;height:var(--stage-h,calc(25.2vw + 80px));background:var(--black)}
+.stage{position:fixed;left:0;right:0;bottom:0;z-index:0;height:var(--stage-h,calc(19.3vw + 80px));background:var(--black)}
 .stage canvas{display:block;width:100%;height:100%;touch-action:pan-y}
-.reveal{height:var(--stage-h,calc(25.2vw + 80px))}
+.reveal{height:var(--stage-h,calc(19.3vw + 80px))}
 
 @media (max-width:1060px){
   .mf-cols{grid-template-columns:repeat(3,minmax(0,1fr))}
@@ -253,17 +253,17 @@ var INTRO={
 
 /* Particle wordmark. The page above lifts away like a curtain to uncover it; the wordmark is already in place and reacts to the pointer. */
 (function(){
-  var COLORS=['#0086A4','#006B2A','#2DB44A','#8BD330','#8BD330']; // h, h, m, i stem, i dot (document order)
+  var COLORS=['#8B8B8B','#8B8B8B','#8B8B8B','#8B8B8B','#8B8B8B']; // h, h, m, i stem, i dot (document order)
   var PATHS=[].map.call(document.querySelectorAll('.brand svg path, .brand svg polygon'),function(el){
     return new Path2D(el.tagName.toLowerCase()==='polygon'?'M'+el.getAttribute('points').trim().split(/\s+/).join(' ').replace(/(\S+ \S+) /g,'$1 L')+' Z':el.getAttribute('d'));
   });
-  var VB_W=128,VB_H=38,FILL=.85;
+  var VB_W=128,VB_H=38,FILL=.65;
   var cv=document.getElementById('particles'),ctx=cv.getContext('2d'),spacer=document.getElementById('reveal');
   var reduce=matchMedia('(prefers-reduced-motion: reduce)');
   var P=[],G=[],W=0,H=0,r=1.5,R=80,lastW=-1,raf=0,visible=false;
   var mouse={x:-1e4,y:-1e4,on:false,f:4,base:4};
 
-  function dot(w){return w>1060?3:w>560?2.5:1.5}   // particle diameter in CSS px
+  function dot(){return 1}   // particle size in CSS px, all screens
   function layout(){
     var w=document.documentElement.clientWidth;
     var pad=Math.max(40,Math.min(120,w*.06)),lw=w*FILL,lh=lw*VB_H/VB_W,h=Math.round(lh+pad*2);
@@ -271,7 +271,7 @@ var INTRO={
     if(w===lastW)return;lastW=w;W=w;H=h;
     var dpr=Math.min(window.devicePixelRatio||1,2);
     cv.width=Math.round(W*dpr);cv.height=Math.round(H*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);
-    var d=dot(w),gap=d*2,s=lw/VB_W,ox=(W-lw)/2,oy=(H-lh)/2;
+    var d=dot(w),gap=2,s=lw/VB_W,ox=(W-lw)/2,oy=(H-lh)/2;
     r=d/2;R=Math.max(50,W*.06);
     var t=document.createElement('canvas').getContext('2d');
     var groups={};P=[];
@@ -302,7 +302,8 @@ var INTRO={
     ctx.clearRect(0,0,W,H);
     for(var g=0;g<G.length;g++){
       var a=G[g].p;ctx.fillStyle=G[g].c;ctx.beginPath();
-      for(var i=0;i<a.length;i++){var p=a[i];ctx.moveTo(p.x+r,p.y);ctx.arc(p.x,p.y,r,0,6.2832)}
+      if(r<=.75){for(var i=0;i<a.length;i++){var p=a[i];ctx.rect(p.x-r,p.y-r,r*2,r*2)}}
+      else for(var i=0;i<a.length;i++){var p=a[i];ctx.moveTo(p.x+r,p.y);ctx.arc(p.x,p.y,r,0,6.2832)}
       ctx.fill();
     }
   }
