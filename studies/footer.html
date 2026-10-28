@@ -1,0 +1,331 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"></head><body>
+<title>HHMI Janelia Footer</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400&display=swap">
+<style>
+/* Layout: fixed black header; each top item opens a full-width black mega panel. Janelia uses a left rail of sections. */
+:root{
+  --black:#000; --white:#fff; --dim:#9a9a9a; --soft:#cfcfcf; --rule:#2b2b2b; --flag:#d8b85a; --green:rgb(0,154,76);
+  --font:"Instrument Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  color-scheme:dark;
+}
+body{background:var(--black);color:var(--white);font:400 15px/1.4 var(--font)}
+h2,h3{font-weight:400}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;text-align:left;padding:0}
+:focus-visible{outline:2px solid var(--white);outline-offset:3px}
+.wrap{max-width:1440px;margin:0 auto;padding-left:max(24px,env(safe-area-inset-left,0px));padding-right:max(24px,env(safe-area-inset-right,0px))}
+.hero{position:relative;height:100vh;height:100svh;background:#111 url("https://www.hhmi.org/sites/default/files/styles/3840x2400/public/2024-01/hhmi-homepage-hero-desktop-1v3.jpg?itok=HIjV0wqK") center/cover no-repeat}
+
+header.site{position:fixed;top:0;left:0;right:0;z-index:20;padding-top:env(safe-area-inset-top,0px);background:var(--black)}
+.bar{display:flex;align-items:center;gap:24px;height:76px;padding-left:max(32px,env(safe-area-inset-left,0px));padding-right:max(32px,env(safe-area-inset-right,0px))}
+.brand{display:flex;color:var(--white);flex:none}
+.brand svg{display:block}
+.top{display:flex;gap:4px;margin:0 0 0 auto;list-style:none;padding:0}
+.top>li>button{display:flex;align-items:center;gap:8px;height:76px;padding:0 14px;font-size:15px;position:relative}
+.top>li>button::after{content:"";position:absolute;left:14px;right:14px;bottom:20px;height:2px;background:var(--green);transform:scaleX(0);transform-origin:left;transition:transform .2s}
+.top>li>button:hover::after,.top>li.open>button::after{transform:scaleX(1)}
+.chev{width:9px;height:9px;transition:transform .2s}
+.top>li.open .chev{transform:rotate(180deg)}
+.toggle{display:none;margin-left:auto;border:1px solid var(--rule);padding:8px 14px}
+
+.mega{position:fixed;left:0;right:0;top:calc(76px + env(safe-area-inset-top,0px));background:var(--black);border-top:1px solid var(--rule);max-height:calc(100vh - 76px);overflow-y:auto;overscroll-behavior:contain;z-index:1;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .22s ease,visibility 0s linear .22s}
+.top>li.open>.mega{z-index:2;opacity:1;visibility:visible;pointer-events:auto;transition:opacity .22s ease,visibility 0s}
+.mega .inner{display:grid;grid-template-columns:250px minmax(0,1fr);gap:48px;padding-block:40px 48px;padding-left:max(32px,env(safe-area-inset-left,0px));padding-right:max(32px,env(safe-area-inset-right,0px))}
+.intro h2{font-size:36px;line-height:1.05;letter-spacing:-.01em;margin:0 0 12px}
+.intro p{color:var(--dim);margin:0 0 18px;max-width:30ch}
+.intro a.go{display:inline-flex;gap:8px;align-items:center;border-bottom:1px solid var(--dim);padding-bottom:2px}
+.intro a.go:hover{border-color:var(--white)}
+.cols{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:32px 36px;align-content:start}
+.col{min-width:0}
+.col h3{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);margin:0 0 10px;padding-bottom:10px;border-bottom:1px solid var(--rule)}
+.col h3 a:hover{color:var(--white)}
+.col ul{list-style:none;margin:0;padding:0;display:grid;gap:1px}
+.col li>a{display:block;padding:5px 0;line-height:1.3}
+.col a:hover .t{text-decoration:underline;text-underline-offset:4px;text-decoration-thickness:1px}
+.col ul ul{margin:2px 0 8px;padding-left:14px;border-left:1px solid var(--rule)}
+.col ul ul a{color:var(--soft);font-size:14px}
+.col .sub{margin-top:14px;padding-bottom:2px;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim)}
+.col .sub:first-child{margin-top:0}
+.q{display:flex;gap:10px;align-items:baseline}
+.q a.t2{flex:1;min-width:0;font-size:14px}
+.q .tech{flex:none;font-size:11px;color:var(--dim);border:1px solid var(--rule);padding:1px 6px}
+.q .tech:hover{color:var(--white);border-color:var(--dim)}
+.qrow{margin-top:40px;padding-top:28px;border-top:1px solid var(--rule)}
+.qrow h4{font-weight:400;font-size:20px;margin:0 0 20px}
+.cols.c4{grid-template-columns:repeat(4,minmax(0,1fr));gap:28px}
+.flag{display:block;font-size:11px;color:var(--flag);margin-top:2px}
+.sel .t{text-decoration:underline;text-underline-offset:4px}
+
+.railwrap{display:grid;grid-template-columns:210px minmax(0,1fr);gap:40px}
+.rail{list-style:none;margin:0;padding:0;border-right:1px solid var(--rule);align-self:start}
+.rail button,.rail a{display:flex;justify-content:space-between;align-items:center;width:100%;padding:10px 18px 10px 0;font-size:19px;color:var(--dim)}
+.rail button[aria-selected="true"],.rail button:hover,.rail a:hover{color:var(--white)}
+.arr{opacity:0;transition:opacity .15s}
+.rail button[aria-selected="true"] .arr{opacity:1}
+.tabpanel[hidden]{display:none}
+.tabhead{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-bottom:24px}
+.tabhead h3{font-size:26px;margin:0}
+.tabhead a{color:var(--dim);border-bottom:1px solid var(--rule)}
+.tabhead a:hover{color:var(--white)}
+
+@media (max-width:1060px){
+  .toggle{display:block}
+  .bar{height:64px}
+  .top{display:none;position:fixed;left:0;right:0;top:calc(64px + env(safe-area-inset-top,0px));bottom:0;background:var(--black);flex-direction:column;gap:0;overflow-y:auto;padding:8px max(24px,env(safe-area-inset-right,0px)) 40px max(24px,env(safe-area-inset-left,0px));border-top:1px solid var(--rule)}
+  .top.show{display:flex}
+  .top>li{border-bottom:1px solid var(--rule)}
+  .top>li>button{height:auto;padding:18px 0;font-size:20px;width:100%;justify-content:space-between}
+  .top>li>button::after{display:none}
+  .mega{position:static;max-height:none;border:0;overflow:visible;display:none;opacity:1;visibility:visible;pointer-events:auto;transition:none}
+  .top>li.open>.mega{display:block}
+  .mega .inner{padding-left:0;padding-right:0}
+  .mega .inner,.railwrap{grid-template-columns:minmax(0,1fr);gap:24px;padding-block:4px 24px}
+  .intro h2{display:none}
+  .rail{display:none}
+  .tabpanel[hidden]{display:block}
+  .tabpanel+.tabpanel{margin-top:28px}
+  .cols,.cols.c4{grid-template-columns:1fr 1fr;gap:24px}
+}
+@media (max-width:560px){.cols,.cols.c4{grid-template-columns:minmax(0,1fr)}}
+/* ---- Footer study: scrolling page, mega footer, particle wordmark revealed by the page lifting like a curtain ---- */
+body.menu-lock{overflow:hidden}
+body{margin:0}
+.curtain{position:relative;z-index:1;background:var(--black)}
+.mfoot{background:var(--black);border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+.mfoot .in{max-width:1440px;margin:0 auto;padding-block:64px 28px;padding-left:max(32px,env(safe-area-inset-left,0px));padding-right:max(32px,env(safe-area-inset-right,0px))}
+.mf-head{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;padding-bottom:36px;margin-bottom:40px;border-bottom:1px solid var(--rule)}
+.mf-head h2{font-size:36px;line-height:1.05;letter-spacing:-.01em;margin:0;max-width:16ch}
+.mf-head p{margin:0;color:var(--dim);font-size:15px}
+.mf-cols{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:40px 28px}
+.mf-cols .col h3{margin-bottom:12px}
+.mf-cols li>a{font-size:14px}
+.mf-base{display:flex;justify-content:space-between;align-items:baseline;gap:24px;margin-top:56px;padding-top:20px;border-top:1px solid var(--rule);font-size:12px;color:var(--dim)}
+.mf-base p{margin:0;max-width:72ch}
+.totop{flex:none;color:var(--dim);border-bottom:1px solid var(--rule);padding-bottom:2px}
+.totop:hover{color:var(--white);border-color:var(--dim)}
+
+.stage{position:fixed;left:0;right:0;bottom:0;z-index:0;height:var(--stage-h,calc(26.7vw + 80px));background:var(--black)}
+.stage canvas{display:block;width:100%;height:100%;touch-action:pan-y}
+.reveal{height:var(--stage-h,calc(26.7vw + 80px))}
+
+@media (max-width:1060px){
+  .mf-cols{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .mfoot .in{padding-left:max(24px,env(safe-area-inset-left,0px));padding-right:max(24px,env(safe-area-inset-right,0px))}
+}
+@media (max-width:560px){
+  .mf-cols{grid-template-columns:repeat(2,minmax(0,1fr));gap:32px 20px}
+  .mf-head{flex-direction:column;align-items:flex-start}
+  .mf-head h2{font-size:28px}
+  .mf-base{flex-direction:column}
+}
+@media (prefers-reduced-motion:reduce){.chev,.top>li>button::after,.arr,.mega,.top>li.open>.mega{transition:none}}
+</style>
+
+<main class="curtain">
+<div class="hero" role="img" aria-label="HHMI homepage hero image"></div>
+<footer class="mfoot" id="mfoot"><div class="in">
+  <div class="mf-head"><h2>Howard Hughes Medical Institute</h2><p>Questions · People · Openness</p></div>
+  <nav class="mf-cols" id="mfcols" aria-label="Footer"></nav>
+  <div class="mf-base"><p>A design concept for supporting scientists and sharing what they discover. Program terms and applications are maintained on the official HHMI website.</p><a class="totop" href="#" id="totop">Back to top <span aria-hidden="true">↑</span></a></div>
+</div></footer>
+</main>
+<div class="reveal" id="reveal" aria-hidden="true"></div>
+<div class="stage"><canvas id="particles" role="img" aria-label="HHMI"></canvas></div>
+<header class="site"><div class="bar">
+  <a class="brand" href="#" aria-label="HHMI home"><svg width="113" height="34" viewBox="0 0 128 38" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="HHMI"><title>HHMI Logo</title><g fill="currentColor" fill-rule="evenodd"><path d="M0,0 L10.6326783,0 L10.6326783,13.3585568 L10.7405466,13.3585568 C12.5660116,11.2287875 14.9303817,9.68631694 19.4398916,9.68631694 C24.4354642,9.68631694 29,12.719323 29,19.0532334 L29,38 L18.3673217,38 L18.3673217,23.5222432 C18.3673217,20.3299697 17.9908742,18.0954648 14.8753558,18.0954648 C13.0498908,18.0954648 10.6326783,18.9991344 10.6326783,23.4175076 L10.6326783,38 L0,38 L0,0"/><path d="M33,0 L43.6324017,0 L43.6324017,13.3585568 L43.7402717,13.3585568 C45.5657641,11.2287875 47.9301699,9.68631694 52.4419312,9.68631694 C57.4353955,9.68631694 62,12.719323 62,19.0532334 L62,38 L51.3671616,38 L51.3671616,23.5222432 C51.3671616,20.3299697 50.9907084,18.0954648 47.8751431,18.0954648 C46.0500873,18.0954648 43.6324017,18.9991344 43.6324017,23.4175076 L43.6324017,38 L33,38 L33,0"/><path d="M66,10.6843569 L76.2404845,10.6843569 L76.2404845,14.3158571 L76.3481689,14.3158571 C78.4913943,11.1568585 81.6011638,10 85.4612366,10 C88.4637577,10 91.6794677,11.5257864 92.9673213,14.2619302 C93.3958791,13.9469292 95.5391046,10 102.456195,10 C109.586474,10 112,14.8422855 112,19.2617162 L112,38 L101.38371,38 L101.38371,23.2103574 C101.38371,20.6317141 101.115589,18.3141451 97.8998787,18.3141451 C95.2182311,18.3141451 94.3079271,20.3684999 94.3079271,23.2103574 L94.3079271,38 L83.691637,38 L83.691637,23.2103574 C83.691637,20.6317141 83.4235158,18.3141451 80.2078057,18.3141451 C77.5261582,18.3141451 76.6162901,20.3684999 76.6162901,23.2103574 L76.6162901,38 L66,38 L66,10.6843569"/><polygon points="116 38 127 38 127 10 116 10"/><path d="M127.750439,7 C127.911577,6.50960867 128,5.98823666 128,5.45015141 C128,2.43931982 125.314083,0 121.999327,0 C118.686366,0 116,2.43931982 116,5.45015141 C116,5.98823666 116.088872,6.50960867 116.250009,7 L127.750439,7"/></g></svg></a>
+  <button class="toggle" id="toggle" aria-expanded="false" aria-controls="top">Menu</button>
+  <ul class="top" id="top"></ul>
+</div></header>
+
+<script>
+var TREE=[{"l": "Programs", "r": "programs", "k": [{"l": "All programs", "r": "programs"}, {"l": "Program finder", "r": "programs/finder"}, {"l": "Compare programs", "r": "programs/compare"}, {"l": "Program pages", "k": [{"l": "HHMI Investigators", "r": "programs/investigators"}, {"l": "Freeman Hrabowski Scholars", "r": "programs/freeman-hrabowski-scholars"}, {"l": "Hanna H. Gray Fellows", "r": "programs/hanna-gray-fellows"}, {"l": "Gilliam Fellows", "r": "programs/gilliam-fellows"}, {"l": "Cech Fellows", "r": "programs/cech-fellows"}]}]}, {"l": "Our scientists", "r": "scientists", "k": [{"l": "All scientists", "r": "scientists"}, {"l": "Science & discoveries", "r": "scientists/discoveries", "k": [{"l": "All discoveries", "r": "scientists/discoveries"}, {"l": "Targeting hard-to-treat cancers", "r": "scientists/discoveries/ras-cancers"}, {"l": "Fruit fly nervous system map", "r": "scientists/discoveries/fly-connectome"}, {"l": "Plant defenses and growth", "r": "scientists/discoveries/plants"}, {"l": "Designing new proteins", "r": "scientists/discoveries/proteins"}, {"l": "From bacterial defense to CRISPR", "r": "scientists/discoveries/crispr"}, {"l": "How a cell senses touch", "r": "scientists/discoveries/touch"}, {"l": "A first summer in an HHMI lab", "r": "scientists/discoveries/first-research"}]}, {"l": "Scientist profiles", "k": [{"l": "David Baker", "r": "scientists/baker"}, {"l": "Jennifer A. N. Brophy", "r": "scientists/brophy"}, {"l": "Jennifer A. Doudna", "r": "scientists/doudna"}, {"l": "Danica Dougan", "r": "scientists/dougan"}, {"l": "Ardem Patapoutian", "r": "scientists/patapoutian"}, {"l": "Kevan Shokat", "r": "scientists/shokat"}]}]}, {"l": "Janelia", "r": "janelia", "k": [{"l": "Janelia home", "r": "janelia"}, {"l": "About Janelia", "r": "janelia/about", "k": [{"l": "About Janelia", "r": "janelia/about"}, {"l": "Life at Janelia", "r": "janelia/life"}, {"l": "How we work", "r": "janelia/how-we-work"}, {"l": "Janelia and HHMI", "r": "janelia/connections"}, {"l": "Janelia at 20", "r": "janelia/anniversary", "k": [{"l": "20 years overview", "r": "janelia/anniversary"}, {"l": "2006 · A different place to do science", "r": "janelia/anniversary/beginning"}, {"l": "2013 · Making neural activity visible", "r": "janelia/anniversary/gcamp"}, {"l": "2014 · Seeing beyond the old limits", "r": "janelia/anniversary/nobel"}, {"l": "2015 · Small molecules, new views", "r": "janelia/anniversary/fluor"}, {"l": "2020 · A map to explore, together", "r": "janelia/anniversary/hemibrain"}, {"l": "2024 · A virtual fly takes flight", "r": "janelia/anniversary/virtual-fly"}]}]}, {"l": "Science", "r": "janelia/science", "k": [{"l": "The science", "r": "janelia/science"}, {"l": "Open questions", "r": "janelia/questions", "k": [{"l": "All open questions", "r": "janelia/questions"}, {"l": "Biology", "k": [{"l": "All biology questions", "r": "janelia/questions/for/biology"}, {"l": "What is a circuit computing?", "k": [{"l": "What is a circuit actually computing?", "r": "janelia/questions/circuit-algorithms", "t": "janelia/questions/circuit-algorithms/technical"}, {"l": "Which neurons does a behavior depend on?", "r": "janelia/questions/visual-cell-types", "t": "janelia/questions/visual-cell-types/technical"}, {"l": "How does the brain keep its internal compass aligned with the world?", "r": "janelia/questions/anchoring-maps", "t": "janelia/questions/anchoring-maps/technical"}]}, {"l": "How do cells and molecules implement computation?", "k": [{"l": "What changes inside a neuron when a memory forms?", "r": "janelia/questions/memory-molecules", "t": "janelia/questions/memory-molecules/technical"}, {"l": "How do cells and synapses build a neural compass?", "r": "janelia/questions/attractor-biophysics", "t": "janelia/questions/attractor-biophysics/technical"}, {"l": "How can a single experience create a memory?", "r": "janelia/questions/one-shot-memory", "t": "janelia/questions/one-shot-memory/technical"}]}, {"l": "How does a whole vertebrate brain and body generate behavior?", "k": [{"l": "How does a whole vertebrate brain turn sensing into action?", "r": "janelia/questions/whole-brain-zebrafish", "t": "janelia/questions/whole-brain-zebrafish/technical"}, {"l": "How do internal states reshape the whole brain?", "r": "janelia/questions/internal-states", "t": "janelia/questions/internal-states/technical"}, {"l": "How does a brain generate complex social behavior?", "r": "janelia/questions/social-behavior", "t": "janelia/questions/social-behavior/technical"}, {"l": "What carries over from fly to fish?", "r": "janelia/questions/fly-to-vertebrate", "t": "janelia/questions/fly-to-vertebrate/technical"}]}]}, {"l": "AI", "k": [{"l": "All AI questions", "r": "janelia/questions/for/ai"}, {"l": "Can AI help build the tools the science depends on?", "k": [{"l": "Can we design better sensors?", "r": "janelia/questions/better-sensors", "t": "janelia/questions/better-sensors/technical"}, {"l": "Can AI design a microscope?", "r": "janelia/questions/instrument-design", "t": "janelia/questions/instrument-design/technical"}]}, {"l": "How do we learn and verify mechanism from measurement?", "k": [{"l": "Can one model explain a whole animal?", "r": "janelia/questions/whole-system-models", "t": "janelia/questions/whole-system-models/technical"}, {"l": "Can a simulated animal serve as an experiment?", "r": "janelia/questions/digital-twins", "t": "janelia/questions/digital-twins/technical"}, {"l": "When can data reveal a mechanism?", "r": "janelia/questions/identifiability", "t": "janelia/questions/identifiability/technical"}]}, {"l": "How can AI agents help with open-ended science?", "k": [{"l": "When should a research agent pause?", "r": "janelia/questions/research-agents", "t": "janelia/questions/research-agents/technical"}, {"l": "Can we capture what experts know but never write down?", "r": "janelia/questions/tacit-knowledge", "t": "janelia/questions/tacit-knowledge/technical"}, {"l": "How should scientists and AI agents work together?", "r": "janelia/questions/agent-interface", "t": "janelia/questions/agent-interface/technical"}, {"l": "How do we keep AI-run research accountable?", "r": "janelia/questions/accountable-agents", "t": "janelia/questions/accountable-agents/technical"}]}]}, {"l": "Theory", "k": [{"l": "All theory questions", "r": "janelia/questions/for/theory"}, {"l": "What are the right abstractions?", "k": [{"l": "What is the right way to describe a computation?", "r": "janelia/questions/levels-of-explanation", "t": "janelia/questions/levels-of-explanation/technical"}, {"l": "How do molecules shape behavior?", "r": "janelia/questions/molecules-behavior", "t": "janelia/questions/molecules-behavior/technical"}, {"l": "Do different brains solve problems the same way?", "r": "janelia/questions/universal-solutions", "t": "janelia/questions/universal-solutions/technical"}]}, {"l": "How do we constrain these abstractions with data?", "k": [{"l": "Why does the same circuit compute differently at different times?", "r": "janelia/questions/context-dependence", "t": "janelia/questions/context-dependence/technical"}, {"l": "Which experiment should come next?", "r": "janelia/questions/next-experiment", "t": "janelia/questions/next-experiment/technical"}, {"l": "Can theory invent new ways to measure?", "r": "janelia/questions/theory-guided-measurement", "t": "janelia/questions/theory-guided-measurement/technical"}]}, {"l": "Why are biological systems organized as they are?", "k": [{"l": "How do brains learn quickly without forgetting?", "r": "janelia/questions/fast-flexible-learning", "t": "janelia/questions/fast-flexible-learning/technical"}, {"l": "How does a brain stay the same while its parts change?", "r": "janelia/questions/stable-function", "t": "janelia/questions/stable-function/technical"}, {"l": "Why are biological systems built the way they are?", "r": "janelia/questions/biological-tradeoffs", "t": "janelia/questions/biological-tradeoffs/technical"}]}]}, {"l": "Tools", "k": [{"l": "All tools questions", "r": "janelia/questions/for/tools"}, {"l": "What reagents do we need?", "k": [{"l": "Can we make brighter, longer-lasting fluorescent molecules?", "r": "janelia/questions/better-fluorophores", "t": "janelia/questions/better-fluorophores/technical"}, {"l": "How do we attach a label to exactly what we want to see?", "r": "janelia/questions/labeling-strategies", "t": "janelia/questions/labeling-strategies/technical"}, {"l": "Can we build biosensors faster?", "r": "janelia/questions/faster-biosensors", "t": "janelia/questions/faster-biosensors/technical"}, {"l": "How can we change a single synapse?", "r": "janelia/questions/single-synapse", "t": "janelia/questions/single-synapse/technical"}]}, {"l": "What instruments do we need?", "k": [{"l": "Can we map a whole brain at every scale at once?", "r": "janelia/questions/imaging-across-scales", "t": "janelia/questions/imaging-across-scales/technical"}, {"l": "Can computation see beyond the microscope?", "r": "janelia/questions/computational-microscopy", "t": "janelia/questions/computational-microscopy/technical"}, {"l": "What should we measure in a working brain?", "r": "janelia/questions/multimodal-imaging", "t": "janelia/questions/multimodal-imaging/technical"}, {"l": "How do we measure a brain in motion?", "r": "janelia/questions/brain-in-motion", "t": "janelia/questions/brain-in-motion/technical"}]}]}]}, {"l": "Research units", "r": "janelia/units", "k": [{"l": "All research units", "r": "janelia/units"}, {"l": "Biology", "r": "janelia/units/biology"}, {"l": "Tools@HHMI", "r": "janelia/units/tools"}, {"l": "AI@HHMI", "r": "janelia/units/ai"}, {"l": "Theory@HHMI", "r": "janelia/units/theory"}]}]}, {"l": "People", "r": "janelia/people", "k": [{"l": "People and teams", "r": "janelia/people"}, {"l": "Leadership", "r": "janelia/leadership", "k": [{"l": "All leadership", "r": "janelia/leadership"}, {"l": "Nelson Spruston", "r": "janelia/leadership/spruston"}, {"l": "Gerry Rubin", "r": "janelia/leadership/rubin"}, {"l": "Luke Lavis", "r": "janelia/leadership/lavis"}, {"l": "Stephan Saalfeld", "r": "janelia/leadership/saalfeld"}, {"l": "Ann Hermundstad", "r": "janelia/leadership/hermundstad"}]}, {"l": "Lab heads", "r": "janelia/labs", "k": [{"l": "All lab heads", "r": "janelia/labs"}, {"l": "Gerry Rubin", "r": "janelia/labs/rubin"}, {"l": "Luke Lavis", "r": "janelia/labs/lavis"}, {"l": "Stephan Saalfeld", "r": "janelia/labs/saalfeld"}, {"l": "Ann Hermundstad", "r": "janelia/labs/hermundstad"}, {"l": "Nelson Spruston", "r": "janelia/labs/spruston"}, {"l": "Joshua Dudman", "r": "janelia/labs/dudman"}]}]}, {"l": "Resources", "r": "janelia/resources", "k": [{"l": "All resources", "r": "janelia/resources"}, {"l": "Research tools", "r": "janelia/resources/tools"}, {"l": "Data and code", "r": "janelia/resources/data"}]}, {"l": "Join Janelia", "r": "janelia/join", "k": [{"l": "Scientific careers", "r": "janelia/join"}, {"l": "Principal Scientists", "r": "janelia/join/principal-scientists"}, {"l": "AI Scientists", "r": "janelia/join/ai-scientists"}, {"l": "Group Leaders", "r": "janelia/join/group-leaders"}, {"l": "Other roles", "r": "janelia/join/other-roles"}, {"l": "Opportunities", "r": "janelia/join/opportunities", "f": "Not linked in prototype"}]}]}, {"l": "Shaping science", "r": "shaping-science", "k": [{"l": "Shaping how science is done", "r": "shaping-science"}, {"l": "Open science", "r": "shaping-science/open-science"}, {"l": "Science leadership & lab culture", "r": "shaping-science/science-leadership-lab-culture"}]}, {"l": "Science for everyone", "r": "engagement", "k": [{"l": "Science for everyone", "r": "engagement"}, {"l": "BioInteractive", "r": "engagement/biointeractive"}, {"l": "Science Education Alliance", "r": "engagement/sea"}, {"l": "Tangled Bank Studios", "r": "engagement/tangled-bank"}]}, {"l": "More", "k": [{"l": "About HHMI", "r": "about", "f": "Footer only in prototype"}, {"l": "Explore your path", "r": "careers/interests", "k": [{"l": "Start here", "r": "careers/interests"}, {"l": "Lead a laboratory", "r": "careers/interests/lead"}, {"l": "Pursue hands-on research", "r": "careers/interests/research"}, {"l": "Build AI for science", "r": "careers/interests/ai"}, {"l": "Find fellowship support", "r": "careers/interests/fellowships"}, {"l": "Contribute technical or professional expertise", "r": "careers/interests/professional"}], "f": "Not in any menu in prototype"}, {"l": "Other roles at HHMI", "r": "careers/other-roles"}, {"l": "Prototype guide", "r": "guide"}, {"l": "Janelia prototype guide", "r": "janelia/prototype-guide", "f": "Not linked in prototype"}]}];
+var CTA={'Janelia':['Join Janelia','janelia/join']};
+var INTRO={
+  'Programs':'Find support for your next scientific chapter, from early career to an independent lab.',
+  'Our scientists':'Meet the people asking the next questions, and follow what they discover.',
+  'Janelia':'Janelia Research Campus. Understanding how brains generate behavior.',
+  'Shaping science':'Better ways to work, and more possibilities for discovery.',
+  'Science for everyone':'Bringing science to more classrooms, screens, and people.',
+  'More':'About HHMI, career paths, and pages outside the main sections.'
+};
+(function(){
+  var top=document.getElementById('top'),toggle=document.getElementById('toggle');
+  var mobile=function(){return window.matchMedia('(max-width:1060px)').matches};
+  var selEl=null;
+  function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+  function isGroup(n){return !n.r&&!!n.k}
+  function isHeading(n){return isGroup(n)&&n.k.every(function(x){return !x.k})}
+  function a(n,cls,label){return '<a class="'+(cls||'')+'" href="#" data-r="'+esc(n.r)+'"><span class="t">'+esc(label||n.l)+'</span>'+(n.f?'<span class="flag">'+esc(n.f)+'</span>':'')+'</a>'}
+  function li(n){
+    if(isHeading(n))return '<li class="sub">'+esc(n.l)+'</li>'+n.k.map(li).join('');
+    if(n.t)return '<li class="q"><a class="t2" href="#" data-r="'+esc(n.r)+'"><span class="t">'+esc(n.l)+'</span></a><a class="tech" href="#" data-r="'+esc(n.t)+'" aria-label="Technical statement: '+esc(n.l)+'">Tech</a></li>';
+    var kids=(n.k||[]).filter(function(c){return c.r!==n.r});
+    return '<li>'+a(n)+(kids.length?'<ul>'+kids.map(li).join('')+'</ul>':'')+'</li>';
+  }
+  function col(title,r,items){
+    return '<div class="col"><h3>'+(r?'<a href="#" data-r="'+esc(r)+'">'+esc(title)+'</a>':esc(title))+'</h3><ul>'+items.map(li).join('')+'</ul></div>';
+  }
+  // Loose pages gather in a first column; every child with its own pages becomes a column.
+  function columns(node,leadTitle){
+    var leaves=[],cols=[],extra='';
+    node.k.forEach(function(c){
+      if(!c.k){leaves.push(c);return}
+      var fields=c.k.filter(function(g){return isGroup(g)&&g.k.some(isGroup)});
+      if(fields.length){ // Open questions: links column here, full question lists in their own row
+        var hub=c.k.filter(function(g){return g.r});
+        var byField=fields.map(function(f){var all=f.k.filter(function(x){return x.r})[0];return {l:({Biology:'For biologists',AI:'For AI researchers',Theory:'For theorists',Tools:'For tool builders'})[f.l]||f.l,r:all&&all.r}});
+        cols.push(col(c.l,c.r,hub.concat(byField)));
+        extra='<div class="qrow"><h4>Open questions by field</h4><div class="cols c4">'+fields.map(function(f){
+          var all=f.k.filter(function(x){return x.r})[0];
+          return col(f.l,all&&all.r,f.k.filter(function(x){return !x.r}));
+        }).join('')+'</div></div>';
+        return;
+      }
+      cols.push(col(c.l,c.r,c.k.filter(function(x){return x.r!==c.r})));
+    });
+    return '<div class="cols">'+(leaves.length?col(leadTitle,null,leaves):'')+cols.join('')+'</div>'+extra;
+  }
+  function intro(n){
+    return '<div class="intro"><h2>'+esc(n.l)+'</h2><p>'+esc(INTRO[n.l]||'')+'</p>'+(n.r?'<a class="go" href="#" data-r="'+esc(CTA[n.l]?CTA[n.l][1]:n.r)+'">'+esc(CTA[n.l]?CTA[n.l][0]:'Go to '+n.l)+' <span aria-hidden="true">→</span></a>':'')+'</div>';
+  }
+  function janelia(n){
+    var home=n.k.filter(function(c){return !c.k}),secs=n.k.filter(function(c){return c.k});
+    var rail='<ul class="rail" role="tablist" aria-label="Janelia sections">'+home.map(function(h){return '<li role="presentation"><a href="#" data-r="'+esc(h.r)+'">'+esc(h.l)+'</a></li>'}).join('')+
+      secs.map(function(s,i){return '<li role="presentation"><button role="tab" id="jt'+i+'" aria-controls="jp'+i+'" aria-selected="'+(i===0)+'" data-i="'+i+'">'+esc(s.l)+'<span class="arr" aria-hidden="true">→</span></button></li>'}).join('')+'</ul>';
+    var panels=secs.map(function(s,i){
+      return '<div class="tabpanel" role="tabpanel" id="jp'+i+'" aria-labelledby="jt'+i+'"'+(i?' hidden':'')+'><div class="tabhead"><h3>'+esc(s.l)+'</h3>'+'</div>'+columns(s,'Overview')+'</div>';
+    }).join('');
+    return '<div class="railwrap">'+rail+'<div>'+panels+'</div></div>';
+  }
+  function close(el){el.classList.remove('open');el.firstChild.setAttribute('aria-expanded','false')}
+  TREE.forEach(function(n){
+    var el=document.createElement('li');
+    var body=n.l==='Janelia'?janelia(n):columns(n,n.l==='More'?'Also on the site':'Overview');
+    el.innerHTML='<button aria-expanded="false">'+esc(n.l)+'<svg class="chev" viewBox="0 0 10 10" aria-hidden="true"><path d="M1 3l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.2"/></svg></button>'+
+      '<div class="mega"><div class="inner">'+intro(n)+'<div>'+body+'</div></div></div>';
+    var btn=el.firstChild,t;
+    function open(){[].forEach.call(top.children,function(s){if(s!==el)close(s)});el.classList.add('open');btn.setAttribute('aria-expanded','true')}
+    el.addEventListener('mouseenter',function(){if(mobile())return;clearTimeout(t);open()});
+    el.addEventListener('mouseleave',function(){if(mobile())return;t=setTimeout(function(){close(el)},200)});
+    btn.addEventListener('click',function(e){e.stopPropagation();el.classList.contains('open')?close(el):open()});
+    var tabs=el.querySelectorAll('.rail button');
+    tabs.forEach(function(b){
+      function show(){tabs.forEach(function(x){x.setAttribute('aria-selected',x===b)});el.querySelectorAll('.tabpanel').forEach(function(p,i){p.hidden=String(i)!==b.dataset.i})}
+      b.addEventListener('mouseenter',function(){if(!mobile())show()});
+      b.addEventListener('click',function(e){e.stopPropagation();show()});
+    });
+    el.querySelector('.mega').addEventListener('click',function(e){
+      e.stopPropagation();var l=e.target.closest('a[data-r]');if(!l)return;e.preventDefault();
+      if(selEl)selEl.classList.remove('sel');selEl=l;l.classList.add('sel');
+    });
+    top.appendChild(el);
+  });
+  document.addEventListener('click',function(){if(!mobile())[].forEach.call(top.children,close)});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')[].forEach.call(top.children,close)});
+  toggle.addEventListener('click',function(e){e.stopPropagation();var s=top.classList.toggle('show');document.body.classList.toggle('menu-lock',s);toggle.setAttribute('aria-expanded',s);toggle.textContent=s?'Close':'Menu'});
+})();
+</script>
+<script>
+/* Mega footer: one column per header section, built from the same TREE as the menu. */
+(function(){
+  var cols=document.getElementById('mfcols'),sel=null;
+  function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+  function link(n){return '<li><a href="#" data-r="'+esc(n.r)+'"><span class="t">'+esc(n.l)+'</span></a></li>'}
+  cols.innerHTML=TREE.map(function(n){
+    var items=n.k.filter(function(c){return c.r!==n.r}).map(function(c){
+      if(c.r)return link(c);
+      return '<li class="sub">'+esc(c.l)+'</li>'+(c.k||[]).filter(function(x){return x.r}).map(link).join('');
+    }).join('');
+    var h=n.r?'<a href="#" data-r="'+esc(n.r)+'">'+esc(n.l)+'</a>':esc(n.l);
+    return '<div class="col"><h3>'+h+'</h3><ul>'+items+'</ul></div>';
+  }).join('');
+  cols.addEventListener('click',function(e){
+    var l=e.target.closest('a[data-r]');if(!l)return;e.preventDefault();
+    if(sel)sel.classList.remove('sel');sel=l;l.classList.add('sel');
+  });
+  document.getElementById('totop').addEventListener('click',function(e){
+    e.preventDefault();
+    window.scrollTo({top:0,behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});
+  });
+})();
+
+/* Particle wordmark. The page above lifts away like a curtain to uncover it; particles rise into the HHMI wordmark. */
+(function(){
+  var PATHS=[].map.call(document.querySelectorAll('.brand svg path, .brand svg polygon'),function(el){
+    return el.tagName.toLowerCase()==='polygon'?'M'+el.getAttribute('points').trim().split(/\s+/).join(' ').replace(/(\S+ \S+) /g,'$1 L')+' Z':el.getAttribute('d');
+  });
+  var VB_W=128,VB_H=38,FILL=.9,TARGET=9000;
+  var cv=document.getElementById('particles'),ctx=cv.getContext('2d'),spacer=document.getElementById('reveal');
+  var reduce=matchMedia('(prefers-reduced-motion: reduce)');
+  var P=[],W=0,H=0,r=1,R=80,lastW=-1,raf=0,visible=false,attract=false;
+  var mouse={x:-1e4,y:-1e4,on:false,f:4,base:4};
+
+  function scatter(p){p.x=Math.random()*W;p.y=H*(.45+Math.random()*.9);p.vx=p.vy=0}
+  function layout(){
+    var w=document.documentElement.clientWidth;
+    var pad=Math.max(40,Math.min(120,w*.06)),lw=w*FILL,lh=lw*VB_H/VB_W,h=Math.round(lh+pad*2);
+    document.documentElement.style.setProperty('--stage-h',h+'px');
+    if(w===lastW)return;lastW=w;W=w;H=h;
+    var dpr=Math.min(window.devicePixelRatio||1,2);
+    cv.width=Math.round(W*dpr);cv.height=Math.round(H*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);
+    var off=document.createElement('canvas');off.width=Math.ceil(lw);off.height=Math.ceil(lh);
+    var o=off.getContext('2d');o.scale(lw/VB_W,lh/VB_H);o.fillStyle='#fff';
+    PATHS.forEach(function(d){o.fill(new Path2D(d))});
+    var data=o.getImageData(0,0,off.width,off.height).data,filled=0,i;
+    for(i=3;i<data.length;i+=4)if(data[i]>127)filled++;
+    var gap=Math.max(2,Math.sqrt(filled/TARGET));
+    r=Math.max(.7,gap*.36);R=Math.max(50,W*.06);
+    var ox=(W-lw)/2,oy=(H-lh)/2,settled=attract||reduce.matches;
+    P=[];
+    for(var y=gap/2;y<off.height;y+=gap)for(var x=gap/2;x<off.width;x+=gap){
+      if(data[((y|0)*off.width+(x|0))*4+3]<128)continue;
+      var p={hx:x+ox,hy:y+oy,vx:0,vy:0,e:.7+Math.random()*.6};
+      if(settled){p.x=p.hx;p.y=p.hy}else scatter(p);
+      P.push(p);
+    }
+    draw();
+  }
+  function step(){
+    var moving=0,R2=R*R,m=mouse.on&&!reduce.matches,k=.045;
+    mouse.f+=(mouse.base-mouse.f)*.06;
+    for(var i=0;i<P.length;i++){
+      var p=P[i],ax=(p.hx-p.x)*k*p.e,ay=(p.hy-p.y)*k*p.e;
+      if(m){var dx=p.x-mouse.x,dy=p.y-mouse.y,d2=dx*dx+dy*dy;
+        if(d2<R2&&d2>.01){var d=Math.sqrt(d2),f=(1-d/R)*mouse.f/d;ax+=dx*f;ay+=dy*f}}
+      p.vx=(p.vx+ax)*.86;p.vy=(p.vy+ay)*.86;p.x+=p.vx;p.y+=p.vy;
+      if(Math.abs(p.vx)+Math.abs(p.vy)>.03||Math.abs(p.hx-p.x)+Math.abs(p.hy-p.y)>.4)moving++;
+    }
+    return moving;
+  }
+  function draw(){
+    ctx.clearRect(0,0,W,H);ctx.fillStyle='#fff';ctx.beginPath();
+    for(var i=0;i<P.length;i++){var p=P[i];ctx.moveTo(p.x+r,p.y);ctx.arc(p.x,p.y,r,0,6.2832)}
+    ctx.fill();
+  }
+  function frame(){
+    raf=0;var moving=attract&&!reduce.matches?step():0;draw();
+    if(visible&&(moving||mouse.on||mouse.f>mouse.base+.1))raf=requestAnimationFrame(frame);
+  }
+  function kick(){if(!raf&&visible&&!reduce.matches)raf=requestAnimationFrame(frame)}
+
+  new IntersectionObserver(function(es){
+    var e=es[es.length-1];visible=e.isIntersecting;
+    if(visible&&e.intersectionRatio>=.35&&!attract)attract=true;          // footer has lifted enough: assemble
+    if(!visible&&attract&&!reduce.matches){attract=false;P.forEach(scatter);draw()} // fully covered again: reset for the next reveal
+    kick();
+  },{threshold:[0,.35]}).observe(spacer);
+
+  function at(e){var b=cv.getBoundingClientRect();mouse.x=e.clientX-b.left;mouse.y=e.clientY-b.top}
+  cv.addEventListener('pointermove',function(e){at(e);mouse.on=true;kick()});
+  cv.addEventListener('pointerleave',function(e){if(e.pointerType==='mouse'){mouse.on=false;mouse.x=mouse.y=-1e4}});
+  cv.addEventListener('pointerdown',function(e){at(e);mouse.on=true;mouse.f=16;kick()});   // click or tap: bigger burst
+  function lift(e){if(e.pointerType!=='mouse')setTimeout(function(){mouse.on=false},300)}
+  cv.addEventListener('pointerup',lift);cv.addEventListener('pointercancel',lift);
+
+  var rq=0;window.addEventListener('resize',function(){if(rq)return;rq=requestAnimationFrame(function(){rq=0;layout();kick()})});
+  layout();
+})();
+</script>
+</body></html>
