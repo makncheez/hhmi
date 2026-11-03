@@ -87,6 +87,11 @@
     text-wrap: balance;
   }
 
+  /* Desktop: photo is 80% of the card width, with equal space above and at each side */
+  @media (min-width: 992px) {
+    .gcell-in.person { padding: 10% 10% var(--cell-pad); }
+  }
+
   /* ---------- Story card ---------- */
   .story img {
     display: block;
