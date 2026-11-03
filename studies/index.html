@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>HHMI Studies</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500&family=Space+Mono&display=swap">
+<style>
+  :root {
+    --bg: #000;
+    --fg: #fff;
+    --dim: #8a8a8a;
+    --line: #262626;
+    --green: #00AC1D;
+    --blue: #0086A4;
+    --font-label: "Space Mono", ui-monospace, Menlo, Consolas, monospace;
+    --font-head: "Space Grotesk", "Helvetica Neue", Arial, sans-serif;
+    color-scheme: dark;
+  }
+  body { margin: 0; background: var(--bg); color: var(--fg); font: 400 14px/1.5 var(--font-label); }
+  main {
+    max-width: 960px;
+    margin: 0 auto;
+    padding-block: 64px;
+    padding-left: max(24px, env(safe-area-inset-left, 0px));
+    padding-right: max(24px, env(safe-area-inset-right, 0px));
+  }
+  .eyebrow { margin: 0 0 12px; color: var(--dim); letter-spacing: 0.04em; }
+  .eyebrow a { color: inherit; }
+  h1 { margin: 0 0 40px; font: 500 clamp(40px, 6vw, 64px)/1 var(--font-head); letter-spacing: -0.02em; }
+  .rule { height: 2px; background: linear-gradient(90deg, var(--blue), var(--green)); }
+  ul { list-style: none; margin: 0; padding: 0; }
+  li { border-bottom: 1px solid var(--line); }
+  li a {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 4px 24px;
+    padding: 24px 0;
+    color: var(--fg);
+    text-decoration: none;
+  }
+  li b { font: 500 clamp(24px, 3.4vw, 36px)/1.1 var(--font-head); letter-spacing: -0.02em; transition: color .2s; }
+  li span { grid-column: 1; color: var(--dim); }
+  li i { grid-column: 2; grid-row: 1 / span 2; align-self: center; font-style: normal; color: var(--dim); transition: color .2s, transform .2s; }
+  li a:hover b, li a:hover i { color: var(--green); }
+  li a:hover i { transform: translateX(4px); }
+  li a:focus-visible { outline: 2px solid var(--fg); outline-offset: 4px; }
+  @media (prefers-reduced-motion: reduce) { li a:hover i { transform: none; } }
+</style>
+</head>
+<body>
+<main>
+  <p class="eyebrow"><a href="../">HHMI Web Redesign</a> / Studies</p>
+  <h1>Studies</h1>
+  <div class="rule"></div>
+  <ul>
+    <li><a href="call-for-applicants.html"><b>Call for Applicants</b><span>Revolving list of roles beside a green Apply box, on a Bootstrap grid.</span><i>→</i></a></li>
+    <li><a href="footer.html"><b>Footer</b><span>Mega footer built from the menu, with a particle HHMI wordmark reveal.</span><i>→</i></a></li>
+    <li><a href="menu.html"><b>Full site menu</b><span>A black mega menu containing every page, over a full-screen hero.</span><i>→</i></a></li>
+    <li><a href="sitemap.html"><b>Sitemap</b><span>Every page under its menu section, cross-links, and issues to review.</span><i>→</i></a></li>
+  </ul>
+</main>
+</body>
+</html>
