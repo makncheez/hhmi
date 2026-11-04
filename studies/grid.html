@@ -198,15 +198,13 @@
     grid-template-rows: [head] auto [p1] minmax(0, 150px) [p2] minmax(0, 150px) [fill] 1fr [status] auto [date] auto;
     row-gap: 16px;
     height: 100%;
-    min-width: 936px;
-    padding-bottom: 24px;
     margin: 0;
     list-style: none;
     color: var(--grid-ink);
   }
   .xh-card {
     grid-row: 1 / -1;
-    margin: 0 var(--in-card) -24px;
+    margin: 0 var(--in-card);
     background: #fff;
     border: 1px solid var(--ink);
     border-radius: 22px;
@@ -250,6 +248,7 @@
   .xh-date {
     grid-row: date;
     margin: 0 calc(var(--in-card) + 16px);
+    padding-bottom: 24px;
     font: 700 clamp(14px, calc(var(--col) * .17), 18px)/1 var(--font-mono);
     letter-spacing: .02em;
     white-space: nowrap;
@@ -261,18 +260,67 @@
     margin-inline: var(--in-card);
   }
   .xh-date.is-open::before,
-  .xh-date.is-open::after { content: ""; flex: none; width: var(--dot); height: var(--dot); border-radius: 50%; background: #A5F300; }
-  /* Below 992px: drop the empty outer columns and scroll the 10-column row */
+  .xh-date.is-open::after {
+    content: ""; flex: none; width: var(--dot); height: var(--dot); border-radius: 50%; background: #A5F300;
+    animation: xh-blink 1s steps(1, end) infinite;     /* hard on/off, once a second */
+  }
+  @keyframes xh-blink { 50% { opacity: 0; } }
+  /* Desktop placement: stages s1-s5 on columns 2-11, 2 columns each */
+  .s1 { grid-column: 2 / 4; }
+  .s2 { grid-column: 4 / 6; }
+  .s3 { grid-column: 6 / 8; }
+  .s4 { grid-column: 8 / 10; }
+  .s5 { grid-column: 10 / 12; }
+  .p-cech    { grid-column: 2 / 4;  grid-row: p1; }
+  .p-gilliam { grid-column: 4 / 8;  grid-row: p1; }
+  .p-hannah  { grid-column: 6 / 8;  grid-row: p2; }
+  .p-freeman { grid-column: 8 / 12; grid-row: p1; }
+  .p-inv     { grid-column: 10 / 12; grid-row: p2; }
+
+  /* Below 992px: three stacked rows. Undergraduate is full width (12 cols);
+     PhD | Postdoc and Early | Mid Career are 6 + 6, so the spanning boxes
+     still span their pair. In Content mode the section grows to fit
+     (800px minimum) and the crosshair pattern keeps repeating down. */
   @media (max-width: 991.98px) {
+    .xhair { height: auto; min-height: 800px; }
+    .xhair:not([data-mode="content"]) { height: 800px; }
+    .xhair[data-mode="content"] .xh-layer { position: relative; inset: auto; padding: 32px 0 48px; }
+    .xh-layer > .container, .xh-scroll, .xh-programs { height: auto; }
+    .xh-scroll { overflow: visible; }
     .xh-programs {
-      --col: calc(100cqw / 10);
-      grid-template-columns: 0 repeat(10, 1fr) 0;
-      min-width: 780px;
+      row-gap: 12px;
+      grid-template-rows:
+        auto auto auto auto 8px            /* 1-4  Undergraduate */
+        auto auto auto auto auto 8px       /* 6-10 PhD | Postdoc */
+        auto auto auto auto auto;          /* 12-16 Early | Mid Career */
     }
+    .s1 { grid-column: 1 / 13; }
+    .s2, .s4 { grid-column: 1 / 7; }
+    .s3, .s5 { grid-column: 7 / 13; }
+    .xh-card.s1 { grid-row: 1 / 5; }
+    .xh-card.s2, .xh-card.s3 { grid-row: 6 / 11; }
+    .xh-card.s4, .xh-card.s5 { grid-row: 12 / 17; }
+    .xh-head.s1 { grid-row: 1; }
+    .xh-head.s2, .xh-head.s3 { grid-row: 6; }
+    .xh-head.s4, .xh-head.s5 { grid-row: 12; }
+    .p-cech    { grid-column: 1 / 13; grid-row: 2; }
+    .p-gilliam { grid-column: 1 / 13; grid-row: 7; }
+    .p-hannah  { grid-column: 7 / 13; grid-row: 8; }
+    .p-freeman { grid-column: 1 / 13; grid-row: 13; }
+    .p-inv     { grid-column: 7 / 13; grid-row: 14; }
+    .xh-prog { min-height: 110px; }
+    .xh-status.s1 { grid-row: 3; }
+    .xh-status.s2, .xh-status.s3 { grid-row: 9; }
+    .xh-status.s4, .xh-status.s5 { grid-row: 15; }
+    .xh-date.s1 { grid-row: 4; }
+    .xh-date.s2, .xh-date.s3 { grid-row: 10; }
+    .xh-date.s4, .xh-date.s5 { grid-row: 16; }
+    .xh-status { margin-top: 12px; }
   }
   @media (prefers-reduced-motion: reduce) {
     .xh-layer, .xhair[data-mode="content"] .xh-layer { transition: none; }
     .xh-switch span { transition: none; }
+    .xh-date.is-open::before, .xh-date.is-open::after { animation: none; }
   }
 
   /* ---------- Person card ---------- */
@@ -347,38 +395,37 @@
     <div class="container">
       <div class="xh-scroll">
         <div class="xh-programs">
-          <!-- Stage cards: 2 columns each, columns 2-11 -->
-          <div class="xh-card" style="grid-column: 2 / 4"></div>
-          <div class="xh-card" style="grid-column: 4 / 6"></div>
-          <div class="xh-card" style="grid-column: 6 / 8"></div>
-          <div class="xh-card" style="grid-column: 8 / 10"></div>
-          <div class="xh-card" style="grid-column: 10 / 12"></div>
+          <!-- Stage cards (s1-s5); placement lives in the CSS -->
+          <div class="xh-card s1"></div>
+          <div class="xh-card s2"></div>
+          <div class="xh-card s3"></div>
+          <div class="xh-card s4"></div>
+          <div class="xh-card s5"></div>
 
-          <h3 class="xh-head" style="grid-column: 2 / 4">Undergraduate</h3>
-          <h3 class="xh-head" style="grid-column: 4 / 6">PhD</h3>
-          <h3 class="xh-head" style="grid-column: 6 / 8">Postdoc</h3>
-          <h3 class="xh-head" style="grid-column: 8 / 10">Early Career Faculty</h3>
-          <h3 class="xh-head" style="grid-column: 10 / 12">Mid Career &amp; Senior Faculty</h3>
+          <h3 class="xh-head s1">Undergraduate</h3>
+          <h3 class="xh-head s2">PhD</h3>
+          <h3 class="xh-head s3">Postdoc</h3>
+          <h3 class="xh-head s4">Early Career Faculty</h3>
+          <h3 class="xh-head s5">Mid Career &amp; Senior Faculty</h3>
 
-          <!-- Programmes: spanning boxes cover two stages -->
-          <div class="xh-prog" style="grid-column: 2 / 4; grid-row: p1"><strong>Cech Fellows</strong><span>Annual Competition</span></div>
-          <div class="xh-prog" style="grid-column: 4 / 8; grid-row: p1"><strong>Gilliam Fellows</strong><span>Annual Competition</span></div>
-          <div class="xh-prog" style="grid-column: 6 / 8; grid-row: p2"><strong>Hannah Gray Fellows</strong><span>Biennial Competition</span></div>
-          <div class="xh-prog" style="grid-column: 8 / 12; grid-row: p1"><strong>Freeman Hrabowski Scholars Program</strong><span>Biennial Competition</span></div>
-          <div class="xh-prog" style="grid-column: 10 / 12; grid-row: p2"><strong>Investigators</strong><span>Every 5 years</span></div>
+          <!-- Programmes: Gilliam and Freeman Hrabowski span two stages -->
+          <div class="xh-prog p-cech"><strong>Cech Fellows</strong><span>Annual Competition</span></div>
+          <div class="xh-prog p-gilliam"><strong>Gilliam Fellows</strong><span>Annual Competition</span></div>
+          <div class="xh-prog p-hannah"><strong>Hannah Gray Fellows</strong><span>Biennial Competition</span></div>
+          <div class="xh-prog p-freeman"><strong>Freeman Hrabowski Scholars Program</strong><span>Biennial Competition</span></div>
+          <div class="xh-prog p-inv"><strong>Investigators</strong><span>Every 5 years</span></div>
 
-          <!-- Application status and date -->
-          <p class="xh-status" style="grid-column: 2 / 4">Next Application Opens</p>
-          <p class="xh-status" style="grid-column: 4 / 6">Next Application Closes</p>
-          <p class="xh-status" style="grid-column: 6 / 8">Now Application Open!</p>
-          <p class="xh-status" style="grid-column: 8 / 10">Next Application Closes</p>
-          <p class="xh-status" style="grid-column: 10 / 12">Next Application Opens</p>
+          <p class="xh-status s1">Next Application Opens</p>
+          <p class="xh-status s2">Next Application Closes</p>
+          <p class="xh-status s3">Now Application Open!</p>
+          <p class="xh-status s4">Next Application Closes</p>
+          <p class="xh-status s5">Next Application Opens</p>
 
-          <p class="xh-date" style="grid-column: 2 / 4">NOV 10, 2026</p>
-          <p class="xh-date" style="grid-column: 4 / 6">SEP 1, 2027</p>
-          <p class="xh-date is-open" style="grid-column: 6 / 8">DEC 15, 2026</p>
-          <p class="xh-date" style="grid-column: 8 / 10">DEC 15, 2026</p>
-          <p class="xh-date" style="grid-column: 10 / 12">SEP 28, 2027</p>
+          <p class="xh-date s1">NOV 10, 2026</p>
+          <p class="xh-date s2">SEP 1, 2027</p>
+          <p class="xh-date s3 is-open">DEC 15, 2026</p>
+          <p class="xh-date s4">DEC 15, 2026</p>
+          <p class="xh-date s5">SEP 28, 2027</p>
         </div>
       </div>
     </div>
