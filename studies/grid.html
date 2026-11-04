@@ -84,16 +84,14 @@
      Reduce motion: the animation stops and the crosshairs stay black. */
   @property --wave { syntax: "<length>"; inherits: false; initial-value: 0px; }
   @keyframes xhair-wave { to { --wave: 3200px; } }
-  .xhair {
+  .xhair, .combo {
     --col: calc((100% - 56px) / 12);   /* < 576px: fluid container */
     --step: 1;                         /* crosshair on every Nth column line */
     --row: 200px;
     --xhair: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 108 108' fill='none' stroke='%23000' stroke-width='1'%3E%3Cpath vector-effect='non-scaling-stroke' d='M54 32V49M54 59V76M32 54H49M59 54H76'/%3E%3C/svg%3E");
-    position: relative;
-    height: 800px;
-    margin: 48px 0 72px;
   }
-  .xhair::before {
+  .xhair { position: relative; height: 800px; margin: 48px 0 72px; }
+  .xhair::before, .combo::before {
     content: "";
     position: absolute;
     inset: calc(var(--row) / -2) 0;     /* decorative: pseudo content is not announced */
@@ -110,15 +108,15 @@
     animation: xhair-wave 10s linear infinite;
   }
   @media (prefers-reduced-motion: reduce) {
-    .xhair::before { animation: none; background: #111; }
+    .xhair::before, .combo::before { animation: none; background: #111; }
   }
-  @media (min-width: 576px)  { .xhair { --col: 43px; } }
-  @media (min-width: 768px)  { .xhair { --col: 58px; } }
-  @media (min-width: 992px)  { .xhair { --col: 78px; } }
-  @media (min-width: 1200px) { .xhair { --col: 93px; } }
-  @media (min-width: 1400px) { .xhair { --col: 108px; } }
+  @media (min-width: 576px)  { .xhair, .combo { --col: 43px; } }
+  @media (min-width: 768px)  { .xhair, .combo { --col: 58px; } }
+  @media (min-width: 992px)  { .xhair, .combo { --col: 78px; } }
+  @media (min-width: 1200px) { .xhair, .combo { --col: 93px; } }
+  @media (min-width: 1400px) { .xhair, .combo { --col: 108px; } }
   @media (max-width: 767.98px) {
-    .xhair {
+    .xhair, .combo {
       --step: 3;
       --xhair: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 108 108' fill='none' stroke='%23000' stroke-width='1'%3E%3Cpath vector-effect='non-scaling-stroke' d='M54 38.5V50.5M54 57.5V69.5M38.5 54H50.5M57.5 54H69.5'/%3E%3C/svg%3E");
     }
@@ -142,7 +140,8 @@
      to keep the label on the same right edge as the grid below. */
   @media (max-width: 575.98px) {
     .xhair > .container,
-    .schema-band > .container {
+    .schema-band > .container,
+    .combo > .container {
       padding-left: calc(12px + max(16px, env(safe-area-inset-left, 0px)));
       padding-right: calc(12px + max(16px, env(safe-area-inset-right, 0px)));
     }
@@ -180,7 +179,8 @@
     background: #000;
     box-shadow: 0 -48px 0 #000, 0 48px 0 #000;
   }
-  .xhair[data-theme="dark"]::before {
+  .xhair[data-theme="dark"]::before,
+  .combo[data-theme="dark"]::before {
     background: repeating-linear-gradient(135deg,
       #fff    calc(var(--wave) + 0px),
       #A5F300 calc(var(--wave) + 1067px),
@@ -194,7 +194,8 @@
   .xhair[data-theme="dark"] .xh-card { background: #000; }
   .xhair[data-theme="dark"] .xh-prog { color: #111; border-color: #A5F300; }
   @media (prefers-reduced-motion: reduce) {
-    .xhair[data-theme="dark"]::before { background: #fff; }
+    .xhair[data-theme="dark"]::before,
+    .combo[data-theme="dark"]::before { background: #fff; }
   }
 
   /* ---------- Background Grid: programme content ----------
@@ -397,6 +398,42 @@
     .schema .gcell:nth-last-child(-n+3)::before { border-bottom-width: 0; }
   }
 
+  /* ---------- Schema and Background Grid ----------
+     The crosshair pattern (full width, same column lines and wave) under
+     the Schema grid (.container > .row.g-0 > cols). Crosshair rows are half
+     a Schema cell apart, so one sits in every open line junction and one at
+     the middle of each cell edge. A cell is 4 columns wide on desktop, 6 on
+     tablet and 12 on phone, and 5:3 tall, so a row is 0.3 x cell width.
+     The pattern starts on the grid's top edge (48px padding + 96px header)
+     and stops on its bottom edge. Own Light / Dark switch. */
+  .combo {
+    --cellw: calc(100cqw - 56px);      /* phone: fluid container, cqw = this section's width */
+    container-type: inline-size;
+    --row: calc(var(--cellw) * .3);
+    --top: 144px;
+    --bottom: 72px;
+    --grid-ink: #111;
+    --grid-line: #111;
+    position: relative;
+    padding: 48px 0 var(--bottom);
+    color: var(--grid-ink);
+    transition: background-color .4s;
+  }
+  @media (min-width: 576px) { .combo { --cellw: calc(var(--col) * 12); } }
+  @media (min-width: 768px) { .combo { --cellw: calc(var(--col) * 6); } }
+  @media (min-width: 992px) { .combo { --cellw: calc(var(--col) * 4); } }
+  .combo::before {
+    inset: calc(var(--top) - var(--row) / 2) 0 calc(var(--bottom) - var(--row) / 2);
+  }
+  .combo > .container { position: relative; }        /* paints above the pattern */
+  .combo-head { height: 96px; }
+  .combo .section-label { padding-top: 0; }
+  .combo[data-theme="dark"] { --grid-ink: #fff; --grid-line: #fff; background: #000; }
+  .combo .gcell::before, .combo .gcell::after { transition: border-color .4s; }
+  @media (prefers-reduced-motion: reduce) {
+    .combo, .combo .gcell::before, .combo .gcell::after { transition: none; }
+  }
+
   /* ---------- Person card ---------- */
   .person { text-align: center; }
   .person img {
@@ -550,6 +587,26 @@
       <span class="xh-off" aria-hidden="true">Light</span>
       <span class="xh-on" aria-hidden="true">Dark</span>
     </button>
+    <div class="row g-0 schema">
+      <div class="col-12 col-md-6 col-lg-4 gcell"><div class="gcell-in"></div></div>
+      <div class="col-12 col-md-6 col-lg-4 gcell"><div class="gcell-in"></div></div>
+      <div class="col-12 col-md-6 col-lg-4 gcell"><div class="gcell-in"></div></div>
+      <div class="col-12 col-md-6 col-lg-4 gcell"><div class="gcell-in"></div></div>
+      <div class="col-12 col-md-6 col-lg-4 gcell"><div class="gcell-in"></div></div>
+      <div class="col-12 col-md-6 col-lg-4 gcell"><div class="gcell-in"></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="combo" aria-labelledby="combo-label">
+  <div class="container">
+    <div class="combo-head">
+      <h2 class="section-label" id="combo-label">Schema and Background Grid</h2>
+      <button type="button" class="xh-switch xh-theme" role="switch" aria-checked="false" aria-label="Dark mode">
+        <span class="xh-off" aria-hidden="true">Light</span>
+        <span class="xh-on" aria-hidden="true">Dark</span>
+      </button>
+    </div>
     <div class="row g-0 schema">
       <div class="col-12 col-md-6 col-lg-4 gcell"><div class="gcell-in"></div></div>
       <div class="col-12 col-md-6 col-lg-4 gcell"><div class="gcell-in"></div></div>
