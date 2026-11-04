@@ -354,6 +354,32 @@
     .xh-date.is-open::before, .xh-date.is-open::after { animation: none; }
   }
 
+  /* ---------- Schema ----------
+     Same framework as Post Grid: .container > .row.g-0 > cols, with the
+     broken-line .gcell. Differences: no outer top or bottom line (only the
+     lines between rows), and verticals run the full height, breaking 10px
+     either side of each row line. 3 across on desktop, 2 on tablet, 1 on
+     phone; cells are 5:3. Row edges per breakpoint are picked with
+     nth-child, so keep the cell count a multiple of 6. */
+  .schema-section { margin-top: 72px; }
+  .schema .gcell { aspect-ratio: 5 / 3; }
+  .schema .gcell::before { top: auto; border-top-width: 0; }      /* bottom line only */
+  .schema .gcell::after  { top: 10px; bottom: 10px; }
+  /* phone: 1 per row */
+  .schema .gcell:first-child::after { top: 0; }
+  .schema .gcell:last-child::after { bottom: 0; }
+  .schema .gcell:last-child::before { border-bottom-width: 0; }
+  @media (min-width: 768px) {          /* tablet: 2 per row */
+    .schema .gcell:nth-child(-n+2)::after { top: 0; }
+    .schema .gcell:nth-last-child(-n+2)::after { bottom: 0; }
+    .schema .gcell:nth-last-child(-n+2)::before { border-bottom-width: 0; }
+  }
+  @media (min-width: 992px) {          /* desktop: 3 per row */
+    .schema .gcell:nth-child(-n+3)::after { top: 0; }
+    .schema .gcell:nth-last-child(-n+3)::after { bottom: 0; }
+    .schema .gcell:nth-last-child(-n+3)::before { border-bottom-width: 0; }
+  }
+
   /* ---------- Person card ---------- */
   .person { text-align: center; }
   .person img {
@@ -498,6 +524,20 @@
 
     </div>
   </div>
+
+  <section class="schema-section" aria-labelledby="schema-label">
+    <div class="container">
+      <h2 class="section-label" id="schema-label">Schema</h2>
+      <div class="row g-0 schema">
+        <div class="col-12 col-md-6 col-lg-4 gcell"><div class="gcell-in"></div></div>
+        <div class="col-12 col-md-6 col-lg-4 gcell"><div class="gcell-in"></div></div>
+        <div class="col-12 col-md-6 col-lg-4 gcell"><div class="gcell-in"></div></div>
+        <div class="col-12 col-md-6 col-lg-4 gcell"><div class="gcell-in"></div></div>
+        <div class="col-12 col-md-6 col-lg-4 gcell"><div class="gcell-in"></div></div>
+        <div class="col-12 col-md-6 col-lg-4 gcell"><div class="gcell-in"></div></div>
+      </div>
+    </div>
+  </section>
 </main>
 
 <script>
