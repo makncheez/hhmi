@@ -67,6 +67,64 @@
   }
   .gcell-in { padding: calc(var(--cell-pad) + var(--gap-v-top) / 2) var(--cell-pad) var(--cell-pad); height: 100%; }
 
+  /* ---------- Crosshair pattern section ----------
+     Full-bleed, 800px tall. Crosshairs sit on the same 12-column lines as the
+     cards below, repeated outward to the screen edges. The section and the
+     grid share a centre, and the centre is column line 6, so a tile centred
+     horizontally puts every crosshair on a column line. Columns per breakpoint
+     are the container width minus its 24px padding, divided by 12.
+     Rows are 200px apart: 5 rows (0, 200 ... 800). The SVG keeps its aspect
+     ratio, so it scales to the tile width and sits centred in the 200px height.
+     Crosshair: 44px at xxl (41% of a column), 1px stroke at every size.
+     Phones: every 3rd line (on the card edges), crosshair about 24px.
+     Colour: the SVG is a mask, and the colour underneath is a diagonal
+     gradient (black > #A5F300 > #00AC1D > #000D42 > black, 3200px per cycle, about half a cycle on screen).
+     Animating --wave by one full cycle slides it top-left to bottom-right,
+     so each crosshair passes through every colour once every 10s, seamlessly.
+     Reduce motion: the animation stops and the crosshairs stay black. */
+  @property --wave { syntax: "<length>"; inherits: false; initial-value: 0px; }
+  @keyframes xhair-wave { to { --wave: 3200px; } }
+  .xhair {
+    --col: calc((100% - 56px) / 12);   /* < 576px: fluid container */
+    --step: 1;                         /* crosshair on every Nth column line */
+    --row: 200px;
+    --xhair: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 108 108' fill='none' stroke='%23000' stroke-width='1'%3E%3Cpath vector-effect='non-scaling-stroke' d='M54 32V49M54 59V76M32 54H49M59 54H76'/%3E%3C/svg%3E");
+    position: relative;
+    height: 800px;
+    margin: 48px 0 72px;
+  }
+  .xhair::before {
+    content: "";
+    position: absolute;
+    inset: calc(var(--row) / -2) 0;
+    pointer-events: none;
+    --tile: calc(var(--col) * var(--step)) var(--row);
+    background: repeating-linear-gradient(135deg,
+      #111    calc(var(--wave) + 0px),
+      #A5F300 calc(var(--wave) + 800px),
+      #00AC1D calc(var(--wave) + 1600px),
+      #000D42 calc(var(--wave) + 2400px),
+      #111    calc(var(--wave) + 3200px));
+    -webkit-mask: var(--xhair) center 0 / var(--tile) repeat;
+            mask: var(--xhair) center 0 / var(--tile) repeat;
+    animation: xhair-wave 10s linear infinite;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .xhair::before { animation: none; background: #111; }
+  }
+  @media (min-width: 576px)  { .xhair { --col: 43px; } }
+  @media (min-width: 768px)  { .xhair { --col: 58px; } }
+  @media (min-width: 992px)  { .xhair { --col: 78px; } }
+  @media (min-width: 1200px) { .xhair { --col: 93px; } }
+  @media (min-width: 1400px) { .xhair { --col: 108px; } }
+  @media (max-width: 767.98px) {
+    .xhair {
+      --step: 3;
+      --xhair: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 108 108' fill='none' stroke='%23000' stroke-width='1'%3E%3Cpath vector-effect='non-scaling-stroke' d='M54 38.5V50.5M54 57.5V69.5M38.5 54H50.5M57.5 54H69.5'/%3E%3C/svg%3E");
+    }
+  }
+  .xhair + .grid-page { padding-top: 0; }
+
   /* ---------- Person card ---------- */
   .person { text-align: center; }
   .person img {
@@ -125,6 +183,8 @@
 </style>
 </head>
 <body>
+
+<section class="xhair" aria-hidden="true"></section>
 
 <main class="grid-page">
   <div class="container">
