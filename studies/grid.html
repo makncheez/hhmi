@@ -164,6 +164,37 @@
   .xh-switch[aria-checked="false"] .xh-off,
   .xh-switch[aria-checked="true"] .xh-on { background: var(--grid-ink); color: #fff; }
   .xh-switch:focus-visible { outline: 2px solid var(--grid-ink); outline-offset: 3px; }
+  .xh-switch + .xh-switch { margin-top: 8px; }
+  .xh-switch, .section-label { transition: background .4s, color .4s, border-color .4s; }
+
+  /* ---------- Background Grid: dark mode (this section only) ----------
+     Black band; the band extends 48px above and below so the edge rows of
+     crosshairs sit on black too. The wave runs white > #A5F300 > #00AC1D
+     > white (no navy, which vanishes on black) and rests on white for
+     reduced motion. Cards invert to black with thin white lines; the green
+     programme boxes stay as they are. */
+  .xhair { transition: background-color .4s, box-shadow .4s; }
+  .xhair[data-theme="dark"] {
+    --grid-ink: #fff;
+    background: #000;
+    box-shadow: 0 -48px 0 #000, 0 48px 0 #000;
+  }
+  .xhair[data-theme="dark"]::before {
+    background: repeating-linear-gradient(135deg,
+      #fff    calc(var(--wave) + 0px),
+      #A5F300 calc(var(--wave) + 1067px),
+      #00AC1D calc(var(--wave) + 2133px),
+      #fff    calc(var(--wave) + 3200px));
+  }
+  .xhair[data-theme="dark"] .xh-switch { background: #000; }
+  .xhair[data-theme="dark"] .xh-switch[aria-checked="false"] .xh-off,
+  .xhair[data-theme="dark"] .xh-switch[aria-checked="true"] .xh-on { background: #fff; color: #000; }
+  .xhair[data-theme="dark"] .xh-programs { --ink: #fff; color: #fff; }
+  .xhair[data-theme="dark"] .xh-card { background: #000; }
+  .xhair[data-theme="dark"] .xh-prog { color: #111; border-color: #A5F300; }
+  @media (prefers-reduced-motion: reduce) {
+    .xhair[data-theme="dark"]::before { background: #fff; }
+  }
 
   /* ---------- Background Grid: programme content ----------
      Sits in the 1320px container on the same 12-column lines as the crosshairs.
@@ -171,10 +202,10 @@
      between cards fall on crosshair lines 3, 5, 7 and 9. Cards are inset 10px
      from the lines; green boxes 18px. Spanning programmes are their own grid
      items laid over two cards. Type scales with the column width.
-     Below 992px the row keeps its desktop layout and scrolls sideways. */
+     Below 992px the cards stack (see the stacked layout further down). */
   .xh-layer {
     position: absolute;
-    inset: 120px 0 40px;
+    inset: 160px 0 40px;
     opacity: 0;
     visibility: hidden;
     transition: opacity .4s ease, visibility 0s linear .4s;
@@ -389,6 +420,10 @@
       <span class="xh-off" aria-hidden="true">BG Only</span>
       <span class="xh-on" aria-hidden="true">Content</span>
     </button>
+    <button type="button" class="xh-switch xh-theme" role="switch" aria-checked="false" aria-label="Dark mode">
+      <span class="xh-off" aria-hidden="true">Light</span>
+      <span class="xh-on" aria-hidden="true">Dark</span>
+    </button>
   </div>
 
   <div class="xh-layer" id="bg-content" inert>
@@ -469,7 +504,13 @@
   // Background Grid switch: BG Only (pattern) / Content (programme cards).
   (function () {
     var section = document.querySelector(".xhair");
-    var btn = section.querySelector(".xh-switch");
+    var btn = section.querySelector(".xh-switch:not(.xh-theme)");
+    var theme = section.querySelector(".xh-theme");
+    theme.addEventListener("click", function () {
+      var dark = theme.getAttribute("aria-checked") !== "true";
+      theme.setAttribute("aria-checked", String(dark));
+      section.dataset.theme = dark ? "dark" : "light";
+    });
     var layer = document.getElementById("bg-content");
     btn.addEventListener("click", function () {
       var on = btn.getAttribute("aria-checked") !== "true";
