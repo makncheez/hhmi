@@ -141,7 +141,8 @@
   /* Phones: the container is fluid, so match the page's 16px side padding
      to keep the label on the same right edge as the grid below. */
   @media (max-width: 575.98px) {
-    .xhair > .container {
+    .xhair > .container,
+    .schema-band > .container {
       padding-left: calc(12px + max(16px, env(safe-area-inset-left, 0px)));
       padding-right: calc(12px + max(16px, env(safe-area-inset-right, 0px)));
     }
@@ -186,9 +187,9 @@
       #00AC1D calc(var(--wave) + 2133px),
       #fff    calc(var(--wave) + 3200px));
   }
-  .xhair[data-theme="dark"] .xh-switch { background: #000; }
-  .xhair[data-theme="dark"] .xh-switch[aria-checked="false"] .xh-off,
-  .xhair[data-theme="dark"] .xh-switch[aria-checked="true"] .xh-on { background: #fff; color: #000; }
+  [data-theme="dark"] .xh-switch { background: #000; }
+  [data-theme="dark"] .xh-switch[aria-checked="false"] .xh-off,
+  [data-theme="dark"] .xh-switch[aria-checked="true"] .xh-on { background: #fff; color: #000; }
   .xhair[data-theme="dark"] .xh-programs { --ink: #fff; color: #fff; }
   .xhair[data-theme="dark"] .xh-card { background: #000; }
   .xhair[data-theme="dark"] .xh-prog { color: #111; border-color: #A5F300; }
@@ -361,7 +362,23 @@
      either side of each row line. 3 across on desktop, 2 on tablet, 1 on
      phone; cells are 5:3. Row edges per breakpoint are picked with
      nth-child, so keep the cell count a multiple of 6. */
-  .schema-section { margin-top: 72px; }
+  /* Full-width band holding the Schema grid in its .container. Light mode
+     looks like the page; Dark turns the band black with white lines, label
+     and switch. Its own Light / Dark switch, independent of Background Grid. */
+  .schema-band {
+    --grid-ink: #111;
+    --grid-line: #111;
+    padding: 48px 0 72px;
+    color: var(--grid-ink);
+    transition: background-color .4s;
+  }
+  .schema-band[data-theme="dark"] { --grid-ink: #fff; --grid-line: #fff; background: #000; }
+  .schema-band .gcell::before,
+  .schema-band .gcell::after { transition: border-color .4s; }
+  .schema-band .xh-switch { margin-bottom: 16px; }
+  @media (prefers-reduced-motion: reduce) {
+    .schema-band, .schema-band .gcell::before, .schema-band .gcell::after { transition: none; }
+  }
   .schema .gcell { aspect-ratio: 5 / 3; }
   .schema .gcell::before { top: auto; border-top-width: 0; }      /* bottom line only */
   .schema .gcell::after  { top: 10px; bottom: 10px; }
@@ -524,33 +541,31 @@
 
     </div>
   </div>
-
-  <section class="schema-section" aria-labelledby="schema-label">
-    <div class="container">
-      <h2 class="section-label" id="schema-label">Schema</h2>
-      <div class="row g-0 schema">
-        <div class="col-12 col-md-6 col-lg-4 gcell"><div class="gcell-in"></div></div>
-        <div class="col-12 col-md-6 col-lg-4 gcell"><div class="gcell-in"></div></div>
-        <div class="col-12 col-md-6 col-lg-4 gcell"><div class="gcell-in"></div></div>
-        <div class="col-12 col-md-6 col-lg-4 gcell"><div class="gcell-in"></div></div>
-        <div class="col-12 col-md-6 col-lg-4 gcell"><div class="gcell-in"></div></div>
-        <div class="col-12 col-md-6 col-lg-4 gcell"><div class="gcell-in"></div></div>
-      </div>
-    </div>
-  </section>
 </main>
+
+<section class="schema-band" aria-labelledby="schema-label">
+  <div class="container">
+    <h2 class="section-label" id="schema-label">Schema</h2>
+    <button type="button" class="xh-switch xh-theme" role="switch" aria-checked="false" aria-label="Dark mode">
+      <span class="xh-off" aria-hidden="true">Light</span>
+      <span class="xh-on" aria-hidden="true">Dark</span>
+    </button>
+    <div class="row g-0 schema">
+      <div class="col-12 col-md-6 col-lg-4 gcell"><div class="gcell-in"></div></div>
+      <div class="col-12 col-md-6 col-lg-4 gcell"><div class="gcell-in"></div></div>
+      <div class="col-12 col-md-6 col-lg-4 gcell"><div class="gcell-in"></div></div>
+      <div class="col-12 col-md-6 col-lg-4 gcell"><div class="gcell-in"></div></div>
+      <div class="col-12 col-md-6 col-lg-4 gcell"><div class="gcell-in"></div></div>
+      <div class="col-12 col-md-6 col-lg-4 gcell"><div class="gcell-in"></div></div>
+    </div>
+  </div>
+</section>
 
 <script>
   // Background Grid switch: BG Only (pattern) / Content (programme cards).
   (function () {
     var section = document.querySelector(".xhair");
     var btn = section.querySelector(".xh-switch:not(.xh-theme)");
-    var theme = section.querySelector(".xh-theme");
-    theme.addEventListener("click", function () {
-      var dark = theme.getAttribute("aria-checked") !== "true";
-      theme.setAttribute("aria-checked", String(dark));
-      section.dataset.theme = dark ? "dark" : "light";
-    });
     var layer = document.getElementById("bg-content");
     btn.addEventListener("click", function () {
       var on = btn.getAttribute("aria-checked") !== "true";
@@ -559,6 +574,15 @@
       layer.inert = !on;
     });
   })();
+  // Light / Dark switches: each one themes its own section only.
+  document.querySelectorAll(".xh-theme").forEach(function (theme) {
+    var scope = theme.closest("section");
+    theme.addEventListener("click", function () {
+      var dark = theme.getAttribute("aria-checked") !== "true";
+      theme.setAttribute("aria-checked", String(dark));
+      scope.dataset.theme = dark ? "dark" : "light";
+    });
+  });
   // Placeholder content: 8 person cards, then 2 story cards.
   (function () {
     var grid = document.getElementById("grid");
