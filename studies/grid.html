@@ -96,7 +96,7 @@
   .xhair::before {
     content: "";
     position: absolute;
-    inset: calc(var(--row) / -2) 0;
+    inset: calc(var(--row) / -2) 0;     /* decorative: pseudo content is not announced */
     pointer-events: none;
     --tile: calc(var(--col) * var(--step)) var(--row);
     background: repeating-linear-gradient(135deg,
@@ -124,6 +124,28 @@
     }
   }
   .xhair + .grid-page { padding-top: 0; }
+
+  /* ---------- Section labels ----------
+     Right-aligned to the container's right edge (the last column line).
+     Background Grid sits 32px below the top row of crosshairs, clear of the
+     22px arms; Post Grid sits just above the grid's top line. */
+  .section-label {
+    position: relative;               /* paints above the crosshair layer */
+    margin: 0;
+    text-align: right;
+    font: 400 14px/1.2 var(--font-mono);
+    color: var(--grid-ink);
+  }
+  .xhair .section-label { padding-top: 32px; }
+  .grid-page .section-label { margin-bottom: 16px; }
+  /* Phones: the container is fluid, so match the page's 16px side padding
+     to keep the label on the same right edge as the grid below. */
+  @media (max-width: 575.98px) {
+    .xhair > .container {
+      padding-left: calc(12px + max(16px, env(safe-area-inset-left, 0px)));
+      padding-right: calc(12px + max(16px, env(safe-area-inset-right, 0px)));
+    }
+  }
 
   /* ---------- Person card ---------- */
   .person { text-align: center; }
@@ -184,10 +206,15 @@
 </head>
 <body>
 
-<section class="xhair" aria-hidden="true"></section>
+<section class="xhair" aria-labelledby="bg-grid-label">
+  <div class="container">
+    <h2 class="section-label" id="bg-grid-label">Background Grid</h2>
+  </div>
+</section>
 
 <main class="grid-page">
   <div class="container">
+    <h2 class="section-label">Post Grid</h2>
     <div class="row g-0" id="grid">
 
       <!-- Person cards: 4 per row on desktop, 2 on tablet, 1 on phone -->
