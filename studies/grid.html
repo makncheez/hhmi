@@ -32,7 +32,7 @@
     font: 400 16px/1.4 var(--font-sans);
   }
   .grid-page {
-    padding-block: 100px;
+    padding-block: 200px;
     padding-left: max(16px, env(safe-area-inset-left, 0px));
     padding-right: max(16px, env(safe-area-inset-right, 0px));
   }
@@ -90,7 +90,7 @@
     --row: 200px;
     --xhair: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 108 108' fill='none' stroke='%23000' stroke-width='1'%3E%3Cpath vector-effect='non-scaling-stroke' d='M54 32V49M54 59V76M32 54H49M59 54H76'/%3E%3C/svg%3E");
   }
-  .xhair { position: relative; height: 800px; margin: 100px 0; }
+  .xhair { position: relative; height: 800px; margin: 200px 0; }
   .xhair::before, .combo::before {
     content: "";
     position: absolute;
@@ -168,7 +168,7 @@
   .xh-switch, .section-label { transition: background .4s, color .4s, border-color .4s; }
 
   /* ---------- Background Grid: dark mode (this section only) ----------
-     Black band; the band extends 100px above and below so the edge rows of
+     Black band; the band extends 200px above and below so the edge rows of
      crosshairs sit on black too. The wave runs white > #A5F300 > #00AC1D
      > white (no navy, which vanishes on black) and rests on white for
      reduced motion. Cards invert to black with thin white lines; the green
@@ -177,7 +177,7 @@
   .xhair[data-theme="dark"] {
     --grid-ink: #fff;
     background: #000;
-    box-shadow: 0 -100px 0 #000, 0 100px 0 #000;   /* black covers the 100px above and below */
+    box-shadow: 0 -200px 0 #000, 0 200px 0 #000;   /* black covers the 200px above and below */
   }
   .xhair[data-theme="dark"]::before,
   .combo[data-theme="dark"]::before {
@@ -369,7 +369,7 @@
   .schema-band {
     --grid-ink: #111;
     --grid-line: #111;
-    padding: 100px 0;
+    padding: 200px 0;
     color: var(--grid-ink);
     transition: background-color .4s;
   }
@@ -404,18 +404,18 @@
      a Schema cell apart, so one sits in every open line junction and one at
      the middle of each cell edge. A cell is 4 columns wide on desktop, 6 on
      tablet and 12 on phone, and 5:3 tall, so a row is 0.3 x cell width.
-     The pattern starts on the grid's top edge (100px padding + 96px header)
+     The pattern starts on the grid's top edge (200px padding + 96px header)
      and stops on its bottom edge. Own Light / Dark switch. */
   .combo {
     --cellw: calc(100cqw - 56px);      /* phone: fluid container, cqw = this section's width */
     container-type: inline-size;
     --row: calc(var(--cellw) * .3);
-    --top: 196px;                      /* 100px padding + 96px header */
-    --bottom: 100px;
+    --top: 296px;                      /* 200px padding + 96px header */
+    --bottom: 200px;
     --grid-ink: #111;
     --grid-line: #111;
     position: relative;
-    padding: 100px 0 var(--bottom);
+    padding: 200px 0 var(--bottom);
     color: var(--grid-ink);
     transition: background-color .4s;
   }
@@ -444,7 +444,7 @@
      autoplay and show controls instead. */
   .video-band {
     --grid-ink: #fff;
-    padding: 100px 0;
+    padding: 200px 0;
     background: #000;
     color: var(--grid-ink);
   }
@@ -469,8 +469,8 @@
 
   /* ---------- Section divider ----------
      The rule from studies/index.html: 2px, blue #0086A4 > green #00AC1D.
-     Sits on the seam between two sections (each has 100px of space above
-     and below, so 200px between them), at the container's content width. */
+     Sits on the seam between two sections (each has 200px of space above
+     and below, so 400px between them), at the container's content width. */
   .section-rule { position: relative; z-index: 1; height: 0; }
   .section-rule::before {
     content: "";
