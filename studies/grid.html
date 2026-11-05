@@ -543,6 +543,42 @@
     }
   }
 
+  /* ---------- Video Grid and Schema ----------
+     A copy of Video Grid with the Schema grid laid over it (3 x 2 cells on
+     desktop, 2 x 3 below 992px, stretched to cover the bento). Once the
+     video grid's top edge has scrolled 80px past the top of the screen,
+     a 95% black overlay fades in over the videos with the figures counting up;
+     scrolling back reverses it. The space below is extended on tall
+     screens (by script) so the 80px is always reachable. */
+  .vs { --grid-line: #fff; }
+  .vs-stage { position: relative; display: flow-root; }   /* flow-root: keep the row's negative gutter margin inside, so the overlay matches the videos */
+  .vs-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, .95);  /* 95% black dims the videos (they stay at full opacity) */
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity .4s ease, visibility 0s linear .4s;
+  }
+  .vs[data-mode="content"] .vs-overlay { opacity: 1; visibility: visible; transition: opacity .4s ease; }
+  .vs[data-mode="content"] .sc { opacity: 1; visibility: visible; transition: opacity .4s ease; }
+  .vs-overlay .schema { height: 100%; }
+  .vs-overlay .gcell { container-type: inline-size; aspect-ratio: auto; height: 33.3333%; }
+  /* below 992px: 2 across, so open the first and last pairs */
+  .vs-overlay .gcell:nth-child(-n+2)::after { top: 0; }
+  .vs-overlay .gcell:nth-last-child(-n+2)::after { bottom: 0; }
+  .vs-overlay .gcell:nth-last-child(-n+2)::before { border-bottom-width: 0; }
+  @media (min-width: 992px) { .vs-overlay .gcell { height: 50%; } }
+  @media (max-width: 767.98px) {
+    .vs .sc { padding: 40px 12px 16px; }
+    .vs .sc-label { top: 14px; left: 14px; font-size: 12px; }
+    .vs .sc-fig { font-size: clamp(26px, 20cqw, 40px); }
+    .vs .sc-cap { margin-top: 8px; font-size: 12px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .vs-overlay, .vs[data-mode="content"] .vs-overlay, .vs[data-mode="content"] .sc { transition: none; }
+  }
+
   /* ---------- Person card ---------- */
   .person { text-align: center; }
   .person img {
@@ -764,6 +800,41 @@
   </div>
 </section>
 
+<div class="container section-rule" aria-hidden="true"></div>
+
+<section class="video-band vs" aria-labelledby="vs-label">
+  <div class="container">
+    <h2 class="section-label" id="vs-label">Video Grid and Schema</h2>
+    <div class="vs-stage">
+      <div class="row g-4">
+        <div class="col-12 col-lg-6">
+          <div class="vcell vcell-tall">
+            <video src="../assets/video/Janelia_Exterior.mp4" autoplay muted loop playsinline preload="metadata" aria-label="Janelia campus exterior"></video>
+          </div>
+        </div>
+        <div class="col-12 col-lg-6 d-flex flex-column gap-4">
+          <div class="vcell">
+            <video src="../assets/video/Janelia_People.mp4" autoplay muted loop playsinline preload="metadata" aria-label="Researchers talking at a table"></video>
+          </div>
+          <div class="vcell">
+            <video src="../assets/video/Janelia_Interior.mp4" autoplay muted loop playsinline preload="metadata" aria-label="Janelia interior"></video>
+          </div>
+        </div>
+      </div>
+      <div class="vs-overlay">
+        <div class="row g-0 schema" id="vs-content" inert>
+            <div class="col-6 col-lg-4 gcell"><div class="gcell-in sc"><p class="sc-label">Established</p><p class="sc-fig" data-count="2006">2006</p></div></div>
+            <div class="col-6 col-lg-4 gcell"><div class="gcell-in sc"><p class="sc-label">Location</p><p class="sc-fig">VA, USA</p></div></div>
+            <div class="col-6 col-lg-4 gcell"><div class="gcell-in sc"><p class="sc-label">Staffs</p><p class="sc-fig" data-count="650">650</p></div></div>
+            <div class="col-6 col-lg-4 gcell"><div class="gcell-in sc"><p class="sc-label">Campus</p><p class="sc-fig" data-count="689">689</p><p class="sc-cap">Acres</p></div></div>
+            <div class="col-6 col-lg-4 gcell"><div class="gcell-in sc"><p class="sc-label">Research</p><p class="sc-fig" data-count="200">200</p><p class="sc-cap">Researchers &amp; Scientists</p></div></div>
+            <div class="col-6 col-lg-4 gcell"><div class="gcell-in sc"><p class="sc-label">Programs</p><p class="sc-fig" data-count="4">4</p><p class="sc-cap">Initiatives</p></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <script>
   // Background Grid switch: BG Only (pattern) / Content (programme cards).
   (function () {
@@ -802,31 +873,60 @@
     }, { threshold: 0.1 });
     videos.forEach(function (v) { io.observe(v); });
   })();
+  // Count the [data-count] figures in a grid up from 0 (1s, ease-out).
+  var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  function countUp(grid) {
+    var figs = grid.querySelectorAll("[data-count]");
+    if (reduceMotion) return;
+    var start = performance.now(), dur = 1000;
+    figs.forEach(function (el) { el.textContent = "0"; });
+    (function tick(now) {
+      var t = Math.min(1, (now - start) / dur), e = 1 - Math.pow(1 - t, 3);
+      figs.forEach(function (el) { el.textContent = String(Math.round(+el.dataset.count * e)); });
+      if (t < 1) requestAnimationFrame(tick);
+    })(start);
+  }
   // BG Only / Content switches on the Schema and combined sections. Each
   // is independent; figures count up from 0 every time Content goes on.
   document.querySelectorAll(".xh-content").forEach(function (btn) {
     var band = btn.closest("section");
     var grid = document.getElementById(btn.getAttribute("aria-controls"));
-    var figs = grid.querySelectorAll("[data-count]");
-    var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    function countUp() {
-      if (reduce) return;
-      var start = performance.now(), dur = 1000;
-      figs.forEach(function (el) { el.textContent = "0"; });
-      (function tick(now) {
-        var t = Math.min(1, (now - start) / dur), e = 1 - Math.pow(1 - t, 3);   // ease-out
-        figs.forEach(function (el) { el.textContent = String(Math.round(+el.dataset.count * e)); });
-        if (t < 1) requestAnimationFrame(tick);
-      })(start);
-    }
     btn.addEventListener("click", function () {
       var on = btn.getAttribute("aria-checked") !== "true";
       btn.setAttribute("aria-checked", String(on));
       band.dataset.mode = on ? "content" : "bg";
       grid.inert = !on;
-      if (on) countUp();
+      if (on) countUp(grid);
     });
   });
+  // Video Grid and Schema: once the video grid's top edge has scrolled 80px
+  // past the top of the screen, dim the videos and show the Schema overlay.
+  (function () {
+    var band = document.querySelector(".vs");
+    var stage = band.querySelector(".vs-stage");
+    var grid = document.getElementById("vs-content");
+    var TRIGGER = 80, BASE_PAD = 200, on = false, queued = false;
+    function update() {
+      queued = false;
+      var past = stage.getBoundingClientRect().top <= -TRIGGER;
+      if (past === on) return;
+      on = past;
+      band.dataset.mode = on ? "content" : "bg";
+      grid.inert = !on;
+      if (on) countUp(grid);
+    }
+    // The page must be able to scroll the stage 80px past the top: extend
+    // the bottom padding on screens taller than stage + 200px allows.
+    function fitPadding() {
+      var need = window.innerHeight + TRIGGER + 16 - stage.offsetHeight;   // 16px slack for rounding
+      band.style.paddingBottom = Math.max(BASE_PAD, need) + "px";
+      update();
+    }
+    window.addEventListener("scroll", function () { if (!queued) { queued = true; requestAnimationFrame(update); } }, { passive: true });
+    window.addEventListener("resize", fitPadding);
+    if ("ResizeObserver" in window) new ResizeObserver(fitPadding).observe(stage);
+    fitPadding();
+  })();
   // Placeholder content: 8 person cards, then 2 story cards.
   (function () {
     var grid = document.getElementById("grid");
