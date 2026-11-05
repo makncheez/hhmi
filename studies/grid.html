@@ -545,23 +545,29 @@
 
   /* ---------- Video Grid and Schema ----------
      A copy of Video Grid with the Schema grid laid over it (3 x 2 cells on
-     desktop, 2 x 3 below 992px, stretched to cover the bento). Once the
-     video grid's top edge has scrolled 80px past the top of the screen,
-     a 95% black overlay fades in over the videos with the figures counting up;
-     scrolling back reverses it. The space below is extended on tall
-     screens (by script) so the 80px is always reachable. */
-  .vs { --grid-line: #fff; }
-  .vs-stage { position: relative; display: flow-root; }   /* flow-root: keep the row's negative gutter margin inside, so the overlay matches the videos */
+     desktop, 2 x 3 below 992px, stretched to cover the bento).
+     Scroll: the video grid pins (sticky, centred on screen) for 80px of
+     scrolling. Over those 80px an 80% black overlay with the six facts
+     fades in with the scroll (figures count up as it appears); then the
+     grid unlocks and the page carries on. Scrolling back reverses it.
+     The pin wrapper is the grid's height + 80px; the script keeps the
+     grid's height in --vs-h and extends the bottom padding on tall screens
+     so the pin can always complete. */
+  .vs { --grid-line: #fff; --vs-h: 740px; --vs-pin: 80px; }
+  .vs-pin { height: calc(var(--vs-h) + var(--vs-pin)); }
+  .vs-stage {
+    position: sticky;
+    top: max(0px, calc((100vh - var(--vs-h)) / 2));
+    display: flow-root;   /* keeps the row's negative gutter margin inside, so the overlay matches the videos */
+  }
   .vs-overlay {
     position: absolute;
     inset: 0;
-    background: rgba(0, 0, 0, .95);  /* 95% black dims the videos (they stay at full opacity) */
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity .4s ease, visibility 0s linear .4s;
+    background: rgba(0, 0, 0, .8);   /* 80% black dims the videos (they stay at full opacity) */
+    opacity: var(--vs-p, 0);         /* 0 to 1 across the 80px pin, set by the script */
+    pointer-events: none;
   }
-  .vs[data-mode="content"] .vs-overlay { opacity: 1; visibility: visible; transition: opacity .4s ease; }
-  .vs[data-mode="content"] .sc { opacity: 1; visibility: visible; transition: opacity .4s ease; }
+  .vs .sc { opacity: 1; visibility: visible; transition: none; }
   .vs-overlay .schema { height: 100%; }
   .vs-overlay .gcell { container-type: inline-size; aspect-ratio: auto; height: 33.3333%; }
   /* below 992px: 2 across, so open the first and last pairs */
@@ -574,9 +580,6 @@
     .vs .sc-label { top: 14px; left: 14px; font-size: 12px; }
     .vs .sc-fig { font-size: clamp(26px, 20cqw, 40px); }
     .vs .sc-cap { margin-top: 8px; font-size: 12px; }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .vs-overlay, .vs[data-mode="content"] .vs-overlay, .vs[data-mode="content"] .sc { transition: none; }
   }
 
   /* ---------- Person card ---------- */
@@ -805,6 +808,7 @@
 <section class="video-band vs" aria-labelledby="vs-label">
   <div class="container">
     <h2 class="section-label" id="vs-label">Video Grid and Schema</h2>
+    <div class="vs-pin">
     <div class="vs-stage">
       <div class="row g-4">
         <div class="col-12 col-lg-6">
@@ -831,6 +835,7 @@
             <div class="col-6 col-lg-4 gcell"><div class="gcell-in sc"><p class="sc-label">Programs</p><p class="sc-fig" data-count="4">4</p><p class="sc-cap">Initiatives</p></div></div>
         </div>
       </div>
+    </div>
     </div>
   </div>
 </section>
@@ -899,33 +904,39 @@
       if (on) countUp(grid);
     });
   });
-  // Video Grid and Schema: once the video grid's top edge has scrolled 80px
-  // past the top of the screen, dim the videos and show the Schema overlay.
+  // Video Grid and Schema: the grid pins for 80px of scrolling while the
+  // Schema overlay fades in with the scroll; then it unlocks.
   (function () {
     var band = document.querySelector(".vs");
+    var pin = band.querySelector(".vs-pin");
     var stage = band.querySelector(".vs-stage");
     var grid = document.getElementById("vs-content");
-    var TRIGGER = 80, BASE_PAD = 200, on = false, queued = false;
+    var PIN = 80, BASE_PAD = 200, shown = false, queued = false;
+    function pinTop() { return Math.max(0, (window.innerHeight - stage.offsetHeight) / 2); }
     function update() {
       queued = false;
-      var past = stage.getBoundingClientRect().top <= -TRIGGER;
-      if (past === on) return;
-      on = past;
-      band.dataset.mode = on ? "content" : "bg";
-      grid.inert = !on;
-      if (on) countUp(grid);
+      var p = (pinTop() - pin.getBoundingClientRect().top) / PIN;   // 0 at lock, 1 at unlock
+      p = Math.max(0, Math.min(1, p));
+      band.style.setProperty("--vs-p", p.toFixed(3));
+      var on = p > 0;
+      if (on !== shown) {
+        shown = on;
+        band.dataset.mode = on ? "content" : "bg";
+        if (on) countUp(grid);          // figures count up each time it appears
+      }
+      grid.inert = p < 0.5;
     }
-    // The page must be able to scroll the stage 80px past the top: extend
-    // the bottom padding on screens taller than stage + 200px allows.
-    function fitPadding() {
-      var need = window.innerHeight + TRIGGER + 16 - stage.offsetHeight;   // 16px slack for rounding
+    function fit() {
+      band.style.setProperty("--vs-h", stage.offsetHeight + "px");
+      // room below so the pin can finish: screen space under the pinned grid + slack
+      var need = window.innerHeight - pinTop() - stage.offsetHeight + 16;
       band.style.paddingBottom = Math.max(BASE_PAD, need) + "px";
       update();
     }
     window.addEventListener("scroll", function () { if (!queued) { queued = true; requestAnimationFrame(update); } }, { passive: true });
-    window.addEventListener("resize", fitPadding);
-    if ("ResizeObserver" in window) new ResizeObserver(fitPadding).observe(stage);
-    fitPadding();
+    window.addEventListener("resize", fit);
+    if ("ResizeObserver" in window) new ResizeObserver(fit).observe(stage);
+    fit();
   })();
   // Placeholder content: 8 person cards, then 2 story cards.
   (function () {
