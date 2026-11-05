@@ -587,8 +587,8 @@
 
   /* ---------- Video & Grid ----------
      Full-width (fluid) band, 800px tall: the danionella skin-cells calcium
-     video (muted loop, cropped to fit) fills the left half, the right half
-     is black.
+     video (muted loop, cropped to fit) fills the left half; the rest of the
+     band is the page grey in Light mode and black in Dark.
      On top, inside a regular .container, the animated crosshair grid on the
      same 12-column lines (every 3rd line on phones). Rows are 200px apart,
      centred in the band (100, 300, 500, 700px) so none are cut at the image
@@ -600,9 +600,11 @@
     position: relative;
     height: 800px;
     margin: 200px 0;
-    background: #000;
-    box-shadow: 0 -200px 0 #000, 0 200px 0 #000;   /* black band: covers the 200px above and below */
+    --fw-bg: var(--grid-bg);                        /* Light: the page grey */
+    background: var(--fw-bg);
+    box-shadow: 0 -200px 0 var(--fw-bg), 0 200px 0 var(--fw-bg);   /* the band also covers the 200px above and below */
     color: var(--grid-ink);
+    transition: background-color .4s, box-shadow .4s;
   }
   /* Video on the left 6 columns, bleeding from the screen edge to the centre
      column line (the band and container share a centre, line 6); the right
@@ -616,7 +618,7 @@
     height: 100%;
     object-fit: cover;
   }
-  .fwimg[data-theme="dark"] { --grid-ink: #fff; }
+  .fwimg[data-theme="dark"] { --grid-ink: #fff; --fw-bg: #000; }   /* Dark: black */
   .fwimg > .container { position: relative; height: 100%; }   /* above the video */
   @media (max-width: 767.98px) { .fw-video { width: 100%; height: 50%; } }   /* 400px video over 400px black */
   .fw-area {
@@ -633,6 +635,7 @@
   .fw-area > * { position: relative; }               /* label and switch paint above the pattern */
   .fwimg .section-label { padding-top: 132px; }       /* 32px under the first crosshair row (100px), as in Background Grid */
   .fwimg .section-label, .fwimg .xh-switch span { transition: color .4s, background .4s; }
+  @media (prefers-reduced-motion: reduce) { .fwimg { transition: none; } }
 
   /* ---------- Person card ---------- */
   .person { text-align: center; }
