@@ -141,7 +141,8 @@
   @media (max-width: 575.98px) {
     .xhair > .container,
     .schema-band > .container,
-    .combo > .container {
+    .combo > .container,
+    .video-band > .container {
       padding-left: calc(12px + max(16px, env(safe-area-inset-left, 0px)));
       padding-right: calc(12px + max(16px, env(safe-area-inset-right, 0px)));
     }
@@ -434,6 +435,39 @@
     .combo, .combo .gcell::before, .combo .gcell::after { transition: none; }
   }
 
+  /* ---------- Video Grid ----------
+     Full-width black band; bento grid in a .container with Bootstrap
+     gutters (g-4, 24px). Desktop: a tall Exterior cell (col-lg-6) beside
+     People and Interior stacked (col-lg-6, 16:9 each); the tall cell
+     stretches to match them. Below 992px all three stack at 16:9. Videos
+     fill their cells (cropped, square corners), muted, looping, inline.
+     They play only while on screen; with reduce motion they don't
+     autoplay and show controls instead. */
+  .video-band {
+    --grid-ink: #fff;
+    padding: 48px 0 72px;
+    background: #000;
+    color: var(--grid-ink);
+  }
+  .video-band .section-label { margin-bottom: 16px; }
+  .vcell {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 16 / 9;
+    background: #111;
+  }
+  .vcell video {
+    position: absolute;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  @media (min-width: 992px) {
+    .vcell-tall { aspect-ratio: auto; height: 100%; }
+  }
+
   /* ---------- Person card ---------- */
   .person { text-align: center; }
   .person img {
@@ -618,6 +652,27 @@
   </div>
 </section>
 
+<section class="video-band" aria-labelledby="video-label">
+  <div class="container">
+    <h2 class="section-label" id="video-label">Video Grid</h2>
+    <div class="row g-4">
+      <div class="col-12 col-lg-6">
+        <div class="vcell vcell-tall">
+          <video src="../assets/video/Janelia_Exterior.mp4" autoplay muted loop playsinline preload="metadata" aria-label="Janelia campus exterior"></video>
+        </div>
+      </div>
+      <div class="col-12 col-lg-6 d-flex flex-column gap-4">
+        <div class="vcell">
+          <video src="../assets/video/Janelia_People.mp4" autoplay muted loop playsinline preload="metadata" aria-label="Researchers talking at a table"></video>
+        </div>
+        <div class="vcell">
+          <video src="../assets/video/Janelia_Interior.mp4" autoplay muted loop playsinline preload="metadata" aria-label="Janelia interior"></video>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <script>
   // Background Grid switch: BG Only (pattern) / Content (programme cards).
   (function () {
@@ -640,6 +695,22 @@
       scope.dataset.theme = dark ? "dark" : "light";
     });
   });
+  // Video Grid: play only while on screen; no autoplay for reduce motion.
+  (function () {
+    var videos = document.querySelectorAll(".vcell video");
+    var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    videos.forEach(function (v) {
+      if (reduce) { v.removeAttribute("autoplay"); v.pause(); v.controls = true; }
+    });
+    if (reduce || !("IntersectionObserver" in window)) return;
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) { var p = e.target.play(); if (p) p.catch(function () {}); }
+        else e.target.pause();
+      });
+    }, { threshold: 0.1 });
+    videos.forEach(function (v) { io.observe(v); });
+  })();
   // Placeholder content: 8 person cards, then 2 story cards.
   (function () {
     var grid = document.getElementById("grid");
