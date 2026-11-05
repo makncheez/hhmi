@@ -84,14 +84,14 @@
      Reduce motion: the animation stops and the crosshairs stay black. */
   @property --wave { syntax: "<length>"; inherits: false; initial-value: 0px; }
   @keyframes xhair-wave { to { --wave: 3200px; } }
-  .xhair, .combo {
+  .xhair, .combo, .fwimg {
     --col: calc((100% - 56px) / 12);   /* < 576px: fluid container */
     --step: 1;                         /* crosshair on every Nth column line */
     --row: 200px;
     --xhair: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 108 108' fill='none' stroke='%23000' stroke-width='1'%3E%3Cpath vector-effect='non-scaling-stroke' d='M54 32V49M54 59V76M32 54H49M59 54H76'/%3E%3C/svg%3E");
   }
   .xhair { position: relative; height: 800px; margin: 200px 0; }
-  .xhair::before, .combo::before {
+  .xhair::before, .combo::before, .fw-area::before {
     content: "";
     position: absolute;
     inset: calc(var(--row) / -2) 0;     /* decorative: pseudo content is not announced */
@@ -108,7 +108,7 @@
     animation: xhair-wave 10s linear infinite;
   }
   @media (prefers-reduced-motion: reduce) {
-    .xhair::before, .combo::before { animation: none; background: #111; }
+    .xhair::before, .combo::before, .fw-area::before { animation: none; background: #111; }
   }
   @media (min-width: 576px)  { .xhair, .combo { --col: 43px; } }
   @media (min-width: 768px)  { .xhair, .combo { --col: 58px; } }
@@ -116,7 +116,7 @@
   @media (min-width: 1200px) { .xhair, .combo { --col: 93px; } }
   @media (min-width: 1400px) { .xhair, .combo { --col: 108px; } }
   @media (max-width: 767.98px) {
-    .xhair, .combo {
+    .xhair, .combo, .fwimg {
       --step: 3;
       --xhair: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 108 108' fill='none' stroke='%23000' stroke-width='1'%3E%3Cpath vector-effect='non-scaling-stroke' d='M54 38.5V50.5M54 57.5V69.5M38.5 54H50.5M57.5 54H69.5'/%3E%3C/svg%3E");
     }
@@ -141,7 +141,8 @@
     .xhair > .container,
     .schema-band > .container,
     .combo > .container,
-    .video-band > .container {
+    .video-band > .container,
+    .fwimg > .container {
       padding-left: calc(12px + max(16px, env(safe-area-inset-left, 0px)));
       padding-right: calc(12px + max(16px, env(safe-area-inset-right, 0px)));
     }
@@ -180,7 +181,8 @@
     box-shadow: 0 -200px 0 #000, 0 200px 0 #000;   /* black covers the 200px above and below */
   }
   .xhair[data-theme="dark"]::before,
-  .combo[data-theme="dark"]::before {
+  .combo[data-theme="dark"]::before,
+  .fwimg[data-theme="dark"] .fw-area::before {
     background: repeating-linear-gradient(135deg,
       #fff    calc(var(--wave) + 0px),
       #A5F300 calc(var(--wave) + 1067px),
@@ -195,7 +197,8 @@
   .xhair[data-theme="dark"] .xh-prog { color: #111; border-color: #A5F300; }
   @media (prefers-reduced-motion: reduce) {
     .xhair[data-theme="dark"]::before,
-    .combo[data-theme="dark"]::before { background: #fff; }
+    .combo[data-theme="dark"]::before,
+    .fwimg[data-theme="dark"] .fw-area::before { background: #fff; }
   }
 
   /* ---------- Background Grid: programme content ----------
@@ -582,6 +585,48 @@
     .vs .sc-cap { margin-top: 8px; font-size: 12px; }
   }
 
+  /* ---------- Video & Grid ----------
+     Full-width (fluid) band, 800px tall, with the danionella skin-cells
+     calcium video as its background (muted loop, cropped to fit).
+     On top, inside a regular .container, the animated crosshair grid on the
+     same 12-column lines (every 3rd line on phones). Rows are 200px apart,
+     centred in the band (100, 300, 500, 700px) so none are cut at the image
+     edges. The column width comes from the container's own width (cqw).
+     Own Light / Dark switch: dark turns the crosshairs, label and switch
+     white. */
+  .fwimg {
+    --grid-ink: #111;
+    position: relative;
+    height: 800px;
+    margin: 200px 0;
+    background: #111;
+    color: var(--grid-ink);
+  }
+  .fw-video {
+    position: absolute;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .fwimg[data-theme="dark"] { --grid-ink: #fff; }
+  .fwimg > .container { position: relative; height: 100%; }   /* above the video */
+  .fw-area {
+    --col: calc(100cqw / 12);
+    container-type: inline-size;
+    position: relative;
+    height: 100%;
+  }
+  .fw-area::before {
+    inset: 0 calc(var(--col) * var(--step) / -2);
+    -webkit-mask-position: center 0;
+            mask-position: center 0;
+  }
+  .fw-area > * { position: relative; }               /* label and switch paint above the pattern */
+  .fwimg .section-label { padding-top: 132px; }       /* 32px under the first crosshair row (100px), as in Background Grid */
+  .fwimg .section-label, .fwimg .xh-switch span { transition: color .4s, background .4s; }
+
   /* ---------- Person card ---------- */
   .person { text-align: center; }
   .person img {
@@ -840,6 +885,21 @@
   </div>
 </section>
 
+<div class="container section-rule" aria-hidden="true"></div>
+
+<section class="fwimg" aria-labelledby="fw-label">
+  <video class="fw-video" src="../assets/video/danionella_skin_cells_calcium.mp4" autoplay muted loop playsinline preload="auto" aria-hidden="true"></video>
+  <div class="container">
+    <div class="fw-area">
+      <h2 class="section-label" id="fw-label">Video &amp; Grid</h2>
+      <button type="button" class="xh-switch xh-theme" role="switch" aria-checked="false" aria-label="Dark mode">
+        <span class="xh-off" aria-hidden="true">Light</span>
+        <span class="xh-on" aria-hidden="true">Dark</span>
+      </button>
+    </div>
+  </div>
+</section>
+
 <script>
   // Background Grid switch: BG Only (pattern) / Content (programme cards).
   (function () {
@@ -864,10 +924,13 @@
   });
   // Video Grid: play only while on screen; no autoplay for reduce motion.
   (function () {
-    var videos = document.querySelectorAll(".vcell video");
+    var videos = document.querySelectorAll(".vcell video, .fw-video");
     var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     videos.forEach(function (v) {
-      if (reduce) { v.removeAttribute("autoplay"); v.pause(); v.controls = true; }
+      if (reduce) {
+        v.removeAttribute("autoplay"); v.pause();
+        if (!v.classList.contains("fw-video")) v.controls = true;   // background video just holds a still frame
+      }
     });
     if (reduce || !("IntersectionObserver" in window)) return;
     var io = new IntersectionObserver(function (entries) {
