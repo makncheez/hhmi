@@ -382,7 +382,8 @@
      top-left, a big figure centred, an optional caption under it. Figures
      scale with the cell width (container units) and count up from 0 when
      Content is switched on; reduce motion shows the final values. */
-  .schema-band .schema .gcell { container-type: inline-size; }
+  .schema-band .schema .gcell,
+  .combo .schema .gcell { container-type: inline-size; }
   .sc {
     position: absolute;
     inset: 0;
@@ -396,7 +397,8 @@
     visibility: hidden;
     transition: opacity .4s ease, visibility 0s linear .4s;
   }
-  .schema-band[data-mode="content"] .sc { opacity: 1; visibility: visible; transition: opacity .4s ease; }
+  .schema-band[data-mode="content"] .sc,
+  .combo[data-mode="content"] .sc { opacity: 1; visibility: visible; transition: opacity .4s ease; }
   .sc-label {
     position: absolute;
     top: 20px;
@@ -412,7 +414,7 @@
     white-space: nowrap;
   }
   .sc-cap { margin: 10px 0 0; font: 400 14px/1.3 var(--font-sans); }
-  @media (prefers-reduced-motion: reduce) { .sc, .schema-band[data-mode="content"] .sc { transition: none; } }
+  @media (prefers-reduced-motion: reduce) { .sc, .schema-band[data-mode="content"] .sc, .combo[data-mode="content"] .sc { transition: none; } }
   /* Schema is 2 across below 992px (phones included): open the top and
      bottom of the first and last pairs. Phones get square cells and
      smaller type so the half-width cells still fit their content. */
@@ -421,10 +423,10 @@
   .schema-band .schema .gcell:nth-last-child(-n+2)::before { border-bottom-width: 0; }
   @media (max-width: 767.98px) {
     .schema-band .schema .gcell { aspect-ratio: 1 / 1; }
-    .sc { padding: 40px 12px 16px; }
-    .sc-label { top: 14px; left: 14px; font-size: 12px; }
-    .sc-fig { font-size: clamp(26px, 20cqw, 40px); }
-    .sc-cap { margin-top: 8px; font-size: 12px; }
+    .schema-band .sc { padding: 40px 12px 16px; }
+    .schema-band .sc-label { top: 14px; left: 14px; font-size: 12px; }
+    .schema-band .sc-fig { font-size: clamp(26px, 20cqw, 40px); }
+    .schema-band .sc-cap { margin-top: 8px; font-size: 12px; }
   }
   @media (prefers-reduced-motion: reduce) {
     .schema-band, .schema-band .gcell::before, .schema-band .gcell::after { transition: none; }
@@ -453,13 +455,13 @@
      a Schema cell apart, so one sits in every open line junction and one at
      the middle of each cell edge. A cell is 4 columns wide on desktop, 6 on
      tablet and 12 on phone, and 5:3 tall, so a row is 0.3 x cell width.
-     The pattern starts on the grid's top edge (200px padding + 96px header)
+     The pattern starts on the grid's top edge (200px padding + 140px header)
      and stops on its bottom edge. Own Light / Dark switch. */
   .combo {
     --cellw: calc(100cqw - 56px);      /* phone: fluid container, cqw = this section's width */
     container-type: inline-size;
     --row: calc(var(--cellw) * .3);
-    --top: 296px;                      /* 200px padding + 96px header */
+    --top: 340px;                      /* 200px padding + 140px header */
     --bottom: 200px;
     --grid-ink: #111;
     --grid-line: #111;
@@ -475,7 +477,11 @@
     inset: calc(var(--top) - var(--row) / 2) 0 calc(var(--bottom) - var(--row) / 2);
   }
   .combo > .container { position: relative; }        /* paints above the pattern */
-  .combo-head { height: 96px; }
+  /* Content on: crosshairs fade to 30% so the figures read cleanly */
+  .combo::before { transition: opacity .4s ease; }
+  .combo[data-mode="content"]::before { opacity: .3; }
+  @media (prefers-reduced-motion: reduce) { .combo::before { transition: none; } }
+  .combo-head { height: 140px; }
   .combo .section-label { padding-top: 0; }
   .combo[data-theme="dark"] { --grid-ink: #fff; --grid-line: #fff; background: #000; }
   .combo .gcell::before, .combo .gcell::after { transition: border-color .4s; }
@@ -715,18 +721,22 @@
   <div class="container">
     <div class="combo-head">
       <h2 class="section-label" id="combo-label">Schema and Background Grid</h2>
+      <button type="button" class="xh-switch xh-content" role="switch" aria-checked="false" aria-controls="combo-content" aria-label="Show content">
+        <span class="xh-off" aria-hidden="true">BG Only</span>
+        <span class="xh-on" aria-hidden="true">Content</span>
+      </button>
       <button type="button" class="xh-switch xh-theme" role="switch" aria-checked="false" aria-label="Dark mode">
         <span class="xh-off" aria-hidden="true">Light</span>
         <span class="xh-on" aria-hidden="true">Dark</span>
       </button>
     </div>
-    <div class="row g-0 schema">
-      <div class="col-12 col-md-6 col-lg-4 gcell"><div class="gcell-in"></div></div>
-      <div class="col-12 col-md-6 col-lg-4 gcell"><div class="gcell-in"></div></div>
-      <div class="col-12 col-md-6 col-lg-4 gcell"><div class="gcell-in"></div></div>
-      <div class="col-12 col-md-6 col-lg-4 gcell"><div class="gcell-in"></div></div>
-      <div class="col-12 col-md-6 col-lg-4 gcell"><div class="gcell-in"></div></div>
-      <div class="col-12 col-md-6 col-lg-4 gcell"><div class="gcell-in"></div></div>
+    <div class="row g-0 schema" id="combo-content" inert>
+      <div class="col-12 col-md-6 col-lg-4 gcell"><div class="gcell-in sc"><p class="sc-label">Established</p><p class="sc-fig" data-count="2006">2006</p></div></div>
+      <div class="col-12 col-md-6 col-lg-4 gcell"><div class="gcell-in sc"><p class="sc-label">Location</p><p class="sc-fig">VA, USA</p></div></div>
+      <div class="col-12 col-md-6 col-lg-4 gcell"><div class="gcell-in sc"><p class="sc-label">Staffs</p><p class="sc-fig" data-count="650">650</p></div></div>
+      <div class="col-12 col-md-6 col-lg-4 gcell"><div class="gcell-in sc"><p class="sc-label">Campus</p><p class="sc-fig" data-count="689">689</p><p class="sc-cap">Acres</p></div></div>
+      <div class="col-12 col-md-6 col-lg-4 gcell"><div class="gcell-in sc"><p class="sc-label">Research</p><p class="sc-fig" data-count="200">200</p><p class="sc-cap">Researchers &amp; Scientists</p></div></div>
+      <div class="col-12 col-md-6 col-lg-4 gcell"><div class="gcell-in sc"><p class="sc-label">Programs</p><p class="sc-fig" data-count="4">4</p><p class="sc-cap">Initiatives</p></div></div>
     </div>
   </div>
 </section>
@@ -792,11 +802,11 @@
     }, { threshold: 0.1 });
     videos.forEach(function (v) { io.observe(v); });
   })();
-  // Schema: BG Only / Content switch, with the figures counting up from 0.
-  (function () {
-    var band = document.querySelector(".schema-band");
-    var btn = band.querySelector(".xh-content");
-    var grid = document.getElementById("schema-content");
+  // BG Only / Content switches on the Schema and combined sections. Each
+  // is independent; figures count up from 0 every time Content goes on.
+  document.querySelectorAll(".xh-content").forEach(function (btn) {
+    var band = btn.closest("section");
+    var grid = document.getElementById(btn.getAttribute("aria-controls"));
     var figs = grid.querySelectorAll("[data-count]");
     var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     function countUp() {
@@ -816,7 +826,7 @@
       grid.inert = !on;
       if (on) countUp();
     });
-  })();
+  });
   // Placeholder content: 8 person cards, then 2 story cards.
   (function () {
     var grid = document.getElementById("grid");
