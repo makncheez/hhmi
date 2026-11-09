@@ -90,7 +90,7 @@
     --row: 200px;
     --xhair: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 108 108' fill='none' stroke='%23000' stroke-width='1'%3E%3Cpath vector-effect='non-scaling-stroke' d='M54 32V49M54 59V76M32 54H49M59 54H76'/%3E%3C/svg%3E");
   }
-  .xhair { position: relative; height: 800px; margin: 200px 0; }
+  .xhair { --row: 100px; position: relative; height: 800px; margin: 200px 0; }   /* rows 100px apart: 9 rows, top and bottom on the edges */
   .xhair::before, .combo::before, .fw-area::before {
     content: "";
     position: absolute;
@@ -134,6 +134,30 @@
     color: var(--grid-ink);
   }
   .xhair .section-label { padding-top: 32px; }
+  /* Background Grid: the label and switches sit on a knockout in the
+     section's own colour, so the 100px crosshair rows stop cleanly around
+     them. Its edges fall midway between crosshair columns (it spans a whole
+     number of column steps, at least 200px, plus half a step each side) and
+     between rows (28px to 150px, clear of the rows at 0, 100 and 200px), so
+     a crosshair is either fully shown or fully hidden. Margins cancel the
+     padding, so nothing else moves. */
+  .xh-corner {
+    --cs: calc(var(--col) * var(--step));          /* one crosshair step */
+    position: relative;                            /* paints above the pattern */
+    width: calc(round(up, 200px, var(--cs)) + var(--cs));
+    margin: 28px calc(var(--cs) / -2) -13px auto;
+    padding: 4px calc(var(--cs) / 2) 13px 0;
+    background: var(--grid-bg);
+    transition: background-color .4s;            /* same timing as the section, so they fade in step */
+  }
+  .xh-corner .section-label { padding-top: 0; }
+  .xhair > .container { display: flow-root; }     /* keeps the 28px top margin inside the section */
+  .xhair { overflow-x: clip; }                     /* the knockout's half-step overhang never adds sideways scroll */
+  .xhair[data-theme="dark"] .xh-corner { background: #000; }
+  @media (max-width: 575.98px) {                   /* fluid container: a column is 1/12 of it */
+    .xh-corner { --col: calc(100% / 12); }
+  }
+  @media (prefers-reduced-motion: reduce) { .xhair, .xh-corner { transition: none; } }   /* section and knockout always switch together */
   .grid-page .section-label { margin-bottom: 16px; }
   /* Phones: the container is fluid, so match the page's 16px side padding
      to keep the label on the same right edge as the grid below. */
@@ -620,6 +644,7 @@
   }
   .fwimg[data-theme="dark"] { --grid-ink: #fff; --fw-bg: #000; }   /* Dark: black */
   .fwimg > .container { position: relative; height: 100%; }   /* above the video */
+  .fwimg { overflow-x: clip; }                    /* the pattern's half-step overhang never adds sideways scroll */
   @media (max-width: 767.98px) { .fw-video { width: 100%; height: 50%; } }   /* 400px video over 400px black */
   .fw-area {
     --col: calc(100cqw / 12);
@@ -698,15 +723,17 @@
 
 <section class="xhair" aria-labelledby="bg-grid-label">
   <div class="container">
-    <h2 class="section-label" id="bg-grid-label">Background Grid</h2>
-    <button type="button" class="xh-switch" role="switch" aria-checked="false" aria-controls="bg-content" aria-label="Show content">
-      <span class="xh-off" aria-hidden="true">BG Only</span>
-      <span class="xh-on" aria-hidden="true">Content</span>
-    </button>
-    <button type="button" class="xh-switch xh-theme" role="switch" aria-checked="false" aria-label="Dark mode">
-      <span class="xh-off" aria-hidden="true">Light</span>
-      <span class="xh-on" aria-hidden="true">Dark</span>
-    </button>
+    <div class="xh-corner">
+      <h2 class="section-label" id="bg-grid-label">Background Grid</h2>
+      <button type="button" class="xh-switch" role="switch" aria-checked="false" aria-controls="bg-content" aria-label="Show content">
+        <span class="xh-off" aria-hidden="true">BG Only</span>
+        <span class="xh-on" aria-hidden="true">Content</span>
+      </button>
+      <button type="button" class="xh-switch xh-theme" role="switch" aria-checked="false" aria-label="Dark mode">
+        <span class="xh-off" aria-hidden="true">Light</span>
+        <span class="xh-on" aria-hidden="true">Dark</span>
+      </button>
+    </div>
   </div>
 
   <div class="xh-layer" id="bg-content" inert>
