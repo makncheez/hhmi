@@ -617,8 +617,8 @@
      same 12-column lines (every 3rd line on phones). Rows are 200px apart,
      centred in the band (100, 300, 500, 700px) so none are cut at the image
      edges. The column width comes from the container's own width (cqw).
-     Own Light / Dark switch: dark turns the crosshairs, label and switch
-     white. */
+     Dark only (data-theme="dark" in the markup): black band, white
+     crosshairs, label, switch and Schema lines. */
   .fwimg {
     --grid-ink: #111;
     position: relative;
@@ -661,6 +661,53 @@
   .fwimg .section-label { padding-top: 132px; }       /* 32px under the first crosshair row (100px), as in Background Grid */
   .fwimg .section-label, .fwimg .xh-switch span { transition: color .4s, background .4s; }
   @media (prefers-reduced-motion: reduce) { .fwimg { transition: none; } }
+
+  /* Video & Grid: BG Only / Content. Content fades in a 2 x 2 Schema
+     (Established, Location, Staffs, Research) over the video and crosshairs,
+     which stay underneath. Desktop/tablet: the right 8 columns (2/3 of the
+     grid, overlapping the video by 2), from the crosshair row at 300px down
+     to the band's bottom edge (cells 4 columns wide, 250px tall). Phones: the empty 400px under the video. The
+     crosshairs fade to 30% while it shows. */
+  .fwimg { --grid-line: var(--grid-ink); }
+  /* Video & Grid crosshairs: a fixed 20 x 20px at every screen size (the
+     other sections scale theirs with the column spacing). The SVG has no
+     viewBox, so it fills each tile without scaling; the nested svg puts its
+     origin at the tile centre, and the path is drawn in px from there:
+     arms 7.75px, a 4.5px gap at the centre, 1px stroke. */
+  .fwimg .fw-area {
+    --xhair: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' stroke='%23000' stroke-width='1' shape-rendering='crispEdges'%3E%3Csvg x='50%25' y='50%25' overflow='visible'%3E%3Cpath d='M0 -10V-2.25M0 2.25V10M-10 0H-2.25M2.25 0H10'/%3E%3C/svg%3E%3C/svg%3E");
+  }
+  .fw-area::before { transition: opacity .4s ease; }
+  .fwimg[data-mode="content"] .fw-area::before { opacity: .3; }
+  .fw-schema {
+    position: absolute;
+    top: 300px;
+    bottom: 0;
+    left: calc(100% / 3);              /* column line 4: the grid spans 8 of 12 columns */
+    right: 0;
+    margin: 0;
+    opacity: 0;                        /* the whole grid, lines included, shows only in Content */
+    visibility: hidden;
+    transition: opacity .4s ease, visibility 0s linear .4s;
+  }
+  .fwimg[data-mode="content"] .fw-schema { opacity: 1; visibility: visible; transition: opacity .4s ease; }
+  .fw-schema .gcell { container-type: inline-size; aspect-ratio: auto; height: 50%; }
+  .fwimg .fw-schema .gcell:nth-child(-n+2)::after { top: 0; bottom: 10px; }
+  .fwimg .fw-schema .gcell:nth-child(n+3)::after { top: 10px; bottom: 0; }
+  .fwimg .fw-schema .gcell:nth-child(-n+2)::before { border-bottom-width: var(--line-w); }
+  .fwimg .fw-schema .gcell:nth-child(n+3)::before { border-bottom-width: 0; }
+  .fwimg .fw-schema .gcell::before, .fwimg .fw-schema .gcell::after { transition: border-color .4s; }
+  .fwimg[data-mode="content"] .sc { opacity: 1; visibility: visible; transition: opacity .4s ease; }
+  @media (max-width: 767.98px) {
+    .fw-schema { top: 400px; left: 0; }            /* the empty half under the video */
+    .fw-schema .sc { padding: 40px 12px 16px; }
+    .fw-schema .sc-label { top: 14px; left: 14px; font-size: 12px; }
+    .fw-schema .sc-fig { font-size: clamp(26px, 20cqw, 40px); }
+    .fw-schema .sc-cap { margin-top: 8px; font-size: 12px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .fw-area::before, .fw-schema, .fwimg[data-mode="content"] .fw-schema, .fwimg[data-mode="content"] .sc, .fwimg .fw-schema .gcell::before, .fwimg .fw-schema .gcell::after { transition: none; }
+  }
 
   /* ---------- Person card ---------- */
   .person { text-align: center; }
@@ -924,15 +971,21 @@
 
 <div class="container section-rule" aria-hidden="true"></div>
 
-<section class="fwimg" aria-labelledby="fw-label">
+<section class="fwimg" data-theme="dark" aria-labelledby="fw-label">   <!-- dark only -->
   <video class="fw-video" src="../assets/video/danionella_skin_cells_calcium.mp4" autoplay muted loop playsinline preload="auto" aria-hidden="true"></video>
   <div class="container">
     <div class="fw-area">
       <h2 class="section-label" id="fw-label">Video &amp; Grid</h2>
-      <button type="button" class="xh-switch xh-theme" role="switch" aria-checked="false" aria-label="Dark mode">
-        <span class="xh-off" aria-hidden="true">Light</span>
-        <span class="xh-on" aria-hidden="true">Dark</span>
+      <button type="button" class="xh-switch xh-content" role="switch" aria-checked="false" aria-controls="fw-content" aria-label="Show content">
+        <span class="xh-off" aria-hidden="true">BG Only</span>
+        <span class="xh-on" aria-hidden="true">Content</span>
       </button>
+      <div class="row g-0 schema fw-schema" id="fw-content" inert>
+        <div class="col-6 gcell"><div class="gcell-in sc"><p class="sc-label">Established</p><p class="sc-fig" data-count="2006">2006</p></div></div>
+        <div class="col-6 gcell"><div class="gcell-in sc"><p class="sc-label">Location</p><p class="sc-fig">VA, USA</p></div></div>
+        <div class="col-6 gcell"><div class="gcell-in sc"><p class="sc-label">Staffs</p><p class="sc-fig" data-count="650">650</p></div></div>
+        <div class="col-6 gcell"><div class="gcell-in sc"><p class="sc-label">Research</p><p class="sc-fig" data-count="200">200</p><p class="sc-cap">Researchers &amp; Scientists</p></div></div>
+      </div>
     </div>
   </div>
 </section>
