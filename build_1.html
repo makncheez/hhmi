@@ -338,6 +338,59 @@
   @media (max-width: 767.98px) { .grid-section { --step: 3; } }
   .grid-section > .container { position: relative; min-height: 800px; }
 
+  /* ---------- Roles: "Find Your Scientific Role" with three columns ----------
+     Each column has a colour bar on its left edge behind the text, the role
+     name, three points between dotted rules and an optional mono footnote. */
+  .roles-title {
+    margin: 0 0 clamp(64px, 7vw, 112px);
+    color: #021341;
+    font: 400 clamp(25px, 2.35vw, 40px)/1.15 var(--font-sans);
+    letter-spacing: -0.005em;
+    text-align: center;
+  }
+  .role {
+    --bar: #a5f300;
+    position: relative;
+    height: 100%;
+    padding: 32px 0 88px 24px;
+    color: #021341;
+  }
+  .role::before {                    /* colour bar behind the text */
+    content: "";
+    position: absolute;
+    top: 0; bottom: 0; left: 0;
+    width: 20%;
+    background: var(--bar);
+  }
+  .role > * { position: relative; }
+  .role--ai    { --bar: #66bec9; }
+  .role--group { --bar: #d8d8d8; }
+  .role h3 {
+    margin: 0 0 22px;
+    font: 400 clamp(25px, 2.3vw, 40px)/1.1 var(--font-sans);
+    letter-spacing: -0.005em;
+  }
+  .role ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-top: 1px dotted #021341;
+  }
+  .role li {
+    padding: 16px 0 22px;
+    border-bottom: 1px dotted #021341;
+    font: 400 clamp(15px, 1.2vw, 19px)/1.35 var(--font-sans);
+    letter-spacing: 0.01em;
+  }
+  .role-note {
+    margin: 16px 0 0;
+    font: 400 12px/1.4 "ABC Diatype Semi-Mono", ui-monospace, monospace;
+    letter-spacing: 0.02em;
+  }
+  @media (max-width: 991.98px) {
+    .roles-row > * + * { margin-top: 48px; }
+  }
+
   /* ---------- Placeholder content below the hero ---------- */
   .filler { min-height: 150vh; }
 </style>
@@ -401,8 +454,43 @@
     </div>
   </section>
 
-  <section class="grid-section" aria-label="Grid section">
-    <div class="container"></div>
+  <section class="grid-section" aria-labelledby="rolesTitle">
+    <div class="container">
+      <h2 class="roles-title" id="rolesTitle">Find Your Scientific Role</h2>
+      <div class="row roles-row">
+        <div class="col-lg-4">
+          <article class="role role--principal">
+            <h3>Principal Scientist</h3>
+            <ul>
+              <li>Develop approaches and contribute deep expertise to shared questions.</li>
+              <li>A distinct career centered on direct scientific contribution.</li>
+              <li>Contribute intellectual leadership across projects and disciplines.</li>
+            </ul>
+            <p class="role-note">On-Site / Internally funded / No postdoc required</p>
+          </article>
+        </div>
+        <div class="col-lg-4">
+          <article class="role role--ai">
+            <h3>AI Scientist</h3>
+            <ul>
+              <li>Develop AI methods and systems connected to scientific experiments.</li>
+              <li>Computational research, modeling, and scientific systems.</li>
+              <li>Connect computational approaches with biologists, theorists, and tool builders.</li>
+            </ul>
+          </article>
+        </div>
+        <div class="col-lg-4">
+          <article class="role role--group">
+            <h3>Group Leader</h3>
+            <ul>
+              <li>Build a laboratory around broad questions and a portfolio of projects.</li>
+              <li>The balance of research and team leadership depends on the role and program.</li>
+              <li>Lead a lab and collaborate across the shared scientific enterprise.</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </div>
   </section>
 
   <div class="filler"></div>
