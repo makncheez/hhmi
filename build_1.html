@@ -104,12 +104,12 @@
     .explore-label { display: none; }
   }
 
-  /* ---------- Hero: inset video that unmasks to full bleed over the first 80px ----------
-     The section is 100vh + 80px + 100px tall; its stage is sticky, so the video
-     stays pinned while it grows (80px), holds full screen (100px), then scrolls
+  /* ---------- Hero: inset video that unmasks to full bleed over the first 300px ----------
+     The section is 100vh + 300px + 300px tall; its stage is sticky, so the video
+     stays pinned while it grows (300px), holds full screen (300px), then scrolls
      away. Watch also takes it full bleed. JS sets the frame's
      box from scroll progress (0 = inset 16:9, 1 = full screen). */
-  :root { --hero-unmask: 80px; --hero-hold: 100px; --hero-top: 72px; --hero-dim: .55; }
+  :root { --hero-unmask: 300px; --hero-hold: 300px; --hero-top: 72px; --hero-dim: .55; }
   .hero {
     position: relative;
     height: calc(100vh + var(--hero-unmask) + var(--hero-hold));
@@ -360,7 +360,7 @@
   var frame = document.getElementById('heroFrame');
   var video = document.getElementById('heroVideo');
   var watch = document.getElementById('heroWatch');
-  var UNMASK = 80, TOP = 72, RADIUS = 6;
+  var UNMASK = 300, TOP = 72, RADIUS = 6;
   var ticking = false;
   var watchT = 0, watchFrom = 0, watchTo = 0, watchStart = 0, WATCH_MS = 600;
 
