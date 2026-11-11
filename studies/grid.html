@@ -24,6 +24,13 @@
        names are kept so labels and headings can be split again later. */
     --font-mono: "ABC Diatype", "Helvetica Neue", Arial, sans-serif;
     --font-sans: "ABC Diatype", "Helvetica Neue", Arial, sans-serif;
+    /* Fixed 20 x 20px crosshair, used by Background Grid and Video & Grid
+       at every screen size (Schema and Background Grid still scales its
+       crosshair with the column spacing). The SVG has no viewBox, so it
+       fills each tile without scaling; the nested svg puts its origin at
+       the tile centre and the path is drawn in px from there: arms 7.75px,
+       a 4.5px gap at the centre, 1px stroke. */
+    --xhair-20: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' stroke='%23000' stroke-width='1' shape-rendering='crispEdges'%3E%3Csvg x='50%25' y='50%25' overflow='visible'%3E%3Cpath d='M0 -10V-2.25M0 2.25V10M-10 0H-2.25M2.25 0H10'/%3E%3C/svg%3E%3C/svg%3E");
     color-scheme: light;
   }
   body {
@@ -92,6 +99,14 @@
     --xhair: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 108 108' fill='none' stroke='%23000' stroke-width='1'%3E%3Cpath vector-effect='non-scaling-stroke' d='M54 32V49M54 59V76M32 54H49M59 54H76'/%3E%3C/svg%3E");
   }
   .xhair { --row: 100px; position: relative; height: 800px; margin: 200px 0; }   /* rows 100px apart: 9 rows, top and bottom on the edges */
+  section.xhair { --xhair: var(--xhair-20); }   /* fixed 20 x 20px crosshair at every width */
+  /* Snap the pattern to whole pixels: with an odd column spacing (93px,
+     129px) centring puts every crosshair on a half pixel and its 1px arms
+     render as two grey pixels. Browsers without round() keep "center". */
+  section.xhair::before, .fwimg .fw-area::before {
+    -webkit-mask-position: round(nearest, 50%, 1px) 0;
+            mask-position: round(nearest, 50%, 1px) 0;
+  }
   .xhair::before, .combo::before, .fw-area::before {
     content: "";
     position: absolute;
@@ -670,14 +685,8 @@
      to the band's bottom edge (cells 4 columns wide, 250px tall). Phones: the empty 400px under the video. The
      crosshairs fade to 30% while it shows. */
   .fwimg { --grid-line: var(--grid-ink); }
-  /* Video & Grid crosshairs: a fixed 20 x 20px at every screen size (the
-     other sections scale theirs with the column spacing). The SVG has no
-     viewBox, so it fills each tile without scaling; the nested svg puts its
-     origin at the tile centre, and the path is drawn in px from there:
-     arms 7.75px, a 4.5px gap at the centre, 1px stroke. */
-  .fwimg .fw-area {
-    --xhair: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' stroke='%23000' stroke-width='1' shape-rendering='crispEdges'%3E%3Csvg x='50%25' y='50%25' overflow='visible'%3E%3Cpath d='M0 -10V-2.25M0 2.25V10M-10 0H-2.25M2.25 0H10'/%3E%3C/svg%3E%3C/svg%3E");
-  }
+  /* Video & Grid crosshairs: the fixed 20 x 20px crosshair (--xhair-20). */
+  .fwimg .fw-area { --xhair: var(--xhair-20); }
   .fw-area::before { transition: opacity .4s ease; }
   .fwimg[data-mode="content"] .fw-area::before { opacity: .3; }
   .fw-schema {
