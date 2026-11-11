@@ -388,7 +388,8 @@
     var maxH = vh - TOP - 24;               // keep the inset box on screen
     if (h0 > maxH) { h0 = maxH; w0 = h0 * 16 / 9; }
     var x0 = (vw - w0) / 2;
-    var y0 = Math.max(TOP, (vh - h0) / 2);  // vertically centred, never under the header
+    // Vertically centred, never under the header; phones keep it near the top.
+    var y0 = vw < 576 ? TOP : Math.max(TOP, (vh - h0) / 2);
     var t = Math.min(Math.max(window.scrollY / UNMASK, 0), 1);
     t = t * t * (3 - 2 * t);                // smoothstep easing
     t = Math.max(t, watchT);                // Watch can take it full bleed too
