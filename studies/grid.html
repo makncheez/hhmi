@@ -5,9 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>HHMI Grid</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400&family=Space+Mono:wght@400;700&display=swap">
+<link rel="preload" href="../assets/ABCDiatype-Regular.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../assets/fonts.css">
 <style>
   /* Layout: Bootstrap grid with no gutters. Every cell draws its own four lines,
      pulled in at the ends, so lines never meet at intersections. */
@@ -21,8 +20,10 @@
     --gap-v-top: 24px;      /* vertical lines: inset at the top */
     --gap-v-bottom: 12px;   /* vertical lines: inset at the bottom */
     --cell-pad: clamp(20px, 2.6vw, 38px);
-    --font-mono: "Space Mono", ui-monospace, Menlo, Consolas, monospace;
-    --font-sans: "Space Grotesk", "Helvetica Neue", Arial, sans-serif;
+    /* ABC Diatype Regular for all text, for now (assets/fonts.css). Both
+       names are kept so labels and headings can be split again later. */
+    --font-mono: "ABC Diatype", "Helvetica Neue", Arial, sans-serif;
+    --font-sans: "ABC Diatype", "Helvetica Neue", Arial, sans-serif;
     color-scheme: light;
   }
   body {
@@ -309,7 +310,7 @@
     grid-row: date;
     margin: 0 calc(var(--in-card) + 16px);
     padding-bottom: 24px;
-    font: 700 clamp(14px, calc(var(--col) * .17), 18px)/1 var(--font-mono);
+    font: 400 clamp(14px, calc(var(--col) * .17), 18px)/1 var(--font-mono);
     letter-spacing: .02em;
     white-space: nowrap;
   }
