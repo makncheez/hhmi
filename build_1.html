@@ -394,15 +394,15 @@
     .roles-row > * + * { margin-top: 48px; }
   }
 
-  /* ---------- CTA arrow label (reusable): 4-square .deco + label + arrow, 40px tall ---------- */
+  /* ---------- CTA arrow label (reusable): 4-square .deco + label + arrow, 30px tall ---------- */
   .cta {
     display: inline-flex;
     align-items: center;
-    gap: 24px;
-    height: 40px;
+    gap: 18px;
+    height: 30px;
     color: #021341;
     text-decoration: none;
-    font: 400 18px/1 var(--font-sans);
+    font: 400 14px/1 var(--font-sans);
     letter-spacing: 0.08em;
     text-transform: uppercase;
     white-space: nowrap;
@@ -410,14 +410,33 @@
   .cta:hover, .cta:focus-visible { color: #021341; }
   .cta:focus-visible { outline: 2px solid #021341; outline-offset: 4px; }
   .cta .deco {                       /* square: navy / lime over cyan / green */
-    --deco-w: 32px;
-    --deco-h: 32px;
+    --deco-w: 24px;
+    --deco-h: 24px;
     --deco-1: #000d42;
     --deco-2: #a5f300;
     --deco-3: #3fc2cd;
     --deco-4: #00ac1d;
   }
-  .cta-arrow { width: 34px; height: 36px; margin-left: -4px; flex: none; overflow: visible; }
+  .cta-arrow { width: 26px; height: 27px; margin-left: -3px; flex: none; overflow: visible; }
+
+  /* Hover / focus: the four colours rotate clockwise around the squares,
+     one step every 0.2s, for as long as the pointer stays on the CTA.
+     Each cell steps through the same four colours, starting from its own. */
+  .cta:hover .deco > *, .cta:focus-visible .deco > * { animation: deco-cycle .8s step-end infinite; }
+  .deco > :nth-child(1) { --c1: var(--deco-1); --c2: var(--deco-3); --c3: var(--deco-4); --c4: var(--deco-2); }  /* top-left */
+  .deco > :nth-child(2) { --c1: var(--deco-2); --c2: var(--deco-1); --c3: var(--deco-3); --c4: var(--deco-4); }  /* top-right */
+  .deco > :nth-child(3) { --c1: var(--deco-3); --c2: var(--deco-4); --c3: var(--deco-2); --c4: var(--deco-1); }  /* bottom-left */
+  .deco > :nth-child(4) { --c1: var(--deco-4); --c2: var(--deco-2); --c3: var(--deco-1); --c4: var(--deco-3); }  /* bottom-right */
+  @keyframes deco-cycle {
+    0%   { background-color: var(--c2); }
+    25%  { background-color: var(--c3); }
+    50%  { background-color: var(--c4); }
+    75%  { background-color: var(--c1); }
+    100% { background-color: var(--c1); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .cta:hover .deco > *, .cta:focus-visible .deco > * { animation: none; }
+  }
   .role-cta { margin-top: auto; padding-top: 40px; text-align: right; }   /* bottom right of the column */
 
   /* ---------- Placeholder content below the hero ---------- */
