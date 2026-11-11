@@ -253,16 +253,14 @@
     grid-template-columns: repeat(4, 1fr);
     width: min(510px, 100%);
     margin: 0 auto;
-    border: 1px solid #5e5e5e;
-    border-bottom: 0;
-    background: #fff;
   }
   .units-tab {
     position: relative;
     height: 35px;
     padding: 0 0 0 15px;
-    border: 0;
-    border-left: 1px solid #5e5e5e;
+    border: 1px solid #5e5e5e;
+    border-bottom: 0;
+    border-radius: 7px 7px 0 0;
     background: #fff;
     color: #021341;
     font: 400 18px/1 var(--font-sans);
@@ -270,7 +268,7 @@
     white-space: nowrap;
     cursor: pointer;
   }
-  .units-tab:first-child { border-left: 0; }
+  .units-tab + .units-tab { margin-left: -1px; }   /* touching tabs share one border line */
   .units-tab sup {
     top: -0.85em;
     margin-left: 3px;
