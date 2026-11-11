@@ -170,6 +170,64 @@
   .watch:focus-visible { outline: 2px solid var(--green-1); outline-offset: 2px; }
   .hero.is-watching .watch { opacity: 0; pointer-events: none; }
 
+  /* ---------- Headline over the video (not clipped by the frame) ---------- */
+  .hero-copy {
+    position: absolute;
+    left: 0; right: 0;
+    top: 45%;
+    transform: translateY(-50%);
+    z-index: 1;
+    padding: 0 3vw;
+    pointer-events: none;            /* Watch stays clickable underneath */
+    transition: opacity .6s ease;
+  }
+  .hero-title {
+    margin: 0;
+    color: var(--ink);
+    font: 400 4.74vw/1.08 var(--font-sans);
+    letter-spacing: -0.005em;
+    text-align: center;
+  }
+  .hero.is-watching .hero-copy { opacity: 0; }
+  @media (max-width: 767.98px) {
+    .hero-title { font-size: clamp(32px, 9vw, 56px); }
+  }
+
+  /* ---------- Decorative block: 4 divs in a 2 x 2 grid (reusable) ----------
+     Usage: <div class="deco"><div></div><div></div><div></div><div></div></div>
+     Order: top-left, top-right, bottom-left, bottom-right.
+     Override --deco-w / --deco-h (whole block) or --deco-1..4 per instance. */
+  .deco {
+    --deco-w: 17px;
+    --deco-h: 172px;
+    --deco-1: #3fc2cd;   /* top-left: cyan */
+    --deco-2: #000d42;   /* top-right: navy */
+    --deco-3: #00ac1d;   /* bottom-left: green */
+    --deco-4: #a5f300;   /* bottom-right: lime */
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    width: var(--deco-w);
+    height: var(--deco-h);
+    flex: none;
+  }
+  .deco > :nth-child(1) { background: var(--deco-1); }
+  .deco > :nth-child(2) { background: var(--deco-2); }
+  .deco > :nth-child(3) { background: var(--deco-3); }
+  .deco > :nth-child(4) { background: var(--deco-4); }
+
+  .hero-deco {
+    position: absolute;
+    top: 45%;
+    transform: translateY(-50%);
+    z-index: 1;
+  }
+  .hero-deco--left  { left: 0; }
+  .hero-deco--right { right: 0; }
+  @media (max-width: 575.98px) {
+    .hero-deco { --deco-w: 10px; --deco-h: 100px; }
+  }
+
   /* ---------- Placeholder content below the hero ---------- */
   .filler { min-height: 150vh; }
 </style>
@@ -203,6 +261,11 @@
           <svg viewBox="0 0 11 13" aria-hidden="true"><path d="M0 0L11 6.5L0 13Z"/></svg>
         </button>
       </div>
+      <div class="hero-copy">
+        <h1 class="hero-title">Understanding how brains generate behavior.</h1>
+      </div>
+      <div class="deco hero-deco hero-deco--left" aria-hidden="true"><div></div><div></div><div></div><div></div></div>
+      <div class="deco hero-deco hero-deco--right" aria-hidden="true"><div></div><div></div><div></div><div></div></div>
     </div>
   </section>
 
