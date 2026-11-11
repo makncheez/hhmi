@@ -383,7 +383,7 @@
     ticking = false;
     var vw = document.documentElement.clientWidth;
     var vh = hero.querySelector('.hero-stage').clientHeight;
-    var share = vw < 576 ? 0.92 : 0.64;
+    var share = vw < 576 ? 0.92 : vw < 992 ? 0.80 : 0.72;   // phone / tablet / desktop
     var w0 = vw * share, h0 = w0 * 9 / 16;
     var maxH = vh - TOP - 24;               // keep the inset box on screen
     if (h0 > maxH) { h0 = maxH; w0 = h0 * 16 / 9; }
