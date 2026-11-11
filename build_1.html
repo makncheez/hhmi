@@ -105,14 +105,15 @@
   }
 
   /* ---------- Hero: inset video that unmasks to full bleed over the first 80px ----------
-     The section is 100vh + 80px tall; its stage is sticky, so the video stays
-     pinned while it grows, then the section scrolls away. JS sets the frame's
+     The section is 100vh + 80px + 100px tall; its stage is sticky, so the video
+     stays pinned while it grows (80px), holds full screen (100px), then scrolls
+     away. Watch also takes it full bleed. JS sets the frame's
      box from scroll progress (0 = inset 16:9, 1 = full screen). */
-  :root { --hero-unmask: 80px; --hero-top: 72px; --hero-dim: .55; }
+  :root { --hero-unmask: 80px; --hero-hold: 100px; --hero-top: 72px; --hero-dim: .55; }
   .hero {
     position: relative;
-    height: calc(100vh + var(--hero-unmask));
-    height: calc(100svh + var(--hero-unmask));
+    height: calc(100vh + var(--hero-unmask) + var(--hero-hold));
+    height: calc(100svh + var(--hero-unmask) + var(--hero-hold));
     background: #000;
   }
   .hero-stage {
@@ -361,6 +362,19 @@
   var watch = document.getElementById('heroWatch');
   var UNMASK = 80, TOP = 72, RADIUS = 6;
   var ticking = false;
+  var watchT = 0, watchFrom = 0, watchTo = 0, watchStart = 0, WATCH_MS = 600;
+
+  // Animate the Watch full-bleed amount (0 = inset, 1 = full screen).
+  function animateWatch(to) {
+    watchFrom = watchT; watchTo = to; watchStart = performance.now();
+    requestAnimationFrame(function step(now) {
+      var p = Math.min((now - watchStart) / WATCH_MS, 1);
+      var e = p < .5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2;   // ease in-out
+      watchT = watchFrom + (watchTo - watchFrom) * e;
+      layout();
+      if (p < 1 && watchTo === to) requestAnimationFrame(step);
+    });
+  }
 
   function lerp(a, b, t) { return a + (b - a) * t; }
 
@@ -369,13 +383,14 @@
     ticking = false;
     var vw = document.documentElement.clientWidth;
     var vh = hero.querySelector('.hero-stage').clientHeight;
-    var share = vw < 576 ? 0.92 : 0.81;
+    var share = vw < 576 ? 0.92 : 0.64;
     var w0 = vw * share, h0 = w0 * 9 / 16;
     var maxH = vh - TOP - 24;               // keep the inset box on screen
     if (h0 > maxH) { h0 = maxH; w0 = h0 * 16 / 9; }
     var x0 = (vw - w0) / 2;
     var t = Math.min(Math.max(window.scrollY / UNMASK, 0), 1);
     t = t * t * (3 - 2 * t);                // smoothstep easing
+    t = Math.max(t, watchT);                // Watch can take it full bleed too
     frame.style.left   = lerp(x0, 0, t) + 'px';
     frame.style.top    = lerp(TOP, 0, t) + 'px';
     frame.style.width  = lerp(w0, vw, t) + 'px';
@@ -391,6 +406,7 @@
   function reset() {
     if (!hero.classList.contains('is-watching')) return;
     hero.classList.remove('is-watching');
+    animateWatch(0);
     video.muted = true;
     video.loop = true;
     video.play().catch(function () {});
@@ -401,6 +417,7 @@
   watch.addEventListener('click', function () {
     if (hero.classList.contains('is-watching')) { reset(); return; }
     hero.classList.add('is-watching');
+    animateWatch(1);
     video.loop = false;
     video.currentTime = 0;
     video.muted = false;
