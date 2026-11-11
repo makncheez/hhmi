@@ -419,24 +419,9 @@
   }
   .cta-arrow { width: 26px; height: 27px; margin-left: -3px; flex: none; overflow: visible; }
 
-  /* Hover / focus: the four colours rotate clockwise around the squares,
-     one step every 0.2s, for as long as the pointer stays on the CTA.
-     Each cell steps through the same four colours, starting from its own. */
-  .cta:hover .deco > *, .cta:focus-visible .deco > * { animation: deco-cycle .8s step-end infinite; }
-  .deco > :nth-child(1) { --c1: var(--deco-1); --c2: var(--deco-3); --c3: var(--deco-4); --c4: var(--deco-2); }  /* top-left */
-  .deco > :nth-child(2) { --c1: var(--deco-2); --c2: var(--deco-1); --c3: var(--deco-3); --c4: var(--deco-4); }  /* top-right */
-  .deco > :nth-child(3) { --c1: var(--deco-3); --c2: var(--deco-4); --c3: var(--deco-2); --c4: var(--deco-1); }  /* bottom-left */
-  .deco > :nth-child(4) { --c1: var(--deco-4); --c2: var(--deco-2); --c3: var(--deco-1); --c4: var(--deco-3); }  /* bottom-right */
-  @keyframes deco-cycle {
-    0%   { background-color: var(--c2); }
-    25%  { background-color: var(--c3); }
-    50%  { background-color: var(--c4); }
-    75%  { background-color: var(--c1); }
-    100% { background-color: var(--c1); }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .cta:hover .deco > *, .cta:focus-visible .deco > * { animation: none; }
-  }
+  /* Hover / focus: the four colours are reshuffled at random every 0.2s
+     (script at the end of the page). Reduced motion: no shuffle. */
+
   .role-cta { margin-top: auto; padding-top: 40px; text-align: right; }   /* bottom right of the column */
 
   /* ---------- Placeholder content below the hero ---------- */
@@ -666,6 +651,40 @@
       var next = tabs[(n + tabs.length) % tabs.length];
       select(next); next.focus();
     });
+  });
+})();
+
+// CTA hover: reassign the four .deco colours to the squares in a random
+// order every 0.2s (always a new order); restore the original on leave.
+(function () {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  function shuffle(a) {
+    for (var i = a.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1)), t = a[i]; a[i] = a[j]; a[j] = t;
+    }
+    return a;
+  }
+  document.querySelectorAll('.cta').forEach(function (cta) {
+    var cells = Array.prototype.slice.call(cta.querySelectorAll('.deco > *'));
+    if (cells.length !== 4) return;
+    var timer = null, last = '';
+    function step() {
+      var cs = getComputedStyle(cta.querySelector('.deco'));
+      var colours = [1, 2, 3, 4].map(function (n) { return cs.getPropertyValue('--deco-' + n).trim(); });
+      var order;
+      do { order = shuffle(colours.slice()); } while (order.join() === last || order.join() === colours.join());
+      last = order.join();
+      cells.forEach(function (c, i) { c.style.backgroundColor = order[i]; });
+    }
+    function start() { if (!timer) { step(); timer = setInterval(step, 200); } }
+    function stop() {
+      clearInterval(timer); timer = null; last = '';
+      cells.forEach(function (c) { c.style.backgroundColor = ''; });
+    }
+    cta.addEventListener('mouseenter', start);
+    cta.addEventListener('mouseleave', stop);
+    cta.addEventListener('focus', function () { if (cta.matches(':focus-visible')) start(); });
+    cta.addEventListener('blur', stop);
   });
 })();
 </script>
