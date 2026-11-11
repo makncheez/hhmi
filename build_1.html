@@ -12,9 +12,9 @@
     --page-bg: #808080;            /* placeholder page background */
     --tile: #000;
     --ink: #fff;
-    --green-1: #b4f01e;            /* menu icon: lime */
-    --green-2: #2db52d;            /* menu icon: mid green */
-    --green-3: #0c6b2a;            /* menu icon: dark green */
+    --green-1: #a5f300;            /* menu icon: lime */
+    --green-2: #00ac1d;            /* menu icon: mid green */
+    --green-3: #006b2a;            /* menu icon: dark green */
     --bar-h: 56px;
     --font-sans: "ABC Diatype", "Helvetica Neue", Arial, sans-serif;
     color-scheme: light;
@@ -90,15 +90,10 @@
     left: 0;
     width: 100%;
     height: 2px;
-    transition: transform .25s ease;
   }
   .explore-icon i:nth-child(1) { top: 0;    background: var(--green-1); }
   .explore-icon i:nth-child(2) { top: 12.5px; background: var(--green-2); }
   .explore-icon i:nth-child(3) { bottom: 0; background: var(--green-3); }
-  .explore:hover .explore-icon i:nth-child(1),
-  .explore:focus-visible .explore-icon i:nth-child(1) { transform: translateX(-6px); }
-  .explore:hover .explore-icon i:nth-child(3),
-  .explore:focus-visible .explore-icon i:nth-child(3) { transform: translateX(6px); }
   .explore:focus-visible { outline: 2px solid var(--green-1); outline-offset: 2px; }
 
   @media (max-width: 575.98px) {
