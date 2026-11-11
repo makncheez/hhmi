@@ -289,7 +289,7 @@
   }
 
   /* ---------- Grid section: Background Grid crosshairs from studies/grid.html ----------
-     #FBFBFB, 200px + 800px content + 200px, all covered by the grid.
+     #FBFBFB, 200px + content + 200px, all covered by the grid.
      Fixed 20 x 20px crosshairs (1px arms, 4.5px centre gap) on the Bootstrap
      container's column lines, rows every 100px (rows sit at 50, 150 … 1150px,
      so none are cut at the section edges). Phones: every 3rd column line.
@@ -336,7 +336,7 @@
   @media (min-width: 1200px) { .grid-section { --col: 93px; } }
   @media (min-width: 1400px) { .grid-section { --col: 108px; } }
   @media (max-width: 767.98px) { .grid-section { --step: 3; } }
-  .grid-section > .container { position: relative; min-height: 800px; }
+  .grid-section > .container { position: relative; }   /* height follows the content */
 
   /* ---------- Roles: "Find Your Scientific Role" with three columns ----------
      Each column has a colour bar on its left edge behind the text, the role
@@ -352,7 +352,8 @@
     --bar: #a5f300;
     position: relative;
     height: 100%;
-    padding: 32px 0 88px 24px;
+    padding: 32px 24px 88px;
+    background: #fbfbfb;           /* covers the grid behind the column */
     color: #021341;
   }
   .role::before {                    /* colour bar behind the text */
@@ -457,7 +458,7 @@
   <section class="grid-section" aria-labelledby="rolesTitle">
     <div class="container">
       <h2 class="roles-title" id="rolesTitle">Find Your Scientific Role</h2>
-      <div class="row roles-row">
+      <div class="row gx-5 roles-row">
         <div class="col-lg-4">
           <article class="role role--principal">
             <h3>Principal Scientist</h3>
