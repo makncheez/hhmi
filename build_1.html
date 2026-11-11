@@ -168,7 +168,15 @@
   }
   .watch svg { width: 11px; height: 13px; fill: currentColor; }
   .watch:focus-visible { outline: 2px solid var(--green-1); outline-offset: 2px; }
-  .hero.is-watching .watch { opacity: 0; pointer-events: none; }
+  .watch .watch-stop { display: none; }
+  .hero.is-watching .watch .watch-play { display: none; }
+  .hero.is-watching .watch .watch-stop { display: flex; }
+  .watch-play, .watch-stop { align-items: center; gap: 10px; }
+  .watch-play { display: flex; }
+  .watch-stop svg { width: 11px; height: 11px; }
+
+  /* 150px of black between the hero video and the next section */
+  .hero-spacer { height: 150px; background: #000; }
 
   /* ---------- Headline over the video (not clipped by the frame) ---------- */
   .hero-copy {
@@ -312,8 +320,8 @@
                autoplay muted loop playsinline preload="auto"
                aria-label="Aerial view of the Janelia Research Campus"></video>
         <button class="watch" id="heroWatch" type="button">
-          <span>Watch</span>
-          <svg viewBox="0 0 11 13" aria-hidden="true"><path d="M0 0L11 6.5L0 13Z"/></svg>
+          <span class="watch-play"><span>Watch</span><svg viewBox="0 0 11 13" aria-hidden="true"><path d="M0 0L11 6.5L0 13Z"/></svg></span>
+          <span class="watch-stop"><span>Stop</span><svg viewBox="0 0 11 11" aria-hidden="true"><path d="M0 0H11V11H0Z"/></svg></span>
         </button>
       </div>
       <div class="hero-copy">
@@ -323,6 +331,7 @@
       <div class="deco hero-deco hero-deco--right" aria-hidden="true"><div></div><div></div><div></div><div></div></div>
     </div>
   </section>
+  <div class="hero-spacer" aria-hidden="true"></div>
 
   <section class="units" aria-labelledby="unitsTitle">
     <h2 class="units-title" id="unitsTitle">Four units. Connected scientific work.</h2>
@@ -393,7 +402,9 @@
   }
 
   // Watch: restart from the beginning, unmuted, full brightness, play once.
+  // While playing, the same button reads Stop and returns to the dimmed loop.
   watch.addEventListener('click', function () {
+    if (hero.classList.contains('is-watching')) { reset(); return; }
     hero.classList.add('is-watching');
     video.loop = false;
     video.currentTime = 0;
