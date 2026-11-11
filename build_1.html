@@ -104,8 +104,74 @@
     .explore-label { display: none; }
   }
 
-  /* ---------- Filler so the fixed bar can be seen while scrolling ---------- */
-  .filler { min-height: 300vh; padding-top: calc(var(--bar-h) + 48px); }
+  /* ---------- Hero: inset video that unmasks to full bleed over the first 80px ----------
+     The section is 100vh + 80px tall; its stage is sticky, so the video stays
+     pinned while it grows, then the section scrolls away. JS sets the frame's
+     box from scroll progress (0 = inset 16:9, 1 = full screen). */
+  :root { --hero-unmask: 80px; --hero-top: 72px; --hero-dim: .55; }
+  .hero {
+    position: relative;
+    height: calc(100vh + var(--hero-unmask));
+    height: calc(100svh + var(--hero-unmask));
+    background: #000;
+  }
+  .hero-stage {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    height: 100svh;
+    overflow: hidden;
+  }
+  .hero-frame {
+    position: absolute;
+    overflow: hidden;
+    background: #000;
+    border-radius: 6px;
+    will-change: left, top, width, height;
+  }
+  .hero-frame video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .hero-frame::after {               /* darkening for text on top */
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: #000;
+    opacity: var(--hero-dim);
+    transition: opacity .6s ease;
+    pointer-events: none;
+  }
+  .hero.is-watching .hero-frame::after { opacity: 0; }
+
+  .watch {
+    position: absolute;
+    right: 24px;
+    bottom: 20px;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 0 8px 8px;
+    border: 0;
+    background: none;
+    color: var(--ink);
+    font: 400 15px/1 var(--font-sans);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: opacity .3s ease;
+  }
+  .watch svg { width: 11px; height: 13px; fill: currentColor; }
+  .watch:focus-visible { outline: 2px solid var(--green-1); outline-offset: 2px; }
+  .hero.is-watching .watch { opacity: 0; pointer-events: none; }
+
+  /* ---------- Placeholder content below the hero ---------- */
+  .filler { min-height: 150vh; }
 </style>
 </head>
 <body>
@@ -125,9 +191,85 @@
   </button>
 </header>
 
-<main class="filler">
-  <div class="container"></div>
+<main>
+  <section class="hero" id="hero" aria-label="Janelia Research Campus">
+    <div class="hero-stage">
+      <div class="hero-frame" id="heroFrame">
+        <video id="heroVideo" src="assets/video/Janelia_Exterior.mp4"
+               autoplay muted loop playsinline preload="auto"
+               aria-label="Aerial view of the Janelia Research Campus"></video>
+        <button class="watch" id="heroWatch" type="button">
+          <span>Watch</span>
+          <svg viewBox="0 0 11 13" aria-hidden="true"><path d="M0 0L11 6.5L0 13Z"/></svg>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <div class="filler"></div>
 </main>
+
+<script>
+(function () {
+  var hero  = document.getElementById('hero');
+  var frame = document.getElementById('heroFrame');
+  var video = document.getElementById('heroVideo');
+  var watch = document.getElementById('heroWatch');
+  var UNMASK = 80, TOP = 72, RADIUS = 6;
+  var ticking = false;
+
+  function lerp(a, b, t) { return a + (b - a) * t; }
+
+  // Scroll-linked unmask: inset 16:9 box -> full screen over the first 80px.
+  function layout() {
+    ticking = false;
+    var vw = document.documentElement.clientWidth;
+    var vh = hero.querySelector('.hero-stage').clientHeight;
+    var share = vw < 576 ? 0.92 : 0.81;
+    var w0 = vw * share, h0 = w0 * 9 / 16;
+    var maxH = vh - TOP - 24;               // keep the inset box on screen
+    if (h0 > maxH) { h0 = maxH; w0 = h0 * 16 / 9; }
+    var x0 = (vw - w0) / 2;
+    var t = Math.min(Math.max(window.scrollY / UNMASK, 0), 1);
+    t = t * t * (3 - 2 * t);                // smoothstep easing
+    frame.style.left   = lerp(x0, 0, t) + 'px';
+    frame.style.top    = lerp(TOP, 0, t) + 'px';
+    frame.style.width  = lerp(w0, vw, t) + 'px';
+    frame.style.height = lerp(h0, vh, t) + 'px';
+    frame.style.borderRadius = lerp(RADIUS, 0, t) + 'px';
+  }
+  function request() { if (!ticking) { ticking = true; requestAnimationFrame(layout); } }
+  window.addEventListener('scroll', request, { passive: true });
+  window.addEventListener('resize', request);
+  layout();
+
+  // Back to the dimmed, muted loop.
+  function reset() {
+    if (!hero.classList.contains('is-watching')) return;
+    hero.classList.remove('is-watching');
+    video.muted = true;
+    video.loop = true;
+    video.play().catch(function () {});
+  }
+
+  // Watch: restart from the beginning, unmuted, full brightness, play once.
+  watch.addEventListener('click', function () {
+    hero.classList.add('is-watching');
+    video.loop = false;
+    video.currentTime = 0;
+    video.muted = false;
+    video.play().catch(function () { reset(); });
+  });
+  video.addEventListener('ended', reset);
+
+  // Scrolling the hero mostly out of view also returns it to the dimmed loop.
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) { if (e.intersectionRatio < 0.4) reset(); });
+    }, { threshold: [0, 0.4] }).observe(hero);
+  }
+})();
+</script>
 
 </body>
 </html>
