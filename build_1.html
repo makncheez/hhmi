@@ -228,6 +228,61 @@
     .hero-deco { --deco-w: 10px; --deco-h: 100px; }
   }
 
+  /* ---------- Units: heading, tabs, and a black full-width panel per tab ---------- */
+  .units {
+    background: #fbfbfb;
+    color: #021341;
+    padding-top: 26px;
+  }
+  .units-title {
+    margin: 0 0 26px;
+    font: 400 clamp(25px, 2.35vw, 40px)/1.15 var(--font-sans);
+    letter-spacing: -0.005em;
+    text-align: center;
+  }
+  .units-tabs {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    width: min(510px, 100%);
+    margin: 0 auto;
+    border: 1px solid #5e5e5e;
+    border-bottom: 0;
+    background: #fff;
+  }
+  .units-tab {
+    position: relative;
+    height: 35px;
+    padding: 0 0 0 15px;
+    border: 0;
+    border-left: 1px solid #5e5e5e;
+    background: #fff;
+    color: #021341;
+    font: 400 18px/1 var(--font-sans);
+    text-align: left;
+    white-space: nowrap;
+    cursor: pointer;
+  }
+  .units-tab:first-child { border-left: 0; }
+  .units-tab sup {
+    top: -0.85em;
+    margin-left: 3px;
+    font-size: 9px;
+    letter-spacing: 0.02em;
+  }
+  .units-tab[aria-selected="true"] { background: #a5f300; }
+  .units-tab:focus-visible { outline: 2px solid #021341; outline-offset: -3px; }
+  .units-panel {
+    background: #000;
+    color: var(--ink);
+    min-height: 600px;
+    padding: 56px 0;
+  }
+  .units-panel[hidden] { display: none; }
+  @media (max-width: 575.98px) {
+    .units-tab { padding-left: 8px; font-size: 15px; }
+    .units-tab sup { font-size: 8px; margin-left: 1px; }
+  }
+
   /* ---------- Placeholder content below the hero ---------- */
   .filler { min-height: 150vh; }
 </style>
@@ -266,6 +321,28 @@
       </div>
       <div class="deco hero-deco hero-deco--left" aria-hidden="true"><div></div><div></div><div></div><div></div></div>
       <div class="deco hero-deco hero-deco--right" aria-hidden="true"><div></div><div></div><div></div><div></div></div>
+    </div>
+  </section>
+
+  <section class="units" aria-labelledby="unitsTitle">
+    <h2 class="units-title" id="unitsTitle">Four units. Connected scientific work.</h2>
+    <div class="units-tabs" role="tablist" aria-label="Research units">
+      <button class="units-tab" role="tab" id="tab-biology" aria-controls="panel-biology" aria-selected="true">Biology</button>
+      <button class="units-tab" role="tab" id="tab-ai" aria-controls="panel-ai" aria-selected="false" tabindex="-1">AI<sup>@HHMI</sup></button>
+      <button class="units-tab" role="tab" id="tab-tool" aria-controls="panel-tool" aria-selected="false" tabindex="-1">Tool<sup>@HHMI</sup></button>
+      <button class="units-tab" role="tab" id="tab-theory" aria-controls="panel-theory" aria-selected="false" tabindex="-1">Theory<sup>@HHMI</sup></button>
+    </div>
+    <div class="units-panel" role="tabpanel" id="panel-biology" aria-labelledby="tab-biology">
+      <div class="container"><div class="row"><div class="col-lg-6"></div><div class="col-lg-6"></div></div></div>
+    </div>
+    <div class="units-panel" role="tabpanel" id="panel-ai" aria-labelledby="tab-ai" hidden>
+      <div class="container"><div class="row"><div class="col-lg-6"></div><div class="col-lg-6"></div></div></div>
+    </div>
+    <div class="units-panel" role="tabpanel" id="panel-tool" aria-labelledby="tab-tool" hidden>
+      <div class="container"><div class="row"><div class="col-lg-6"></div><div class="col-lg-6"></div></div></div>
+    </div>
+    <div class="units-panel" role="tabpanel" id="panel-theory" aria-labelledby="tab-theory" hidden>
+      <div class="container"><div class="row"><div class="col-lg-6"></div><div class="col-lg-6"></div></div></div>
     </div>
   </section>
 
@@ -331,6 +408,29 @@
       entries.forEach(function (e) { if (e.intersectionRatio < 0.4) reset(); });
     }, { threshold: [0, 0.4] }).observe(hero);
   }
+})();
+
+// Units tabs: each tab shows its own panel; arrow keys, Home and End move between tabs.
+(function () {
+  var tabs = Array.prototype.slice.call(document.querySelectorAll('.units-tab'));
+  function select(tab) {
+    tabs.forEach(function (t) {
+      var on = t === tab;
+      t.setAttribute('aria-selected', on);
+      t.tabIndex = on ? 0 : -1;
+      document.getElementById(t.getAttribute('aria-controls')).hidden = !on;
+    });
+  }
+  tabs.forEach(function (tab, i) {
+    tab.addEventListener('click', function () { select(tab); });
+    tab.addEventListener('keydown', function (e) {
+      var n = { ArrowRight: i + 1, ArrowLeft: i - 1, Home: 0, End: tabs.length - 1 }[e.key];
+      if (n === undefined) return;
+      e.preventDefault();
+      var next = tabs[(n + tabs.length) % tabs.length];
+      select(next); next.focus();
+    });
+  });
 })();
 </script>
 
