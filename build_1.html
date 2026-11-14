@@ -485,11 +485,17 @@
      Each column has a colour bar on its left edge behind the text, the role
      name, three points between dotted rules and an optional mono footnote. */
   .roles-title {
-    margin: 0 0 clamp(64px, 7vw, 112px);
+    margin: 0 0 16px;
     color: #021341;
     font: 400 clamp(25px, 2.35vw, 40px)/1.15 var(--font-sans);
     letter-spacing: -0.005em;
-    text-align: center;
+    text-align: left;
+  }
+  .roles-lead {                      /* global paragraph style, 17/20 */
+    position: relative;
+    max-width: 640px;
+    margin: 0 0 clamp(64px, 7vw, 112px);
+    color: #021341;
   }
   .role {
     --bar: #a5f300;
@@ -898,7 +904,8 @@
 
   <section class="grid-section" aria-labelledby="rolesTitle">
     <div class="container">
-      <h2 class="roles-title" id="rolesTitle">Find Your Scientific Role</h2>
+      <h2 class="roles-title" id="rolesTitle">Janelia’s three lead scientist roles</h2>
+      <p class="roles-lead">Janelia’s ambitious mission needs scientists who work in different ways.</p>
       <div class="row g-0 roles-row">
         <div class="col-lg-4">
           <article class="role role--principal">
