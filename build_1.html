@@ -494,8 +494,24 @@
   .roles-lead {                      /* global paragraph style, 17/20 */
     position: relative;
     max-width: 640px;
-    margin: 0 0 clamp(64px, 7vw, 112px);
+    margin: 0;
     color: #021341;
+  }
+  /* Intro block: container width, white, with a full-width .deco band on top */
+  .roles-intro {
+    position: relative;              /* paints above the crosshair grid */
+    margin-bottom: clamp(64px, 7vw, 112px);
+    padding-bottom: 28px;
+    background: #fff;
+  }
+  .roles-intro .deco {
+    --deco-w: 100%;
+    --deco-h: 14px;                  /* two 7px rows */
+    --deco-1: #00ac1d;               /* top-left: green */
+    --deco-2: #3fc2cd;               /* top-right: cyan */
+    --deco-3: #a5f300;               /* bottom-left: lime */
+    --deco-4: #000d42;               /* bottom-right: navy */
+    margin-bottom: 32px;
   }
   .role {
     --bar: #a5f300;
@@ -903,8 +919,11 @@
 
   <section class="grid-section" aria-labelledby="rolesTitle">
     <div class="container">
-      <h2 class="roles-title" id="rolesTitle">Janelia’s three lead scientist roles</h2>
-      <p class="roles-lead">Janelia’s ambitious mission needs scientists who work in different ways.</p>
+      <div class="roles-intro">
+        <div class="deco" aria-hidden="true"><div></div><div></div><div></div><div></div></div>
+        <h2 class="roles-title" id="rolesTitle">Janelia’s three lead scientist roles</h2>
+        <p class="roles-lead">Janelia’s ambitious mission needs scientists who work in different ways.</p>
+      </div>
       <div class="row g-0 roles-row">
         <div class="col-lg-4">
           <article class="role role--principal">
