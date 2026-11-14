@@ -358,6 +358,35 @@
   @media (max-width: 991.98px) {
     .unit-figure { width: 100%; margin-top: 40px; }
   }
+
+  /* Split panel: left column as above, right half is a full-bleed looping video */
+  .unit-split { position: relative; }
+  .unit-media { overflow: hidden; background: #000; }
+  .unit-media video {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;               /* fill, crop the sides, keep it centred */
+  }
+  @media (min-width: 992px) {
+    .unit-split { min-height: 800px; }
+    .unit-split > .container > .row { min-height: calc(800px - 112px); }   /* panel minus 56px top/bottom */
+    .unit-split .unit-col {
+      display: grid;                 /* text and image share one cell */
+    }
+    .unit-split .unit-col > * { grid-area: 1 / 1; }
+    .unit-split .unit-desc { align-self: start; }
+    .unit-split .unit-figure { align-self: center; margin: 0 auto; }   /* centred in the panel */
+    .unit-media {
+      position: absolute;
+      top: 0; bottom: 0;
+      left: 50%; right: 0;           /* right half, to the screen edge */
+    }
+  }
+  @media (max-width: 991.98px) {
+    .unit-split { padding-bottom: 0; }
+    .unit-media { margin-top: 56px; aspect-ratio: 4 / 3; }
+  }
   @media (max-width: 575.98px) {
     .units-tab { padding-left: 8px; font-size: 15px; }
     .units-tab sup { font-size: 8px; margin-left: 1px; }
@@ -554,17 +583,20 @@
       <button class="units-tab" role="tab" id="tab-theory" aria-controls="panel-theory" aria-selected="false" tabindex="-1">Theory<sup>@HHMI</sup></button>
       </div>
     </div>
-    <div class="units-panel" role="tabpanel" id="panel-biology" aria-labelledby="tab-biology">
+    <div class="units-panel unit-split" role="tabpanel" id="panel-biology" aria-labelledby="tab-biology">
       <div class="container"><div class="row">
-        <div class="col-lg-6">
+        <div class="col-lg-6 unit-col">
           <p class="unit-desc"><span class="unit-name">Biology</span> pursues the central scientific research questions at the heart of Janelia’s mission.</p>
           <figure class="unit-figure">
             <img src="assets/biology-research-area-work-square.jpg" width="750" height="750" loading="lazy"
                  alt="A researcher at a microscope rig, with a brain imaging scan on the monitor.">
           </figure>
         </div>
-        <div class="col-lg-6"></div>
       </div></div>
+      <div class="unit-media" aria-hidden="true">
+        <video src="assets/video/zebrafish_brain_imaging.mp4" poster="assets/zebrafish_brain_imaging-poster.jpg"
+               autoplay muted loop playsinline preload="metadata"></video>
+      </div>
     </div>
     <div class="units-panel" role="tabpanel" id="panel-ai" aria-labelledby="tab-ai" hidden>
       <div class="container"><div class="row"><div class="col-lg-6"></div><div class="col-lg-6"></div></div></div>
@@ -641,6 +673,11 @@
 </main>
 
 <script>
+  /* Reduced motion: decorative panel videos show their still frame instead of playing */
+  if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    document.querySelectorAll('.unit-media video').forEach(function (v) { v.removeAttribute('autoplay'); v.pause(); });
+  }
+
   /* Touch screens: a tap toggles the H; tapping anywhere else turns it back */
   (function () {
     var btn = document.querySelector('.explore');
