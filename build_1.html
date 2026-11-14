@@ -617,8 +617,7 @@
     margin: 0;
     font: 400 clamp(40px, 18cqw, 88px)/1 var(--font-sans);
     letter-spacing: -.01em;
-    font-variant-numeric: tabular-nums;
-    white-space: nowrap;
+    white-space: nowrap;             /* proportional figures: normal spacing around commas and spaces */
   }
   .sc-cap { margin: 10px 0 0; font: 400 14px/1.3 var(--font-sans); }
   @media (max-width: 767.98px) {
@@ -798,11 +797,11 @@
         <div class="vs-overlay">
           <div class="row g-0 schema" id="vs-content" inert>
             <div class="col-6 col-lg-4 gcell"><div class="sc"><p class="sc-label">Established</p><p class="sc-fig" data-count="2006">2006</p></div></div>
-            <div class="col-6 col-lg-4 gcell"><div class="sc"><p class="sc-label">Location</p><p class="sc-fig">VA, USA</p></div></div>
-            <div class="col-6 col-lg-4 gcell"><div class="sc"><p class="sc-label">Staffs</p><p class="sc-fig" data-count="650">650</p></div></div>
+            <div class="col-6 col-lg-4 gcell"><div class="sc"><p class="sc-label">Location</p><p class="sc-fig" data-count="30" data-suffix=" Miles">30 Miles</p><p class="sc-cap">From D.C.</p></div></div>
+            <div class="col-6 col-lg-4 gcell"><div class="sc"><p class="sc-label">Employees</p><p class="sc-fig" data-count="650" data-prefix="+">+650</p><p class="sc-cap">Staffs &amp; Researchers</p></div></div>
             <div class="col-6 col-lg-4 gcell"><div class="sc"><p class="sc-label">Campus</p><p class="sc-fig" data-count="689">689</p><p class="sc-cap">Acres</p></div></div>
-            <div class="col-6 col-lg-4 gcell"><div class="sc"><p class="sc-label">Research</p><p class="sc-fig" data-count="200">200</p><p class="sc-cap">Researchers &amp; Scientists</p></div></div>
-            <div class="col-6 col-lg-4 gcell"><div class="sc"><p class="sc-label">Programs</p><p class="sc-fig" data-count="4">4</p><p class="sc-cap">Initiatives</p></div></div>
+            <div class="col-6 col-lg-4 gcell"><div class="sc"><p class="sc-fig" data-count="140000" data-commas>140,000</p><p class="sc-cap">Mapped Neurons</p></div></div>
+            <div class="col-6 col-lg-4 gcell"><div class="sc"><p class="sc-fig" data-count="5000" data-commas>5,000</p><p class="sc-cap">Neurons Per Hour</p></div></div>
           </div>
         </div>
       </div>
@@ -1054,11 +1053,16 @@
   function countUp(grid) {
     var figs = grid.querySelectorAll('[data-count]');
     if (reduce) return;
+    // data-prefix / data-suffix stay fixed around the number; data-commas adds thousands separators
+    function show(el, n) {
+      var num = el.hasAttribute('data-commas') ? n.toLocaleString('en-US') : String(n);
+      el.textContent = (el.dataset.prefix || '') + num + (el.dataset.suffix || '');
+    }
     var start = performance.now(), dur = 1000;
-    figs.forEach(function (el) { el.textContent = '0'; });
+    figs.forEach(function (el) { show(el, 0); });
     (function tick(now) {
       var t = Math.min(1, (now - start) / dur), e = 1 - Math.pow(1 - t, 3);
-      figs.forEach(function (el) { el.textContent = String(Math.round(+el.dataset.count * e)); });
+      figs.forEach(function (el) { show(el, Math.round(+el.dataset.count * e)); });
       if (t < 1) requestAnimationFrame(tick);
     })(start);
   }
