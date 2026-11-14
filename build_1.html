@@ -276,39 +276,31 @@
 
   /* ---------- Units: heading, tabs, and a black full-width panel per tab ---------- */
   .units {
-    background: #fbfbfb;
-    color: #021341;
+    background: #000;
+    color: #fff;
     padding-top: 150px;              /* space above "Four units…" */
   }
   /* Heading + paragraph on the left, tabs on the right sitting on the panel */
+  /* Heading + paragraph centred, tabs centred below sitting on the panel */
   .units-head {
     display: flex;
     flex-direction: column;
-    gap: 32px;
+    align-items: center;
+    gap: 40px;
   }
-  .units-intro { max-width: 640px; }
+  .units-intro { max-width: 640px; text-align: center; }
   .units-title {
     margin: 0 0 16px;
     font: 400 clamp(25px, 2.35vw, 40px)/1.15 var(--font-sans);
     letter-spacing: -0.005em;
-    text-align: left;
+    text-align: center;
   }
   .units-lead { margin: 0; }          /* uses the global body paragraph style */
   .units-tabs {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     width: min(510px, 100%);
-    margin-left: auto;                /* right-aligned */
     flex-shrink: 0;
-  }
-  @media (min-width: 1200px) {
-    .units-head {
-      flex-direction: row;
-      justify-content: space-between;
-      align-items: flex-end;          /* tabs stay on the panel */
-      gap: 48px;
-    }
-    .units-intro { padding-bottom: 40px; }
   }
   .units-tab {
     position: relative;
@@ -334,6 +326,7 @@
   .units-tab[aria-selected="true"] { background: #a5f300; }
   .units-tab:focus-visible { outline: 2px solid #021341; outline-offset: -3px; }
   .units-panel {
+    border-top: 1px solid #fff;
     background: #000;
     color: var(--ink);
     min-height: 600px;
