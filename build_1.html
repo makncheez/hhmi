@@ -397,14 +397,14 @@
     object-fit: cover;               /* fill, crop the sides, keep it centred */
   }
   @media (min-width: 992px) {
-    .unit-split { min-height: 800px; }
-    /* Three rows: text / image / equal spacer. With room to spare the image sits
-       exactly in the panel centre; if the text needs more, the image moves down
-       instead of covering it (always >= 48px gap). */
+    .unit-split { min-height: 600px; }
+    /* Two rows: text, then the image centred in the space below it.
+       The image never covers the text (always >= 48px gap), and with the
+       size caps below everything fits the 600px panel. */
     .unit-split .unit-col {
       display: grid;
-      grid-template-rows: 1fr auto 1fr;
-      min-height: calc(800px - 112px);   /* panel minus 56px top/bottom */
+      grid-template-rows: auto 1fr;
+      min-height: calc(600px - 113px);   /* panel minus 56px top/bottom and the 1px top border */
       padding-inline: 0;             /* the column is exactly half the screen */
     }
     .unit-split .unit-desc {         /* column = half the screen, so the screen is 200% */
@@ -413,7 +413,8 @@
       max-width: calc(100% - var(--cw) / 2 + 12px + 560px);   /* text itself stays ≤ 560px */
     }
     .unit-split .unit-desc { grid-row: 1; align-self: start; padding-bottom: 48px; }
-    .unit-split .unit-figure { grid-row: 2; margin: 0 auto; }
+    .unit-split .unit-figure { grid-row: 2; align-self: center; margin: 0 auto; max-width: 320px; }        /* square photo: fits the 600px panel */
+    .unit-split .unit-figure--video { max-width: 540px; }                               /* 16:9 video: up to ~304px tall */
     .unit-media {
       position: absolute;
       top: 0; bottom: 0;
@@ -639,7 +640,7 @@
       <div class="container-fluid px-0"><div class="row g-0">
         <div class="col-lg-6 unit-col">
           <p class="unit-desc"><span class="unit-name">AI<span class="unit-tag">@HHMI</span></span> powers this research, creating AI systems that help scientists analyze and understand their data and eventually design and run experiments as well.</p>
-          <figure class="unit-figure">
+          <figure class="unit-figure unit-figure--video">
             <video src="assets/video/danionella.mp4" muted loop playsinline preload="none"
                    aria-label="Close-up footage of a Danionella research setup"></video>
           </figure>
@@ -654,7 +655,7 @@
       <div class="container-fluid px-0"><div class="row g-0">
         <div class="col-lg-6 unit-col">
           <p class="unit-desc"><span class="unit-name">Tools<span class="unit-tag">@HHMI</span></span> enables this work, building the microscopes, molecular tools, and instruments that drive biological discovery.</p>
-          <figure class="unit-figure">
+          <figure class="unit-figure unit-figure--video">
             <video src="assets/video/danionella.mp4" muted loop playsinline preload="none"
                    aria-label="Close-up footage of a Danionella research setup"></video>
           </figure>
