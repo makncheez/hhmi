@@ -214,9 +214,23 @@
     letter-spacing: -0.005em;
     text-align: center;
   }
+  .hero-sub {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    column-gap: 0.9em;               /* wider than a word space: each phrase its own beat */
+    row-gap: 0.15em;
+    margin: 3.4vw 0 0;               /* ~40px below the headline on a laptop */
+    color: var(--ink);
+    font: 400 2.6vw/1.2 var(--font-sans);   /* ~55% of the headline */
+    letter-spacing: 0;
+    text-align: center;
+  }
+  .hero-sub span { white-space: nowrap; }  /* phrases never break mid-phrase */
   .hero.is-watching .hero-copy { opacity: 0; }
   @media (max-width: 767.98px) {
     .hero-title { font-size: clamp(32px, 9vw, 56px); }
+    .hero-sub { font-size: 17px; margin-top: 18px; }
   }
 
   /* ---------- Decorative block: 4 divs in a 2 x 2 grid (reusable) ----------
@@ -478,6 +492,7 @@
       </div>
       <div class="hero-copy">
         <h1 class="hero-title">Understanding how brains generate behavior.</h1>
+        <p class="hero-sub"><span>Big questions.</span> <span>Long horizons.</span> <span>Sustained support.</span></p>
       </div>
       <div class="deco hero-deco hero-deco--left" aria-hidden="true"><div></div><div></div><div></div><div></div></div>
       <div class="deco hero-deco hero-deco--right" aria-hidden="true"><div></div><div></div><div></div><div></div></div>
