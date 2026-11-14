@@ -88,13 +88,32 @@
   .explore-icon i {
     position: absolute;
     left: 0;
-    width: 100%;
+    width: 32px;
     height: 2px;
+    transition: transform .35s cubic-bezier(.65,0,.35,1);
   }
-  .explore-icon i:nth-child(1) { top: 0;    background: var(--green-1); }
-  .explore-icon i:nth-child(2) { top: 12.5px; background: var(--green-2); }
-  .explore-icon i:nth-child(3) { bottom: 0; background: var(--green-3); }
+  .explore-icon i:nth-child(1) { top: 0;      background: var(--green-1); transform-origin: 1px 1px; }   /* pivots on its left end */
+  .explore-icon i:nth-child(2) { top: 12.5px; background: var(--green-2); transform-origin: 31px 1px; }  /* pivots on its right end */
+  .explore-icon i:nth-child(3) { top: 25px;   background: var(--green-3); transform-origin: 0 1px; }
   .explore:focus-visible { outline: 2px solid var(--green-1); outline-offset: 2px; }
+
+  /* "H" state: hover (mouse), keyboard focus, or tap on touch screens (.is-h).
+     Lines stay 2px thick throughout: top swings down into the left upright,
+     middle swings into the right upright, bottom rises and shortens into the crossbar. */
+  .explore.is-h .explore-icon i:nth-child(1),
+  .explore:focus-visible .explore-icon i:nth-child(1) { transform: rotate(90deg) scaleX(.84375); }
+  .explore.is-h .explore-icon i:nth-child(2),
+  .explore:focus-visible .explore-icon i:nth-child(2) { transform: translateY(-12.5px) rotate(-90deg) scaleX(.84375); }
+  .explore.is-h .explore-icon i:nth-child(3),
+  .explore:focus-visible .explore-icon i:nth-child(3) { transform: translate(4px, -12.5px) scaleX(.75); }
+  @media (hover: hover) {
+    .explore:hover .explore-icon i:nth-child(1) { transform: rotate(90deg) scaleX(.84375); }
+    .explore:hover .explore-icon i:nth-child(2) { transform: translateY(-12.5px) rotate(-90deg) scaleX(.84375); }
+    .explore:hover .explore-icon i:nth-child(3) { transform: translate(4px, -12.5px) scaleX(.75); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .explore-icon i { transition: none; }
+  }
 
   @media (max-width: 575.98px) {
     .site-bar { padding-right: 12px; }
@@ -551,6 +570,17 @@
 </main>
 
 <script>
+  /* Touch screens: a tap toggles the H; tapping anywhere else turns it back */
+  (function () {
+    var btn = document.querySelector('.explore');
+    btn.addEventListener('pointerup', function (e) {
+      if (e.pointerType !== 'mouse') btn.classList.toggle('is-h');
+    });
+    document.addEventListener('pointerdown', function (e) {
+      if (!btn.contains(e.target)) btn.classList.remove('is-h');
+    });
+  })();
+
 (function () {
   var hero  = document.getElementById('hero');
   var frame = document.getElementById('heroFrame');
