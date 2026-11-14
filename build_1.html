@@ -232,6 +232,12 @@
     .hero-title { font-size: clamp(32px, 9vw, 56px); }
     .hero-sub { font-size: 17px; margin-top: 18px; }
   }
+  @media (max-width: 575.98px) {
+    .hero-copy {
+      padding: 0 calc(4vw + 16px);   /* keep text inside the 92%-wide video box */
+      top: calc(72px + 57.5vw);      /* centre of the 4:5 box (72px + half of 92vw x 5/4) */
+    }
+  }
 
   /* ---------- Decorative block: 4 divs in a 2 x 2 grid (reusable) ----------
      Usage: <div class="deco"><div></div><div></div><div></div><div></div></div>
@@ -625,9 +631,10 @@
     var vw = document.documentElement.clientWidth;
     var vh = hero.querySelector('.hero-stage').clientHeight;
     var share = vw < 576 ? 0.92 : vw < 992 ? 0.80 : 0.72;   // phone / tablet / desktop
-    var w0 = vw * share, h0 = w0 * 9 / 16;
+    var ratio = vw < 576 ? 5 / 4 : 9 / 16;  // height / width: phones 4:5 portrait, else 16:9
+    var w0 = vw * share, h0 = w0 * ratio;
     var maxH = vh - TOP - 24;               // keep the inset box on screen
-    if (h0 > maxH) { h0 = maxH; w0 = h0 * 16 / 9; }
+    if (h0 > maxH) { h0 = maxH; w0 = h0 / ratio; }
     var x0 = (vw - w0) / 2;
     // Vertically centred, never under the header; phones keep it near the top.
     var y0 = vw < 576 ? TOP : Math.max(TOP, (vh - h0) / 2);
