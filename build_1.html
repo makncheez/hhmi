@@ -721,8 +721,8 @@
      the centre column line); phones: 400px of video over 400px black.
      On top, inside the .container: the animated crosshair grid on the
      12-column lines (every 3rd on phones), rows 200px apart at 100, 300,
-     500, 700px, shown at 30%; and a 2 x 2 Schema over the right 8 columns
-     from the 300px row to the bottom edge (phones: the black half). */
+     500, 700px, shown at 30%; and the Project Teams card over the right
+     7 columns, centred in the band (phones: the black half). */
   .fwimg {
     --grid-ink: #fff;
     --grid-line: #fff;
@@ -761,20 +761,44 @@
     opacity: .3;                     /* Content mode: crosshairs at 30% so the figures read */
   }
   .fw-area > * { position: relative; }
-  .fw-schema { position: absolute; top: 300px; bottom: 0; left: calc(100% / 3); right: 0; margin: 0; }
-  .fw-schema .gcell { height: 50%; }
-  .fw-schema .gcell:nth-child(-n+2)::after { top: 0; bottom: 10px; }
-  .fw-schema .gcell:nth-child(n+3)::after { top: 10px; bottom: 0; }
-  .fw-schema .gcell:nth-child(-n+2)::before { border-bottom-width: var(--line-w); }
-  .fw-schema .gcell:nth-child(n+3)::before { border-bottom-width: 0; }
+  /* Card: heading cell over a text cell (broken lines as in the Schema), then a
+     Learn More link under its right edge. Right 7 columns, centred in the band. */
+  .fw-card {
+    position: absolute;
+    top: 50%;
+    left: calc(100% * 5 / 12);       /* column line 5: overlaps the video by one column */
+    right: 0;
+    transform: translateY(-50%);
+  }
+  .fw-cell { position: relative; padding: 28px 48px; }
+  .fw-cell::before, .fw-cell::after { content: ""; position: absolute; pointer-events: none; border: 0 solid var(--grid-line); }
+  .fw-cell::after {                  /* sides, breaking 10px either side of the row line */
+    left: calc(var(--line-w) / -2); right: calc(var(--line-w) / -2);
+    border-left-width: var(--line-w); border-right-width: var(--line-w);
+  }
+  .fw-cell--head::after { top: 0; bottom: 10px; }
+  .fw-cell--head::before {           /* row line, stopping 12px short of each side */
+    left: var(--gap-h); right: var(--gap-h); bottom: calc(var(--line-w) / -2);
+    border-bottom-width: var(--line-w);
+  }
+  .fw-cell--body { padding-block: 48px; }
+  .fw-cell--body::after { top: 10px; bottom: 0; }
+  .fw-title {                        /* heading font */
+    margin: 0;
+    font: 400 clamp(25px, 2.35vw, 40px)/1.15 var(--font-sans);
+    letter-spacing: -0.005em;
+  }
+  .fw-text { margin: 0; max-width: 600px; }   /* paragraph font, 17/20 */
+  .fw-cta { margin-top: 24px; text-align: right; }
+  .cta.cta--light, .cta.cta--light:hover, .cta.cta--light:focus-visible { color: #fff; }   /* white on dark */
+  .cta--light .cta-arrow path { stroke: #fff; }
+  .cta.cta--light:focus-visible { outline-color: #fff; }
   @media (max-width: 767.98px) {
     .fwimg { --step: 3; }
     .fw-video { width: 100%; height: 50%; }
-    .fw-schema { top: 400px; left: 0; }
-    .fw-schema .sc { padding: 40px 12px 16px; }
-    .fw-schema .sc-label { top: 14px; left: 14px; font-size: 12px; }
-    .fw-schema .sc-fig { font-size: clamp(26px, 20cqw, 40px); }
-    .fw-schema .sc-cap { margin-top: 8px; font-size: 12px; }
+    .fw-card { top: calc(400px + (100% - 400px) / 2); left: 0; }   /* centred in the black half */
+    .fw-cell { padding: 20px 24px; }
+    .fw-cell--body { padding-block: 28px; }
   }
   @media (prefers-reduced-motion: reduce) { .fw-area::before { animation: none; background: #fff; } }
 
@@ -1046,16 +1070,23 @@
     </div>
   </section>
 
-  <section class="fwimg" aria-label="Janelia facts">
+  <section class="fwimg" aria-labelledby="fwTitle">
     <video class="fw-video" src="assets/video/danionella_skin_cells_calcium-web.mp4" poster="assets/danionella_skin_cells_calcium-poster.jpg"
            autoplay muted loop playsinline preload="metadata" aria-hidden="true"></video>
     <div class="container">
       <div class="fw-area">
-        <div class="row g-0 schema fw-schema" id="fw-content">
-          <div class="col-6 gcell"><div class="sc"><p class="sc-label">Established</p><p class="sc-fig" data-count="2006">2006</p></div></div>
-          <div class="col-6 gcell"><div class="sc"><p class="sc-label">Location</p><p class="sc-fig">VA, USA</p></div></div>
-          <div class="col-6 gcell"><div class="sc"><p class="sc-label">Staffs</p><p class="sc-fig" data-count="650">650</p></div></div>
-          <div class="col-6 gcell"><div class="sc"><p class="sc-label">Research</p><p class="sc-fig" data-count="200">200</p><p class="sc-cap">Researchers &amp; Scientists</p></div></div>
+        <div class="fw-card">
+          <div class="fw-cell fw-cell--head"><h2 class="fw-title" id="fwTitle">Project Teams</h2></div>
+          <div class="fw-cell fw-cell--body">
+            <p class="fw-text">Some scientific projects are too big for one lab to accomplish on its own, but have the potential to transform science. For these projects, Janelia created Project Teams: dedicated groups of scientists who come together to pursue a specialized goal.</p>
+          </div>
+          <div class="fw-cta">
+            <a class="cta cta--light" href="#">
+              <span class="deco" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
+              <span>Learn more<span class="visually-hidden"> about Project Teams</span></span>
+              <svg class="cta-arrow" viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke="black" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round" stroke="black"/></svg>
+            </a>
+          </div>
         </div>
       </div>
     </div>
@@ -1297,31 +1328,16 @@ document.querySelectorAll('button.mj-more').forEach(function (btn) {
   });
 });
 
-// Video & Grid: the video plays only while on screen; the figures count up the first time it comes into view.
+// Video & Grid: the video plays only while on screen (reduced motion: still frame).
 (function () {
   var band = document.querySelector('.fwimg');
   if (!band) return;
-  var v = band.querySelector('.fw-video'), grid = band.querySelector('.fw-schema');
-  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (reduce) { v.removeAttribute('autoplay'); v.pause(); return; }
+  var v = band.querySelector('.fw-video');
+  if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) { v.removeAttribute('autoplay'); v.pause(); return; }
   if (!('IntersectionObserver' in window)) return;
-  var counted = false;
   new IntersectionObserver(function (entries) {
-    entries.forEach(function (e) {
-      if (e.isIntersecting) {
-        var p = v.play(); if (p) p.catch(function () {});
-        if (!counted && e.intersectionRatio > 0.3) {
-          counted = true;
-          var figs = grid.querySelectorAll('[data-count]'), start = performance.now();
-          (function tick(now) {
-            var t = Math.min(1, (now - start) / 1000), k = 1 - Math.pow(1 - t, 3);
-            figs.forEach(function (el) { el.textContent = String(Math.round(+el.dataset.count * k)); });
-            if (t < 1) requestAnimationFrame(tick);
-          })(start);
-        }
-      } else v.pause();
-    });
-  }, { threshold: [0, 0.3] }).observe(band);
+    entries.forEach(function (e) { if (e.isIntersecting) { var p = v.play(); if (p) p.catch(function () {}); } else v.pause(); });
+  }, { threshold: 0 }).observe(band);
 })();
 </script>
 
