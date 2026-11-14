@@ -343,7 +343,13 @@
 
   /* Panel left column: unit name (lime) + one-line description, then a square image */
   .unit-desc { margin: 0; max-width: 560px; }      /* global paragraph style, 17/20 */
-  .unit-name { display: block; color: #a5f300; }
+  .unit-name {                       /* same size as the units heading */
+    display: block;
+    color: #a5f300;
+    font-size: clamp(25px, 2.35vw, 40px);
+    line-height: 1.15;
+    letter-spacing: -0.005em;
+  }
   .unit-figure {
     width: 60%;
     margin: 180px auto 0;            /* centred in the column, 180px below the text */
