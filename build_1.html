@@ -627,6 +627,56 @@
     .vs .sc-cap { margin-top: 8px; font-size: 12px; }
   }
 
+  /* ---------- Mission / Journey (inside .vs, below the video grid) ----------
+     2 x 2 in the .container: heading cell (4 cols) + text cell (8 cols) per
+     row. Broken lines as in the Schema: sides break 10px either side of the
+     row line, the row line stops 12px short of each side; no outer top or
+     bottom line. Below 992px each heading sits on top of its text. */
+  .mj { margin-top: 160px; }
+  .mj-cell { position: relative; display: flex; flex-direction: column; justify-content: center; padding: 72px var(--cell-pad); }
+  .mj-cell::before, .mj-cell::after { content: ""; position: absolute; pointer-events: none; border: 0 solid var(--grid-line); }
+  .mj-cell::before {                 /* row line */
+    left: var(--gap-h); right: var(--gap-h); bottom: calc(var(--line-w) / -2);
+    border-bottom-width: var(--line-w);
+  }
+  .mj-cell::after {                  /* sides */
+    top: 10px; bottom: 10px;
+    left: calc(var(--line-w) / -2); right: calc(var(--line-w) / -2);
+    border-left-width: var(--line-w); border-right-width: var(--line-w);
+  }
+  .mj-row1::after { top: 0; }
+  .mj-row2::after { bottom: 0; }
+  .mj-row2::before { content: none; }
+  .mj-head { align-items: center; text-align: center; }
+  .mj-title {                        /* heading font: same as the section headings */
+    margin: 0;
+    font: 400 clamp(25px, 2.35vw, 40px)/1.15 var(--font-sans);
+    letter-spacing: -0.005em;
+  }
+  .mj-text { margin: 0; }            /* paragraph font: global 17/20 */
+  .mj-more {
+    align-self: center;
+    margin-top: 24px;
+    padding-bottom: 4px;
+    border-bottom: 3px solid #00ac1d;
+    color: #00ac1d;
+    font: 400 15px/1 var(--font-sans);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-decoration: none;
+  }
+  .mj-more:hover, .mj-more:focus-visible { color: #a5f300; border-color: #a5f300; }
+  .mj-more:focus-visible { outline: 2px solid #a5f300; outline-offset: 4px; }
+  @media (max-width: 991.98px) {
+    .mj { margin-top: 120px; }
+    .mj-head { align-items: flex-start; text-align: left; padding-bottom: 16px; }
+    .mj-head::before { content: none; }          /* heading and its text read as one block */
+    .mj-head::after { bottom: 0; }
+    .mj-body { padding-top: 0; padding-bottom: 56px; }
+    .mj-body::after { top: 0; }
+    .mj-row1.mj-head::after { top: 0; }
+  }
+
   /* ---------- CTA arrow label (reusable): 4-square .deco + label + arrow, 30px tall ---------- */
   .cta {
     display: inline-flex;
@@ -805,6 +855,18 @@
           </div>
         </div>
       </div>
+      </div>
+      <div class="row g-0 mj">
+        <div class="col-12 col-lg-4 mj-cell mj-head mj-row1"><h3 class="mj-title">Mission</h3></div>
+        <div class="col-12 col-lg-8 mj-cell mj-body mj-row1">
+          <p class="mj-text">HHMI’s Janelia Research Campus in Ashburn, Virginia, is undertaking an ambitious, decade-long challenge to understand how a complex brain generates behavior, and to develop a new mode of discovery in which biologists and AI work together to drive science forward. Seizing the moment requires exactly what Janelia was built to provide: sustained support, shared infrastructure, interdisciplinary teams, and the time to ask the hard questions.</p>
+          <a class="mj-more" href="#">Read More<span class="visually-hidden"> about our mission</span></a>
+        </div>
+        <div class="col-12 col-lg-4 mj-cell mj-head mj-row2"><h3 class="mj-title">Journey</h3></div>
+        <div class="col-12 col-lg-8 mj-cell mj-body mj-row2">
+          <p class="mj-text">After centuries of investigation, scientists still cannot explain how the brain integrates sensory information, internal states, memories, and physiology to produce behaviors. Understanding the fundamental function of the brain is vital not only in its own right, but as the key to making real progress against brain disorders, like Alzheimer’s disease and depression, that impact hundreds of millions of people worldwide. Janelia’s grand challenge is to build a mechanistic account connecting molecules, neural circuits, brain activity, and complex behavior in a whole animal in motion.</p>
+          <a class="mj-more" href="#">Read More<span class="visually-hidden"> about the journey</span></a>
+        </div>
       </div>
     </div>
   </section>
