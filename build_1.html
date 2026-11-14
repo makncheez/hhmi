@@ -560,6 +560,12 @@
     background: #000;
     color: var(--grid-ink);
   }
+  .vs-title {                        /* same style as the Units heading */
+    margin: 0 0 48px;
+    font: 400 clamp(25px, 2.35vw, 40px)/1.15 var(--font-sans);
+    letter-spacing: -0.005em;
+    text-align: center;
+  }
   .vcell { position: relative; overflow: hidden; aspect-ratio: 16 / 9; background: #111; }
   .vcell video { position: absolute; inset: 0; display: block; width: 100%; height: 100%; object-fit: cover; }
   @media (min-width: 992px) { .vcell-tall { aspect-ratio: auto; height: 100%; } }
@@ -572,7 +578,7 @@
   .vs-overlay {
     position: absolute;
     inset: 0;
-    background: rgba(0, 0, 0, .8);
+    background: rgba(0, 0, 0, .9);   /* 90% black */
     opacity: var(--vs-p, 0);         /* 0 to 1 across the 80px pin, set by the script */
     pointer-events: none;
   }
@@ -769,8 +775,9 @@
     </div>
   </section>
 
-  <section class="vs" aria-label="Janelia at a glance">
+  <section class="vs" aria-labelledby="vsTitle">
     <div class="container">
+      <h2 class="vs-title" id="vsTitle">Janelia at a Glance</h2>
       <div class="vs-pin">
       <div class="vs-stage">
         <div class="row g-4">
