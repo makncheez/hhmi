@@ -543,7 +543,7 @@
      a tall Exterior cell beside People and Interior stacked (16:9); below
      992px all three stack at 16:9. Over it, the Schema grid (3 x 2 on
      desktop, 2 x 3 below) with six facts on an 80% black overlay.
-     Scroll: the grid pins (sticky, centred) for 80px of scrolling while the
+     Scroll: the grid pins (sticky, centred) for 150px of scrolling while the
      overlay fades in with the scroll (figures count up); then it unlocks.
      Videos play only while on screen; reduced motion: no autoplay. */
   .vs {
@@ -555,7 +555,7 @@
     --gap-v-bottom: 12px;
     --cell-pad: clamp(20px, 2.6vw, 38px);
     --vs-h: 740px;
-    --vs-pin: 80px;
+    --vs-pin: 150px;
     padding: 200px 0;
     background: #000;
     color: var(--grid-ink);
@@ -564,7 +564,7 @@
     margin: 0 0 48px;
     font: 400 clamp(25px, 2.35vw, 40px)/1.15 var(--font-sans);
     letter-spacing: -0.005em;
-    text-align: center;
+    text-align: left;
   }
   .vcell { position: relative; overflow: hidden; aspect-ratio: 16 / 9; background: #111; }
   .vcell video { position: absolute; inset: 0; display: block; width: 100%; height: 100%; object-fit: cover; }
@@ -579,7 +579,7 @@
     position: absolute;
     inset: 0;
     background: rgba(0, 0, 0, .9);   /* 90% black */
-    opacity: var(--vs-p, 0);         /* 0 to 1 across the 80px pin, set by the script */
+    opacity: var(--vs-p, 0);         /* 0 to 1 across the 150px pin, set by the script */
     pointer-events: none;
   }
   /* Broken-line cell: ::before draws the bottom line, ::after the sides,
@@ -1035,7 +1035,7 @@
 })();
 
 // Video Grid and Schema (from studies/grid.html): videos play only while on
-// screen; the grid pins for 80px of scrolling while the facts fade in, then unlocks.
+// screen; the grid pins for 150px of scrolling while the facts fade in, then unlocks.
 (function () {
   var band = document.querySelector('.vs');
   if (!band) return;
@@ -1065,7 +1065,7 @@
   var pin = band.querySelector('.vs-pin');
   var stage = band.querySelector('.vs-stage');
   var grid = document.getElementById('vs-content');
-  var PIN = 80, BASE_PAD = 200, shown = false, queued = false;
+  var PIN = 150, BASE_PAD = 200, shown = false, queued = false;
   function pinTop() { return Math.max(0, (window.innerHeight - stage.offsetHeight) / 2); }
   function update() {
     queued = false;
