@@ -403,7 +403,7 @@
        size caps below everything fits the 600px panel. */
     .unit-split .unit-col {
       display: grid;
-      grid-template-rows: auto 1fr auto;   /* text / media / CTA */
+      grid-template-rows: auto 1fr;
       min-height: calc(600px - 113px);   /* panel minus 56px top/bottom and the 1px top border */
       padding-inline: 0;             /* the column is exactly half the screen */
     }
@@ -412,10 +412,9 @@
       padding-right: 24px;
       max-width: calc(100% - var(--cw) / 2 + 12px + 560px);   /* text itself stays ≤ 560px */
     }
-    .unit-split .unit-desc { grid-row: 1; align-self: start; padding-bottom: 40px; }
-    .unit-split .unit-cta { grid-row: 3; padding-top: 24px; padding-left: calc(100% - var(--cw) / 2 + 12px); }
-    .unit-split .unit-figure { grid-row: 2; align-self: center; margin: 0 auto; max-width: 240px; }        /* square photo: fits the 600px panel with the CTA */
-    .unit-split .unit-figure--video { max-width: 427px; }                               /* 16:9 video: up to 240px tall */
+    .unit-split .unit-desc { grid-row: 1; align-self: start; padding-bottom: 48px; }
+    .unit-split .unit-figure { grid-row: 2; align-self: center; margin: 0 auto; max-width: 320px; }        /* square photo: fits the 600px panel */
+    .unit-split .unit-figure--video { max-width: 540px; }                               /* 16:9 video: up to ~304px tall */
     .unit-media {
       position: absolute;
       top: 0; bottom: 0;
@@ -424,7 +423,6 @@
   }
   @media (max-width: 991.98px) {
     .unit-split { padding-bottom: 0; }
-    .unit-cta { margin-top: 32px; }
     .unit-media { margin-top: 56px; aspect-ratio: 4 / 3; }
   }
   @media (max-width: 575.98px) {
@@ -562,19 +560,6 @@
     --deco-4: #00ac1d;
   }
   .cta-arrow { width: 26px; height: 27px; margin-left: -3px; flex: none; overflow: visible; }
-  /* Pill variant for dark backgrounds: white pill, mixed-case label */
-  .cta--pill {
-    height: 46px;
-    padding: 0 30px 0 32px;
-    gap: 20px;
-    border-radius: 999px;
-    background: #fff;
-    font-size: 16px;
-    letter-spacing: 0.1em;
-    text-transform: none;
-  }
-  .cta--pill .cta-arrow { margin-left: 4px; }
-  .cta--pill:focus-visible { outline-color: #fff; }
 
   /* Hover / focus: the four colours are reshuffled at random every 0.2s
      (script at the end of the page). Reduced motion: no shuffle. */
@@ -644,13 +629,6 @@
             <img src="assets/biology-research-area-work-square.jpg" width="750" height="750" loading="lazy"
                  alt="A researcher at a microscope rig, with a brain imaging scan on the monitor.">
           </figure>
-          <div class="unit-cta">
-            <a class="cta cta--pill" href="#">
-              <span class="deco" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
-              <span>Learn More<span class="visually-hidden"> about Biology</span></span>
-              <svg class="cta-arrow" viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke="black" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round" stroke="black"/></svg>
-            </a>
-          </div>
         </div>
       </div></div>
       <div class="unit-media" aria-hidden="true">
@@ -666,13 +644,6 @@
             <video src="assets/video/danionella.mp4" muted loop playsinline preload="none"
                    aria-label="Close-up footage of a Danionella research setup"></video>
           </figure>
-          <div class="unit-cta">
-            <a class="cta cta--pill" href="#">
-              <span class="deco" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
-              <span>Learn More<span class="visually-hidden"> about AI@HHMI</span></span>
-              <svg class="cta-arrow" viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke="black" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round" stroke="black"/></svg>
-            </a>
-          </div>
         </div>
       </div></div>
       <div class="unit-media" aria-hidden="true">
@@ -688,13 +659,6 @@
             <video src="assets/video/danionella.mp4" muted loop playsinline preload="none"
                    aria-label="Close-up footage of a Danionella research setup"></video>
           </figure>
-          <div class="unit-cta">
-            <a class="cta cta--pill" href="#">
-              <span class="deco" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
-              <span>Learn More<span class="visually-hidden"> about Tools@HHMI</span></span>
-              <svg class="cta-arrow" viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke="black" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round" stroke="black"/></svg>
-            </a>
-          </div>
         </div>
       </div></div>
       <div class="unit-media" aria-hidden="true">
@@ -710,13 +674,6 @@
             <img src="assets/biology-research-area-work-square.jpg" width="750" height="750" loading="lazy"
                  alt="A researcher at a microscope rig, with a brain imaging scan on the monitor.">
           </figure>
-          <div class="unit-cta">
-            <a class="cta cta--pill" href="#">
-              <span class="deco" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
-              <span>Learn More<span class="visually-hidden"> about Theory@HHMI</span></span>
-              <svg class="cta-arrow" viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke="black" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round" stroke="black"/></svg>
-            </a>
-          </div>
         </div>
       </div></div>
       <div class="unit-media" aria-hidden="true">
