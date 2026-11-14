@@ -327,6 +327,7 @@
   .units-tab:focus-visible { outline: 2px solid #021341; outline-offset: -3px; }
   .units-panel {
     border-top: 1px solid #fff;
+    border-bottom: 1px solid #fff;
     background: #000;
     color: var(--ink);
     min-height: 600px;
@@ -404,7 +405,7 @@
     .unit-split .unit-col {
       display: grid;
       grid-template-rows: auto 1fr;
-      min-height: calc(600px - 113px);   /* panel minus 56px top/bottom and the 1px top border */
+      min-height: calc(600px - 114px);   /* panel minus 56px top/bottom and the 1px top/bottom borders */
       padding-inline: 0;             /* the column is exactly half the screen */
     }
     .unit-split .unit-desc {         /* column = half the screen, so the screen is 200% */
@@ -534,6 +535,91 @@
   }
   @media (max-width: 991.98px) {
     .roles-row > * + * { margin-top: 48px; }
+  }
+
+
+  /* ---------- Video Grid and Schema (from studies/grid.html) ----------
+     Black band, bento of three muted looping videos in a .container (g-4):
+     a tall Exterior cell beside People and Interior stacked (16:9); below
+     992px all three stack at 16:9. Over it, the Schema grid (3 x 2 on
+     desktop, 2 x 3 below) with six facts on an 80% black overlay.
+     Scroll: the grid pins (sticky, centred) for 80px of scrolling while the
+     overlay fades in with the scroll (figures count up); then it unlocks.
+     Videos play only while on screen; reduced motion: no autoplay. */
+  .vs {
+    --grid-ink: #fff;
+    --grid-line: #fff;
+    --line-w: 1px;
+    --gap-h: 12px;
+    --gap-v-top: 24px;
+    --gap-v-bottom: 12px;
+    --cell-pad: clamp(20px, 2.6vw, 38px);
+    --vs-h: 740px;
+    --vs-pin: 80px;
+    padding: 200px 0;
+    background: #000;
+    color: var(--grid-ink);
+  }
+  .vcell { position: relative; overflow: hidden; aspect-ratio: 16 / 9; background: #111; }
+  .vcell video { position: absolute; inset: 0; display: block; width: 100%; height: 100%; object-fit: cover; }
+  @media (min-width: 992px) { .vcell-tall { aspect-ratio: auto; height: 100%; } }
+  .vs-pin { height: calc(var(--vs-h) + var(--vs-pin)); }
+  .vs-stage {
+    position: sticky;
+    top: max(0px, calc((100vh - var(--vs-h)) / 2));
+    display: flow-root;              /* keeps the row's negative gutter inside, so the overlay matches the videos */
+  }
+  .vs-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, .8);
+    opacity: var(--vs-p, 0);         /* 0 to 1 across the 80px pin, set by the script */
+    pointer-events: none;
+  }
+  /* Broken-line cell: ::before draws the bottom line, ::after the sides,
+     pulled in at the ends so lines never meet at intersections. */
+  .gcell { position: relative; container-type: inline-size; height: 33.3333%; }
+  .gcell::before, .gcell::after { content: ""; position: absolute; pointer-events: none; border: 0 solid var(--grid-line); }
+  .gcell::before {
+    top: auto; bottom: calc(var(--line-w) / -2);
+    left: var(--gap-h); right: var(--gap-h);
+    border-bottom-width: var(--line-w);
+  }
+  .gcell::after {
+    top: 10px; bottom: 10px;
+    left: calc(var(--line-w) / -2); right: calc(var(--line-w) / -2);
+    border-left-width: var(--line-w); border-right-width: var(--line-w);
+  }
+  .vs-overlay .schema { height: 100%; }
+  .vs-overlay .gcell:nth-child(-n+2)::after { top: 0; }                 /* 2 across: open the outer rows */
+  .vs-overlay .gcell:nth-last-child(-n+2)::after { bottom: 0; }
+  .vs-overlay .gcell:nth-last-child(-n+2)::before { border-bottom-width: 0; }
+  @media (min-width: 992px) {                                             /* 3 across */
+    .vs-overlay .gcell { height: 50%; }
+    .vs-overlay .gcell:nth-child(-n+3)::after { top: 0; }
+    .vs-overlay .gcell:nth-last-child(-n+3)::after { bottom: 0; }
+    .vs-overlay .gcell:nth-last-child(-n+3)::before { border-bottom-width: 0; }
+  }
+  .sc {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    padding: 48px 24px 32px;
+    text-align: center;
+  }
+  .sc-label { position: absolute; top: 20px; left: 24px; margin: 0; font: 400 14px/1.2 var(--font-sans); }
+  .sc-fig {
+    margin: 0;
+    font: 400 clamp(40px, 18cqw, 88px)/1 var(--font-sans);
+    letter-spacing: -.01em;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+  .sc-cap { margin: 10px 0 0; font: 400 14px/1.3 var(--font-sans); }
+  @media (max-width: 767.98px) {
+    .vs .sc { padding: 40px 12px 16px; }
+    .vs .sc-label { top: 14px; left: 14px; font-size: 12px; }
+    .vs .sc-fig { font-size: clamp(26px, 20cqw, 40px); }
+    .vs .sc-cap { margin-top: 8px; font-size: 12px; }
   }
 
   /* ---------- CTA arrow label (reusable): 4-square .deco + label + arrow, 30px tall ---------- */
@@ -679,6 +765,40 @@
       <div class="unit-media" aria-hidden="true">
         <video src="assets/video/zebrafish_brain_imaging.mp4" poster="assets/zebrafish_brain_imaging-poster.jpg"
                muted loop playsinline preload="none"></video>
+      </div>
+    </div>
+  </section>
+
+  <section class="vs" aria-label="Janelia at a glance">
+    <div class="container">
+      <div class="vs-pin">
+      <div class="vs-stage">
+        <div class="row g-4">
+          <div class="col-12 col-lg-6">
+            <div class="vcell vcell-tall">
+              <video src="assets/video/Janelia_Exterior.mp4" autoplay muted loop playsinline preload="metadata" aria-label="Janelia campus exterior"></video>
+            </div>
+          </div>
+          <div class="col-12 col-lg-6 d-flex flex-column gap-4">
+            <div class="vcell">
+              <video src="assets/video/Janelia_People.mp4" autoplay muted loop playsinline preload="metadata" aria-label="Researchers talking at a table"></video>
+            </div>
+            <div class="vcell">
+              <video src="assets/video/Janelia_Interior.mp4" autoplay muted loop playsinline preload="metadata" aria-label="Janelia interior"></video>
+            </div>
+          </div>
+        </div>
+        <div class="vs-overlay">
+          <div class="row g-0 schema" id="vs-content" inert>
+            <div class="col-6 col-lg-4 gcell"><div class="sc"><p class="sc-label">Established</p><p class="sc-fig" data-count="2006">2006</p></div></div>
+            <div class="col-6 col-lg-4 gcell"><div class="sc"><p class="sc-label">Location</p><p class="sc-fig">VA, USA</p></div></div>
+            <div class="col-6 col-lg-4 gcell"><div class="sc"><p class="sc-label">Staffs</p><p class="sc-fig" data-count="650">650</p></div></div>
+            <div class="col-6 col-lg-4 gcell"><div class="sc"><p class="sc-label">Campus</p><p class="sc-fig" data-count="689">689</p><p class="sc-cap">Acres</p></div></div>
+            <div class="col-6 col-lg-4 gcell"><div class="sc"><p class="sc-label">Research</p><p class="sc-fig" data-count="200">200</p><p class="sc-cap">Researchers &amp; Scientists</p></div></div>
+            <div class="col-6 col-lg-4 gcell"><div class="sc"><p class="sc-label">Programs</p><p class="sc-fig" data-count="4">4</p><p class="sc-cap">Initiatives</p></div></div>
+          </div>
+        </div>
+      </div>
       </div>
     </div>
   </section>
@@ -905,6 +1025,60 @@
     cta.addEventListener('focus', function () { if (cta.matches(':focus-visible')) start(); });
     cta.addEventListener('blur', stop);
   });
+})();
+
+// Video Grid and Schema (from studies/grid.html): videos play only while on
+// screen; the grid pins for 80px of scrolling while the facts fade in, then unlocks.
+(function () {
+  var band = document.querySelector('.vs');
+  if (!band) return;
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var videos = band.querySelectorAll('.vcell video');
+  videos.forEach(function (v) { if (reduce) { v.removeAttribute('autoplay'); v.pause(); v.controls = true; } });
+  if (!reduce && 'IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) { var p = e.target.play(); if (p) p.catch(function () {}); }
+        else e.target.pause();
+      });
+    }, { threshold: 0.1 });
+    videos.forEach(function (v) { io.observe(v); });
+  }
+  function countUp(grid) {
+    var figs = grid.querySelectorAll('[data-count]');
+    if (reduce) return;
+    var start = performance.now(), dur = 1000;
+    figs.forEach(function (el) { el.textContent = '0'; });
+    (function tick(now) {
+      var t = Math.min(1, (now - start) / dur), e = 1 - Math.pow(1 - t, 3);
+      figs.forEach(function (el) { el.textContent = String(Math.round(+el.dataset.count * e)); });
+      if (t < 1) requestAnimationFrame(tick);
+    })(start);
+  }
+  var pin = band.querySelector('.vs-pin');
+  var stage = band.querySelector('.vs-stage');
+  var grid = document.getElementById('vs-content');
+  var PIN = 80, BASE_PAD = 200, shown = false, queued = false;
+  function pinTop() { return Math.max(0, (window.innerHeight - stage.offsetHeight) / 2); }
+  function update() {
+    queued = false;
+    var p = (pinTop() - pin.getBoundingClientRect().top) / PIN;   // 0 at lock, 1 at unlock
+    p = Math.max(0, Math.min(1, p));
+    band.style.setProperty('--vs-p', p.toFixed(3));
+    var on = p > 0;
+    if (on !== shown) { shown = on; if (on) countUp(grid); }
+    grid.inert = p < 0.5;
+  }
+  function fit() {
+    band.style.setProperty('--vs-h', stage.offsetHeight + 'px');
+    var need = window.innerHeight - pinTop() - stage.offsetHeight + 16;   // room so the pin can finish
+    band.style.paddingBottom = Math.max(BASE_PAD, need) + 'px';
+    update();
+  }
+  window.addEventListener('scroll', function () { if (!queued) { queued = true; requestAnimationFrame(update); } }, { passive: true });
+  window.addEventListener('resize', fit);
+  if ('ResizeObserver' in window) new ResizeObserver(fit).observe(stage);
+  fit();
 })();
 </script>
 
