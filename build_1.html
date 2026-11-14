@@ -715,6 +715,69 @@
     .mj-row1.mj-head::after { top: 0; }
   }
 
+  /* ---------- Video & Grid, Content mode (from studies/grid.html) ----------
+     Full-width black band, 800px tall. The danionella skin-cells calcium
+     video (muted loop, cropped to fit) fills the left half (screen edge to
+     the centre column line); phones: 400px of video over 400px black.
+     On top, inside the .container: the animated crosshair grid on the
+     12-column lines (every 3rd on phones), rows 200px apart at 100, 300,
+     500, 700px, shown at 30%; and a 2 x 2 Schema over the right 8 columns
+     from the 300px row to the bottom edge (phones: the black half). */
+  .fwimg {
+    --grid-ink: #fff;
+    --grid-line: #fff;
+    --line-w: 1px;
+    --gap-h: 12px;
+    --cell-pad: clamp(20px, 2.6vw, 38px);
+    --row: 200px;
+    --step: 1;
+    --xhair: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' stroke='%23000' stroke-width='1' shape-rendering='crispEdges'%3E%3Csvg x='50%25' y='50%25' overflow='visible'%3E%3Cpath d='M0 -10V-2.25M0 2.25V10M-10 0H-2.25M2.25 0H10'/%3E%3C/svg%3E%3C/svg%3E");
+    position: relative;
+    height: 800px;
+    overflow-x: clip;
+    background: #000;
+    color: var(--grid-ink);
+  }
+  .fw-video { position: absolute; top: 0; left: 0; display: block; width: 50%; height: 100%; object-fit: cover; }
+  .fwimg > .container { position: relative; height: 100%; }
+  .fw-area { --col: calc(100cqw / 12); container-type: inline-size; position: relative; height: 100%; }
+  .fw-area::before {
+    content: "";
+    position: absolute;
+    inset: 0 calc(var(--col) * var(--step) / -2);
+    pointer-events: none;
+    --tile: calc(var(--col) * var(--step)) var(--row);
+    background: repeating-linear-gradient(135deg,
+      #111    calc(var(--wave) + 0px),
+      #A5F300 calc(var(--wave) + 800px),
+      #00AC1D calc(var(--wave) + 1600px),
+      #000D42 calc(var(--wave) + 2400px),
+      #111    calc(var(--wave) + 3200px));
+    -webkit-mask: var(--xhair) center 0 / var(--tile) repeat;
+            mask: var(--xhair) center 0 / var(--tile) repeat;
+    -webkit-mask-position: round(nearest, 50%, 1px) 0;
+            mask-position: round(nearest, 50%, 1px) 0;
+    animation: xhair-wave 10s linear infinite;
+    opacity: .3;                     /* Content mode: crosshairs at 30% so the figures read */
+  }
+  .fw-area > * { position: relative; }
+  .fw-schema { position: absolute; top: 300px; bottom: 0; left: calc(100% / 3); right: 0; margin: 0; }
+  .fw-schema .gcell { height: 50%; }
+  .fw-schema .gcell:nth-child(-n+2)::after { top: 0; bottom: 10px; }
+  .fw-schema .gcell:nth-child(n+3)::after { top: 10px; bottom: 0; }
+  .fw-schema .gcell:nth-child(-n+2)::before { border-bottom-width: var(--line-w); }
+  .fw-schema .gcell:nth-child(n+3)::before { border-bottom-width: 0; }
+  @media (max-width: 767.98px) {
+    .fwimg { --step: 3; }
+    .fw-video { width: 100%; height: 50%; }
+    .fw-schema { top: 400px; left: 0; }
+    .fw-schema .sc { padding: 40px 12px 16px; }
+    .fw-schema .sc-label { top: 14px; left: 14px; font-size: 12px; }
+    .fw-schema .sc-fig { font-size: clamp(26px, 20cqw, 40px); }
+    .fw-schema .sc-cap { margin-top: 8px; font-size: 12px; }
+  }
+  @media (prefers-reduced-motion: reduce) { .fw-area::before { animation: none; background: #fff; } }
+
   /* ---------- CTA arrow label (reusable): 4-square .deco + label + arrow, 30px tall ---------- */
   .cta {
     display: inline-flex;
@@ -983,6 +1046,21 @@
     </div>
   </section>
 
+  <section class="fwimg" aria-label="Janelia facts">
+    <video class="fw-video" src="assets/video/danionella_skin_cells_calcium-web.mp4" poster="assets/danionella_skin_cells_calcium-poster.jpg"
+           autoplay muted loop playsinline preload="metadata" aria-hidden="true"></video>
+    <div class="container">
+      <div class="fw-area">
+        <div class="row g-0 schema fw-schema" id="fw-content">
+          <div class="col-6 gcell"><div class="sc"><p class="sc-label">Established</p><p class="sc-fig" data-count="2006">2006</p></div></div>
+          <div class="col-6 gcell"><div class="sc"><p class="sc-label">Location</p><p class="sc-fig">VA, USA</p></div></div>
+          <div class="col-6 gcell"><div class="sc"><p class="sc-label">Staffs</p><p class="sc-fig" data-count="650">650</p></div></div>
+          <div class="col-6 gcell"><div class="sc"><p class="sc-label">Research</p><p class="sc-fig" data-count="200">200</p><p class="sc-cap">Researchers &amp; Scientists</p></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <div class="filler"></div>
 </main>
 
@@ -1218,6 +1296,33 @@ document.querySelectorAll('button.mj-more').forEach(function (btn) {
     btn.querySelector('.mj-more-label').textContent = open ? 'Read Less' : 'Read More';
   });
 });
+
+// Video & Grid: the video plays only while on screen; the figures count up the first time it comes into view.
+(function () {
+  var band = document.querySelector('.fwimg');
+  if (!band) return;
+  var v = band.querySelector('.fw-video'), grid = band.querySelector('.fw-schema');
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduce) { v.removeAttribute('autoplay'); v.pause(); return; }
+  if (!('IntersectionObserver' in window)) return;
+  var counted = false;
+  new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (e.isIntersecting) {
+        var p = v.play(); if (p) p.catch(function () {});
+        if (!counted && e.intersectionRatio > 0.3) {
+          counted = true;
+          var figs = grid.querySelectorAll('[data-count]'), start = performance.now();
+          (function tick(now) {
+            var t = Math.min(1, (now - start) / 1000), k = 1 - Math.pow(1 - t, 3);
+            figs.forEach(function (el) { el.textContent = String(Math.round(+el.dataset.count * k)); });
+            if (t < 1) requestAnimationFrame(tick);
+          })(start);
+        }
+      } else v.pause();
+    });
+  }, { threshold: [0, 0.3] }).observe(band);
+})();
 </script>
 
 </body>
