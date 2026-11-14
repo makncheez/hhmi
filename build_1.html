@@ -359,8 +359,19 @@
     .unit-figure { width: 100%; margin-top: 40px; }
   }
 
-  /* Split panel: left column as above, right half is a full-bleed looping video */
-  .unit-split { position: relative; }
+  /* Split panel: full-width, split exactly in half. Left half: text + image,
+     right half: a full-bleed looping video. The text keeps the same left edge as
+     the heading above by matching the Bootstrap container's edge
+     (--cw = container width at each breakpoint; 12px = container padding). */
+  .unit-split { position: relative; --cw: 100%; }   /* phones: fluid container */
+  @media (min-width: 576px)  { .unit-split { --cw: 540px; } }
+  @media (min-width: 768px)  { .unit-split { --cw: 720px; } }
+  @media (min-width: 992px)  { .unit-split { --cw: 960px; } }
+  @media (min-width: 1200px) { .unit-split { --cw: 1140px; } }
+  @media (min-width: 1400px) { .unit-split { --cw: 1320px; } }
+  .unit-split .unit-col {            /* stacked: same edges as the container */
+    padding-inline: max(12px, calc((100% - var(--cw)) / 2 + 12px));
+  }
   .unit-media { overflow: hidden; background: #000; }
   .unit-media video {
     display: block;
@@ -370,9 +381,15 @@
   }
   @media (min-width: 992px) {
     .unit-split { min-height: 800px; }
-    .unit-split > .container > .row { min-height: calc(800px - 112px); }   /* panel minus 56px top/bottom */
+    .unit-split .row { min-height: calc(800px - 112px); }   /* panel minus 56px top/bottom */
     .unit-split .unit-col {
       display: grid;                 /* text and image share one cell */
+      padding-inline: 0;             /* the column is exactly half the screen */
+    }
+    .unit-split .unit-desc {         /* column = half the screen, so the screen is 200% */
+      padding-left: calc(100% - var(--cw) / 2 + 12px);
+      padding-right: 24px;
+      max-width: calc(100% - var(--cw) / 2 + 12px + 560px);   /* text itself stays ≤ 560px */
     }
     .unit-split .unit-col > * { grid-area: 1 / 1; }
     .unit-split .unit-desc { align-self: start; }
@@ -584,7 +601,7 @@
       </div>
     </div>
     <div class="units-panel unit-split" role="tabpanel" id="panel-biology" aria-labelledby="tab-biology">
-      <div class="container"><div class="row">
+      <div class="container-fluid px-0"><div class="row g-0">
         <div class="col-lg-6 unit-col">
           <p class="unit-desc"><span class="unit-name">Biology</span> pursues the central scientific research questions at the heart of Janelia’s mission.</p>
           <figure class="unit-figure">
