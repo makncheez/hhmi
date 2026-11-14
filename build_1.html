@@ -361,6 +361,24 @@
     aspect-ratio: 1 / 1;
     object-fit: cover;
   }
+  .unit-figure video {               /* keeps its own (16:9) shape */
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  /* "@HHMI" tag after a unit name: black on a lime pill, top aligned with the cap height */
+  .unit-tag {
+    display: inline-block;
+    margin-left: 0.39em;
+    padding: 0.08em 0.45em;
+    border-radius: 0.12em;
+    background: #a5f300;
+    color: #000;
+    font-size: 0.47em;
+    line-height: 1;
+    vertical-align: 0.56em;          /* pill top level with the cap height of the name */
+    letter-spacing: 0.01em;
+  }
   @media (max-width: 991.98px) {
     .unit-figure { width: 100%; margin-top: 40px; }
   }
@@ -621,8 +639,16 @@
                autoplay muted loop playsinline preload="metadata"></video>
       </div>
     </div>
-    <div class="units-panel" role="tabpanel" id="panel-ai" aria-labelledby="tab-ai" hidden>
-      <div class="container"><div class="row"><div class="col-lg-6"></div><div class="col-lg-6"></div></div></div>
+    <div class="units-panel unit-split" role="tabpanel" id="panel-ai" aria-labelledby="tab-ai" hidden>
+      <div class="container-fluid px-0"><div class="row g-0">
+        <div class="col-lg-6 unit-col">
+          <p class="unit-desc"><span class="unit-name">AI<span class="unit-tag">@HHMI</span></span> powers this research, creating AI systems that help scientists analyze and understand their data and eventually design and run experiments as well.</p>
+          <figure class="unit-figure">
+            <video src="assets/video/danionella.mp4" autoplay muted loop playsinline preload="metadata"
+                   aria-label="Close-up footage of a Danionella research setup"></video>
+          </figure>
+        </div>
+      </div></div>
     </div>
     <div class="units-panel" role="tabpanel" id="panel-tool" aria-labelledby="tab-tool" hidden>
       <div class="container"><div class="row"><div class="col-lg-6"></div><div class="col-lg-6"></div></div></div>
@@ -698,7 +724,7 @@
 <script>
   /* Reduced motion: decorative panel videos show their still frame instead of playing */
   if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    document.querySelectorAll('.unit-media video').forEach(function (v) { v.removeAttribute('autoplay'); v.pause(); });
+    document.querySelectorAll('.unit-media video, .unit-figure video').forEach(function (v) { v.removeAttribute('autoplay'); v.pause(); });
   }
 
   /* Touch screens: a tap toggles the H; tapping anywhere else turns it back */
@@ -801,9 +827,15 @@
       var on = t === tab;
       t.setAttribute('aria-selected', on);
       t.tabIndex = on ? 0 : -1;
-      document.getElementById(t.getAttribute('aria-controls')).hidden = !on;
+      var panel = document.getElementById(t.getAttribute('aria-controls'));
+      panel.hidden = !on;
+      // Play the shown panel's videos, pause the hidden ones (unless reduced motion)
+      panel.querySelectorAll('video').forEach(function (v) {
+        if (on && !reduceMotion) v.play().catch(function () {}); else v.pause();
+      });
     });
   }
+  var reduceMotion = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
   tabs.forEach(function (tab, i) {
     tab.addEventListener('click', function () { select(tab); });
     tab.addEventListener('keydown', function (e) {
