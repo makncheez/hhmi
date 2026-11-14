@@ -23,7 +23,7 @@
     margin: 0;
     background: var(--page-bg);
     color: var(--ink);
-    font: 400 16px/1.4 var(--font-sans);
+    font: 400 17px/20px var(--font-sans);   /* global body paragraph: ABC Diatype Regular 17/20 */
     -webkit-font-smoothing: antialiased;
   }
 
@@ -280,17 +280,35 @@
     color: #021341;
     padding-top: 150px;              /* space above "Four units…" */
   }
+  /* Heading + paragraph on the left, tabs on the right sitting on the panel */
+  .units-head {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+  .units-intro { max-width: 640px; }
   .units-title {
-    margin: 0 0 26px;
+    margin: 0 0 16px;
     font: 400 clamp(25px, 2.35vw, 40px)/1.15 var(--font-sans);
     letter-spacing: -0.005em;
-    text-align: center;
+    text-align: left;
   }
+  .units-lead { margin: 0; }          /* uses the global body paragraph style */
   .units-tabs {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     width: min(510px, 100%);
-    margin: 0 auto;
+    margin-left: auto;                /* right-aligned */
+    flex-shrink: 0;
+  }
+  @media (min-width: 1200px) {
+    .units-head {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: flex-end;          /* tabs stay on the panel */
+      gap: 48px;
+    }
+    .units-intro { padding-bottom: 40px; }
   }
   .units-tab {
     position: relative;
@@ -506,12 +524,17 @@
   </section>
 
   <section class="units" aria-labelledby="unitsTitle">
-    <h2 class="units-title" id="unitsTitle">Four units. Connected scientific work.</h2>
-    <div class="units-tabs" role="tablist" aria-label="Research units">
+    <div class="container units-head">
+      <div class="units-intro">
+        <h2 class="units-title" id="unitsTitle">Four units. Connected scientific work.</h2>
+        <p class="units-lead">Integrated teams of biologists, AI researchers, tool builders, and theorists work together to pursue Janelia’s overarching mission and move biological discoveries forward across HHMI and in the larger scientific community.</p>
+      </div>
+      <div class="units-tabs" role="tablist" aria-label="Research units">
       <button class="units-tab" role="tab" id="tab-biology" aria-controls="panel-biology" aria-selected="true">Biology</button>
       <button class="units-tab" role="tab" id="tab-ai" aria-controls="panel-ai" aria-selected="false" tabindex="-1">AI<sup>@HHMI</sup></button>
       <button class="units-tab" role="tab" id="tab-tool" aria-controls="panel-tool" aria-selected="false" tabindex="-1">Tool<sup>@HHMI</sup></button>
       <button class="units-tab" role="tab" id="tab-theory" aria-controls="panel-theory" aria-selected="false" tabindex="-1">Theory<sup>@HHMI</sup></button>
+      </div>
     </div>
     <div class="units-panel" role="tabpanel" id="panel-biology" aria-labelledby="tab-biology">
       <div class="container"><div class="row"><div class="col-lg-6"></div><div class="col-lg-6"></div></div></div>
