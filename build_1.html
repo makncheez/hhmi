@@ -340,6 +340,24 @@
     padding: 56px 0;
   }
   .units-panel[hidden] { display: none; }
+
+  /* Panel left column: unit name (lime) + one-line description, then a square image */
+  .unit-desc { margin: 0; max-width: 560px; }      /* global paragraph style, 17/20 */
+  .unit-name { display: block; color: #a5f300; }
+  .unit-figure {
+    width: 60%;
+    margin: 180px auto 0;            /* centred in the column, 180px below the text */
+  }
+  .unit-figure img {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+  }
+  @media (max-width: 991.98px) {
+    .unit-figure { width: 100%; margin-top: 40px; }
+  }
   @media (max-width: 575.98px) {
     .units-tab { padding-left: 8px; font-size: 15px; }
     .units-tab sup { font-size: 8px; margin-left: 1px; }
@@ -537,7 +555,16 @@
       </div>
     </div>
     <div class="units-panel" role="tabpanel" id="panel-biology" aria-labelledby="tab-biology">
-      <div class="container"><div class="row"><div class="col-lg-6"></div><div class="col-lg-6"></div></div></div>
+      <div class="container"><div class="row">
+        <div class="col-lg-6">
+          <p class="unit-desc"><span class="unit-name">Biology</span> pursues the central scientific research questions at the heart of Janelia’s mission.</p>
+          <figure class="unit-figure">
+            <img src="assets/biology-research-area-work-square.jpg" width="750" height="750" loading="lazy"
+                 alt="A researcher at a microscope rig, with a brain imaging scan on the monitor.">
+          </figure>
+        </div>
+        <div class="col-lg-6"></div>
+      </div></div>
     </div>
     <div class="units-panel" role="tabpanel" id="panel-ai" aria-labelledby="tab-ai" hidden>
       <div class="container"><div class="row"><div class="col-lg-6"></div><div class="col-lg-6"></div></div></div>
