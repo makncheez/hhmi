@@ -405,9 +405,13 @@
   }
   @media (min-width: 992px) {
     .unit-split { min-height: 800px; }
-    .unit-split .row { min-height: calc(800px - 112px); }   /* panel minus 56px top/bottom */
+    /* Three rows: text / image / equal spacer. With room to spare the image sits
+       exactly in the panel centre; if the text needs more, the image moves down
+       instead of covering it (always >= 48px gap). */
     .unit-split .unit-col {
-      display: grid;                 /* text and image share one cell */
+      display: grid;
+      grid-template-rows: 1fr auto 1fr;
+      min-height: calc(800px - 112px);   /* panel minus 56px top/bottom */
       padding-inline: 0;             /* the column is exactly half the screen */
     }
     .unit-split .unit-desc {         /* column = half the screen, so the screen is 200% */
@@ -415,9 +419,8 @@
       padding-right: 24px;
       max-width: calc(100% - var(--cw) / 2 + 12px + 560px);   /* text itself stays ≤ 560px */
     }
-    .unit-split .unit-col > * { grid-area: 1 / 1; }
-    .unit-split .unit-desc { align-self: start; }
-    .unit-split .unit-figure { align-self: center; margin: 0 auto; }   /* centred in the panel */
+    .unit-split .unit-desc { grid-row: 1; align-self: start; padding-bottom: 48px; }
+    .unit-split .unit-figure { grid-row: 2; margin: 0 auto; }
     .unit-media {
       position: absolute;
       top: 0; bottom: 0;
