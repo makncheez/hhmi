@@ -1862,7 +1862,7 @@ document.querySelectorAll('button.mj-more').forEach(function (btn) {
     else if (vp.scrollLeft <= 0) { vp.scrollLeft += h; }
     pos = vp.scrollLeft;
   }
-  function touched() { holdUntil = performance.now() + 2000; }   // resume 2s after the last interaction
+  function touched() { holdUntil = performance.now() + 800; }    // resume 0.8s after the last interaction
   function tick(now) {
     if (last !== null && !hover && now > holdUntil && !reduce) {
       pos += SPEED * Math.min(0.1, (now - last) / 1000);
