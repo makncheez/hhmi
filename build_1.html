@@ -663,11 +663,11 @@
     --line-w: 1px;
     --gap-h: 12px;
     --cell-pad: clamp(20px, 2.6vw, 38px);
-    padding: 80px 0;
+    padding: 56px 0;
     background: #fbfbfb;
     color: #000;
   }
-  .mj-cell { position: relative; display: flex; flex-direction: column; justify-content: center; padding: 72px var(--cell-pad); }
+  .mj-cell { position: relative; display: flex; flex-direction: column; justify-content: center; padding: 40px var(--cell-pad); }
   .mj-cell::before, .mj-cell::after { content: ""; position: absolute; pointer-events: none; border: 0 solid var(--grid-line); }
   .mj-cell::before {                 /* row line */
     left: var(--gap-h); right: var(--gap-h); bottom: calc(var(--line-w) / -2);
@@ -712,7 +712,7 @@
     .mj-head { align-items: flex-start; text-align: left; padding-bottom: 16px; }
     .mj-head::before { content: none; }          /* heading and its text read as one block */
     .mj-head::after { bottom: 0; }
-    .mj-body { padding-top: 0; padding-bottom: 56px; }
+    .mj-body { padding-top: 0; padding-bottom: 40px; }
     .mj-body::after { top: 0; }
     .mj-row1.mj-head::after { top: 0; }
   }
