@@ -234,9 +234,24 @@
     .hero-sub { font-size: 17px; margin-top: 18px; }
   }
   @media (max-width: 575.98px) {
+    /* Phones: the copy block covers the 4:5 video box (72px from the top,
+       92vw x 115vw); the headline is centred in it and the subline sits
+       just below the box. */
     .hero-copy {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      top: 72px;
+      height: 115vw;
       padding: 0 calc(4vw + 16px);   /* keep text inside the 92%-wide video box */
-      top: calc(72px + 57.5vw);      /* centre of the 4:5 box (72px + half of 92vw x 5/4) */
+      transform: none;
+    }
+    .hero-sub {
+      position: absolute;
+      top: 100%;                     /* below the video box */
+      left: 0; right: 0;
+      margin-top: 24px;
+      padding: 0 24px;
     }
   }
 
@@ -272,7 +287,10 @@
   .hero-deco--left  { left: 0; }
   .hero-deco--right { right: 0; }
   @media (max-width: 575.98px) {
-    .hero-deco { --deco-w: 10px; --deco-h: 100px; }
+    .hero-deco {
+      --deco-w: 10px; --deco-h: 100px;
+      top: calc(72px + 57.5vw);      /* level with the headline: centre of the 4:5 video box */
+    }
   }
 
   /* ---------- Units: heading, tabs, and a black full-width panel per tab ---------- */
