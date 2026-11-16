@@ -2146,6 +2146,7 @@ document.querySelectorAll('button.mj-more').forEach(function (btn) {
         'She earned a PhD in biological chemistry from the Massachusetts Institute of Technology and a BS in chemistry from the University of Puerto Rico, Río Piedras.'
       ] }
   ];
+  function slug(p) { return p.photo.split('/').pop().replace(/\.\w+$/, ''); }   // e.g. nelson-spruston
   function esc(t) { return t.replace(/&/g, '&amp;').replace(/</g, '&lt;'); }
   function list(label, items) {
     if (!items || !items.length) return '';
@@ -2171,7 +2172,7 @@ document.querySelectorAll('button.mj-more').forEach(function (btn) {
     var ext = dlg.querySelector('.lm-ext');
     ext.hidden = !p.url;
     if (p.url) ext.href = p.url;
-    copyBtn.hidden = !p.url; copyBtn.dataset.url = p.url || '';
+    copyBtn.dataset.url = location.href.split('#')[0] + '#' + slug(p);   // this modal's own link
     copyBtn.classList.remove('is-copied');
     var row = body.querySelector('.lm-stories');
     if (row) dragScroll(row);
@@ -2225,6 +2226,7 @@ document.querySelectorAll('button.mj-more').forEach(function (btn) {
   });
   function open(i, btn) {
     render(LEADERS[i]); opener = btn;
+    history.replaceState(null, '', '#' + slug(LEADERS[i]));       // the address bar shows this modal's link
     document.documentElement.classList.add('lm-open');
     dlg.showModal(); dlg.focus({ preventScroll: true }); dlg.scrollTop = 0;   // focus the panel, not the X
     requestAnimationFrame(function () { requestAnimationFrame(function () { dlg.classList.add('is-in'); }); });
@@ -2234,6 +2236,8 @@ document.querySelectorAll('button.mj-more').forEach(function (btn) {
     dlg.classList.remove('is-in');
     var done = function () {
       dlg.close(); document.documentElement.classList.remove('lm-open');
+      if (/^#/.test(location.hash) && LEADERS.some(function (p) { return '#' + slug(p) === location.hash; }))
+        history.replaceState(null, '', location.pathname + location.search);
       if (opener) (opener.closest('.lead-set--copy') ? document.querySelector('.lead-set:not(.lead-set--copy) [data-leader="' + opener.dataset.leader + '"]') : opener).focus({ preventScroll: true });
     };
     if (reduce) done(); else setTimeout(done, 450);
@@ -2241,7 +2245,21 @@ document.querySelectorAll('button.mj-more').forEach(function (btn) {
   document.querySelectorAll('.lead .person[data-leader]').forEach(function (btn) {
     btn.addEventListener('click', function () { open(+btn.dataset.leader, btn); });
   });
-  dlg.querySelector('.lm-close').addEventListener('click', close);
+  dlg.querySelector('.lm-close:not(.lm-copy):not(.lm-ext)').addEventListener('click', close);
+  // Arriving with (or changing to) #slug opens that person's modal.
+  function fromHash() {
+    var h = location.hash.slice(1);
+    for (var i = 0; i < LEADERS.length; i++) {
+      if (slug(LEADERS[i]) === h) {
+        if (dlg.open) { render(LEADERS[i]); dlg.scrollTop = 0; return; }
+        document.querySelector('.lead').scrollIntoView();                 // the section sits behind the panel
+        open(i, document.querySelector('.lead-set:not(.lead-set--copy) [data-leader="' + i + '"]'));
+        return;
+      }
+    }
+  }
+  window.addEventListener('hashchange', fromHash);
+  if (document.readyState === 'complete') fromHash(); else window.addEventListener('load', fromHash);
   dlg.addEventListener('cancel', function (e) { e.preventDefault(); close(); });         // Esc
   dlg.addEventListener('click', function (e) {                                           // click on the dimmed page
     var r = dlg.getBoundingClientRect();
