@@ -987,8 +987,9 @@
      Post Grid person cards (from studies/grid.html): broken-line cells
      (top/bottom lines stop 12px short of each side; side lines start 24px
      down and stop 12px short of the bottom). The 8 cards are repeated once
-     so the strip loops seamlessly; it drifts left continuously and pauses on
-     hover. Reduced motion: no drift, the strip scrolls sideways instead. */
+     so the strip loops seamlessly. It drifts left on its own, can be swiped,
+     trackpad-scrolled or dragged, and pauses on hover / touch.
+     Reduced motion: no drift, scrolling only. */
   .lead {
     --line-w: 1px;
     --gap-h: 12px;
@@ -1005,14 +1006,20 @@
     font: 400 clamp(25px, 2.35vw, 40px)/1.15 var(--font-sans);
     letter-spacing: -0.005em;
   }
-  .lead-viewport { overflow: hidden; padding: 1px 0; }   /* room for the cells' top and bottom lines */
-  .lead-track {
-    display: flex;
-    width: max-content;
-    animation: lead-drift 60s linear infinite;
+  /* Scrollable strip (swipe / trackpad / mouse drag); the script drifts it
+     left ~44px/s, pauses on hover or touch, and wraps it so it never ends. */
+  .lead-viewport {
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 1px 0;                  /* room for the cells' top and bottom lines */
+    scrollbar-width: none;
+    overscroll-behavior-x: contain;
+    cursor: grab;
   }
-  .lead-viewport:hover .lead-track { animation-play-state: paused; }
-  @keyframes lead-drift { to { transform: translateX(-50%); } }   /* one full set of 8 cards */
+  .lead-viewport::-webkit-scrollbar { display: none; }
+  .lead-viewport.is-dragging { cursor: grabbing; user-select: none; }
+  .lead-viewport img { -webkit-user-drag: none; user-select: none; }
+  .lead-track { display: flex; width: max-content; }
   .lcell { position: relative; flex: none; width: var(--card-w); }
   .lcell::before, .lcell::after { content: ""; position: absolute; pointer-events: none; border: 0 solid #fff; }
   .lcell::before {                   /* top and bottom lines */
@@ -1036,7 +1043,7 @@
   }
   .lead .person h3 {
     margin: clamp(24px, 3vw, 40px) 0 12px;
-    font: 400 clamp(18px, 1.6vw, 22px)/1.2 var(--font-mono);
+    font: 400 clamp(18px, 1.6vw, 22px)/1.2 var(--font-sans);   /* Diatype Regular, like the title */
   }
   .lead .person p {
     margin: 0 auto;
@@ -1047,10 +1054,6 @@
   @media (max-width: 1399.98px) { .lead { --card-w: 285px; } }
   @media (max-width: 1199.98px) { .lead { --card-w: 260px; } }
   @media (max-width: 767.98px)  { .lead { --card-w: 72vw; padding: 80px 0; } }
-  @media (prefers-reduced-motion: reduce) {
-    .lead-track { animation: none; }
-    .lead-viewport { overflow-x: auto; }
-  }
 
   /* ---------- CTA arrow label (reusable): 4-square .deco + label + arrow, 30px tall ---------- */
   .cta {
@@ -1842,6 +1845,58 @@ document.querySelectorAll('button.mj-more').forEach(function (btn) {
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { measure(); render(); });
   if ("ResizeObserver" in window) new ResizeObserver(function () { measure(); render(); }).observe(drum);
   else window.addEventListener("resize", function () { measure(); render(); });
+})();
+
+// Senior Leadership carousel: auto-drift + swipe / scroll / drag, endless both ways.
+(function () {
+  var vp = document.querySelector('.lead-viewport');
+  if (!vp) return;
+  var set = vp.querySelector('.lead-set');
+  var SPEED = 44;                         // px per second
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var pos = 0, last = null, hover = false, holdUntil = 0;
+  function half() { return set.offsetWidth; }   // width of one set of 8 cards
+  function wrap() {
+    var h = half();
+    if (vp.scrollLeft >= h) { vp.scrollLeft -= h; }
+    else if (vp.scrollLeft <= 0) { vp.scrollLeft += h; }
+    pos = vp.scrollLeft;
+  }
+  function touched() { holdUntil = performance.now() + 2000; }   // resume 2s after the last interaction
+  function tick(now) {
+    if (last !== null && !hover && now > holdUntil && !reduce) {
+      pos += SPEED * Math.min(0.1, (now - last) / 1000);
+      if (pos >= half()) pos -= half();
+      vp.scrollLeft = pos;
+    }
+    last = now;
+    requestAnimationFrame(tick);
+  }
+  vp.addEventListener('scroll', function () {
+    if (Math.abs(vp.scrollLeft - pos) < 2) return;   // our own drift
+    touched(); wrap();                    // the visitor scrolled, swiped or dragged
+  }, { passive: true });
+  vp.addEventListener('mouseenter', function () { hover = true; });
+  vp.addEventListener('mouseleave', function () { hover = false; });
+  vp.addEventListener('touchstart', touched, { passive: true });
+  vp.addEventListener('touchmove', touched, { passive: true });
+  vp.addEventListener('wheel', touched, { passive: true });
+  // Mouse drag to scroll
+  var dragX = null, startLeft = 0;
+  vp.addEventListener('pointerdown', function (e) {
+    if (e.pointerType !== 'mouse' || e.button !== 0) return;
+    dragX = e.clientX; startLeft = vp.scrollLeft; vp.classList.add('is-dragging');
+    vp.setPointerCapture(e.pointerId);
+  });
+  vp.addEventListener('pointermove', function (e) {
+    if (dragX === null) return;
+    vp.scrollLeft = startLeft - (e.clientX - dragX);
+  });
+  function endDrag() { dragX = null; vp.classList.remove('is-dragging'); touched(); }
+  vp.addEventListener('pointerup', endDrag);
+  vp.addEventListener('pointercancel', endDrag);
+  vp.scrollLeft = 1; pos = 1;
+  requestAnimationFrame(tick);
 })();
 </script>
 
