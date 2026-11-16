@@ -1263,17 +1263,18 @@
   /* ---------- Placeholder content below the hero ---------- */
   .filler { min-height: 150vh; }
   /* ---------- Green / black 2-col section (after Senior Leadership) ----------
-     Left (1/3): #2DB44A with the roles section's crosshair grid (black, static).
+     Left (1/3): black with the roles section's crosshair grid (white at 50%, static)
+     and a white "Join Newsletter" button.
      Right: black with white type. Desktop 600px tall; stacked below 992px. */
   .gb { display: grid; grid-template-columns: 1fr 2fr; min-height: 600px; }   /* green 1/3, stories 2/3 */
   .gb-grid {
     --col: 78px; --row: 100px;
     position: relative;
-    background: #2DB44A;
+    background: #000;
   }
   .gb-grid::before {
     content: ""; position: absolute; inset: 0; pointer-events: none;
-    background: #000;
+    background: #fff; opacity: .5;   /* white crosshairs on the black panel */
     -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' stroke='%23000' stroke-width='1' shape-rendering='crispEdges'%3E%3Csvg x='50%25' y='50%25' overflow='visible'%3E%3Cpath d='M0 -10V-2.25M0 2.25V10M-10 0H-2.25M2.25 0H10'/%3E%3C/svg%3E%3C/svg%3E") 0 0 / var(--col) var(--row) repeat;
             mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' stroke='%23000' stroke-width='1' shape-rendering='crispEdges'%3E%3Csvg x='50%25' y='50%25' overflow='visible'%3E%3Cpath d='M0 -10V-2.25M0 2.25V10M-10 0H-2.25M2.25 0H10'/%3E%3C/svg%3E%3C/svg%3E") 0 0 / var(--col) var(--row) repeat;
   }
@@ -1286,6 +1287,24 @@
     padding: 24px 12px 40px;
   }
   .gb-title { margin: 0 0 0 12px; font: 400 clamp(25px, 2.35vw, 40px)/1.15 var(--font-sans); letter-spacing: -0.005em; }
+
+  /* White version of the Explore button (Join Newsletter on the black panel):
+     white at rest and when grown, black type; a subline appears on hover. */
+  .unit-explore--light { background: #fff; color: #000; }
+  .unit-explore--light svg path { stroke: #000; }
+  .unit-explore--light .ue-text { display: flex; flex-direction: column; align-items: flex-start; }
+  .unit-explore--light .ue-sub {
+    max-height: 0; overflow: hidden; opacity: 0;
+    font: 400 14px/1.3 var(--font-sans); letter-spacing: 0;
+    transition: max-height .45s cubic-bezier(.65,0,.35,1), margin-top .45s cubic-bezier(.65,0,.35,1), opacity .3s ease;
+  }
+  .unit-explore--light:focus-visible { background: #fff; color: #000; }
+  .unit-explore--light:focus-visible .ue-sub { max-height: 2em; margin-top: 12px; opacity: 1; transition-delay: 0s, 0s, .15s; }
+  @media (hover: hover) {
+    .unit-explore--light:hover { background: #fff; color: #000; }
+    .unit-explore--light:hover .ue-sub { max-height: 2em; margin-top: 12px; opacity: 1; transition-delay: 0s, 0s, .15s; }
+  }
+  @media (prefers-reduced-motion: reduce) { .unit-explore--light .ue-sub { transition: none; } }
   /* Highlighted Stories: two cards per view, scroll-snap slider, lime dots.
      Cards use the leadership carousel's broken lines: top/bottom lines
      inset 18px from the sides, side lines stop short of the corners. */
@@ -1795,9 +1814,9 @@
 
   <section class="gb" aria-labelledby="gbTitle">
     <div class="gb-grid">
-      <a class="unit-explore">
+      <a class="unit-explore unit-explore--light">
         <span class="deco ue-bar--l" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
-        <span>Join Newsletter</span>
+        <span class="ue-text"><span>Join Newsletter</span><span class="ue-sub">Stay Connected with HHMI</span></span>
         <svg viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke="black" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round" stroke="black"/></svg>
         <span class="deco ue-bar--r" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
       </a>
