@@ -654,7 +654,7 @@
   }
 
   /* ---------- Mission / Journey: own #FBFBFB section after Janelia at a Glance ----------
-     2 x 2 in the .container: heading cell (4 cols) + text cell (8 cols) per
+     3 rows (Mission, Journey, Why) in the .container: heading cell (4 cols) + text cell (8 cols) per
      row. Broken lines as in the Schema: sides break 10px either side of the
      row line, the row line stops 12px short of each side; no outer top or
      bottom line. Below 992px each heading sits on top of its text. */
@@ -678,9 +678,9 @@
     left: calc(var(--line-w) / -2); right: calc(var(--line-w) / -2);
     border-left-width: var(--line-w); border-right-width: var(--line-w);
   }
-  .mj-row1::after { top: 0; }
-  .mj-row2::after { bottom: 0; }
-  .mj-row2::before { content: none; }
+  .mj-row1::after { top: 0; }                    /* first row: sides start at the top */
+  .mj-row2::after { bottom: 0; }                 /* last row: sides run to the bottom, no row line */
+  .mj-row2::before { content: none; }            /* (middle rows, .mj-rowm, keep the defaults) */
   .mj-head { align-items: center; text-align: center; }
   .mj-title {                        /* heading font: same as the section headings */
     margin: 0;
@@ -1269,8 +1269,8 @@
         <div class="col-12 col-lg-8 mj-cell mj-body mj-row1">
           <p class="mj-text">HHMI’s Janelia Research Campus in Ashburn, Virginia, is undertaking an ambitious, decade-long challenge to understand how a complex brain generates behavior, and to develop a new mode of discovery in which biologists and AI work together to drive science forward. Seizing the moment requires exactly what Janelia was built to provide: sustained support, shared infrastructure, interdisciplinary teams, and the time to ask the hard questions.</p>
         </div>
-        <div class="col-12 col-lg-4 mj-cell mj-head mj-row2"><h3 class="mj-title">Journey</h3></div>
-        <div class="col-12 col-lg-8 mj-cell mj-body mj-row2">
+        <div class="col-12 col-lg-4 mj-cell mj-head mj-rowm"><h3 class="mj-title">Journey</h3></div>
+        <div class="col-12 col-lg-8 mj-cell mj-body mj-rowm">
           <p class="mj-text">After centuries of investigation, scientists still cannot explain how the brain integrates sensory information, internal states, memories, and physiology to produce behaviors. Understanding the fundamental function of the brain is vital not only in its own right, but as the key to making real progress against brain disorders, like Alzheimer’s disease and depression, that impact hundreds of millions of people worldwide. Janelia’s grand challenge is to build a mechanistic account connecting molecules, neural circuits, brain activity, and complex behavior in a whole animal in motion.</p>
           <div class="mj-extra" id="journeyMore">
             <div>
@@ -1279,6 +1279,16 @@
             </div>
           </div>
           <button class="mj-more" type="button" aria-expanded="false" aria-controls="journeyMore"><span class="mj-more-label">Read More</span><span class="visually-hidden"> about the journey</span></button>
+        </div>
+        <div class="col-12 col-lg-4 mj-cell mj-head mj-row2"><h3 class="mj-title">Why</h3></div>
+        <div class="col-12 col-lg-8 mj-cell mj-body mj-row2">
+          <p class="mj-text">With small labs and large ambitions, Janelia welcomes biologists, AI scientists, physicists, chemists, engineers, theorists, and computational scientists to work side by side on groundbreaking research. Internal funding, expert technical teams, and world-class facilities are all on one campus, giving Janelia scientists the intellectual freedom to take on big risks, and the sustained support to see them through.</p>
+          <div class="mj-extra" id="whyMore">
+            <div>
+              <p>Janelia’s three lead scientist roles — Principal Scientists, AI Scientists, and Group Leaders — bring complementary forms of scientific leadership and take intellectual responsibility for their work. All three feature stable internal funding and minimal administrative duties. Each spends their time doing science and working with collaborators across campus.</p>
+            </div>
+          </div>
+          <button class="mj-more" type="button" aria-expanded="false" aria-controls="whyMore"><span class="mj-more-label">Read More</span><span class="visually-hidden"> about why Janelia</span></button>
         </div>
       </div>
     </div>
