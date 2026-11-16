@@ -898,6 +898,53 @@
   .hf-ch-bl { right: 100%; top: 100%;    margin: 12px 12px 0 0; }
   .hf-ch-br { left: 100%;  top: 100%;    margin: 12px 0 0 12px; }
   @media (max-width: 991.98px) { .hfs { padding: 80px 0; } }
+  /* Call for Applicants (from studies/call-for-applicants.html), inside the
+     HHMI frame: "Looking for" + a revolving drum of roles scrolling upward
+     forever; the centre word is white, the others fade to dark grey. Words
+     size themselves to fit the frame. Site fonts (Diatype Semi-Mono label,
+     Diatype words) instead of the study's Space Mono / Space Grotesk. */
+  .hframe { display: flex; align-items: center; }
+  .hframe .cfa { position: relative; flex: 1 1 auto; min-width: 0; padding: 0 40px; }
+  .cfa {
+    --cfa-dim-max: 28;               /* lightness % of the words next to centre */
+    --cfa-dim-min: 12;               /* lightness % of the farthest words */
+    display: flex;
+    align-items: center;             /* label sits on the drum's centre line */
+    gap: clamp(12px, 1.6vw, 24px);
+  }
+  .cfa-label {
+    flex: none;
+    margin: 0;
+    font: 400 14px/1 var(--font-mono);
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+    color: #fff;
+  }
+  .cfa-drum {
+    --cfa-size: 40px;
+    --cfa-row: 48px;
+    position: relative;
+    flex: 1 1 auto;
+    min-width: 0;
+    height: calc(var(--cfa-row) * 7);
+    overflow: hidden;
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 24%, #000 76%, transparent 100%);
+            mask-image: linear-gradient(to bottom, transparent 0%, #000 24%, #000 76%, transparent 100%);
+  }
+  .cfa-word {
+    position: absolute;
+    top: 0; left: 0;
+    display: flex;
+    align-items: center;
+    height: var(--cfa-row);
+    white-space: nowrap;
+    font: 400 var(--cfa-size)/1 var(--font-sans);
+    letter-spacing: -0.02em;
+    color: hsl(0 0% calc(var(--cfa-dim-max) * 1%));
+    will-change: transform, color;
+  }
+  @media (max-width: 575.98px) { .hframe .cfa { padding: 0 20px; } }
+
 
   /* ---------- CTA arrow label (reusable): 4-square .deco + label + arrow, 30px tall ---------- */
   .cta {
@@ -1217,13 +1264,18 @@
     <div class="container">
       <div class="row">
         <div class="col-12 col-lg-6">
-          <div class="hframe" aria-hidden="true">
-            <span class="hf-edge hf-t"></span><span class="hf-edge hf-b"></span>
-            <span class="hf-edge hf-l"></span><span class="hf-edge hf-r"></span>
-            <span class="hf-x hf-tl"></span><span class="hf-x hf-tr"></span>
-            <span class="hf-x hf-bl"></span><span class="hf-x hf-br"></span>
-            <span class="hf-ch hf-ch-tl">H</span><span class="hf-ch hf-ch-tr">H</span>
-            <span class="hf-ch hf-ch-bl">M</span><span class="hf-ch hf-ch-br">I</span>
+          <div class="hframe">
+            <span aria-hidden="true" class="hf-edge hf-t"></span><span aria-hidden="true" class="hf-edge hf-b"></span>
+            <span aria-hidden="true" class="hf-edge hf-l"></span><span aria-hidden="true" class="hf-edge hf-r"></span>
+            <span aria-hidden="true" class="hf-x hf-tl"></span><span aria-hidden="true" class="hf-x hf-tr"></span>
+            <span aria-hidden="true" class="hf-x hf-bl"></span><span aria-hidden="true" class="hf-x hf-br"></span>
+            <span aria-hidden="true" class="hf-ch hf-ch-tl">H</span><span aria-hidden="true" class="hf-ch hf-ch-tr">H</span>
+            <span aria-hidden="true" class="hf-ch hf-ch-bl">M</span><span aria-hidden="true" class="hf-ch hf-ch-br">I</span>
+            <section class="cfa" data-cfa aria-label="Call for applicants">
+              <p class="cfa-label">Looking for</p>
+              <p class="visually-hidden cfa-sr"></p>
+              <div class="cfa-drum" aria-hidden="true"></div>
+            </section>
           </div>
         </div>
         <div class="col-12 col-lg-6"></div>
@@ -1482,6 +1534,97 @@ document.querySelectorAll('button.mj-more').forEach(function (btn) {
   new IntersectionObserver(function (entries) {
     entries.forEach(function (e) { if (e.isIntersecting) { var p = v.play(); if (p) p.catch(function () {}); } else v.pause(); });
   }, { threshold: 0 }).observe(band);
+})();
+
+// Call for Applicants drum (from studies/call-for-applicants.html), inside the HHMI frame.
+(function () {
+  var WORDS = [
+    "Technologist", "Futurist", "Engineer", "Undergraduate", "Graduate",
+    "Chemist", "AI Scientist", "Biologist", "Physicist", "Data Scientist"
+  ];
+  var START_INDEX = 3;          // word centred on load ("Undergraduate")
+  var SECONDS_PER_WORD = 1.8;   // time for one word to move up one row
+  var VISIBLE_ROWS = 7;         // rows visible in the drum (odd)
+  var LINE = 1.2;               // row height as a multiple of font size
+  var MIN_SIZE = 18, MAX_SIZE = 72;
+
+  var root = document.querySelector("[data-cfa]");
+  if (!root) return;
+  var drum = root.querySelector(".cfa-drum");
+  var frame = root.closest(".hframe");
+  root.querySelector(".cfa-sr").textContent = "Looking for: " + WORDS.join(", ") + ".";
+  var cs = getComputedStyle(root);
+  var DIM_MAX = parseFloat(cs.getPropertyValue("--cfa-dim-max")) || 28;
+  var DIM_MIN = parseFloat(cs.getPropertyValue("--cfa-dim-min")) || 12;
+
+  var items = [];
+  var copies = Math.max(1, Math.ceil((VISIBLE_ROWS + 3) / WORDS.length));
+  for (var c = 0; c < copies; c++) {
+    WORDS.forEach(function (w) {
+      var el = document.createElement("span");
+      el.className = "cfa-word";
+      el.textContent = w;
+      drum.appendChild(el);
+      items.push(el);
+    });
+  }
+  var row = 48;
+  var phase = START_INDEX - VISIBLE_ROWS / 2 - 0.5;
+
+  // Fit the longest word to the drum's width, and the 7 rows to the frame's height.
+  var canvas = document.createElement("canvas").getContext("2d");
+  function measure() {
+    canvas.font = '400 100px "ABC Diatype", "Helvetica Neue", Arial, sans-serif';
+    var widest = 0;
+    WORDS.forEach(function (w) {
+      var width = canvas.measureText(w).width - w.length * 2;   // letter-spacing -0.02em
+      if (width > widest) widest = width;
+    });
+    var byWidth = (drum.clientWidth * 0.97) / (widest / 100);
+    var byHeight = frame ? (frame.clientHeight - 48) / (VISIBLE_ROWS * LINE) : MAX_SIZE;
+    var size = Math.max(MIN_SIZE, Math.min(MAX_SIZE, byWidth, byHeight));
+    row = size * LINE;
+    drum.style.setProperty("--cfa-size", size.toFixed(2) + "px");
+    drum.style.setProperty("--cfa-row", row.toFixed(2) + "px");
+  }
+  function lightness(d) {
+    if (d <= 0.3) return 100;
+    if (d < 1) { var t = (d - 0.3) / 0.7, s = t * t * (3 - 2 * t); return 100 + (DIM_MAX - 100) * s; }
+    return Math.max(DIM_MIN, DIM_MAX - (d - 1) * 6);
+  }
+  function render() {
+    var total = items.length * row, center = (row * VISIBLE_ROWS) / 2, off = phase * row;
+    for (var i = 0; i < items.length; i++) {
+      var y = (((i * row - off) % total) + total) % total - row;
+      var d = Math.abs(y + row / 2 - center) / row;
+      items[i].style.transform = "translate3d(0," + y.toFixed(2) + "px,0)";
+      items[i].style.color = "hsl(0 0% " + lightness(d).toFixed(1) + "%)";
+    }
+  }
+  var reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
+  var last = null, raf = 0, visible = false;
+  function tick(now) {
+    if (last !== null) {
+      var dt = Math.min(0.1, (now - last) / 1000);
+      phase = (phase + dt / SECONDS_PER_WORD) % items.length;
+    }
+    last = now; render();
+    raf = requestAnimationFrame(tick);
+  }
+  function start() {
+    cancelAnimationFrame(raf); last = null;
+    if (reduce.matches || !visible) { render(); return; }   // static list, middle word white
+    raf = requestAnimationFrame(tick);
+  }
+  if (reduce.addEventListener) reduce.addEventListener("change", start);
+  // Only animate while on screen.
+  if ("IntersectionObserver" in window) {
+    new IntersectionObserver(function (e) { visible = e[0].isIntersecting; start(); }).observe(root);
+  } else { visible = true; }
+  measure(); render(); start();
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { measure(); render(); });
+  if ("ResizeObserver" in window) new ResizeObserver(function () { measure(); render(); }).observe(drum);
+  else window.addEventListener("resize", function () { measure(); render(); });
 })();
 </script>
 
