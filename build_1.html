@@ -309,8 +309,8 @@
     border: 1px solid #5e5e5e;
     border-bottom: 0;
     border-radius: 7px 7px 0 0;
-    background: #fff;
-    color: #021341;
+    background: #000;
+    color: #fff;
     font: 400 18px/1 var(--font-sans);
     text-align: left;
     white-space: nowrap;
@@ -323,8 +323,9 @@
     font-size: 9px;
     letter-spacing: 0.02em;
   }
-  .units-tab[aria-selected="true"] { background: #a5f300; }
-  .units-tab:focus-visible { outline: 2px solid #021341; outline-offset: -3px; }
+  .units-tab[aria-selected="true"] { background: #a5f300; color: #021341; }   /* selected: lime with navy text, as before */
+  .units-tab:focus-visible { outline: 2px solid #fff; outline-offset: -3px; }
+  .units-tab[aria-selected="true"]:focus-visible { outline-color: #021341; }
   .units-panel {
     border-top: 1px solid #fff;
     border-bottom: 1px solid #fff;
