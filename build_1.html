@@ -420,14 +420,15 @@
     object-fit: cover;               /* fill, crop the sides, keep it centred */
   }
   @media (min-width: 992px) {
-    .unit-split { min-height: 600px; }
+    .units-panel { min-height: 700px; }   /* desktop panels: 700px tall */
+    .unit-split { min-height: 700px; }
     /* Two rows: text, then the image centred in the space below it.
        The image never covers the text (always >= 48px gap), and with the
-       size caps below everything fits the 600px panel. */
+       size caps below everything fits the 700px panel. */
     .unit-split .unit-col {
       display: grid;
       grid-template-rows: auto 1fr;
-      min-height: calc(600px - 114px);   /* panel minus 56px top/bottom and the 1px top/bottom borders */
+      min-height: calc(700px - 114px);   /* panel minus 56px top/bottom and the 1px top/bottom borders */
       padding-inline: 0;             /* the column is exactly half the screen */
     }
     .unit-split .unit-desc {         /* column = half the screen, so the screen is 200% */
@@ -436,8 +437,8 @@
       max-width: calc(100% - var(--cw) / 2 + 12px + 560px);   /* text itself stays ≤ 560px */
     }
     .unit-split .unit-desc { grid-row: 1; align-self: start; padding-bottom: 48px; }
-    .unit-split .unit-figure { grid-row: 2; align-self: center; margin: 0 auto; max-width: 320px; }        /* square photo: fits the 600px panel */
-    .unit-split .unit-figure--video { max-width: 540px; }                               /* 16:9 video: up to ~304px tall */
+    .unit-split .unit-figure { grid-row: 2; align-self: center; margin: 0 auto; width: 100%; max-width: min(400px, 100% - 48px); }        /* square photo: 400 x 400 */
+    .unit-split .unit-figure--video { max-width: min(600px, 100% - 48px); }                               /* 16:9 video: up to ~338px tall */
     .unit-media {
       position: absolute;
       top: 0; bottom: 0;
