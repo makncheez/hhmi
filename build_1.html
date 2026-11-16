@@ -1099,16 +1099,15 @@
   .lmodal.is-in { transform: none; }
   .lmodal:focus { outline: none; }   /* the panel takes focus on open, not the close button */
   .lmodal::backdrop { background: rgba(0, 0, 0, .55); }
-  /* Deco bands at the very top and bottom of the panel's content (they scroll
-     with it), set a little left of centre like the careers section's bands. */
+  /* Deco bands across the full width of the panel, at the very top and
+     bottom of its content (they scroll with it). */
   .lm-band {
-    --deco-w: clamp(180px, 20vw, 330px);
+    --deco-w: 100%;
     --deco-h: 18px;                  /* two 9px rows */
     --deco-1: #00ac1d;               /* top-left: green */
     --deco-2: #3fc2cd;               /* top-right: cyan */
     --deco-3: #a5f300;               /* bottom-left: lime */
     --deco-4: #000d42;               /* bottom-right: navy */
-    margin-left: 36.5%;
   }
   html.lm-open { overflow: hidden; }   /* page doesn't scroll behind it */
   .lm-bar {
