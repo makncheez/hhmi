@@ -1032,7 +1032,21 @@
     left: calc(var(--line-w) / -2); right: calc(var(--line-w) / -2);
     border-left-width: var(--line-w); border-right-width: var(--line-w);
   }
-  .lead .person { height: 100%; padding: 10% 10% var(--cell-pad); text-align: center; }
+  .lead .person {
+    display: block;
+    width: 100%;
+    height: 100%;
+    padding: 10% 10% var(--cell-pad);
+    border: 0;
+    background: none;
+    color: inherit;
+    font: inherit;
+    text-align: center;
+    cursor: pointer;
+  }
+  .lead .person img { transition: opacity .2s ease; }
+  .lead .person:hover img { opacity: .8; }
+  .lead .person:focus-visible { outline: 2px solid #fff; outline-offset: -6px; }
   .lead .person img {
     display: block;
     width: 100%;
@@ -1041,11 +1055,13 @@
     object-fit: cover;
     background: #333;
   }
-  .lead .person h3 {
+  .lead .person-name {
+    display: block;
     margin: clamp(24px, 3vw, 40px) 0 12px;
     font: 400 clamp(18px, 1.6vw, 22px)/1.2 var(--font-sans);   /* Diatype Regular, like the title */
   }
-  .lead .person p {
+  .lead .person-title {
+    display: block;
     margin: 0 auto;
     max-width: 18em;
     font: 400 clamp(14px, 1.1vw, 16px)/1.4 var(--font-sans);
@@ -1054,6 +1070,86 @@
   @media (max-width: 1399.98px) { .lead { --card-w: 285px; } }
   @media (max-width: 1199.98px) { .lead { --card-w: 260px; } }
   @media (max-width: 767.98px)  { .lead { --card-w: 72vw; padding: 80px 0; } }
+
+  /* ---------- Senior Leadership modal ----------
+     A <dialog> flush to the right edge: full height, 50% of the viewport
+     width (full width on phones), #FBFBFB, sliding in from the right over a
+     dimmed page. Content: photo + credit beside name + title, bio, media
+     contact, then Honorary & Professional Societies / Selected Awards /
+     Related Stories, each under a navy rule. Close: X, Esc or a click on
+     the dimmed page. The carousel stops while it is open. */
+  .lmodal {
+    position: fixed;
+    inset: 0 0 0 auto;
+    width: 50vw;
+    max-width: none;
+    height: 100dvh;
+    max-height: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: #fbfbfb;
+    color: #000;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    transform: translateX(100%);
+    transition: transform .45s cubic-bezier(.65,0,.35,1);
+  }
+  .lmodal.is-in { transform: none; }
+  .lmodal::backdrop { background: rgba(0, 0, 0, .55); }
+  html.lm-open { overflow: hidden; }   /* page doesn't scroll behind it */
+  .lm-bar {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    display: flex;
+    justify-content: flex-end;
+    padding: 20px 24px 0;
+    pointer-events: none;
+  }
+  .lm-close {
+    display: grid;
+    place-items: center;
+    width: 44px; height: 44px;
+    border: 0;
+    border-radius: 50%;
+    background: #fbfbfb;
+    color: #000;
+    cursor: pointer;
+    pointer-events: auto;
+  }
+  .lm-close:hover { background: #ececec; }
+  .lm-close:focus-visible { outline: 2px solid #021341; outline-offset: 2px; }
+  .lm-body { padding: 36px 15% 96px; }
+  .lm-head { display: grid; grid-template-columns: 41% 1fr; gap: 0 11%; align-items: center; }
+  .lm-photo img { display: block; width: 100%; height: auto; aspect-ratio: 1 / 1; object-fit: cover; background: #ccc; }
+  .lm-credit { margin: 12px 0 0; font: 400 12px/1.3 var(--font-mono); }
+  .lm-name { margin: 0 0 20px; font: 400 clamp(24px, 2.4vw, 40px)/1.15 var(--font-sans); letter-spacing: -0.005em; }
+  .lm-role { margin: 0; font: 400 clamp(16px, 1.45vw, 22px)/1.25 var(--font-sans); letter-spacing: 0.04em; }
+  .lm-bio { margin-top: 48px; }
+  .lm-bio p { margin: 0 0 20px; }                       /* global 17/20 */
+  .lm-bio a, .lm-media a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
+  .lm-media { margin: 36px 0 0; text-align: right; }
+  .lm-sec { margin-top: 40px; padding-top: 24px; border-top: 1px solid #021341; }
+  .lm-label { margin: 0 0 24px; font: 400 16px/1.2 var(--font-mono); letter-spacing: 0.02em; }
+  .lm-sec ul { margin: 0; padding-left: 20px; }
+  .lm-stories { display: grid; grid-template-columns: repeat(3, 1fr); margin-top: 8px; }
+  .lm-story { position: relative; padding: 28px 24px 32px; }
+  .lm-story::before, .lm-story::after { content: ""; position: absolute; pointer-events: none; border: 0 solid #000; }
+  .lm-story::before { top: -0.5px; bottom: -0.5px; left: 12px; right: 12px; border-top-width: 1px; border-bottom-width: 1px; }
+  .lm-story::after  { top: 24px; bottom: 12px; left: -0.5px; right: -0.5px; border-left-width: 1px; border-right-width: 1px; }
+  .lm-story-img { display: block; aspect-ratio: 3 / 2; background: #d9d9d9; }
+  .lm-story-date { display: block; margin: 16px 0 20px; font: 400 13px/1.2 var(--font-mono); }
+  .lm-story-title { display: block; }
+  @media (max-width: 991.98px) {
+    .lmodal { width: 100vw; }
+    .lm-body { padding: 24px 24px 72px; }
+  }
+  @media (max-width: 575.98px) {
+    .lm-head { grid-template-columns: 1fr; gap: 24px; }
+    .lm-stories { grid-template-columns: 1fr; }
+  }
+  @media (prefers-reduced-motion: reduce) { .lmodal { transition: none; } }
 
   /* ---------- CTA arrow label (reusable): 4-square .deco + label + arrow, 30px tall ---------- */
   .cta {
@@ -1423,92 +1519,101 @@
     <div class="lead-viewport">
       <div class="lead-track">
         <div class="lead-set" style="display:flex">
-          <div class="lcell"><article class="person">
+          <div class="lcell"><button class="person" type="button" aria-haspopup="dialog" data-leader="0">
             <img src="assets/leadership/nelson-spruston.webp" alt="Nelson Spruston" width="560" height="560" loading="lazy">
-            <h3>Nelson Spruston</h3>
-            <p>Vice President &amp; Executive Director, Janelia Research Campus</p>
-          </article></div>
-          <div class="lcell"><article class="person">
+            <span class="person-name">Nelson Spruston</span>
+            <span class="person-title">Vice President &amp; Executive Director, Janelia Research Campus</span>
+          </button></div>
+          <div class="lcell"><button class="person" type="button" aria-haspopup="dialog" data-leader="1">
             <img src="assets/leadership/gerry-rubin.webp" alt="Gerry Rubin" width="560" height="560" loading="lazy">
-            <h3>Gerry Rubin</h3>
-            <p>Head of Biology and Senior Group Leader</p>
-          </article></div>
-          <div class="lcell"><article class="person">
+            <span class="person-name">Gerry Rubin</span>
+            <span class="person-title">Head of Biology and Senior Group Leader</span>
+          </button></div>
+          <div class="lcell"><button class="person" type="button" aria-haspopup="dialog" data-leader="2">
             <img src="assets/leadership/stephan-saalfeld.webp" alt="Stephan Saalfeld" width="560" height="560" loading="lazy">
-            <h3>Stephan Saalfeld</h3>
-            <p>Head of AI@HHMI and Senior Group Leader</p>
-          </article></div>
-          <div class="lcell"><article class="person">
+            <span class="person-name">Stephan Saalfeld</span>
+            <span class="person-title">Head of AI@HHMI and Senior Group Leader</span>
+          </button></div>
+          <div class="lcell"><button class="person" type="button" aria-haspopup="dialog" data-leader="3">
             <img src="assets/leadership/luke-lavis.webp" alt="Luke Lavis" width="560" height="560" loading="lazy">
-            <h3>Luke Lavis</h3>
-            <p>Head of Tools@HHMI and Senior Group Leader</p>
-          </article></div>
-          <div class="lcell"><article class="person">
+            <span class="person-name">Luke Lavis</span>
+            <span class="person-title">Head of Tools@HHMI and Senior Group Leader</span>
+          </button></div>
+          <div class="lcell"><button class="person" type="button" aria-haspopup="dialog" data-leader="4">
             <img src="assets/leadership/ann-hermundstad.webp" alt="Ann Hermundstad" width="560" height="560" loading="lazy">
-            <h3>Ann Hermundstad</h3>
-            <p>Head of Theory@HHMI and Group Leader</p>
-          </article></div>
-          <div class="lcell"><article class="person">
+            <span class="person-name">Ann Hermundstad</span>
+            <span class="person-title">Head of Theory@HHMI and Group Leader</span>
+          </button></div>
+          <div class="lcell"><button class="person" type="button" aria-haspopup="dialog" data-leader="5">
             <img src="assets/leadership/reed-george.webp" alt="Reed George" width="560" height="560" loading="lazy">
-            <h3>Reed George</h3>
-            <p>Managing Director, Janelia Scientific Operations</p>
-          </article></div>
-          <div class="lcell"><article class="person">
+            <span class="person-name">Reed George</span>
+            <span class="person-title">Managing Director, Janelia Scientific Operations</span>
+          </button></div>
+          <div class="lcell"><button class="person" type="button" aria-haspopup="dialog" data-leader="6">
             <img src="assets/leadership/wyatt-korff.webp" alt="Wyatt Korff" width="560" height="560" loading="lazy">
-            <h3>Wyatt Korff</h3>
-            <p>Senior Director, Project Teams</p>
-          </article></div>
-          <div class="lcell"><article class="person">
+            <span class="person-name">Wyatt Korff</span>
+            <span class="person-title">Senior Director, Project Teams</span>
+          </button></div>
+          <div class="lcell"><button class="person" type="button" aria-haspopup="dialog" data-leader="7">
             <img src="assets/leadership/zarixia-zavala-ruiz.webp" alt="Zarixia Zavala-Ruiz" width="560" height="560" loading="lazy">
-            <h3>Zarixia Zavala-Ruiz</h3>
-            <p>Senior Director, Scientific Programs &amp; Training</p>
-          </article></div>
+            <span class="person-name">Zarixia Zavala-Ruiz</span>
+            <span class="person-title">Senior Director, Scientific Programs &amp; Training</span>
+          </button></div>
         </div>
         <div class="lead-set" style="display:flex" aria-hidden="true" inert>
-          <div class="lcell"><article class="person">
+          <div class="lcell"><button class="person" type="button" aria-haspopup="dialog" data-leader="0">
             <img src="assets/leadership/nelson-spruston.webp" alt="" width="560" height="560" loading="lazy">
-            <h3>Nelson Spruston</h3>
-            <p>Vice President &amp; Executive Director, Janelia Research Campus</p>
-          </article></div>
-          <div class="lcell"><article class="person">
+            <span class="person-name">Nelson Spruston</span>
+            <span class="person-title">Vice President &amp; Executive Director, Janelia Research Campus</span>
+          </button></div>
+          <div class="lcell"><button class="person" type="button" aria-haspopup="dialog" data-leader="1">
             <img src="assets/leadership/gerry-rubin.webp" alt="" width="560" height="560" loading="lazy">
-            <h3>Gerry Rubin</h3>
-            <p>Head of Biology and Senior Group Leader</p>
-          </article></div>
-          <div class="lcell"><article class="person">
+            <span class="person-name">Gerry Rubin</span>
+            <span class="person-title">Head of Biology and Senior Group Leader</span>
+          </button></div>
+          <div class="lcell"><button class="person" type="button" aria-haspopup="dialog" data-leader="2">
             <img src="assets/leadership/stephan-saalfeld.webp" alt="" width="560" height="560" loading="lazy">
-            <h3>Stephan Saalfeld</h3>
-            <p>Head of AI@HHMI and Senior Group Leader</p>
-          </article></div>
-          <div class="lcell"><article class="person">
+            <span class="person-name">Stephan Saalfeld</span>
+            <span class="person-title">Head of AI@HHMI and Senior Group Leader</span>
+          </button></div>
+          <div class="lcell"><button class="person" type="button" aria-haspopup="dialog" data-leader="3">
             <img src="assets/leadership/luke-lavis.webp" alt="" width="560" height="560" loading="lazy">
-            <h3>Luke Lavis</h3>
-            <p>Head of Tools@HHMI and Senior Group Leader</p>
-          </article></div>
-          <div class="lcell"><article class="person">
+            <span class="person-name">Luke Lavis</span>
+            <span class="person-title">Head of Tools@HHMI and Senior Group Leader</span>
+          </button></div>
+          <div class="lcell"><button class="person" type="button" aria-haspopup="dialog" data-leader="4">
             <img src="assets/leadership/ann-hermundstad.webp" alt="" width="560" height="560" loading="lazy">
-            <h3>Ann Hermundstad</h3>
-            <p>Head of Theory@HHMI and Group Leader</p>
-          </article></div>
-          <div class="lcell"><article class="person">
+            <span class="person-name">Ann Hermundstad</span>
+            <span class="person-title">Head of Theory@HHMI and Group Leader</span>
+          </button></div>
+          <div class="lcell"><button class="person" type="button" aria-haspopup="dialog" data-leader="5">
             <img src="assets/leadership/reed-george.webp" alt="" width="560" height="560" loading="lazy">
-            <h3>Reed George</h3>
-            <p>Managing Director, Janelia Scientific Operations</p>
-          </article></div>
-          <div class="lcell"><article class="person">
+            <span class="person-name">Reed George</span>
+            <span class="person-title">Managing Director, Janelia Scientific Operations</span>
+          </button></div>
+          <div class="lcell"><button class="person" type="button" aria-haspopup="dialog" data-leader="6">
             <img src="assets/leadership/wyatt-korff.webp" alt="" width="560" height="560" loading="lazy">
-            <h3>Wyatt Korff</h3>
-            <p>Senior Director, Project Teams</p>
-          </article></div>
-          <div class="lcell"><article class="person">
+            <span class="person-name">Wyatt Korff</span>
+            <span class="person-title">Senior Director, Project Teams</span>
+          </button></div>
+          <div class="lcell"><button class="person" type="button" aria-haspopup="dialog" data-leader="7">
             <img src="assets/leadership/zarixia-zavala-ruiz.webp" alt="" width="560" height="560" loading="lazy">
-            <h3>Zarixia Zavala-Ruiz</h3>
-            <p>Senior Director, Scientific Programs &amp; Training</p>
-          </article></div>
+            <span class="person-name">Zarixia Zavala-Ruiz</span>
+            <span class="person-title">Senior Director, Scientific Programs &amp; Training</span>
+          </button></div>
         </div>
       </div>
     </div>
   </section>
+
+  <dialog class="lmodal" aria-labelledby="lmName">
+    <div class="lm-bar">
+      <button class="lm-close" type="button" aria-label="Close">
+        <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M3 3l14 14M17 3L3 17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <div class="lm-body"></div>
+  </dialog>
 
   <div class="filler"></div>
 </main>
@@ -1874,7 +1979,7 @@ document.querySelectorAll('button.mj-more').forEach(function (btn) {
   }
   function touched() { holdUntil = performance.now() + 800; }    // resume 0.8s after the last interaction
   function tick(now) {
-    if (last !== null && !hover && now > holdUntil && !reduce) {
+    if (last !== null && !hover && now > holdUntil && !reduce && !document.documentElement.classList.contains('lm-open')) {
       pos += SPEED * Math.min(0.1, (now - last) / 1000);
       if (pos >= half()) pos -= half();
       vp.scrollLeft = pos;
@@ -1892,21 +1997,106 @@ document.querySelectorAll('button.mj-more').forEach(function (btn) {
   vp.addEventListener('touchmove', touched, { passive: true });
   vp.addEventListener('wheel', touched, { passive: true });
   // Mouse drag to scroll
-  var dragX = null, startLeft = 0;
+  var dragX = null, startLeft = 0, dragged = false;
   vp.addEventListener('pointerdown', function (e) {
     if (e.pointerType !== 'mouse' || e.button !== 0) return;
-    dragX = e.clientX; startLeft = vp.scrollLeft; vp.classList.add('is-dragging');
-    vp.setPointerCapture(e.pointerId);
+    dragX = e.clientX; startLeft = vp.scrollLeft; dragged = false;
   });
   vp.addEventListener('pointermove', function (e) {
     if (dragX === null) return;
-    vp.scrollLeft = startLeft - (e.clientX - dragX);
+    if (!dragged && Math.abs(e.clientX - dragX) > 5) {      // a real drag, not a click
+      dragged = true; vp.classList.add('is-dragging'); vp.setPointerCapture(e.pointerId);
+    }
+    if (dragged) vp.scrollLeft = startLeft - (e.clientX - dragX);
   });
+  // A drag must not also open a card.
+  vp.addEventListener('click', function (e) { if (dragged) { e.preventDefault(); e.stopPropagation(); dragged = false; } }, true);
   function endDrag() { dragX = null; vp.classList.remove('is-dragging'); touched(); }
   vp.addEventListener('pointerup', endDrag);
   vp.addEventListener('pointercancel', endDrag);
   vp.scrollLeft = 1; pos = 1;
   requestAnimationFrame(tick);
+})();
+
+// Senior Leadership modal: each card opens a right-hand panel with that person's profile.
+(function () {
+  var dlg = document.querySelector('.lmodal');
+  if (!dlg || !dlg.showModal) return;
+  var body = dlg.querySelector('.lm-body');
+  var COMING = ['Full bio coming soon.'];
+  var LEADERS = [
+    { name: 'Nelson Spruston', role: 'Vice President and Executive Director, Janelia Research Campus',
+      photo: 'assets/leadership/nelson-spruston.webp', credit: 'Credit: James Kegley / HHMI',
+      bio: [
+        'Nelson Spruston became the Executive Director of HHMI’s Janelia Research Campus in August 2024.',
+        'As Executive Director of the Janelia Research Campus and Vice President, Nelson Spruston is responsible for implementing the strategic vision of HHMI’s biomedical research complex in Ashburn, Virginia. Spruston oversees integrated, highly collaborative teams of biologists, computational and data scientists, and tool-builders who are using innovative methods to pursue a wide range of scientific questions.',
+        'In 2011, Spruston came to Janelia to lead the research campus’s science and training team. In 2022, he became Janelia’s Chief of Scientific Operations and Programs. Spruston also <a href="https://www.janelia.org/lab/spruston-lab" target="_blank" rel="noopener">leads a lab at Janelia<span class="visually-hidden"> (opens in a new tab)</span></a> exploring the role of the hippocampus in learning and memory. In addition to investigating the neurobiological mechanisms of memory, Spruston is passionate about training and mentoring the next generation of scientists both within his lab and beyond.',
+        'Before joining HHMI, Spruston spent 16 years on the faculty at Northwestern University, where he was chair of the department of neurobiology and physiology. Prior to Northwestern, Spruston was a postdoctoral researcher at the Max Planck Institute for Medical Research in Heidelberg, Germany.',
+        'Spruston received a PhD in neuroscience from the Baylor College of Medicine and a BS in physiology from the University of British Columbia.'
+      ],
+      societies: ['Fellow at American Association for the Advancement of Science', 'Society for Neuroscience', 'American Physiological Society'],
+      awards: ['Martin J. and Patricia Koldyke Outstanding Teaching Professor', 'NARSAD Distinguished Investigator Award, Brain and Behavior Research Foundation', 'National Science Foundation CAREER Award', 'Klingenstein Fellowship Award in the Neurosciences'],
+      stories: [
+        { date: 'August 27, 2026', title: 'How One Postdoc’s Problem Solving is Changing the Way Scientists Work' },
+        { date: 'June 15, 2026', title: 'Janelia’s Two Big Bets: Decoding the Brain and Reinventing How Science is Done' },
+        { date: 'August 12, 2024', title: 'HHMI Invests $500 Million in AI-Driven Life Sciences Research' }
+      ] },
+    { name: 'Gerry Rubin', role: 'Head of Biology and Senior Group Leader', photo: 'assets/leadership/gerry-rubin.webp', bio: COMING },
+    { name: 'Stephan Saalfeld', role: 'Head of AI@HHMI and Senior Group Leader', photo: 'assets/leadership/stephan-saalfeld.webp', bio: COMING },
+    { name: 'Luke Lavis', role: 'Head of Tools@HHMI and Senior Group Leader', photo: 'assets/leadership/luke-lavis.webp', bio: COMING },
+    { name: 'Ann Hermundstad', role: 'Head of Theory@HHMI and Group Leader', photo: 'assets/leadership/ann-hermundstad.webp', bio: COMING },
+    { name: 'Reed George', role: 'Managing Director, Janelia Scientific Operations', photo: 'assets/leadership/reed-george.webp', bio: COMING },
+    { name: 'Wyatt Korff', role: 'Senior Director, Project Teams', photo: 'assets/leadership/wyatt-korff.webp', bio: COMING },
+    { name: 'Zarixia Zavala-Ruiz', role: 'Senior Director, Scientific Programs & Training', photo: 'assets/leadership/zarixia-zavala-ruiz.webp', bio: COMING }
+  ];
+  function esc(t) { return t.replace(/&/g, '&amp;').replace(/</g, '&lt;'); }
+  function list(label, items) {
+    if (!items || !items.length) return '';
+    return '<section class="lm-sec"><h3 class="lm-label">' + label + '</h3><ul>' +
+      items.map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</ul></section>';
+  }
+  function render(p) {
+    var h = '<div class="lm-head"><figure class="lm-photo m-0"><img src="' + p.photo + '" alt="' + esc(p.name) + '" width="560" height="560">' +
+      (p.credit ? '<figcaption class="lm-credit">' + esc(p.credit) + '</figcaption>' : '') + '</figure>' +
+      '<div><h2 class="lm-name" id="lmName">' + esc(p.name) + '</h2><p class="lm-role">' + esc(p.role) + '</p></div></div>' +
+      '<div class="lm-bio">' + p.bio.map(function (t) { return '<p>' + t + '</p>'; }).join('') + '</div>' +
+      '<p class="lm-media">For any media inquiries, please contact <a href="mailto:pressroom@hhmi.org">pressroom@hhmi.org</a>.</p>' +
+      list('Honorary &amp; Professional Societies', p.societies) +
+      list('Selected Awards', p.awards);
+    if (p.stories && p.stories.length) {
+      h += '<section class="lm-sec"><h3 class="lm-label">Related Stories</h3><div class="lm-stories">' +
+        p.stories.map(function (st) {
+          return '<article class="lm-story"><span class="lm-story-img" aria-hidden="true"></span>' +
+            '<span class="lm-story-date">' + esc(st.date) + '</span><span class="lm-story-title">' + esc(st.title) + '</span></article>';
+        }).join('') + '</div></section>';
+    }
+    body.innerHTML = h;
+  }
+  var opener = null, reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function open(i, btn) {
+    render(LEADERS[i]); opener = btn;
+    document.documentElement.classList.add('lm-open');
+    dlg.showModal(); dlg.scrollTop = 0;
+    requestAnimationFrame(function () { requestAnimationFrame(function () { dlg.classList.add('is-in'); }); });
+  }
+  function close() {
+    if (!dlg.open) return;
+    dlg.classList.remove('is-in');
+    var done = function () {
+      dlg.close(); document.documentElement.classList.remove('lm-open');
+      if (opener) opener.focus({ preventScroll: true });
+    };
+    if (reduce) done(); else setTimeout(done, 450);
+  }
+  document.querySelectorAll('.lead .person[data-leader]').forEach(function (btn) {
+    btn.addEventListener('click', function () { open(+btn.dataset.leader, btn); });
+  });
+  dlg.querySelector('.lm-close').addEventListener('click', close);
+  dlg.addEventListener('cancel', function (e) { e.preventDefault(); close(); });         // Esc
+  dlg.addEventListener('click', function (e) {                                           // click on the dimmed page
+    var r = dlg.getBoundingClientRect();
+    if (e.clientX < r.left) close();
+  });
 })();
 </script>
 
