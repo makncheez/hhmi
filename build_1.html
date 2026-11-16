@@ -1137,8 +1137,12 @@
     pointer-events: auto;
   }
   .lm-close:hover { background: #ececec; }
-  .lm-ext { order: -1; color: #000; }
-  .lm-copy { order: -2; }            /* copy link, open in new window, close */
+  .lm-ext { color: #000; }
+  .lm-actions {                      /* copy link + open in new window, under the title */
+    display: flex;
+    gap: 4px;
+    margin: 16px 0 0 -12px;          /* icon edges line up with the text */
+  }
   .lm-copy .lm-copy-done { display: none; }
   .lm-copy.is-copied .lm-copy-link { display: none; }
   .lm-copy.is-copied .lm-copy-done { display: block; }
@@ -2151,6 +2155,7 @@ document.querySelectorAll('button.mj-more').forEach(function (btn) {
         'She earned a PhD in biological chemistry from the Massachusetts Institute of Technology and a BS in chemistry from the University of Puerto Rico, Río Piedras.'
       ] }
   ];
+  var ext = dlg.querySelector('.lm-ext'), copyBtn = dlg.querySelector('.lm-copy'), copyStatus = dlg.querySelector('.lm-copy-status');
   function slug(p) { return p.photo.split('/').pop().replace(/\.\w+$/, ''); }   // e.g. nelson-spruston
   function esc(t) { return t.replace(/&/g, '&amp;').replace(/</g, '&lt;'); }
   function list(label, items) {
@@ -2161,7 +2166,7 @@ document.querySelectorAll('button.mj-more').forEach(function (btn) {
   function render(p) {
     var h = '<div class="lm-head"><figure class="lm-photo m-0"><img src="' + p.photo + '" alt="' + esc(p.name) + '" width="560" height="560">' +
       (p.credit ? '<figcaption class="lm-credit">' + esc(p.credit) + '</figcaption>' : '') + '</figure>' +
-      '<div><h2 class="lm-name" id="lmName">' + esc(p.name) + '</h2><p class="lm-role">' + esc(p.role) + '</p></div></div>' +
+      '<div><h2 class="lm-name" id="lmName">' + esc(p.name) + '</h2><p class="lm-role">' + esc(p.role) + '</p><div class="lm-actions"></div></div></div>' +
       '<div class="lm-bio">' + p.bio.map(function (t) { return '<p>' + t + '</p>'; }).join('') + '</div>' +
       '<p class="lm-media">For any media inquiries, please contact <a href="mailto:pressroom@hhmi.org">pressroom@hhmi.org</a>.</p>' +
       list('Honorary &amp; Professional Societies', p.societies) +
@@ -2174,7 +2179,7 @@ document.querySelectorAll('button.mj-more').forEach(function (btn) {
         }).join('') + '</div></section>';
     }
     body.innerHTML = h;
-    var ext = dlg.querySelector('.lm-ext');
+    body.querySelector('.lm-actions').append(copyBtn, copyStatus, ext);   // copy link + open in new window, under the title
     ext.hidden = !p.url;
     if (p.url) ext.href = p.url;
     copyBtn.dataset.url = location.href.split('#')[0] + '#' + slug(p);   // this modal's own link
@@ -2211,7 +2216,7 @@ document.querySelectorAll('button.mj-more').forEach(function (btn) {
   }
   var opener = null, reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   // Copy link: puts the profile URL on the clipboard and shows a tick for 1.5s.
-  var copyBtn = dlg.querySelector('.lm-copy'), copyStatus = dlg.querySelector('.lm-copy-status'), copyTimer = 0;
+  var copyTimer = 0;
   copyBtn.addEventListener('click', function () {
     var url = copyBtn.dataset.url;
     function done() {
