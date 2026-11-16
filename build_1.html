@@ -807,8 +807,8 @@
   @media (prefers-reduced-motion: reduce) { .fw-area::before { animation: none; background: #fff; } }
 
   /* "Explore" CTA centred over each panel's right-half media.
-     Rest: lime rectangle, navy mono label. Hovering anywhere over the right
-     half (or keyboard focus) grows it into a large black box with a white
+     Rest: lime rectangle, navy mono label. Hovering the button (or keyboard
+     focus) grows it into a large black box with a white
      label + arrow and .deco colour bars on both sides. Touch screens keep
      the resting button; reduced motion switches without the growth. */
   @media (max-width: 991.98px) { .unit-media { position: relative; } }   /* desktop: already absolute */
@@ -855,10 +855,10 @@
   .unit-explore:focus-visible { width: 78%; height: 76%; background: #000; color: #fff; }
   .unit-explore:focus-visible svg { width: 26px; margin-left: 20px; opacity: 1; transition-delay: 0s, 0s, .15s; }
   .unit-explore:focus-visible .deco { opacity: 1; transition-delay: .2s; }
-  @media (hover: hover) {
-    .unit-media:hover .unit-explore { width: 78%; height: 76%; background: #000; color: #fff; }
-    .unit-media:hover .unit-explore svg { width: 26px; margin-left: 20px; opacity: 1; transition-delay: 0s, 0s, .15s; }
-    .unit-media:hover .unit-explore .deco { opacity: 1; transition-delay: .2s; }
+  @media (hover: hover) {             /* the button itself is the hot spot */
+    .unit-explore:hover { width: 78%; height: 76%; background: #000; color: #fff; }
+    .unit-explore:hover svg { width: 26px; margin-left: 20px; opacity: 1; transition-delay: 0s, 0s, .15s; }
+    .unit-explore:hover .deco { opacity: 1; transition-delay: .2s; }
   }
   @media (prefers-reduced-motion: reduce) {
     .unit-explore, .unit-explore svg, .unit-explore .deco { transition: none; }
@@ -1322,22 +1322,27 @@
     }
     return a;
   }
-  document.querySelectorAll('.cta').forEach(function (cta) {
-    var cells = Array.prototype.slice.call(cta.querySelectorAll('.deco > *'));
-    if (cells.length !== 4) return;
-    var timer = null, last = '';
+  // Also the "Explore" buttons, whose two side bars shuffle independently.
+  document.querySelectorAll('.cta, .unit-explore').forEach(function (cta) {
+    var decos = Array.prototype.slice.call(cta.querySelectorAll('.deco')).map(function (d) {
+      return { el: d, cells: Array.prototype.slice.call(d.children), last: '' };
+    }).filter(function (d) { return d.cells.length === 4; });
+    if (!decos.length) return;
+    var timer = null;
     function step() {
-      var cs = getComputedStyle(cta.querySelector('.deco'));
-      var colours = [1, 2, 3, 4].map(function (n) { return cs.getPropertyValue('--deco-' + n).trim(); });
-      var order;
-      do { order = shuffle(colours.slice()); } while (order.join() === last || order.join() === colours.join());
-      last = order.join();
-      cells.forEach(function (c, i) { c.style.backgroundColor = order[i]; });
+      decos.forEach(function (d) {
+        var cs = getComputedStyle(d.el);
+        var colours = [1, 2, 3, 4].map(function (n) { return cs.getPropertyValue('--deco-' + n).trim(); });
+        var order;
+        do { order = shuffle(colours.slice()); } while (order.join() === d.last || order.join() === colours.join());
+        d.last = order.join();
+        d.cells.forEach(function (c, i) { c.style.backgroundColor = order[i]; });
+      });
     }
     function start() { if (!timer) { step(); timer = setInterval(step, 200); } }
     function stop() {
-      clearInterval(timer); timer = null; last = '';
-      cells.forEach(function (c) { c.style.backgroundColor = ''; });
+      clearInterval(timer); timer = null;
+      decos.forEach(function (d) { d.last = ''; d.cells.forEach(function (c) { c.style.backgroundColor = ''; }); });
     }
     cta.addEventListener('mouseenter', start);
     cta.addEventListener('mouseleave', stop);
