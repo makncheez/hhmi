@@ -1262,6 +1262,66 @@
 
   /* ---------- Placeholder content below the hero ---------- */
   .filler { min-height: 150vh; }
+  /* ---------- Green / black 2-col section (after Senior Leadership) ----------
+     Left: #2DB44A with the roles section's crosshair grid (black, static).
+     Right: black with white type. Desktop 600px tall; stacked below 992px. */
+  .gb { display: grid; grid-template-columns: 1fr 1fr; min-height: 600px; }
+  .gb-grid {
+    --col: 78px; --row: 100px;
+    position: relative;
+    background: #2DB44A;
+  }
+  .gb-grid::before {
+    content: ""; position: absolute; inset: 0; pointer-events: none;
+    background: #000;
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' stroke='%23000' stroke-width='1' shape-rendering='crispEdges'%3E%3Csvg x='50%25' y='50%25' overflow='visible'%3E%3Cpath d='M0 -10V-2.25M0 2.25V10M-10 0H-2.25M2.25 0H10'/%3E%3C/svg%3E%3C/svg%3E") 0 0 / var(--col) var(--row) repeat;
+            mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' stroke='%23000' stroke-width='1' shape-rendering='crispEdges'%3E%3Csvg x='50%25' y='50%25' overflow='visible'%3E%3Cpath d='M0 -10V-2.25M0 2.25V10M-10 0H-2.25M2.25 0H10'/%3E%3C/svg%3E%3C/svg%3E") 0 0 / var(--col) var(--row) repeat;
+  }
+  @media (min-width: 1200px) { .gb-grid { --col: 93px; } }
+  @media (min-width: 1400px) { .gb-grid { --col: 108px; } }
+  .gb-copy {
+    background: #000; color: #fff;
+    display: flex; flex-direction: column; justify-content: center; align-items: flex-start;
+    padding: 80px clamp(24px, 6vw, 96px);
+  }
+  .gb-title { margin: 0 0 32px; font: 400 clamp(25px, 2.35vw, 40px)/1.15 var(--font-sans); letter-spacing: -0.005em; }
+  .gb-text { max-width: 560px; margin: 0; }
+  @media (max-width: 991.98px) {
+    .gb { grid-template-columns: 1fr; min-height: 0; }
+    .gb-grid { --col: 58px; height: 320px; }
+  }
+  @media (max-width: 575.98px) { .gb-grid { --col: 43px; height: 240px; } .gb-copy { padding: 56px 24px; } }
+
+  /* ---------- Footer (from studies/footer.html) ----------
+     Black mega footer: one column per site section, then "Back to top".
+     The page lifts away like a curtain to uncover a particle HHMI wordmark
+     fixed underneath, which scatters from the pointer. Fonts: ABC Diatype. */
+  main { position: relative; z-index: 1; background: var(--page-bg); }   /* the curtain */
+  .mfoot { --dim: #9a9a9a; --soft: #cfcfcf; --rule: #2b2b2b; background: #000; color: #fff; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); font: 400 15px/1.4 var(--font-sans); }
+  .mfoot a { color: inherit; text-decoration: none; cursor: pointer; }
+  .mfoot .in { max-width: 1440px; margin: 0 auto; padding: 64px 32px 28px; }
+  .mf-cols { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 40px 28px; }
+  .mf-col { min-width: 0; }
+  .mf-col h3 { font: 400 12px/1.4 var(--font-mono); letter-spacing: .12em; text-transform: uppercase; color: var(--dim); margin: 0 0 12px; padding-bottom: 10px; border-bottom: 1px solid var(--rule); }
+  .mf-col h3 a:hover { color: #fff; }
+  .mf-col ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 1px; }
+  .mf-col li > a { display: block; padding: 5px 0; line-height: 1.3; font-size: 14px; }
+  .mf-col a:hover .t { text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 1px; }
+  .mf-col .sub { margin-top: 14px; padding-bottom: 2px; font: 400 11px/1.4 var(--font-mono); letter-spacing: .1em; text-transform: uppercase; color: var(--dim); }
+  .mf-col .sub:first-child { margin-top: 0; }
+  .mf-col .sel .t { text-decoration: underline; text-underline-offset: 4px; }
+  .mf-base { display: flex; justify-content: flex-end; gap: 24px; margin-top: 56px; padding-top: 20px; border-top: 1px solid var(--rule); font-size: 12px; color: var(--dim); }
+  .mfoot .totop { color: var(--dim); border-bottom: 1px solid var(--rule); padding-bottom: 2px; }
+  .mfoot .totop:hover { color: #fff; border-color: var(--dim); }
+  .mfoot :focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
+  .mf-stage { position: fixed; left: 0; right: 0; bottom: 0; z-index: 0; height: var(--stage-h, calc(22.3vw + 80px)); background: #000; }
+  .mf-stage canvas { display: block; width: 100%; height: 100%; touch-action: pan-y; }
+  .mf-reveal { height: var(--stage-h, calc(22.3vw + 80px)); }
+  @media (max-width: 1060px) {
+    .mf-cols { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .mfoot .in { padding-left: 24px; padding-right: 24px; }
+  }
+  @media (max-width: 560px) { .mf-cols { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px 20px; } }
 </style>
 </head>
 <body>
@@ -1705,8 +1765,21 @@
     <div class="deco lm-band" aria-hidden="true"><div></div><div></div><div></div><div></div></div>
   </dialog>
 
-  <div class="filler"></div>
+  <section class="gb" aria-labelledby="gbTitle">
+    <div class="gb-grid" aria-hidden="true"></div>
+    <div class="gb-copy">
+      <h2 class="gb-title" id="gbTitle">[Heading placeholder]</h2>
+      <p class="gb-text">[Paragraph placeholder: copy to come.]</p>
+    </div>
+  </section>
+
+  <footer class="mfoot" id="mfoot"><div class="in">
+    <nav class="mf-cols" id="mfcols" aria-label="Footer"></nav>
+    <div class="mf-base"><a class="totop" href="#" id="totop">Back to top <span aria-hidden="true">↑</span></a></div>
+  </div></footer>
 </main>
+<div class="mf-reveal" id="mfReveal" aria-hidden="true"></div>
+<div class="mf-stage"><svg id="mfLogo" hidden width="113" height="34" viewBox="0 0 128 38" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><g fill="currentColor" fill-rule="evenodd"><path d="M0,0 L10.6326783,0 L10.6326783,13.3585568 L10.7405466,13.3585568 C12.5660116,11.2287875 14.9303817,9.68631694 19.4398916,9.68631694 C24.4354642,9.68631694 29,12.719323 29,19.0532334 L29,38 L18.3673217,38 L18.3673217,23.5222432 C18.3673217,20.3299697 17.9908742,18.0954648 14.8753558,18.0954648 C13.0498908,18.0954648 10.6326783,18.9991344 10.6326783,23.4175076 L10.6326783,38 L0,38 L0,0"/><path d="M33,0 L43.6324017,0 L43.6324017,13.3585568 L43.7402717,13.3585568 C45.5657641,11.2287875 47.9301699,9.68631694 52.4419312,9.68631694 C57.4353955,9.68631694 62,12.719323 62,19.0532334 L62,38 L51.3671616,38 L51.3671616,23.5222432 C51.3671616,20.3299697 50.9907084,18.0954648 47.8751431,18.0954648 C46.0500873,18.0954648 43.6324017,18.9991344 43.6324017,23.4175076 L43.6324017,38 L33,38 L33,0"/><path d="M66,10.6843569 L76.2404845,10.6843569 L76.2404845,14.3158571 L76.3481689,14.3158571 C78.4913943,11.1568585 81.6011638,10 85.4612366,10 C88.4637577,10 91.6794677,11.5257864 92.9673213,14.2619302 C93.3958791,13.9469292 95.5391046,10 102.456195,10 C109.586474,10 112,14.8422855 112,19.2617162 L112,38 L101.38371,38 L101.38371,23.2103574 C101.38371,20.6317141 101.115589,18.3141451 97.8998787,18.3141451 C95.2182311,18.3141451 94.3079271,20.3684999 94.3079271,23.2103574 L94.3079271,38 L83.691637,38 L83.691637,23.2103574 C83.691637,20.6317141 83.4235158,18.3141451 80.2078057,18.3141451 C77.5261582,18.3141451 76.6162901,20.3684999 76.6162901,23.2103574 L76.6162901,38 L66,38 L66,10.6843569"/><polygon points="116 38 127 38 127 10 116 10"/><path d="M127.750439,7 C127.911577,6.50960867 128,5.98823666 128,5.45015141 C128,2.43931982 125.314083,0 121.999327,0 C118.686366,0 116,2.43931982 116,5.45015141 C116,5.98823666 116.088872,6.50960867 116.250009,7 L127.750439,7"/></g></svg><canvas id="mfParticles" role="img" aria-label="HHMI"></canvas></div>
 
 <script>
   /* Reduced motion: decorative panel videos show their still frame instead of playing */
@@ -2330,5 +2403,121 @@ document.querySelectorAll('button.mj-more').forEach(function (btn) {
 })();
 </script>
 
+<script>
+var TREE=[{"l": "Programs", "r": "programs", "k": [{"l": "All programs", "r": "programs"}, {"l": "Program finder", "r": "programs/finder"}, {"l": "Compare programs", "r": "programs/compare"}, {"l": "Program pages", "k": [{"l": "HHMI Investigators", "r": "programs/investigators"}, {"l": "Freeman Hrabowski Scholars", "r": "programs/freeman-hrabowski-scholars"}, {"l": "Hanna H. Gray Fellows", "r": "programs/hanna-gray-fellows"}, {"l": "Gilliam Fellows", "r": "programs/gilliam-fellows"}, {"l": "Cech Fellows", "r": "programs/cech-fellows"}]}]}, {"l": "Our scientists", "r": "scientists", "k": [{"l": "All scientists", "r": "scientists"}, {"l": "Science & discoveries", "r": "scientists/discoveries", "k": [{"l": "All discoveries", "r": "scientists/discoveries"}, {"l": "Targeting hard-to-treat cancers", "r": "scientists/discoveries/ras-cancers"}, {"l": "Fruit fly nervous system map", "r": "scientists/discoveries/fly-connectome"}, {"l": "Plant defenses and growth", "r": "scientists/discoveries/plants"}, {"l": "Designing new proteins", "r": "scientists/discoveries/proteins"}, {"l": "From bacterial defense to CRISPR", "r": "scientists/discoveries/crispr"}, {"l": "How a cell senses touch", "r": "scientists/discoveries/touch"}, {"l": "A first summer in an HHMI lab", "r": "scientists/discoveries/first-research"}]}, {"l": "Scientist profiles", "k": [{"l": "David Baker", "r": "scientists/baker"}, {"l": "Jennifer A. N. Brophy", "r": "scientists/brophy"}, {"l": "Jennifer A. Doudna", "r": "scientists/doudna"}, {"l": "Danica Dougan", "r": "scientists/dougan"}, {"l": "Ardem Patapoutian", "r": "scientists/patapoutian"}, {"l": "Kevan Shokat", "r": "scientists/shokat"}]}]}, {"l": "Janelia", "r": "janelia", "k": [{"l": "Janelia home", "r": "janelia"}, {"l": "About Janelia", "r": "janelia/about", "k": [{"l": "About Janelia", "r": "janelia/about"}, {"l": "Life at Janelia", "r": "janelia/life"}, {"l": "How we work", "r": "janelia/how-we-work"}, {"l": "Janelia and HHMI", "r": "janelia/connections"}, {"l": "Janelia at 20", "r": "janelia/anniversary", "k": [{"l": "20 years overview", "r": "janelia/anniversary"}, {"l": "2006 · A different place to do science", "r": "janelia/anniversary/beginning"}, {"l": "2013 · Making neural activity visible", "r": "janelia/anniversary/gcamp"}, {"l": "2014 · Seeing beyond the old limits", "r": "janelia/anniversary/nobel"}, {"l": "2015 · Small molecules, new views", "r": "janelia/anniversary/fluor"}, {"l": "2020 · A map to explore, together", "r": "janelia/anniversary/hemibrain"}, {"l": "2024 · A virtual fly takes flight", "r": "janelia/anniversary/virtual-fly"}]}]}, {"l": "Science", "r": "janelia/science", "k": [{"l": "The science", "r": "janelia/science"}, {"l": "Open questions", "r": "janelia/questions", "k": [{"l": "All open questions", "r": "janelia/questions"}, {"l": "Biology", "k": [{"l": "All biology questions", "r": "janelia/questions/for/biology"}, {"l": "What is a circuit computing?", "k": [{"l": "What is a circuit actually computing?", "r": "janelia/questions/circuit-algorithms", "t": "janelia/questions/circuit-algorithms/technical"}, {"l": "Which neurons does a behavior depend on?", "r": "janelia/questions/visual-cell-types", "t": "janelia/questions/visual-cell-types/technical"}, {"l": "How does the brain keep its internal compass aligned with the world?", "r": "janelia/questions/anchoring-maps", "t": "janelia/questions/anchoring-maps/technical"}]}, {"l": "How do cells and molecules implement computation?", "k": [{"l": "What changes inside a neuron when a memory forms?", "r": "janelia/questions/memory-molecules", "t": "janelia/questions/memory-molecules/technical"}, {"l": "How do cells and synapses build a neural compass?", "r": "janelia/questions/attractor-biophysics", "t": "janelia/questions/attractor-biophysics/technical"}, {"l": "How can a single experience create a memory?", "r": "janelia/questions/one-shot-memory", "t": "janelia/questions/one-shot-memory/technical"}]}, {"l": "How does a whole vertebrate brain and body generate behavior?", "k": [{"l": "How does a whole vertebrate brain turn sensing into action?", "r": "janelia/questions/whole-brain-zebrafish", "t": "janelia/questions/whole-brain-zebrafish/technical"}, {"l": "How do internal states reshape the whole brain?", "r": "janelia/questions/internal-states", "t": "janelia/questions/internal-states/technical"}, {"l": "How does a brain generate complex social behavior?", "r": "janelia/questions/social-behavior", "t": "janelia/questions/social-behavior/technical"}, {"l": "What carries over from fly to fish?", "r": "janelia/questions/fly-to-vertebrate", "t": "janelia/questions/fly-to-vertebrate/technical"}]}]}, {"l": "AI", "k": [{"l": "All AI questions", "r": "janelia/questions/for/ai"}, {"l": "Can AI help build the tools the science depends on?", "k": [{"l": "Can we design better sensors?", "r": "janelia/questions/better-sensors", "t": "janelia/questions/better-sensors/technical"}, {"l": "Can AI design a microscope?", "r": "janelia/questions/instrument-design", "t": "janelia/questions/instrument-design/technical"}]}, {"l": "How do we learn and verify mechanism from measurement?", "k": [{"l": "Can one model explain a whole animal?", "r": "janelia/questions/whole-system-models", "t": "janelia/questions/whole-system-models/technical"}, {"l": "Can a simulated animal serve as an experiment?", "r": "janelia/questions/digital-twins", "t": "janelia/questions/digital-twins/technical"}, {"l": "When can data reveal a mechanism?", "r": "janelia/questions/identifiability", "t": "janelia/questions/identifiability/technical"}]}, {"l": "How can AI agents help with open-ended science?", "k": [{"l": "When should a research agent pause?", "r": "janelia/questions/research-agents", "t": "janelia/questions/research-agents/technical"}, {"l": "Can we capture what experts know but never write down?", "r": "janelia/questions/tacit-knowledge", "t": "janelia/questions/tacit-knowledge/technical"}, {"l": "How should scientists and AI agents work together?", "r": "janelia/questions/agent-interface", "t": "janelia/questions/agent-interface/technical"}, {"l": "How do we keep AI-run research accountable?", "r": "janelia/questions/accountable-agents", "t": "janelia/questions/accountable-agents/technical"}]}]}, {"l": "Theory", "k": [{"l": "All theory questions", "r": "janelia/questions/for/theory"}, {"l": "What are the right abstractions?", "k": [{"l": "What is the right way to describe a computation?", "r": "janelia/questions/levels-of-explanation", "t": "janelia/questions/levels-of-explanation/technical"}, {"l": "How do molecules shape behavior?", "r": "janelia/questions/molecules-behavior", "t": "janelia/questions/molecules-behavior/technical"}, {"l": "Do different brains solve problems the same way?", "r": "janelia/questions/universal-solutions", "t": "janelia/questions/universal-solutions/technical"}]}, {"l": "How do we constrain these abstractions with data?", "k": [{"l": "Why does the same circuit compute differently at different times?", "r": "janelia/questions/context-dependence", "t": "janelia/questions/context-dependence/technical"}, {"l": "Which experiment should come next?", "r": "janelia/questions/next-experiment", "t": "janelia/questions/next-experiment/technical"}, {"l": "Can theory invent new ways to measure?", "r": "janelia/questions/theory-guided-measurement", "t": "janelia/questions/theory-guided-measurement/technical"}]}, {"l": "Why are biological systems organized as they are?", "k": [{"l": "How do brains learn quickly without forgetting?", "r": "janelia/questions/fast-flexible-learning", "t": "janelia/questions/fast-flexible-learning/technical"}, {"l": "How does a brain stay the same while its parts change?", "r": "janelia/questions/stable-function", "t": "janelia/questions/stable-function/technical"}, {"l": "Why are biological systems built the way they are?", "r": "janelia/questions/biological-tradeoffs", "t": "janelia/questions/biological-tradeoffs/technical"}]}]}, {"l": "Tools", "k": [{"l": "All tools questions", "r": "janelia/questions/for/tools"}, {"l": "What reagents do we need?", "k": [{"l": "Can we make brighter, longer-lasting fluorescent molecules?", "r": "janelia/questions/better-fluorophores", "t": "janelia/questions/better-fluorophores/technical"}, {"l": "How do we attach a label to exactly what we want to see?", "r": "janelia/questions/labeling-strategies", "t": "janelia/questions/labeling-strategies/technical"}, {"l": "Can we build biosensors faster?", "r": "janelia/questions/faster-biosensors", "t": "janelia/questions/faster-biosensors/technical"}, {"l": "How can we change a single synapse?", "r": "janelia/questions/single-synapse", "t": "janelia/questions/single-synapse/technical"}]}, {"l": "What instruments do we need?", "k": [{"l": "Can we map a whole brain at every scale at once?", "r": "janelia/questions/imaging-across-scales", "t": "janelia/questions/imaging-across-scales/technical"}, {"l": "Can computation see beyond the microscope?", "r": "janelia/questions/computational-microscopy", "t": "janelia/questions/computational-microscopy/technical"}, {"l": "What should we measure in a working brain?", "r": "janelia/questions/multimodal-imaging", "t": "janelia/questions/multimodal-imaging/technical"}, {"l": "How do we measure a brain in motion?", "r": "janelia/questions/brain-in-motion", "t": "janelia/questions/brain-in-motion/technical"}]}]}]}, {"l": "Research units", "r": "janelia/units", "k": [{"l": "All research units", "r": "janelia/units"}, {"l": "Biology", "r": "janelia/units/biology"}, {"l": "Tools@HHMI", "r": "janelia/units/tools"}, {"l": "AI@HHMI", "r": "janelia/units/ai"}, {"l": "Theory@HHMI", "r": "janelia/units/theory"}]}]}, {"l": "People", "r": "janelia/people", "k": [{"l": "People and teams", "r": "janelia/people"}, {"l": "Leadership", "r": "janelia/leadership", "k": [{"l": "All leadership", "r": "janelia/leadership"}, {"l": "Nelson Spruston", "r": "janelia/leadership/spruston"}, {"l": "Gerry Rubin", "r": "janelia/leadership/rubin"}, {"l": "Luke Lavis", "r": "janelia/leadership/lavis"}, {"l": "Stephan Saalfeld", "r": "janelia/leadership/saalfeld"}, {"l": "Ann Hermundstad", "r": "janelia/leadership/hermundstad"}]}, {"l": "Lab heads", "r": "janelia/labs", "k": [{"l": "All lab heads", "r": "janelia/labs"}, {"l": "Gerry Rubin", "r": "janelia/labs/rubin"}, {"l": "Luke Lavis", "r": "janelia/labs/lavis"}, {"l": "Stephan Saalfeld", "r": "janelia/labs/saalfeld"}, {"l": "Ann Hermundstad", "r": "janelia/labs/hermundstad"}, {"l": "Nelson Spruston", "r": "janelia/labs/spruston"}, {"l": "Joshua Dudman", "r": "janelia/labs/dudman"}]}]}, {"l": "Resources", "r": "janelia/resources", "k": [{"l": "All resources", "r": "janelia/resources"}, {"l": "Research tools", "r": "janelia/resources/tools"}, {"l": "Data and code", "r": "janelia/resources/data"}]}, {"l": "Join Janelia", "r": "janelia/join", "k": [{"l": "Scientific careers", "r": "janelia/join"}, {"l": "Principal Scientists", "r": "janelia/join/principal-scientists"}, {"l": "AI Scientists", "r": "janelia/join/ai-scientists"}, {"l": "Group Leaders", "r": "janelia/join/group-leaders"}, {"l": "Other roles", "r": "janelia/join/other-roles"}, {"l": "Opportunities", "r": "janelia/join/opportunities", "f": "Not linked in prototype"}]}]}, {"l": "Shaping science", "r": "shaping-science", "k": [{"l": "Shaping how science is done", "r": "shaping-science"}, {"l": "Open science", "r": "shaping-science/open-science"}, {"l": "Science leadership & lab culture", "r": "shaping-science/science-leadership-lab-culture"}]}, {"l": "Science for everyone", "r": "engagement", "k": [{"l": "Science for everyone", "r": "engagement"}, {"l": "BioInteractive", "r": "engagement/biointeractive"}, {"l": "Science Education Alliance", "r": "engagement/sea"}, {"l": "Tangled Bank Studios", "r": "engagement/tangled-bank"}]}, {"l": "More", "k": [{"l": "About HHMI", "r": "about", "f": "Footer only in prototype"}, {"l": "Explore your path", "r": "careers/interests", "k": [{"l": "Start here", "r": "careers/interests"}, {"l": "Lead a laboratory", "r": "careers/interests/lead"}, {"l": "Pursue hands-on research", "r": "careers/interests/research"}, {"l": "Build AI for science", "r": "careers/interests/ai"}, {"l": "Find fellowship support", "r": "careers/interests/fellowships"}, {"l": "Contribute technical or professional expertise", "r": "careers/interests/professional"}], "f": "Not in any menu in prototype"}, {"l": "Other roles at HHMI", "r": "careers/other-roles"}, {"l": "Prototype guide", "r": "guide"}, {"l": "Janelia prototype guide", "r": "janelia/prototype-guide", "f": "Not linked in prototype"}]}];
+/* Mega footer: one column per header section, built from the same TREE as the menu. */
+(function(){
+  var cols=document.getElementById('mfcols'),sel=null;
+  function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+  function link(n){return '<li><a data-r="'+esc(n.r)+'"><span class="t">'+esc(n.l)+'</span></a></li>'}
+  cols.innerHTML=TREE.map(function(n){
+    var items=n.k.filter(function(c){return c.r!==n.r}).map(function(c){
+      if(c.r)return link(c);
+      return '<li class="sub">'+esc(c.l)+'</li>'+(c.k||[]).filter(function(x){return x.r}).map(link).join('');
+    }).join('');
+    var h=n.r?'<a data-r="'+esc(n.r)+'">'+esc(n.l)+'</a>':esc(n.l);
+    return '<div class="mf-col"><h3>'+h+'</h3><ul>'+items+'</ul></div>';
+  }).join('');
+  cols.addEventListener('click',function(e){
+    var l=e.target.closest('a[data-r]');if(!l)return;e.preventDefault();
+    if(sel)sel.classList.remove('sel');sel=l;l.classList.add('sel');
+  });
+  document.getElementById('totop').addEventListener('click',function(e){
+    e.preventDefault();
+    window.scrollTo({top:0,behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});
+  });
+})();
+
+/* Particle wordmark. The page above lifts away like a curtain to uncover it; the wordmark is already in place and reacts to the pointer. */
+(function(){
+  var COLORS=['#8B8B8B','#8B8B8B','#8B8B8B','#8B8B8B','#8B8B8B']; // h, h, m, i stem, i dot (document order)
+  var PATHS=[].map.call(document.querySelectorAll('#mfLogo path, #mfLogo polygon'),function(el){
+    return new Path2D(el.tagName.toLowerCase()==='polygon'?'M'+el.getAttribute('points').trim().split(/\s+/).join(' ').replace(/(\S+ \S+) /g,'$1 L')+' Z':el.getAttribute('d'));
+  });
+  var VB_W=128,VB_H=38,FILL=.75;
+  var cv=document.getElementById('mfParticles'),ctx=cv.getContext('2d'),spacer=document.getElementById('mfReveal');
+  var reduce=matchMedia('(prefers-reduced-motion: reduce)');
+  var P=[],G=[],W=0,H=0,r=1.5,DPR=1,img=null,buf=null,R=80,lastW=-1,raf=0,visible=false;
+  var mouse={x:-1e4,y:-1e4,on:false,f:4,base:4};
+
+  function dot(){return 1}   // particle size in CSS px, all screens
+  function layout(){
+    var w=document.documentElement.clientWidth;
+    var pad=Math.max(40,Math.min(120,w*.06)),lw=w*FILL,lh=lw*VB_H/VB_W,h=Math.round(lh+pad*2);
+    document.documentElement.style.setProperty('--stage-h',h+'px');
+    if(w===lastW)return;lastW=w;W=w;H=h;
+    var dpr=Math.min(window.devicePixelRatio||1,2);
+    cv.width=Math.round(W*dpr);cv.height=Math.round(H*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);
+    DPR=dpr;img=ctx.createImageData(cv.width,cv.height);buf=new Uint32Array(img.data.buffer);
+    var d=dot(w),gap=3,s=lw/VB_W,ox=(W-lw)/2,oy=(H-lh)/2;
+    r=d/2;R=Math.max(50,W*.06);
+    var t=document.createElement('canvas').getContext('2d');
+    var groups={};P=[];
+    for(var y=gap/2;y<lh;y+=gap)for(var x=gap/2;x<lw;x+=gap){
+      for(var i=0;i<PATHS.length;i++){
+        if(t.isPointInPath(PATHS[i],x/s,y/s)){
+          var p={hx:x+ox,hy:y+oy,x:x+ox,y:y+oy,vx:0,vy:0,e:.7+Math.random()*.6};
+          (groups[COLORS[i]]=groups[COLORS[i]]||[]).push(p);P.push(p);break;
+        }
+      }
+    }
+    G=Object.keys(groups).map(function(c){return {c:c,p:groups[c]}});
+    draw();
+  }
+  function step(){
+    var moving=0,R2=R*R,m=mouse.on,k=.045;
+    mouse.f+=(mouse.base-mouse.f)*.06;
+    for(var i=0;i<P.length;i++){
+      var p=P[i],ax=(p.hx-p.x)*k*p.e,ay=(p.hy-p.y)*k*p.e;
+      if(m){var dx=p.x-mouse.x,dy=p.y-mouse.y,d2=dx*dx+dy*dy;
+        if(d2<R2&&d2>.01){var d=Math.sqrt(d2),f=(1-d/R)*mouse.f/d;ax+=dx*f;ay+=dy*f}}
+      p.vx=(p.vx+ax)*.86;p.vy=(p.vy+ay)*.86;p.x+=p.vx;p.y+=p.vy;
+      if(Math.abs(p.vx)+Math.abs(p.vy)>.03||Math.abs(p.hx-p.x)+Math.abs(p.hy-p.y)>.4)moving++;
+    }
+    return moving;
+  }
+  // Packs a #RRGGBB color into one 32-bit pixel (canvas pixels are RGBA bytes, read little-endian).
+  function px(hex){var n=parseInt(hex.slice(1),16);return (0xFF000000|((n&255)<<16)|(n&0xFF00)|(n>>16))>>>0}
+  function draw(){
+    if(r<=.75){ // 1px dots: write squares straight into the pixel buffer (much faster than drawing shapes)
+      var cw=cv.width,ch=cv.height,sz=Math.max(1,Math.round(r*2*DPR));
+      buf.fill(0);
+      for(var g=0;g<G.length;g++){
+        var a=G[g].p,c=px(G[g].c);
+        for(var i=0;i<a.length;i++){
+          var x0=Math.round((a[i].x-r)*DPR),y0=Math.round((a[i].y-r)*DPR);
+          if(x0<0||y0<0||x0+sz>cw||y0+sz>ch)continue;
+          for(var yy=0;yy<sz;yy++){var o=(y0+yy)*cw+x0;for(var xx=0;xx<sz;xx++)buf[o+xx]=c}
+        }
+      }
+      ctx.putImageData(img,0,0);
+      return;
+    }
+    ctx.clearRect(0,0,W,H);
+    for(var g=0;g<G.length;g++){
+      var a=G[g].p;ctx.fillStyle=G[g].c;ctx.beginPath();
+      for(var i=0;i<a.length;i++){var p=a[i];ctx.moveTo(p.x+r,p.y);ctx.arc(p.x,p.y,r,0,6.2832)}
+      ctx.fill();
+    }
+  }
+  function frame(){
+    raf=0;var moving=step();draw();
+    if(visible&&(moving||mouse.on||mouse.f>mouse.base+.1))raf=requestAnimationFrame(frame);
+  }
+  function kick(){if(!raf&&visible&&!reduce.matches)raf=requestAnimationFrame(frame)}
+
+  new IntersectionObserver(function(es){visible=es[es.length-1].isIntersecting;kick()},{threshold:0}).observe(spacer);
+
+  function at(e){var b=cv.getBoundingClientRect();mouse.x=e.clientX-b.left;mouse.y=e.clientY-b.top}
+  cv.addEventListener('pointermove',function(e){at(e);mouse.on=true;kick()});
+  cv.addEventListener('pointerleave',function(e){if(e.pointerType==='mouse'){mouse.on=false;mouse.x=mouse.y=-1e4}});
+  cv.addEventListener('pointerdown',function(e){at(e);mouse.on=true;mouse.f=16;kick()});   // click or tap: bigger burst
+  function lift(e){if(e.pointerType!=='mouse')setTimeout(function(){mouse.on=false},300)}
+  cv.addEventListener('pointerup',lift);cv.addEventListener('pointercancel',lift);
+
+  var rq=0;window.addEventListener('resize',function(){if(rq)return;rq=requestAnimationFrame(function(){rq=0;layout();kick()})});
+  layout();
+})();
+</script>
 </body>
 </html>
