@@ -1561,8 +1561,8 @@
             <span class="person-title">Senior Director, Scientific Programs &amp; Training</span>
           </div></div>
         </div>
-        <div class="lead-set" style="display:flex" aria-hidden="true" inert>
-          <div class="lcell"><button class="person" type="button" aria-haspopup="dialog" data-leader="0">
+        <div class="lead-set lead-set--copy" style="display:flex" aria-hidden="true">
+          <div class="lcell"><button class="person" type="button" aria-haspopup="dialog" data-leader="0" tabindex="-1">
             <img src="assets/leadership/nelson-spruston.webp" alt="" width="560" height="560" loading="lazy">
             <span class="person-name">Nelson Spruston</span>
             <span class="person-title">Vice President &amp; Executive Director, Janelia Research Campus</span>
@@ -2011,7 +2011,11 @@ document.querySelectorAll('button.mj-more').forEach(function (btn) {
     if (dragged) vp.scrollLeft = startLeft - (e.clientX - dragX);
   });
   // A drag must not also open a card.
-  vp.addEventListener('click', function (e) { if (dragged) { e.preventDefault(); e.stopPropagation(); dragged = false; } }, true);
+  // A click is ignored only if the press that produced it became a drag;
+  // every new press (pointerdown) starts clean.
+  vp.addEventListener('click', function (e) {
+    if (dragged) { e.preventDefault(); e.stopPropagation(); }
+  }, true);
   function endDrag() { dragX = null; vp.classList.remove('is-dragging'); touched(); }
   vp.addEventListener('pointerup', endDrag);
   vp.addEventListener('pointercancel', endDrag);
@@ -2085,7 +2089,7 @@ document.querySelectorAll('button.mj-more').forEach(function (btn) {
     dlg.classList.remove('is-in');
     var done = function () {
       dlg.close(); document.documentElement.classList.remove('lm-open');
-      if (opener) opener.focus({ preventScroll: true });
+      if (opener) (opener.closest('.lead-set--copy') ? document.querySelector('.lead-set:not(.lead-set--copy) [data-leader="' + opener.dataset.leader + '"]') : opener).focus({ preventScroll: true });
     };
     if (reduce) done(); else setTimeout(done, 450);
   }
