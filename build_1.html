@@ -1038,7 +1038,7 @@
     --gap-v-bottom: 12px;
     --cell-pad: clamp(20px, 2.6vw, 38px);
     --card-w: 330px;                 /* a quarter of the widest container */
-    padding: 120px 0 5px;
+    padding: 120px 0;
     background: #000;
     color: #fff;
   }
@@ -1111,7 +1111,7 @@
   }
   @media (max-width: 1399.98px) { .lead { --card-w: 285px; } }
   @media (max-width: 1199.98px) { .lead { --card-w: 260px; } }
-  @media (max-width: 767.98px)  { .lead { --card-w: 72vw; padding: 80px 0 5px; } }
+  @media (max-width: 767.98px)  { .lead { --card-w: 72vw; padding: 80px 0; } }
 
   /* ---------- Senior Leadership modal ----------
      A <dialog> flush to the right edge: full height, 50% of the viewport
@@ -1263,13 +1263,13 @@
   /* ---------- Placeholder content below the hero ---------- */
   .filler { min-height: 150vh; }
   /* ---------- Newsletter banner (between the two carousels) ----------
-     Full width, 90px tall, black with one row of white crosshairs (50%),
+     Full width, 180px tall, black with one row of white crosshairs (50%),
      the white "Join Newsletter" button centred. On hover it grows to the
      banner's height and shows "Stay Connected with HHMI" underneath. */
   .nl {
     --col: 78px;
     position: relative;
-    height: 90px;
+    height: 180px;
     background: #000;
     border-top: 1px solid #2b2b2b; border-bottom: 1px solid #2b2b2b;
   }
@@ -1282,9 +1282,8 @@
   @media (min-width: 1200px) { .nl { --col: 93px; } }
   @media (min-width: 1400px) { .nl { --col: 108px; } }
   @media (max-width: 767.98px) { .nl { --col: 58px; } }
-  .nl .unit-explore { height: 50px; }
-  .nl .unit-explore:focus-visible { width: min(520px, 90%); height: 76px; }
-  @media (hover: hover) { .nl .unit-explore:hover { width: min(520px, 90%); height: 76px; } }
+  .nl .unit-explore:focus-visible { width: min(560px, 90%); height: 148px; }
+  @media (hover: hover) { .nl .unit-explore:hover { width: min(560px, 90%); height: 148px; } }
   .nl .unit-explore .deco { --deco-h: 70%; }
 
   /* ---------- Highlighted Stories (1 col, after the newsletter banner) ---------- */
@@ -1297,8 +1296,13 @@
      pinned to the bottom edge of the grown box. */
   .unit-explore--light { background: #fff; color: #000; }
   .unit-explore--light svg path { stroke: #000; }
+  /* The label stays put on hover: the arrow is taken out of the flow and
+     fades in near the right edge of the grown box. */
+  .unit-explore--light svg { position: absolute; right: 48px; top: 50%; width: 26px; margin: 0; transform: translateY(-50%); }
+  .unit-explore--light:focus-visible svg { width: 26px; margin: 0; }
+  @media (hover: hover) { .unit-explore--light:hover svg { width: 26px; margin: 0; } }
   .unit-explore--light .ue-sub {
-    position: absolute; left: 50%; bottom: 10px;
+    position: absolute; left: 50%; bottom: 16px;
     transform: translateX(-50%);
     opacity: 0;
     font: 400 13px/1 var(--font-sans); letter-spacing: 0;
