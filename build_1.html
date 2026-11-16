@@ -708,6 +708,7 @@
     letter-spacing: -0.005em;
   }
   .mj-text { margin: 0; }            /* paragraph font: global 17px / 1.35 */
+  .mj-text + .mj-text { margin-top: 1.35em; }   /* blank line between paragraphs */
   .mj-more {
     align-self: center;
     margin-top: 24px;
@@ -1425,13 +1426,8 @@
         <div class="col-12 col-lg-4 mj-cell mj-head mj-rowm"><h3 class="mj-title">Journey</h3></div>
         <div class="col-12 col-lg-8 mj-cell mj-body mj-rowm">
           <p class="mj-text">After centuries of investigation, scientists still cannot explain how the brain integrates sensory information, internal states, memories, and physiology to produce behaviors. Understanding the fundamental function of the brain is vital not only in its own right, but as the key to making real progress against brain disorders, like Alzheimer’s disease and depression, that impact hundreds of millions of people worldwide. Janelia’s grand challenge is to build a mechanistic account connecting molecules, neural circuits, brain activity, and complex behavior in a whole animal in motion.</p>
-          <div class="mj-extra" id="journeyMore">
-            <div>
-              <p>Two forces have converged to bring what was previously impossible within reach: a new generation of tools that lets us observe whole biological systems with a completeness that wasn’t possible a decade ago, and AI capable of parsing data at scales no human scientist can manage. The identification of a new experimental model, Danionella — a small fish that stays transparent into adulthood — also now gives researchers a way to see the whole brain at work.</p>
-              <p>Seizing the moment requires exactly what Janelia was built to provide: sustained support, shared infrastructure, interdisciplinary teams, and the time to ask the hard questions.</p>
-            </div>
-          </div>
-          <button class="mj-more" type="button" aria-expanded="false" aria-controls="journeyMore"><span class="mj-more-label">Read More</span><span class="visually-hidden"> about the journey</span></button>
+          <p class="mj-text">Two forces have converged to bring what was previously impossible within reach: a new generation of tools that lets us observe whole biological systems with a completeness that wasn’t possible a decade ago, and AI capable of parsing data at scales no human scientist can manage. The identification of a new experimental model, <i>Danionella</i> — a small fish that stays transparent into adulthood — also now gives researchers a way to see the whole brain at work.</p>
+          <p class="mj-text">Seizing the moment requires exactly what Janelia was built to provide: sustained support, shared infrastructure, interdisciplinary teams, and the time to ask the hard questions.</p>
         </div>
         <div class="col-12 col-lg-4 mj-cell mj-head mj-row2"><h3 class="mj-title">Why</h3></div>
         <div class="col-12 col-lg-8 mj-cell mj-body mj-row2">
