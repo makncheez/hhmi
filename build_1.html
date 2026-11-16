@@ -872,7 +872,22 @@
      #FBFBFB, full width, 700px tall on desktop; a 50/50 .container. Left: a frame
      device: a navy crosshair at each corner (the grid crosshair, with longer
      30px arms and a 6px centre gap) and 1px edges between them. H / H / M / I in Diatype Semi-Mono sit outside the corners. */
-  .hfs { --hf-ink: #021341; padding: 80px 0; background: #fbfbfb; color: var(--hf-ink); }
+  .hfs { --hf-ink: #021341; position: relative; padding: 80px 0; background: #fbfbfb; color: var(--hf-ink); }
+  /* Deco bands across the top and bottom edges: straddling each edge,
+     set a little left of centre (as in the mockup). */
+  .hfs-band {
+    --deco-w: clamp(180px, 20vw, 330px);
+    --deco-h: 18px;                  /* two 9px rows */
+    --deco-1: #00ac1d;               /* top-left: green */
+    --deco-2: #3fc2cd;               /* top-right: cyan */
+    --deco-3: #a5f300;               /* bottom-left: lime */
+    --deco-4: #000d42;               /* bottom-right: navy */
+    position: absolute;
+    left: 36.5%;
+    z-index: 2;
+  }
+  .hfs-band--top { top: 0; transform: translateY(-50%); }
+  .hfs-band--bottom { bottom: 0; transform: translateY(50%); }
   @media (min-width: 992px) {        /* desktop: 700px tall, content centred */
     .hfs { display: flex; align-items: center; height: 700px; padding: 0; }
     .hfs > .container { width: 100%; }
@@ -960,25 +975,10 @@
     letter-spacing: -0.005em;
   }
   .hfs-text { max-width: 560px; margin: 0; }   /* paragraph font, 17/20 */
-  .hf-cta {
-    display: inline-block;
-    margin-top: 40px;
-    padding: 22px 56px;
-    background: #2db44a;
-    color: var(--hf-ink);
-    font: 400 22px/1 var(--font-mono);
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    text-decoration: none;
-    transition: background-color .2s ease;
-  }
-  .hf-cta:hover { background: #a5f300; color: var(--hf-ink); }
-  .hf-cta:focus-visible { outline: 2px solid var(--hf-ink); outline-offset: 3px; }
+  .hfs-cta { margin-top: 40px; }   /* the reusable arrow CTA */
   @media (max-width: 991.98px) {
     .hfs-copy { height: auto; margin-top: 56px; padding-left: 0; }
-    .hf-cta { padding: 18px 36px; font-size: 18px; }
   }
-  @media (max-width: 575.98px) { .hf-cta { padding: 16px 28px; font-size: 15px; } }
 
 
 
@@ -1297,6 +1297,8 @@
   </section>
 
   <section class="hfs" aria-label="Careers at Janelia">
+    <div class="deco hfs-band hfs-band--top" aria-hidden="true"><div></div><div></div><div></div><div></div></div>
+    <div class="deco hfs-band hfs-band--bottom" aria-hidden="true"><div></div><div></div><div></div><div></div></div>
     <div class="container">
       <div class="row">
         <div class="col-12 col-lg-6">
@@ -1318,7 +1320,13 @@
           <div class="hfs-copy">
             <h2 class="hfs-title">Become part of Janelia’s vibrant scientific community</h2>
             <p class="hfs-text">With small labs and large ambitions, Janelia welcomes biologists, AI scientists, physicists, chemists, engineers, theorists, and computational scientists to work side by side on groundbreaking research. Internal funding, expert technical teams, and world-class facilities are all on one campus, giving Janelia scientists the intellectual freedom to take on big risks, and the sustained support to see them through.</p>
-            <a class="hf-cta" href="#">Explore Careers</a>
+            <div class="hfs-cta">
+              <a class="cta" href="#">
+                <span class="deco" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
+                <span>Explore careers</span>
+                <svg class="cta-arrow" viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke="black" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round" stroke="black"/></svg>
+              </a>
+            </div>
           </div>
         </div>
       </div>
@@ -1627,13 +1635,13 @@ document.querySelectorAll('button.mj-more').forEach(function (btn) {
     drum.style.setProperty("--cfa-size", size.toFixed(2) + "px");
     drum.style.setProperty("--cfa-row", row.toFixed(2) + "px");
   }
-  // Light background: the centre word is navy (#021341 = hsl 224 94% 13%);
-  // neighbours ease to grey 72%, farther words lighten toward the background.
+  // Light background: the centre word is black; neighbours ease to grey 72%,
+  // farther words lighten toward the background.
   function colour(d) {
-    if (d <= 0.3) return "hsl(224 94% 13%)";
+    if (d <= 0.3) return "hsl(0 0% 0%)";
     if (d < 1) {
       var t = (d - 0.3) / 0.7, k = t * t * (3 - 2 * t);
-      return "hsl(224 " + (94 * (1 - k)).toFixed(1) + "% " + (13 + (72 - 13) * k).toFixed(1) + "%)";
+      return "hsl(0 0% " + (72 * k).toFixed(1) + "%)";
     }
     return "hsl(0 0% " + Math.min(88, 72 + (d - 1) * 5).toFixed(1) + "%)";
   }
