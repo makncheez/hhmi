@@ -1262,7 +1262,7 @@
 
   /* ---------- Placeholder content below the hero ---------- */
   .filler { min-height: 150vh; }
-  /* ---------- Newsletter banner (between the two carousels) ----------
+  /* ---------- Newsletter banner (after Highlighted Stories, before the footer) ----------
      Full width, 180px tall, black with one row of white crosshairs (50%),
      the white "Join Newsletter" button centred. On hover it grows to the
      banner's height and shows "Stay Connected with HHMI" underneath. */
@@ -1286,7 +1286,7 @@
   @media (hover: hover) { .nl .unit-explore:hover { width: min(560px, 90%); height: 148px; } }
   .nl .unit-explore .deco { --deco-h: 70%; }
 
-  /* ---------- Highlighted Stories (1 col, after the newsletter banner) ---------- */
+  /* ---------- Highlighted Stories (1 col, after Senior Leadership) ---------- */
   .hs { padding: 120px 0 80px; background: #000; color: #fff; }
   .hs-title-main { margin: 0; font: 400 clamp(25px, 2.35vw, 40px)/1.15 var(--font-sans); letter-spacing: -0.005em; }
   @media (max-width: 767.98px) { .hs { padding: 80px 0 56px; } }
@@ -1822,15 +1822,6 @@
     <div class="deco lm-band" aria-hidden="true"><div></div><div></div><div></div><div></div></div>
   </dialog>
 
-  <section class="nl" aria-label="Newsletter">
-      <a class="unit-explore unit-explore--light">
-        <span class="deco ue-bar--l" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
-        <span>Join Newsletter</span><span class="ue-sub">Stay Connected with HHMI</span>
-        <svg viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke="black" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round" stroke="black"/></svg>
-        <span class="deco ue-bar--r" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
-      </a>
-  </section>
-
   <section class="hs" aria-labelledby="hsTitle">
     <div class="container">
       <h2 class="hs-title-main" id="hsTitle">Highlighted Stories</h2>
@@ -1896,6 +1887,15 @@
       </div>
     </div>
     <div class="hs-dots" id="hsDots" role="group" aria-label="Choose story"></div>
+  </section>
+
+  <section class="nl" aria-label="Newsletter">
+      <a class="unit-explore unit-explore--light">
+        <span class="deco ue-bar--l" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
+        <span>Join Newsletter</span><span class="ue-sub">Stay Connected with HHMI</span>
+        <svg viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke="black" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round" stroke="black"/></svg>
+        <span class="deco ue-bar--r" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
+      </a>
   </section>
 
   <footer class="mfoot" id="mfoot"><div class="in">
