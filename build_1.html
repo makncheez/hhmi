@@ -1133,6 +1133,11 @@
   }
   .lm-close:hover { background: #ececec; }
   .lm-ext { order: -1; color: #000; }
+  .lm-copy { order: -2; }            /* copy link, open in new window, close */
+  .lm-copy .lm-copy-done { display: none; }
+  .lm-copy.is-copied .lm-copy-link { display: none; }
+  .lm-copy.is-copied .lm-copy-done { display: block; }
+  .lm-copy[hidden] { display: none; }
   .lm-ext[hidden] { display: none; }
   .lm-close:focus-visible { outline: 2px solid #021341; outline-offset: 2px; }
   .lm-body { padding: 36px 24px 96px; }        /* tight sides, same as phones */
@@ -1635,6 +1640,11 @@
       <button class="lm-close" type="button" aria-label="Close">
         <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M3 3l14 14M17 3L3 17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
       </button>
+      <button class="lm-close lm-copy" type="button" aria-label="Copy link to full profile">
+        <svg class="lm-copy-link" width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M8.5 11.5a3.5 3.5 0 0 0 5 0l2.5-2.5a3.5 3.5 0 0 0-5-5l-1 1M11.5 8.5a3.5 3.5 0 0 0-5 0L4 11a3.5 3.5 0 0 0 5 5l1-1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <svg class="lm-copy-done" width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 10.5l4 4 8-9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <span class="visually-hidden lm-copy-status" aria-live="polite"></span>
       <a class="lm-close lm-ext" href="#" target="_blank" rel="noopener" aria-label="Open full profile in a new window">
         <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M11 3h6v6M17 3l-8 8M14 11v5a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </a>
@@ -2161,6 +2171,8 @@ document.querySelectorAll('button.mj-more').forEach(function (btn) {
     var ext = dlg.querySelector('.lm-ext');
     ext.hidden = !p.url;
     if (p.url) ext.href = p.url;
+    copyBtn.hidden = !p.url; copyBtn.dataset.url = p.url || '';
+    copyBtn.classList.remove('is-copied');
     var row = body.querySelector('.lm-stories');
     if (row) dragScroll(row);
   }
@@ -2192,6 +2204,25 @@ document.querySelectorAll('button.mj-more').forEach(function (btn) {
     el.addEventListener('click', function (e) { if (moved) { e.preventDefault(); e.stopPropagation(); } }, true);
   }
   var opener = null, reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // Copy link: puts the profile URL on the clipboard and shows a tick for 1.5s.
+  var copyBtn = dlg.querySelector('.lm-copy'), copyStatus = dlg.querySelector('.lm-copy-status'), copyTimer = 0;
+  copyBtn.addEventListener('click', function () {
+    var url = copyBtn.dataset.url;
+    function done() {
+      copyBtn.classList.add('is-copied'); copyStatus.textContent = 'Link copied';
+      clearTimeout(copyTimer);
+      copyTimer = setTimeout(function () { copyBtn.classList.remove('is-copied'); copyStatus.textContent = ''; }, 1500);
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(url).then(done, fallback);
+    } else fallback();
+    function fallback() {                          // older browsers / blocked clipboard API
+      var t = document.createElement('textarea'); t.value = url; t.setAttribute('readonly', '');
+      t.style.position = 'fixed'; t.style.opacity = '0'; dlg.appendChild(t); t.select();
+      try { document.execCommand('copy'); done(); } catch (e) {}
+      t.remove();
+    }
+  });
   function open(i, btn) {
     render(LEADERS[i]); opener = btn;
     document.documentElement.classList.add('lm-open');
