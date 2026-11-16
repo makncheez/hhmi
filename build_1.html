@@ -712,7 +712,7 @@
   /* Read More: label + a 72px square arrow box tucked into the cell's
      bottom-right corner (its right and bottom edges are the grid lines).
      The arrow points down to expand and turns up to collapse. */
-  .mj-body:has(.mj-more) { padding-bottom: 112px; }   /* room for the corner box */
+  .mj-body:has(.mj-more) { padding-bottom: 90px; }   /* room for the corner box */
   .mj-more {
     position: absolute;
     right: 0; bottom: 0;
@@ -731,12 +731,12 @@
   .mj-more-box {
     display: grid;
     place-items: center;
-    width: 72px; height: 72px;
+    width: 50px; height: 50px;
     border-top: 1px solid #000;
     border-left: 1px solid #000;
   }
   .mj-row2 .mj-more-box { border-bottom: 1px solid #000; }   /* last row has no row line below */
-  .mj-more-box svg { width: 34px; height: 36px; transform: rotate(90deg); transition: transform .35s ease; }
+  .mj-more-box svg { width: 24px; height: 25px; transform: rotate(90deg); transition: transform .35s ease; }
   .mj-more[aria-expanded="true"] .mj-more-box svg { transform: rotate(-90deg); }   /* up: collapse */
   .mj-more:hover, .mj-more:focus-visible { color: #006b2a; }   /* darker green on hover, as before */
   .mj-more:hover .mj-more-box svg path, .mj-more:focus-visible .mj-more-box svg path { stroke: #006b2a; }
