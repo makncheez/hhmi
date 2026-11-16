@@ -1143,6 +1143,8 @@
     scroll-snap-type: x proximity;
     overscroll-behavior-x: contain;
   }
+  .lm-stories { cursor: grab; }
+  .lm-stories.is-dragging { cursor: grabbing; scroll-snap-type: none; user-select: none; }   /* snap only after letting go */
   .lm-story { position: relative; flex: none; width: 250px; padding: 28px 24px 32px; scroll-snap-align: start; }
   .lm-story::before, .lm-story::after { content: ""; position: absolute; pointer-events: none; border: 0 solid #000; }
   .lm-story::before { top: -0.5px; bottom: -0.5px; left: 12px; right: 12px; border-top-width: 1px; border-bottom-width: 1px; }
@@ -2083,6 +2085,35 @@ document.querySelectorAll('button.mj-more').forEach(function (btn) {
         }).join('') + '</div></section>';
     }
     body.innerHTML = h;
+    var row = body.querySelector('.lm-stories');
+    if (row) dragScroll(row);
+  }
+  // Mouse drag to scroll a row sideways (touch and trackpad scroll natively).
+  function dragScroll(el) {
+    var x0 = null, left0 = 0, moved = false;
+    el.addEventListener('pointerdown', function (e) {
+      if (e.pointerType !== 'mouse' || e.button !== 0) return;
+      x0 = e.clientX; left0 = el.scrollLeft; moved = false;
+    });
+    el.addEventListener('pointermove', function (e) {
+      if (x0 === null) return;
+      if (!moved && Math.abs(e.clientX - x0) > 5) { moved = true; el.classList.add('is-dragging'); el.setPointerCapture(e.pointerId); }
+      if (moved) el.scrollLeft = left0 - (e.clientX - x0);
+    });
+    function end() {
+      if (x0 === null) return;
+      x0 = null;
+      if (moved) {                                   // let it settle onto the nearest card
+        var l = el.scrollLeft; el.classList.remove('is-dragging'); el.scrollLeft = l;
+        var max = el.scrollWidth - el.clientWidth, stops = [max];           // card edges, plus the very end
+        for (var x = 0; x < max; x += 250) stops.push(x);
+        var to = stops.reduce(function (a, b) { return Math.abs(b - l) < Math.abs(a - l) ? b : a; });
+        el.scrollTo({ left: to, behavior: reduce ? 'auto' : 'smooth' });
+      }
+    }
+    el.addEventListener('pointerup', end);
+    el.addEventListener('pointercancel', end);
+    el.addEventListener('click', function (e) { if (moved) { e.preventDefault(); e.stopPropagation(); } }, true);
   }
   var opener = null, reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   function open(i, btn) {
