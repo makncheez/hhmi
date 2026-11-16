@@ -875,7 +875,7 @@
   .hfs { padding: 120px 0; background: #000; color: #fff; }
   .hframe {
     position: relative;
-    aspect-ratio: 1 / 1;
+    aspect-ratio: 8 / 7;             /* a little wider than tall, as in the mockup (2/3-width column) */
     margin: 40px;                    /* room for the corner arms and letters */
   }
   .hf-edge { position: absolute; background: #fff; }
@@ -944,6 +944,42 @@
     will-change: transform, color;
   }
   @media (max-width: 575.98px) { .hframe .cfa { padding: 0 20px; } }
+  /* Under the frame: Explore Careers button. Right column: green copy block. */
+  .hf-cta-wrap { margin-top: -16px; text-align: center; }   /* sits between the M and I letters */
+  .hf-cta {
+    display: inline-block;
+    padding: 22px 56px;
+    background: #2db44a;
+    color: #021341;
+    font: 400 22px/1 var(--font-mono);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: background-color .2s ease;
+  }
+  .hf-cta:hover { background: #a5f300; color: #021341; }
+  .hf-cta:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
+  .hfs-green {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
+    padding: 72px clamp(28px, 3vw, 48px);
+    background: #2db44a;
+    color: #021341;
+  }
+  .hfs-title {                       /* heading font */
+    margin: 0 0 40px;
+    font: 400 clamp(25px, 2.35vw, 40px)/1.15 var(--font-sans);
+    letter-spacing: -0.005em;
+  }
+  .hfs-text { margin: 0; }           /* paragraph font, 17/20 */
+  @media (max-width: 991.98px) {
+    .hfs-green { height: auto; margin-top: 64px; padding: 56px 28px; }
+    .hf-cta { padding: 18px 36px; font-size: 18px; }
+  }
+  @media (max-width: 575.98px) { .hf-cta { padding: 16px 28px; font-size: 15px; } }
+
 
 
   /* ---------- CTA arrow label (reusable): 4-square .deco + label + arrow, 30px tall ---------- */
@@ -1260,10 +1296,10 @@
     </div>
   </section>
 
-  <section class="hfs" aria-label="HHMI">
+  <section class="hfs" aria-label="Careers at Janelia">
     <div class="container">
       <div class="row">
-        <div class="col-12 col-lg-6">
+        <div class="col-12 col-lg-8">
           <div class="hframe">
             <span aria-hidden="true" class="hf-edge hf-t"></span><span aria-hidden="true" class="hf-edge hf-b"></span>
             <span aria-hidden="true" class="hf-edge hf-l"></span><span aria-hidden="true" class="hf-edge hf-r"></span>
@@ -1277,8 +1313,14 @@
               <div class="cfa-drum" aria-hidden="true"></div>
             </section>
           </div>
+          <div class="hf-cta-wrap"><a class="hf-cta" href="#">Explore Careers</a></div>
         </div>
-        <div class="col-12 col-lg-6"></div>
+        <div class="col-12 col-lg-4">
+          <div class="hfs-green">
+            <h2 class="hfs-title">Become part of Janelia’s vibrant scientific community</h2>
+            <p class="hfs-text">With small labs and large ambitions, Janelia welcomes biologists, AI scientists, physicists, chemists, engineers, theorists, and computational scientists to work side by side on groundbreaking research. Internal funding, expert technical teams, and world-class facilities are all on one campus, giving Janelia scientists the intellectual freedom to take on big risks, and the sustained support to see them through.</p>
+          </div>
+        </div>
       </div>
     </div>
   </section>
