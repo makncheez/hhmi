@@ -81,6 +81,8 @@
     text-transform: uppercase;
     cursor: pointer;
   }
+  .explore-label { transition: opacity .3s ease, visibility .3s; }
+  .explore.is-compact .explore-label { opacity: 0; visibility: hidden; }   /* past the hero: icon only */
   .explore-icon {
     position: relative;
     width: 32px;
@@ -2293,6 +2295,15 @@ document.querySelectorAll('button.mj-more').forEach(function (btn) {
     var r = dlg.getBoundingClientRect();
     if (e.clientX < r.left) close();
   });
+})();
+
+// Desktop: the "Explore" label fades once the hero has scrolled away (icon stays).
+(function () {
+  var btn = document.querySelector('.explore'), hero = document.getElementById('hero');
+  if (!btn || !hero || !('IntersectionObserver' in window)) return;
+  new IntersectionObserver(function (e) {
+    btn.classList.toggle('is-compact', !e[0].isIntersecting);
+  }, { rootMargin: '-80px 0px 0px 0px' }).observe(hero);   // gone once the hero's bottom passes under the header
 })();
 </script>
 
