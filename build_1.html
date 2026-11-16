@@ -1097,6 +1097,11 @@
     transition: transform .45s cubic-bezier(.65,0,.35,1);
   }
   .lmodal.is-in { transform: none; }
+  /* Short profiles still fill the panel: the body grows so the bottom band
+     sits at the bottom edge instead of mid-panel. */
+  .lmodal[open] { display: flex; flex-direction: column; }
+  .lmodal > * { flex: none; }
+  .lmodal > .lm-body { flex: 1 0 auto; }
   .lmodal:focus { outline: none; }   /* the panel takes focus on open, not the close button */
   .lmodal::backdrop { background: rgba(0, 0, 0, .55); }
   /* Deco bands across the full width of the panel, at the very top and
