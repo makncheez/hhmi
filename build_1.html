@@ -1281,16 +1281,45 @@
   @media (min-width: 1400px) { .gb-grid { --col: 108px; } }
   .gb-copy {
     background: #000; color: #fff;
-    display: flex; flex-direction: column; justify-content: center; align-items: flex-start;
-    padding: 80px clamp(24px, 6vw, 96px);
+    display: flex; flex-direction: column;
+    min-width: 0;
+    padding: 24px 12px 40px;
   }
-  .gb-title { margin: 0 0 32px; font: 400 clamp(25px, 2.35vw, 40px)/1.15 var(--font-sans); letter-spacing: -0.005em; }
-  .gb-text { max-width: 560px; margin: 0; }
+  .gb-title { margin: 0 0 0 12px; font: 400 clamp(25px, 2.35vw, 40px)/1.15 var(--font-sans); letter-spacing: -0.005em; }
+  /* Highlighted Stories: two cards per view, scroll-snap slider, lime dots.
+     Cards use the leadership carousel's broken lines: top/bottom lines
+     inset 18px from the sides, side lines stop short of the corners. */
+  .hs-viewport {
+    margin-top: 40px;
+    overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none;
+    overscroll-behavior-x: contain;
+    cursor: grab;
+  }
+  .hs-viewport::-webkit-scrollbar { display: none; }
+  .hs-viewport.is-dragging { cursor: grabbing; scroll-snap-type: none; user-select: none; }
+  .hs-track { display: flex; padding: 1px 0; }
+  .hs-card { position: relative; flex: 0 0 50%; scroll-snap-align: start; }
+  .hs-card::before, .hs-card::after { content: ""; position: absolute; pointer-events: none; border: 0 solid #fff; }
+  .hs-card::before { top: 0; bottom: 0; left: 18px; right: 18px; border-top-width: 1px; border-bottom-width: 1px; }
+  .hs-card::after  { top: 23px; bottom: 12px; left: 0; right: 0; border-left-width: 1px; border-right-width: 1px; }
+  .hs-card + .hs-card { margin-left: -1px; }   /* neighbours share one side line */
+  .hs-link { display: block; height: 100%; padding: 32px 22px 56px; color: inherit; text-decoration: none; cursor: inherit; }
+  .hs-link img { display: block; width: 100%; height: auto; aspect-ratio: 3 / 2; object-fit: cover; background: #222; -webkit-user-drag: none; transition: opacity .2s ease; }
+  .hs-link:hover img { opacity: .8; }
+  .hs-link:focus-visible { outline: 2px solid #fff; outline-offset: -6px; }
+  .hs-title { margin: 28px 0 14px; font: 400 clamp(18px, 1.6vw, 22px)/1.25 var(--font-sans); }
+  .hs-date { display: block; font: 400 12px/1.4 var(--font-mono); letter-spacing: .02em; }
+  .hs-dots { display: flex; justify-content: center; gap: 22px; margin-top: 40px; }
+  .hs-dots button { width: 15px; height: 15px; padding: 0; border: 0; border-radius: 50%; background: #a5f300; opacity: .4; cursor: pointer; transition: opacity .2s ease; }
+  .hs-dots button[aria-current="true"] { opacity: 1; }
+  .hs-dots button:hover { opacity: .8; }
+  .hs-dots button:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
+  @media (max-width: 575.98px) { .hs-card { flex-basis: 85%; } }
   @media (max-width: 991.98px) {
     .gb { grid-template-columns: 1fr; min-height: 0; }
     .gb-grid { --col: 58px; height: 320px; }
   }
-  @media (max-width: 575.98px) { .gb-grid { --col: 43px; height: 240px; } .gb-copy { padding: 56px 24px; } }
+  @media (max-width: 575.98px) { .gb-grid { --col: 43px; height: 240px; } }
 
   /* ---------- Footer (from studies/footer.html) ----------
      Black mega footer: one column per site section, then "Back to top".
@@ -1775,8 +1804,40 @@
       </a>
     </div>
     <div class="gb-copy">
-      <h2 class="gb-title" id="gbTitle">[Heading placeholder]</h2>
-      <p class="gb-text">[Paragraph placeholder: copy to come.]</p>
+      <h2 class="gb-title" id="gbTitle">Highlighted Stories</h2>
+      <div class="hs-viewport" id="hsViewport">
+        <div class="hs-track">
+        <article class="hs-card">
+          <a class="hs-link">
+            <img src="assets/stories/cdc-coronavirus.webp" alt="" width="1000" height="667" loading="lazy" draggable="false">
+            <h3 class="hs-title">Nasal Spray Booster Keeps COVID-19 at Bay</h3>
+            <time class="hs-date" datetime="2020-11-11">November 11, 2020</time>
+          </a>
+        </article>
+        <article class="hs-card">
+          <a class="hs-link">
+            <img src="assets/stories/cell-infected-coronavirus.webp" alt="" width="1000" height="667" loading="lazy" draggable="false">
+            <h3 class="hs-title">Why Men May Fare Worse than Women Against SARS-CoV-2</h3>
+            <time class="hs-date" datetime="2020-11-11">November 11, 2020</time>
+          </a>
+        </article>
+        <article class="hs-card" aria-hidden="true">
+          <a class="hs-link" tabindex="-1">
+            <img src="assets/stories/cdc-coronavirus.webp" alt="" width="1000" height="667" loading="lazy" draggable="false">
+            <h3 class="hs-title">Nasal Spray Booster Keeps COVID-19 at Bay</h3>
+            <time class="hs-date" datetime="2020-11-11">November 11, 2020</time>
+          </a>
+        </article>
+        <article class="hs-card" aria-hidden="true">
+          <a class="hs-link" tabindex="-1">
+            <img src="assets/stories/cell-infected-coronavirus.webp" alt="" width="1000" height="667" loading="lazy" draggable="false">
+            <h3 class="hs-title">Why Men May Fare Worse than Women Against SARS-CoV-2</h3>
+            <time class="hs-date" datetime="2020-11-11">November 11, 2020</time>
+          </a>
+        </article>
+        </div>
+      </div>
+      <div class="hs-dots" id="hsDots" role="group" aria-label="Choose story"></div>
     </div>
   </section>
 
@@ -2524,6 +2585,58 @@ var TREE=[{"l": "Programs", "r": "programs", "k": [{"l": "All programs", "r": "p
 
   var rq=0;window.addEventListener('resize',function(){if(rq)return;rq=requestAnimationFrame(function(){rq=0;layout();kick()})});
   layout();
+})();
+</script>
+<script>
+/* Highlighted Stories: one dot per card; a dot scrolls its card to the left
+   edge (the last one stops at the end). Mouse drag on desktop. */
+(function () {
+  var vp = document.getElementById('hsViewport'), dots = document.getElementById('hsDots');
+  if (!vp) return;
+  var cards = [].slice.call(vp.querySelectorAll('.hs-card'));
+  var reduce = matchMedia('(prefers-reduced-motion: reduce)');
+  function pos(c) { return c.getBoundingClientRect().left - vp.getBoundingClientRect().left + vp.scrollLeft; }
+  cards.forEach(function (c, i) {
+    var b = document.createElement('button');
+    b.type = 'button';
+    b.setAttribute('aria-label', 'Story ' + (i + 1) + ' of ' + cards.length);
+    b.addEventListener('click', function () {
+      picked = i;
+      vp.scrollTo({ left: Math.min(pos(c), vp.scrollWidth - vp.clientWidth), behavior: reduce.matches ? 'auto' : 'smooth' });
+    });
+    dots.appendChild(b);
+  });
+  var btns = [].slice.call(dots.children), picked = -1;
+  function sync() {
+    var max = vp.scrollWidth - vp.clientWidth, cur = 0;
+    cards.forEach(function (c, i) { if (pos(c) <= vp.scrollLeft + 2) cur = i; });
+    if (vp.scrollLeft >= max - 2 && picked > cur) cur = picked;   // the end: several cards share it
+    btns.forEach(function (b, i) { b.setAttribute('aria-current', i === cur ? 'true' : 'false'); });
+  }
+  vp.addEventListener('scroll', function () { requestAnimationFrame(sync); }, { passive: true });
+  sync();
+  // Mouse drag; snaps to the nearest card on release.
+  var down = false, x0 = 0, s0 = 0, moved = false;
+  vp.addEventListener('pointerdown', function (e) {
+    if (e.pointerType !== 'mouse') return;
+    down = true; moved = false; x0 = e.clientX; s0 = vp.scrollLeft;
+  });
+  window.addEventListener('pointermove', function (e) {
+    if (!down) return;
+    picked = -1;
+    var dx = e.clientX - x0;
+    if (!moved && Math.abs(dx) > 4) { moved = true; vp.classList.add('is-dragging'); }
+    if (moved) vp.scrollLeft = s0 - dx;
+  });
+  window.addEventListener('pointerup', function () {
+    if (!down) return; down = false;
+    if (!moved) return;
+    vp.classList.remove('is-dragging');
+    var best = 0, d = 1e9, stops = cards.map(pos).concat(vp.scrollWidth - vp.clientWidth);
+    stops.forEach(function (x) { var k = Math.abs(x - vp.scrollLeft); if (k < d) { d = k; best = x; } });
+    vp.scrollTo({ left: best, behavior: reduce.matches ? 'auto' : 'smooth' });
+  });
+  vp.addEventListener('click', function (e) { if (moved) { e.preventDefault(); e.stopPropagation(); moved = false; } }, true);
 })();
 </script>
 </body>
