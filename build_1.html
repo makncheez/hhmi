@@ -1262,31 +1262,37 @@
 
   /* ---------- Placeholder content below the hero ---------- */
   .filler { min-height: 150vh; }
-  /* ---------- Green / black 2-col section (after Senior Leadership) ----------
-     Left (1/3): black with the roles section's crosshair grid (white at 50%, static)
-     and a white "Join Newsletter" button.
-     Right: black with white type. Desktop 600px tall; stacked below 992px. */
-  .gb { display: grid; grid-template-columns: 1fr 2fr; min-height: 600px; }   /* green 1/3, stories 2/3 */
-  .gb-grid {
-    --col: 78px; --row: 100px;
+  /* ---------- Newsletter banner (between the two carousels) ----------
+     Full width, 90px tall, black with one row of white crosshairs (50%),
+     the white "Join Newsletter" button centred. On hover it grows to the
+     banner's height and shows "Stay Connected with HHMI" underneath. */
+  .nl {
+    --col: 78px;
     position: relative;
+    height: 90px;
     background: #000;
+    border-top: 1px solid #2b2b2b; border-bottom: 1px solid #2b2b2b;
   }
-  .gb-grid::before {
+  .nl::before {
     content: ""; position: absolute; inset: 0; pointer-events: none;
-    background: #fff; opacity: .5;   /* white crosshairs on the black panel */
-    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' stroke='%23000' stroke-width='1' shape-rendering='crispEdges'%3E%3Csvg x='50%25' y='50%25' overflow='visible'%3E%3Cpath d='M0 -10V-2.25M0 2.25V10M-10 0H-2.25M2.25 0H10'/%3E%3C/svg%3E%3C/svg%3E") 0 0 / var(--col) var(--row) repeat;
-            mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' stroke='%23000' stroke-width='1' shape-rendering='crispEdges'%3E%3Csvg x='50%25' y='50%25' overflow='visible'%3E%3Cpath d='M0 -10V-2.25M0 2.25V10M-10 0H-2.25M2.25 0H10'/%3E%3C/svg%3E%3C/svg%3E") 0 0 / var(--col) var(--row) repeat;
+    background: #fff; opacity: .5;
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' stroke='%23000' stroke-width='1' shape-rendering='crispEdges'%3E%3Csvg x='50%25' y='50%25' overflow='visible'%3E%3Cpath d='M0 -10V-2.25M0 2.25V10M-10 0H-2.25M2.25 0H10'/%3E%3C/svg%3E%3C/svg%3E") center center / var(--col) 100% repeat-x;
+            mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' stroke='%23000' stroke-width='1' shape-rendering='crispEdges'%3E%3Csvg x='50%25' y='50%25' overflow='visible'%3E%3Cpath d='M0 -10V-2.25M0 2.25V10M-10 0H-2.25M2.25 0H10'/%3E%3C/svg%3E%3C/svg%3E") center center / var(--col) 100% repeat-x;
   }
-  @media (min-width: 1200px) { .gb-grid { --col: 93px; } }
-  @media (min-width: 1400px) { .gb-grid { --col: 108px; } }
-  .gb-copy {
-    background: #000; color: #fff;
-    display: flex; flex-direction: column;
-    min-width: 0;
-    padding: 24px 12px 40px;
-  }
-  .gb-title { margin: 0 0 0 12px; font: 400 clamp(25px, 2.35vw, 40px)/1.15 var(--font-sans); letter-spacing: -0.005em; }
+  @media (min-width: 1200px) { .nl { --col: 93px; } }
+  @media (min-width: 1400px) { .nl { --col: 108px; } }
+  @media (max-width: 767.98px) { .nl { --col: 58px; } }
+  .nl .unit-explore { height: 50px; }
+  .nl .unit-explore:focus-visible { width: min(520px, 90%); height: 76px; }
+  @media (hover: hover) { .nl .unit-explore:hover { width: min(520px, 90%); height: 76px; } }
+  .nl .unit-explore .deco { --deco-h: 70%; }
+  .nl .unit-explore--light:focus-visible .ue-sub { margin-top: 6px; }
+  @media (hover: hover) { .nl .unit-explore--light:hover .ue-sub { margin-top: 6px; } }
+
+  /* ---------- Highlighted Stories (1 col, after the newsletter banner) ---------- */
+  .hs { padding: 120px 0 80px; background: #000; color: #fff; }
+  .hs-title-main { margin: 0; font: 400 clamp(25px, 2.35vw, 40px)/1.15 var(--font-sans); letter-spacing: -0.005em; }
+  @media (max-width: 767.98px) { .hs { padding: 80px 0 56px; } }
 
   /* White version of the Explore button (Join Newsletter on the black panel):
      white at rest and when grown, black type; a subline appears on hover. */
@@ -1305,11 +1311,13 @@
     .unit-explore--light:hover .ue-sub { max-height: 2em; margin-top: 12px; opacity: 1; transition-delay: 0s, 0s, .15s; }
   }
   @media (prefers-reduced-motion: reduce) { .unit-explore--light .ue-sub { transition: none; } }
-  /* Highlighted Stories: two cards per view, scroll-snap slider, lime dots.
+  /* Highlighted Stories: 4 cards per view (3 / 2 / 1 on smaller screens), scroll-snap slider, dots.
      Cards use the leadership carousel's broken lines: top/bottom lines
      inset 18px from the sides, side lines stop short of the corners. */
   .hs-viewport {
-    margin-top: 40px;
+    margin-top: 56px;
+    padding: 0 12px;
+    scroll-padding: 0 12px;
     overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none;
     overscroll-behavior-x: contain;
     cursor: grab;
@@ -1317,7 +1325,10 @@
   .hs-viewport::-webkit-scrollbar { display: none; }
   .hs-viewport.is-dragging { cursor: grabbing; scroll-snap-type: none; user-select: none; }
   .hs-track { display: flex; padding: 1px 0; }
-  .hs-card { position: relative; flex: 0 0 50%; scroll-snap-align: start; }
+  .hs-card { position: relative; flex: 0 0 25%; scroll-snap-align: start; }   /* 4 per view */
+  .hs-track::after { content: ""; flex: 0 0 12px; }   /* end padding inside the scroller */
+  @media (max-width: 1199.98px) { .hs-card { flex-basis: 33.333%; } }
+  @media (max-width: 991.98px)  { .hs-card { flex-basis: 50%; } }
   .hs-card::before, .hs-card::after { content: ""; position: absolute; pointer-events: none; border: 0 solid #fff; }
   .hs-card::before { top: 0; bottom: 0; left: 18px; right: 18px; border-top-width: 1px; border-bottom-width: 1px; }
   .hs-card::after  { top: 23px; bottom: 12px; left: 0; right: 0; border-left-width: 1px; border-right-width: 1px; }
@@ -1333,11 +1344,6 @@
   .hs-dots button[aria-current="true"], .hs-dots button:hover { background: #A5F300; }
   .hs-dots button:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
   @media (max-width: 575.98px) { .hs-card { flex-basis: 85%; } }
-  @media (max-width: 991.98px) {
-    .gb { grid-template-columns: 1fr; min-height: 0; }
-    .gb-grid { --col: 58px; height: 320px; }
-  }
-  @media (max-width: 575.98px) { .gb-grid { --col: 43px; height: 240px; } }
 
   /* ---------- Footer (from studies/footer.html) ----------
      Black mega footer: one column per site section, then "Back to top".
@@ -1812,19 +1818,21 @@
     <div class="deco lm-band" aria-hidden="true"><div></div><div></div><div></div><div></div></div>
   </dialog>
 
-  <section class="gb" aria-labelledby="gbTitle">
-    <div class="gb-grid">
+  <section class="nl" aria-label="Newsletter">
       <a class="unit-explore unit-explore--light">
         <span class="deco ue-bar--l" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
         <span class="ue-text"><span>Join Newsletter</span><span class="ue-sub">Stay Connected with HHMI</span></span>
         <svg viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke="black" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round" stroke="black"/></svg>
         <span class="deco ue-bar--r" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
       </a>
+  </section>
+
+  <section class="hs" aria-labelledby="hsTitle">
+    <div class="container">
+      <h2 class="hs-title-main" id="hsTitle">Highlighted Stories</h2>
     </div>
-    <div class="gb-copy">
-      <h2 class="gb-title" id="gbTitle">Highlighted Stories</h2>
-      <div class="hs-viewport" id="hsViewport">
-        <div class="hs-track">
+    <div class="hs-viewport" id="hsViewport">
+      <div class="hs-track">
         <article class="hs-card">
           <a class="hs-link">
             <img src="assets/stories/cdc-coronavirus.webp" alt="" width="1000" height="667" loading="lazy" draggable="false">
@@ -1853,10 +1861,37 @@
             <time class="hs-date" datetime="2020-11-11">November 11, 2020</time>
           </a>
         </article>
-        </div>
+        <article class="hs-card" aria-hidden="true">
+          <a class="hs-link" tabindex="-1">
+            <img src="assets/stories/cdc-coronavirus.webp" alt="" width="1000" height="667" loading="lazy" draggable="false">
+            <h3 class="hs-title">Nasal Spray Booster Keeps COVID-19 at Bay</h3>
+            <time class="hs-date" datetime="2020-11-11">November 11, 2020</time>
+          </a>
+        </article>
+        <article class="hs-card" aria-hidden="true">
+          <a class="hs-link" tabindex="-1">
+            <img src="assets/stories/cell-infected-coronavirus.webp" alt="" width="1000" height="667" loading="lazy" draggable="false">
+            <h3 class="hs-title">Why Men May Fare Worse than Women Against SARS-CoV-2</h3>
+            <time class="hs-date" datetime="2020-11-11">November 11, 2020</time>
+          </a>
+        </article>
+        <article class="hs-card" aria-hidden="true">
+          <a class="hs-link" tabindex="-1">
+            <img src="assets/stories/cdc-coronavirus.webp" alt="" width="1000" height="667" loading="lazy" draggable="false">
+            <h3 class="hs-title">Nasal Spray Booster Keeps COVID-19 at Bay</h3>
+            <time class="hs-date" datetime="2020-11-11">November 11, 2020</time>
+          </a>
+        </article>
+        <article class="hs-card" aria-hidden="true">
+          <a class="hs-link" tabindex="-1">
+            <img src="assets/stories/cell-infected-coronavirus.webp" alt="" width="1000" height="667" loading="lazy" draggable="false">
+            <h3 class="hs-title">Why Men May Fare Worse than Women Against SARS-CoV-2</h3>
+            <time class="hs-date" datetime="2020-11-11">November 11, 2020</time>
+          </a>
+        </article>
       </div>
-      <div class="hs-dots" id="hsDots" role="group" aria-label="Choose story"></div>
     </div>
+    <div class="hs-dots" id="hsDots" role="group" aria-label="Choose story"></div>
   </section>
 
   <footer class="mfoot" id="mfoot"><div class="in">
@@ -2606,33 +2641,43 @@ var TREE=[{"l": "Programs", "r": "programs", "k": [{"l": "All programs", "r": "p
 })();
 </script>
 <script>
-/* Highlighted Stories: one dot per card; a dot scrolls its card to the left
-   edge (the last one stops at the end). Mouse drag on desktop. */
+/* Highlighted Stories: one dot per page of cards (4 per view on desktop:
+   8 cards = 2 dots; phones: one per card). Dots, swipe, mouse drag. */
 (function () {
   var vp = document.getElementById('hsViewport'), dots = document.getElementById('hsDots');
   if (!vp) return;
   var cards = [].slice.call(vp.querySelectorAll('.hs-card'));
   var reduce = matchMedia('(prefers-reduced-motion: reduce)');
-  function pos(c) { return c.getBoundingClientRect().left - vp.getBoundingClientRect().left + vp.scrollLeft; }
-  cards.forEach(function (c, i) {
-    var b = document.createElement('button');
-    b.type = 'button';
-    b.setAttribute('aria-label', 'Story ' + (i + 1) + ' of ' + cards.length);
-    b.addEventListener('click', function () {
-      picked = i;
-      vp.scrollTo({ left: Math.min(pos(c), vp.scrollWidth - vp.clientWidth), behavior: reduce.matches ? 'auto' : 'smooth' });
+  var stops = [], btns = [];
+  function pos(c) { return c.getBoundingClientRect().left - vp.getBoundingClientRect().left + vp.scrollLeft - 12; }
+  function max() { return vp.scrollWidth - vp.clientWidth; }
+  function go(x) { vp.scrollTo({ left: Math.max(0, Math.min(x, max())), behavior: reduce.matches ? 'auto' : 'smooth' }); }
+  function build() {
+    var per = Math.max(1, Math.round((vp.clientWidth - 24) / cards[0].getBoundingClientRect().width));
+    var pages = Math.ceil(cards.length / per);
+    stops = [];
+    for (var k = 0; k < pages; k++) stops.push(Math.min(pos(cards[k * per]), max()));
+    dots.innerHTML = '';
+    btns = stops.map(function (x, k) {
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.setAttribute('aria-label', 'Page ' + (k + 1) + ' of ' + pages);
+      b.addEventListener('click', function () { go(stops[k]); });
+      dots.appendChild(b);
+      return b;
     });
-    dots.appendChild(b);
-  });
-  var btns = [].slice.call(dots.children), picked = -1;
+    dots.hidden = pages < 2;
+    sync();
+  }
   function sync() {
-    var max = vp.scrollWidth - vp.clientWidth, cur = 0;
-    cards.forEach(function (c, i) { if (pos(c) <= vp.scrollLeft + 2) cur = i; });
-    if (vp.scrollLeft >= max - 2 && picked > cur) cur = picked;   // the end: several cards share it
-    btns.forEach(function (b, i) { b.setAttribute('aria-current', i === cur ? 'true' : 'false'); });
+    var cur = 0, d = 1e9;
+    stops.forEach(function (x, k) { var e = Math.abs(x - vp.scrollLeft); if (e < d) { d = e; cur = k; } });
+    btns.forEach(function (b, k) { b.setAttribute('aria-current', k === cur ? 'true' : 'false'); });
   }
   vp.addEventListener('scroll', function () { requestAnimationFrame(sync); }, { passive: true });
-  sync();
+  var rq = 0;
+  window.addEventListener('resize', function () { if (rq) return; rq = requestAnimationFrame(function () { rq = 0; build(); }); });
+  build();
   // Mouse drag; snaps to the nearest card on release.
   var down = false, x0 = 0, s0 = 0, moved = false;
   vp.addEventListener('pointerdown', function (e) {
@@ -2641,7 +2686,6 @@ var TREE=[{"l": "Programs", "r": "programs", "k": [{"l": "All programs", "r": "p
   });
   window.addEventListener('pointermove', function (e) {
     if (!down) return;
-    picked = -1;
     var dx = e.clientX - x0;
     if (!moved && Math.abs(dx) > 4) { moved = true; vp.classList.add('is-dragging'); }
     if (moved) vp.scrollLeft = s0 - dx;
@@ -2650,9 +2694,9 @@ var TREE=[{"l": "Programs", "r": "programs", "k": [{"l": "All programs", "r": "p
     if (!down) return; down = false;
     if (!moved) return;
     vp.classList.remove('is-dragging');
-    var best = 0, d = 1e9, stops = cards.map(pos).concat(vp.scrollWidth - vp.clientWidth);
-    stops.forEach(function (x) { var k = Math.abs(x - vp.scrollLeft); if (k < d) { d = k; best = x; } });
-    vp.scrollTo({ left: best, behavior: reduce.matches ? 'auto' : 'smooth' });
+    var best = 0, d = 1e9;
+    cards.map(pos).concat(max()).forEach(function (x) { var k = Math.abs(x - vp.scrollLeft); if (k < d) { d = k; best = x; } });
+    go(best);
   });
   vp.addEventListener('click', function (e) { if (moved) { e.preventDefault(); e.stopPropagation(); moved = false; } }, true);
 })();
