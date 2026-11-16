@@ -938,6 +938,9 @@
     aspect-ratio: 8 / 7;             /* a little wider than tall */
     margin: 40px;                    /* room for the corner arms and letters */
   }
+  @media (min-width: 992px) {        /* wide 9-col frame: fixed height to fit the 700px section */
+    .hframe { aspect-ratio: auto; height: 620px; }
+  }
   .hf-edge { position: absolute; background: var(--hf-ink); }
   .hf-t, .hf-b { left: 6px; right: 6px; height: 1px; }    /* edges start at the crosshair's 6px centre gap */
   .hf-l, .hf-r { top: 6px; bottom: 6px; width: 1px; }
@@ -1561,7 +1564,7 @@
     <div class="deco hfs-band hfs-band--bottom" aria-hidden="true"><div></div><div></div><div></div><div></div></div>
     <div class="container">
       <div class="row">
-        <div class="col-12 col-lg-6">
+        <div class="col-12 col-lg-9">
           <div class="hframe">
             <span aria-hidden="true" class="hf-edge hf-t"></span><span aria-hidden="true" class="hf-edge hf-b"></span>
             <span aria-hidden="true" class="hf-edge hf-l"></span><span aria-hidden="true" class="hf-edge hf-r"></span>
@@ -1576,7 +1579,7 @@
             </section>
           </div>
         </div>
-        <div class="col-12 col-lg-6">
+        <div class="col-12 col-lg-3">
           <div class="hfs-copy">
             <h2 class="hfs-title">Calling For Applications</h2>
             <p class="hfs-text">Become part of Janelia’s vibrant scientific community. With small labs and large ambitions, Janelia welcomes biologists, AI scientists, physicists, chemists, engineers, theorists, and computational scientists to work side by side on groundbreaking research. Internal funding, expert technical teams, and world-class facilities are all on one campus, giving Janelia scientists the intellectual freedom to take on big risks, and the sustained support to see them through.</p>
