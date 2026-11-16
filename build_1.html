@@ -1116,6 +1116,7 @@
     z-index: 1;
     display: flex;
     justify-content: flex-end;
+    gap: 8px;                        /* close, then open-in-new-window on its right */
     padding: 20px 24px 0;
     pointer-events: none;
   }
@@ -1131,6 +1132,8 @@
     pointer-events: auto;
   }
   .lm-close:hover { background: #ececec; }
+  .lm-ext { color: #000; }
+  .lm-ext[hidden] { display: none; }
   .lm-close:focus-visible { outline: 2px solid #021341; outline-offset: 2px; }
   .lm-body { padding: 36px 24px 96px; }        /* tight sides, same as phones */
   .lm-head { display: grid; grid-template-columns: 41% 1fr; gap: 0 11%; align-items: center; }
@@ -1544,41 +1547,41 @@
             <span class="person-name">Nelson Spruston</span>
             <span class="person-title">Vice President &amp; Executive Director, Janelia Research Campus</span>
           </button></div>
-          <div class="lcell"><div class="person person--static">
+          <div class="lcell"><button class="person" type="button" aria-haspopup="dialog" data-leader="1">
             <img src="assets/leadership/gerry-rubin.webp" alt="Gerry Rubin" width="560" height="560" loading="lazy">
             <span class="person-name">Gerry Rubin</span>
             <span class="person-title">Head of Biology and Senior Group Leader</span>
-          </div></div>
-          <div class="lcell"><div class="person person--static">
+          </button></div>
+          <div class="lcell"><button class="person" type="button" aria-haspopup="dialog" data-leader="2">
             <img src="assets/leadership/stephan-saalfeld.webp" alt="Stephan Saalfeld" width="560" height="560" loading="lazy">
             <span class="person-name">Stephan Saalfeld</span>
             <span class="person-title">Head of AI@HHMI and Senior Group Leader</span>
-          </div></div>
-          <div class="lcell"><div class="person person--static">
+          </button></div>
+          <div class="lcell"><button class="person" type="button" aria-haspopup="dialog" data-leader="3">
             <img src="assets/leadership/luke-lavis.webp" alt="Luke Lavis" width="560" height="560" loading="lazy">
             <span class="person-name">Luke Lavis</span>
             <span class="person-title">Head of Tools@HHMI and Senior Group Leader</span>
-          </div></div>
-          <div class="lcell"><div class="person person--static">
+          </button></div>
+          <div class="lcell"><button class="person" type="button" aria-haspopup="dialog" data-leader="4">
             <img src="assets/leadership/ann-hermundstad.webp" alt="Ann Hermundstad" width="560" height="560" loading="lazy">
             <span class="person-name">Ann Hermundstad</span>
             <span class="person-title">Head of Theory@HHMI and Group Leader</span>
-          </div></div>
-          <div class="lcell"><div class="person person--static">
+          </button></div>
+          <div class="lcell"><button class="person" type="button" aria-haspopup="dialog" data-leader="5">
             <img src="assets/leadership/reed-george.webp" alt="Reed George" width="560" height="560" loading="lazy">
             <span class="person-name">Reed George</span>
             <span class="person-title">Managing Director, Janelia Scientific Operations</span>
-          </div></div>
-          <div class="lcell"><div class="person person--static">
+          </button></div>
+          <div class="lcell"><button class="person" type="button" aria-haspopup="dialog" data-leader="6">
             <img src="assets/leadership/wyatt-korff.webp" alt="Wyatt Korff" width="560" height="560" loading="lazy">
             <span class="person-name">Wyatt Korff</span>
             <span class="person-title">Senior Director, Project Teams</span>
-          </div></div>
-          <div class="lcell"><div class="person person--static">
+          </button></div>
+          <div class="lcell"><button class="person" type="button" aria-haspopup="dialog" data-leader="7">
             <img src="assets/leadership/zarixia-zavala-ruiz.webp" alt="Zarixia Zavala-Ruiz" width="560" height="560" loading="lazy">
             <span class="person-name">Zarixia Zavala-Ruiz</span>
             <span class="person-title">Senior Director, Scientific Programs &amp; Training</span>
-          </div></div>
+          </button></div>
         </div>
         <div class="lead-set lead-set--copy" style="display:flex" aria-hidden="true">
           <div class="lcell"><button class="person" type="button" aria-haspopup="dialog" data-leader="0" tabindex="-1">
@@ -1586,41 +1589,41 @@
             <span class="person-name">Nelson Spruston</span>
             <span class="person-title">Vice President &amp; Executive Director, Janelia Research Campus</span>
           </button></div>
-          <div class="lcell"><div class="person person--static">
+          <div class="lcell"><button class="person" type="button" aria-haspopup="dialog" data-leader="1" tabindex="-1">
             <img src="assets/leadership/gerry-rubin.webp" alt="" width="560" height="560" loading="lazy">
             <span class="person-name">Gerry Rubin</span>
             <span class="person-title">Head of Biology and Senior Group Leader</span>
-          </div></div>
-          <div class="lcell"><div class="person person--static">
+          </button></div>
+          <div class="lcell"><button class="person" type="button" aria-haspopup="dialog" data-leader="2" tabindex="-1">
             <img src="assets/leadership/stephan-saalfeld.webp" alt="" width="560" height="560" loading="lazy">
             <span class="person-name">Stephan Saalfeld</span>
             <span class="person-title">Head of AI@HHMI and Senior Group Leader</span>
-          </div></div>
-          <div class="lcell"><div class="person person--static">
+          </button></div>
+          <div class="lcell"><button class="person" type="button" aria-haspopup="dialog" data-leader="3" tabindex="-1">
             <img src="assets/leadership/luke-lavis.webp" alt="" width="560" height="560" loading="lazy">
             <span class="person-name">Luke Lavis</span>
             <span class="person-title">Head of Tools@HHMI and Senior Group Leader</span>
-          </div></div>
-          <div class="lcell"><div class="person person--static">
+          </button></div>
+          <div class="lcell"><button class="person" type="button" aria-haspopup="dialog" data-leader="4" tabindex="-1">
             <img src="assets/leadership/ann-hermundstad.webp" alt="" width="560" height="560" loading="lazy">
             <span class="person-name">Ann Hermundstad</span>
             <span class="person-title">Head of Theory@HHMI and Group Leader</span>
-          </div></div>
-          <div class="lcell"><div class="person person--static">
+          </button></div>
+          <div class="lcell"><button class="person" type="button" aria-haspopup="dialog" data-leader="5" tabindex="-1">
             <img src="assets/leadership/reed-george.webp" alt="" width="560" height="560" loading="lazy">
             <span class="person-name">Reed George</span>
             <span class="person-title">Managing Director, Janelia Scientific Operations</span>
-          </div></div>
-          <div class="lcell"><div class="person person--static">
+          </button></div>
+          <div class="lcell"><button class="person" type="button" aria-haspopup="dialog" data-leader="6" tabindex="-1">
             <img src="assets/leadership/wyatt-korff.webp" alt="" width="560" height="560" loading="lazy">
             <span class="person-name">Wyatt Korff</span>
             <span class="person-title">Senior Director, Project Teams</span>
-          </div></div>
-          <div class="lcell"><div class="person person--static">
+          </button></div>
+          <div class="lcell"><button class="person" type="button" aria-haspopup="dialog" data-leader="7" tabindex="-1">
             <img src="assets/leadership/zarixia-zavala-ruiz.webp" alt="" width="560" height="560" loading="lazy">
             <span class="person-name">Zarixia Zavala-Ruiz</span>
             <span class="person-title">Senior Director, Scientific Programs &amp; Training</span>
-          </div></div>
+          </button></div>
         </div>
       </div>
     </div>
@@ -1632,6 +1635,9 @@
       <button class="lm-close" type="button" aria-label="Close">
         <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M3 3l14 14M17 3L3 17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
       </button>
+      <a class="lm-close lm-ext" href="#" target="_blank" rel="noopener" aria-label="Open full profile in a new window">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M11 3h6v6M17 3l-8 8M14 11v5a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
     </div>
     <div class="lm-body"></div>
     <div class="deco lm-band" aria-hidden="true"><div></div><div></div><div></div><div></div></div>
@@ -2049,10 +2055,10 @@ document.querySelectorAll('button.mj-more').forEach(function (btn) {
   var dlg = document.querySelector('.lmodal');
   if (!dlg || !dlg.showModal) return;
   var body = dlg.querySelector('.lm-body');
-  var COMING = ['Full bio coming soon.'];
   var LEADERS = [
     { name: 'Nelson Spruston', role: 'Vice President and Executive Director, Janelia Research Campus',
       photo: 'assets/leadership/nelson-spruston.webp', credit: 'Credit: James Kegley / HHMI',
+      url: 'https://www.hhmi.org/about/senior-leadership/nelson-spruston',
       bio: [
         'Nelson Spruston became the Executive Director of HHMI’s Janelia Research Campus in August 2024.',
         'As Executive Director of the Janelia Research Campus and Vice President, Nelson Spruston is responsible for implementing the strategic vision of HHMI’s biomedical research complex in Ashburn, Virginia. Spruston oversees integrated, highly collaborative teams of biologists, computational and data scientists, and tool-builders who are using innovative methods to pursue a wide range of scientific questions.',
@@ -2068,13 +2074,67 @@ document.querySelectorAll('button.mj-more').forEach(function (btn) {
         { date: 'August 12, 2024', title: 'HHMI Invests $500 Million in AI-Driven Life Sciences Research' },
         { date: 'October 27, 2017', title: '300 Neurons Traced in Extensive Brain Wiring Map' }
       ] },
-    { name: 'Gerry Rubin', role: 'Head of Biology and Senior Group Leader', photo: 'assets/leadership/gerry-rubin.webp', bio: COMING },
-    { name: 'Stephan Saalfeld', role: 'Head of AI@HHMI and Senior Group Leader', photo: 'assets/leadership/stephan-saalfeld.webp', bio: COMING },
-    { name: 'Luke Lavis', role: 'Head of Tools@HHMI and Senior Group Leader', photo: 'assets/leadership/luke-lavis.webp', bio: COMING },
-    { name: 'Ann Hermundstad', role: 'Head of Theory@HHMI and Group Leader', photo: 'assets/leadership/ann-hermundstad.webp', bio: COMING },
-    { name: 'Reed George', role: 'Managing Director, Janelia Scientific Operations', photo: 'assets/leadership/reed-george.webp', bio: COMING },
-    { name: 'Wyatt Korff', role: 'Senior Director, Project Teams', photo: 'assets/leadership/wyatt-korff.webp', bio: COMING },
-    { name: 'Zarixia Zavala-Ruiz', role: 'Senior Director, Scientific Programs & Training', photo: 'assets/leadership/zarixia-zavala-ruiz.webp', bio: COMING }
+    { name: 'Gerry Rubin', role: 'Head of Biology and Senior Group Leader', photo: 'assets/leadership/gerry-rubin.webp',
+      url: 'https://www.hhmi.org/research/janelia/gerald-rubin',
+      bio: [
+        'Gerald M. Rubin is Head of Biology and a Senior Group Leader at HHMI’s Janelia Research Campus, a role he took on in 2026. He was Janelia’s first director, leading the campus from 2003 until January 2020.',
+        'Rubin earned his bachelor’s degree at MIT and his PhD at the University of Cambridge in 1974, after working at the MRC Laboratory of Molecular Biology. Following postdoctoral work at Stanford, he held faculty positions at Harvard Medical School and the Carnegie Institution of Washington, and joined UC Berkeley in 1983 as the John D. MacArthur Professor. He became an HHMI Investigator in 1987 and HHMI’s Vice President for Biomedical Research in 2000.',
+        'His work spans genetics, genomics, connectomics, and developmental biology in <i>Drosophila</i>. In 1982, he and Allan Spradling developed methods for making transgenic flies; his Berkeley lab identified components of signaling pathways downstream of tyrosine kinases; and he led the public effort to sequence the <i>Drosophila</i> genome, completed in 2000 together with Celera Genomics. At Janelia, he has led work on the fly connectome, published in 2026, and on genetic tools for manipulating individual cell types.'
+      ],
+      societies: ['National Academy of Sciences', 'National Academy of Medicine', 'American Academy of Arts and Sciences', 'Royal Society (London), Foreign Member'],
+      awards: ['American Chemical Society Eli Lilly Award in Biological Chemistry', 'National Academy of Sciences U.S. Steel Foundation Award in Molecular Biology', 'Genetics Society of America Medal', 'Gruber Foundation Neuroscience Prize', 'Wiley Prize in Biomedical Sciences'],
+      stories: [
+        { date: 'June 15, 2026', title: 'Janelia’s Two Big Bets: Decoding the Brain and Reinventing How Science is Done' },
+        { date: 'January 22, 2020', title: 'Unveiling the Biggest and Most Detailed Map of the Fly Brain Yet' }
+      ] },
+    { name: 'Stephan Saalfeld', role: 'Head of AI@HHMI and Senior Group Leader', photo: 'assets/leadership/stephan-saalfeld.webp',
+      url: 'https://www.hhmi.org/research/janelia/stephan-saalfeld',
+      bio: [
+        'Stephan Saalfeld is Head of AI@HHMI and a Senior Group Leader at HHMI’s Janelia Research Campus. He was named Head of AI@HHMI in 2026.',
+        'Saalfeld earned a diploma in computer science and media at Technische Universität Dresden and a PhD in computer science at the International Max Planck Research School for Molecular Cell Biology and Bioengineering in 2013. That year he was a postdoctoral fellow with his PhD advisor, Pavel Tomančák, at the Max Planck Institute of Molecular Cell Biology and Genetics, before joining Janelia as a group leader.',
+        'His group builds scalable data-analysis methods to reveal the principles behind the structure and dynamics of complex biological systems — from tools and infrastructure for acquiring, processing, and managing data, to machine learning–based image analysis and visualization, physics-informed AI, and graph neural networks.'
+      ] },
+    { name: 'Luke Lavis', role: 'Head of Tools@HHMI and Senior Group Leader', photo: 'assets/leadership/luke-lavis.webp',
+      url: 'https://www.hhmi.org/research/janelia/luke-lavis',
+      bio: [
+        'Luke Lavis is Head of Tools@HHMI and a Senior Group Leader at HHMI’s Janelia Research Campus. He was named Head of Molecular Tools & Imaging, the forerunner of Tools@HHMI, in 2017.',
+        'After earning his bachelor’s degree at Oregon State University in 2000, Lavis worked in research and development at Molecular Probes and Molecular Devices. He then completed a PhD in Ronald Raines’s laboratory at the University of Wisconsin–Madison in 2008, developing methods to image biomolecular trafficking in living cells, and started his lab at Janelia.',
+        'His lab designs and synthesizes fluorescent dyes for advanced imaging experiments. Lavis is best known for the Janelia Fluor dyes, which are used in labs around the world.'
+      ],
+      stories: [
+        { date: 'September 4, 2017', title: 'New Fluorescent Dyes Could Advance Biological Imaging' }
+      ] },
+    { name: 'Ann Hermundstad', role: 'Head of Theory@HHMI and Group Leader', photo: 'assets/leadership/ann-hermundstad.webp',
+      url: 'https://www.hhmi.org/research/janelia/ann-hermundstad',
+      bio: [
+        'Ann Hermundstad is Head of Theory@HHMI and a Group Leader at HHMI’s Janelia Research Campus. She was named Head of Theory@HHMI in 2026.',
+        'Hermundstad earned a bachelor’s degree in engineering physics at the Colorado School of Mines and a PhD in statistical physics at the University of California, Santa Barbara. After postdoctoral work in theoretical neuroscience at the École Normale Supérieure in Paris and the University of Pennsylvania, she joined Janelia as a group leader in 2016.',
+        'Her research asks how brains help animals make sense of their surroundings and act effectively when the world is uncertain and changing. She uses theory and computation to study how neural circuits manage this efficiently and flexibly, and works closely with experimentalists to test these ideas in behaving animals.'
+      ] },
+    { name: 'Reed George', role: 'Managing Director, Janelia Scientific Operations', photo: 'assets/leadership/reed-george.webp',
+      url: 'https://www.hhmi.org/research/janelia/reed-george',
+      bio: [
+        'Reed George is Managing Director of Janelia Research Campus Scientific Operations. He oversees the operations that support the campus’s cross-disciplinary research and directs Janelia’s shared resource laboratories, including the microscopy facilities, the instrument design facility, and the molecular biology laboratory.',
+        'George joined HHMI in 2005 from the Berkeley Drosophila Genome Project, where, as a senior program manager, he ran the project’s DNA-sequencing operations and its technology development group. Before moving into the life sciences, he was a Principal Staff Engineer at Motorola.',
+        'He holds a Master of Technology Management from the University of Phoenix and a BS in mechanical engineering from the University of South Florida.'
+      ] },
+    { name: 'Wyatt Korff', role: 'Senior Director, Project Teams', photo: 'assets/leadership/wyatt-korff.webp',
+      url: 'https://www.hhmi.org/research/janelia/wyatt-korff',
+      bio: [
+        'Wyatt Korff is Senior Director of Project Teams at HHMI’s Janelia Research Campus — cross-disciplinary groups that take on large, experimentally challenging research projects. His research background spans neuroscience, biomechanics, evolution, and team science.',
+        'Korff joined HHMI in 2009 as a project scientist leading one of Janelia’s first Project Teams, following a postdoc at the California Institute of Technology. He holds a PhD in integrative biology from the University of California, Berkeley, and a BS in biology from Vassar College.'
+      ],
+      stories: [
+        { date: 'October 6, 2021', title: 'Machine Learning Helps Reveal Cells’ Inner Structures in New Detail' },
+        { date: 'October 27, 2017', title: '300 Neurons Traced in Extensive Brain Wiring Map' }
+      ] },
+    { name: 'Zarixia Zavala-Ruiz', role: 'Senior Director, Scientific Programs & Training', photo: 'assets/leadership/zarixia-zavala-ruiz.webp',
+      url: 'https://www.hhmi.org/research/janelia/zarixia-zavala-ruiz',
+      bio: [
+        'Zarixia Zavala-Ruiz is Senior Director of the Scientific Programs and Training group at HHMI’s Janelia Research Campus. She oversees Janelia’s Visiting Scientist Program, lab head competitions and appointment reviews, professional development, student programs, and conferences and seminars.',
+        'Zavala-Ruiz joined HHMI in 2011 from the University of Puerto Rico, Río Piedras, where she was a tenured assistant professor of chemistry and biochemistry and co-director of the Macromolecular X-ray Crystallography Facility. As a professor, she studied immune responses associated with breast cancer in Hispanic women.',
+        'She earned a PhD in biological chemistry from the Massachusetts Institute of Technology and a BS in chemistry from the University of Puerto Rico, Río Piedras.'
+      ] }
   ];
   function esc(t) { return t.replace(/&/g, '&amp;').replace(/</g, '&lt;'); }
   function list(label, items) {
@@ -2098,6 +2158,9 @@ document.querySelectorAll('button.mj-more').forEach(function (btn) {
         }).join('') + '</div></section>';
     }
     body.innerHTML = h;
+    var ext = dlg.querySelector('.lm-ext');
+    ext.hidden = !p.url;
+    if (p.url) ext.href = p.url;
     var row = body.querySelector('.lm-stories');
     if (row) dragScroll(row);
   }
