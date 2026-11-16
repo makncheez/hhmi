@@ -1006,6 +1006,7 @@
     --deco-4: #00ac1d;
   }
   .cta-arrow { width: 26px; height: 27px; margin-left: -3px; flex: none; overflow: visible; }
+  .cta, .unit-explore { cursor: pointer; }   /* placeholder CTAs have no href yet; keep the hand cursor */
 
   /* Hover / focus: the four colours are reshuffled at random every 0.2s
      (script at the end of the page). Reduced motion: no shuffle. */
@@ -1080,7 +1081,7 @@
       <div class="unit-media">
         <video aria-hidden="true" src="assets/video/zebrafish_brain_imaging.mp4" poster="assets/zebrafish_brain_imaging-poster.jpg"
                autoplay muted loop playsinline preload="metadata"></video>
-        <a class="unit-explore" href="#">
+        <a class="unit-explore">
           <span class="deco ue-bar--l" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
           <span>Explore Biology</span>
           <svg viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke="black" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round" stroke="black"/></svg>
@@ -1101,7 +1102,7 @@
       <div class="unit-media">
         <video aria-hidden="true" src="assets/video/danionella_eye_crop.mp4" poster="assets/danionella_eye_crop-poster.jpg"
                muted loop playsinline preload="none"></video>
-        <a class="unit-explore" href="#">
+        <a class="unit-explore">
           <span class="deco ue-bar--l" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
           <span>Explore AI@HHMI</span>
           <svg viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke="black" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round" stroke="black"/></svg>
@@ -1122,7 +1123,7 @@
       <div class="unit-media">
         <video aria-hidden="true" src="assets/video/danionella_eye_crop.mp4" poster="assets/danionella_eye_crop-poster.jpg"
                muted loop playsinline preload="none"></video>
-        <a class="unit-explore" href="#">
+        <a class="unit-explore">
           <span class="deco ue-bar--l" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
           <span>Explore Tools@HHMI</span>
           <svg viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke="black" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round" stroke="black"/></svg>
@@ -1143,7 +1144,7 @@
       <div class="unit-media">
         <video aria-hidden="true" src="assets/video/zebrafish_brain_imaging.mp4" poster="assets/zebrafish_brain_imaging-poster.jpg"
                muted loop playsinline preload="none"></video>
-        <a class="unit-explore" href="#">
+        <a class="unit-explore">
           <span class="deco ue-bar--l" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
           <span>Explore Theory@HHMI</span>
           <svg viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke="black" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round" stroke="black"/></svg>
@@ -1228,7 +1229,7 @@
             </ul>
             <p class="role-note">On-Site / Internally funded / No postdoc required</p>
             <div class="role-cta">
-              <a class="cta" href="#">
+              <a class="cta">
                 <span class="deco" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
                 <span>Learn more<span class="visually-hidden"> about Principal Scientist roles</span></span>
                 <svg class="cta-arrow" viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke="black" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round" stroke="black"/></svg>
@@ -1245,7 +1246,7 @@
               <li>Connect computational approaches with biologists, theorists, and tool builders.</li>
             </ul>
             <div class="role-cta">
-              <a class="cta" href="#">
+              <a class="cta">
                 <span class="deco" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
                 <span>Learn more<span class="visually-hidden"> about AI Scientist roles</span></span>
                 <svg class="cta-arrow" viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke="black" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round" stroke="black"/></svg>
@@ -1262,7 +1263,7 @@
               <li>Lead a lab and collaborate across the shared scientific enterprise.</li>
             </ul>
             <div class="role-cta">
-              <a class="cta" href="#">
+              <a class="cta">
                 <span class="deco" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
                 <span>Learn more<span class="visually-hidden"> about Group Leader roles</span></span>
                 <svg class="cta-arrow" viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke="black" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round" stroke="black"/></svg>
@@ -1285,7 +1286,7 @@
             <p class="fw-text">Some scientific projects are too big for one lab to accomplish on its own, but have the potential to transform science. For these projects, Janelia created Project Teams: dedicated groups of scientists who come together to pursue a specialized goal.</p>
           </div>
           <div class="fw-cta">
-            <a class="cta cta--light" href="#">
+            <a class="cta cta--light">
               <span class="deco" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
               <span>Learn more<span class="visually-hidden"> about Project Teams</span></span>
               <svg class="cta-arrow" viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke="black" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round" stroke="black"/></svg>
@@ -1321,7 +1322,7 @@
             <h2 class="hfs-title">Become part of Janelia’s vibrant scientific community</h2>
             <p class="hfs-text">With small labs and large ambitions, Janelia welcomes biologists, AI scientists, physicists, chemists, engineers, theorists, and computational scientists to work side by side on groundbreaking research. Internal funding, expert technical teams, and world-class facilities are all on one campus, giving Janelia scientists the intellectual freedom to take on big risks, and the sustained support to see them through.</p>
             <div class="hfs-cta">
-              <a class="cta" href="#">
+              <a class="cta">
                 <span class="deco" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
                 <span>Explore careers</span>
                 <svg class="cta-arrow" viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke="black" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round" stroke="black"/></svg>
