@@ -868,6 +868,38 @@
     .unit-figure { width: 50%; margin-left: auto; margin-right: auto; }
   }
 
+  /* ---------- HHMI frame section ----------
+     Black, full width; a 2-column .container. Left column: a square frame
+     device drawn with the crosshair (same SVG as the background grid, white)
+     at each corner and 1px edges between them, stopping at the crosshair's
+     centre gap. H / H / M / I in Diatype Semi-Mono sit outside the corners. */
+  .hfs { padding: 120px 0; background: #000; color: #fff; }
+  .hframe {
+    position: relative;
+    aspect-ratio: 1 / 1;
+    margin: 32px;                    /* room for the corner letters */
+  }
+  .hf-edge { position: absolute; background: #fff; }
+  .hf-t, .hf-b { left: 3px; right: 3px; height: 1px; }
+  .hf-l, .hf-r { top: 3px; bottom: 3px; width: 1px; }
+  .hf-t { top: 0; }  .hf-b { bottom: 0; }
+  .hf-l { left: 0; } .hf-r { right: 0; }
+  .hf-x {                            /* the crosshair, centred on each corner */
+    position: absolute;
+    width: 21px; height: 21px;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' stroke='%23fff' stroke-width='1' shape-rendering='crispEdges'%3E%3Csvg x='50%25' y='50%25' overflow='visible'%3E%3Cpath d='M0 -10V-2.25M0 2.25V10M-10 0H-2.25M2.25 0H10'/%3E%3C/svg%3E%3C/svg%3E") no-repeat;
+  }
+  .hf-tl { top: -10px;    left: -10px; }
+  .hf-tr { top: -10px;    right: -10px; }
+  .hf-bl { bottom: -10px; left: -10px; }
+  .hf-br { bottom: -10px; right: -10px; }
+  .hf-ch { position: absolute; font: 400 14px/1 var(--font-mono); }
+  .hf-ch-tl { right: 100%; bottom: 100%; margin: 0 12px 12px 0; }
+  .hf-ch-tr { left: 100%;  bottom: 100%; margin: 0 0 12px 12px; }
+  .hf-ch-bl { right: 100%; top: 100%;    margin: 12px 12px 0 0; }
+  .hf-ch-br { left: 100%;  top: 100%;    margin: 12px 0 0 12px; }
+  @media (max-width: 991.98px) { .hfs { padding: 80px 0; } }
+
   /* ---------- CTA arrow label (reusable): 4-square .deco + label + arrow, 30px tall ---------- */
   .cta {
     display: inline-flex;
@@ -1178,6 +1210,24 @@
             </a>
           </div>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="hfs" aria-label="HHMI">
+    <div class="container">
+      <div class="row">
+        <div class="col-12 col-lg-6">
+          <div class="hframe" aria-hidden="true">
+            <span class="hf-edge hf-t"></span><span class="hf-edge hf-b"></span>
+            <span class="hf-edge hf-l"></span><span class="hf-edge hf-r"></span>
+            <span class="hf-x hf-tl"></span><span class="hf-x hf-tr"></span>
+            <span class="hf-x hf-bl"></span><span class="hf-x hf-br"></span>
+            <span class="hf-ch hf-ch-tl">H</span><span class="hf-ch hf-ch-tr">H</span>
+            <span class="hf-ch hf-ch-bl">M</span><span class="hf-ch hf-ch-br">I</span>
+          </div>
+        </div>
+        <div class="col-12 col-lg-6"></div>
       </div>
     </div>
   </section>
