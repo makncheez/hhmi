@@ -982,6 +982,76 @@
 
 
 
+  /* ---------- Janelia Senior Leadership ----------
+     Black band. Heading in the .container, then a full-width carousel of
+     Post Grid person cards (from studies/grid.html): broken-line cells
+     (top/bottom lines stop 12px short of each side; side lines start 24px
+     down and stop 12px short of the bottom). The 8 cards are repeated once
+     so the strip loops seamlessly; it drifts left continuously and pauses on
+     hover. Reduced motion: no drift, the strip scrolls sideways instead. */
+  .lead {
+    --line-w: 1px;
+    --gap-h: 12px;
+    --gap-v-top: 24px;
+    --gap-v-bottom: 12px;
+    --cell-pad: clamp(20px, 2.6vw, 38px);
+    --card-w: 330px;                 /* a quarter of the widest container */
+    padding: 120px 0;
+    background: #000;
+    color: #fff;
+  }
+  .lead-title {                      /* heading font */
+    margin: 0 0 56px;
+    font: 400 clamp(25px, 2.35vw, 40px)/1.15 var(--font-sans);
+    letter-spacing: -0.005em;
+  }
+  .lead-viewport { overflow: hidden; padding: 1px 0; }   /* room for the cells' top and bottom lines */
+  .lead-track {
+    display: flex;
+    width: max-content;
+    animation: lead-drift 60s linear infinite;
+  }
+  .lead-viewport:hover .lead-track { animation-play-state: paused; }
+  @keyframes lead-drift { to { transform: translateX(-50%); } }   /* one full set of 8 cards */
+  .lcell { position: relative; flex: none; width: var(--card-w); }
+  .lcell::before, .lcell::after { content: ""; position: absolute; pointer-events: none; border: 0 solid #fff; }
+  .lcell::before {                   /* top and bottom lines */
+    top: calc(var(--line-w) / -2); bottom: calc(var(--line-w) / -2);
+    left: var(--gap-h); right: var(--gap-h);
+    border-top-width: var(--line-w); border-bottom-width: var(--line-w);
+  }
+  .lcell::after {                    /* side lines */
+    top: var(--gap-v-top); bottom: var(--gap-v-bottom);
+    left: calc(var(--line-w) / -2); right: calc(var(--line-w) / -2);
+    border-left-width: var(--line-w); border-right-width: var(--line-w);
+  }
+  .lead .person { height: 100%; padding: 10% 10% var(--cell-pad); text-align: center; }
+  .lead .person img {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    background: #333;
+  }
+  .lead .person h3 {
+    margin: clamp(24px, 3vw, 40px) 0 12px;
+    font: 400 clamp(18px, 1.6vw, 22px)/1.2 var(--font-mono);
+  }
+  .lead .person p {
+    margin: 0 auto;
+    max-width: 18em;
+    font: 400 clamp(14px, 1.1vw, 16px)/1.4 var(--font-sans);
+    text-wrap: balance;
+  }
+  @media (max-width: 1399.98px) { .lead { --card-w: 285px; } }
+  @media (max-width: 1199.98px) { .lead { --card-w: 260px; } }
+  @media (max-width: 767.98px)  { .lead { --card-w: 72vw; padding: 80px 0; } }
+  @media (prefers-reduced-motion: reduce) {
+    .lead-track { animation: none; }
+    .lead-viewport { overflow-x: auto; }
+  }
+
   /* ---------- CTA arrow label (reusable): 4-square .deco + label + arrow, 30px tall ---------- */
   .cta {
     display: inline-flex;
@@ -1329,6 +1399,99 @@
               </a>
             </div>
           </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="lead" aria-labelledby="leadTitle">
+    <div class="container">
+      <h2 class="lead-title" id="leadTitle">Janelia Senior Leadership</h2>
+    </div>
+    <div class="lead-viewport">
+      <div class="lead-track">
+        <div class="lead-set" style="display:flex">
+          <div class="lcell"><article class="person">
+            <img src="https://www.hhmi.org/sites/default/files/2026-08/ann-hermundstad-400x400.png" alt="Ann Hermundstad" width="400" height="400" loading="lazy">
+            <h3>Ann Hermundstad</h3>
+            <p>Head of Theory@HHMI and Group Leader</p>
+          </article></div>
+          <div class="lcell"><article class="person">
+            <img src="https://www.hhmi.org/sites/default/files/2026-08/ann-hermundstad-400x400.png" alt="Ann Hermundstad" width="400" height="400" loading="lazy">
+            <h3>Ann Hermundstad</h3>
+            <p>Head of Theory@HHMI and Group Leader</p>
+          </article></div>
+          <div class="lcell"><article class="person">
+            <img src="https://www.hhmi.org/sites/default/files/2026-08/ann-hermundstad-400x400.png" alt="Ann Hermundstad" width="400" height="400" loading="lazy">
+            <h3>Ann Hermundstad</h3>
+            <p>Head of Theory@HHMI and Group Leader</p>
+          </article></div>
+          <div class="lcell"><article class="person">
+            <img src="https://www.hhmi.org/sites/default/files/2026-08/ann-hermundstad-400x400.png" alt="Ann Hermundstad" width="400" height="400" loading="lazy">
+            <h3>Ann Hermundstad</h3>
+            <p>Head of Theory@HHMI and Group Leader</p>
+          </article></div>
+          <div class="lcell"><article class="person">
+            <img src="https://www.hhmi.org/sites/default/files/2026-08/ann-hermundstad-400x400.png" alt="Ann Hermundstad" width="400" height="400" loading="lazy">
+            <h3>Ann Hermundstad</h3>
+            <p>Head of Theory@HHMI and Group Leader</p>
+          </article></div>
+          <div class="lcell"><article class="person">
+            <img src="https://www.hhmi.org/sites/default/files/2026-08/ann-hermundstad-400x400.png" alt="Ann Hermundstad" width="400" height="400" loading="lazy">
+            <h3>Ann Hermundstad</h3>
+            <p>Head of Theory@HHMI and Group Leader</p>
+          </article></div>
+          <div class="lcell"><article class="person">
+            <img src="https://www.hhmi.org/sites/default/files/2026-08/ann-hermundstad-400x400.png" alt="Ann Hermundstad" width="400" height="400" loading="lazy">
+            <h3>Ann Hermundstad</h3>
+            <p>Head of Theory@HHMI and Group Leader</p>
+          </article></div>
+          <div class="lcell"><article class="person">
+            <img src="https://www.hhmi.org/sites/default/files/2026-08/ann-hermundstad-400x400.png" alt="Ann Hermundstad" width="400" height="400" loading="lazy">
+            <h3>Ann Hermundstad</h3>
+            <p>Head of Theory@HHMI and Group Leader</p>
+          </article></div>
+        </div>
+        <div class="lead-set" style="display:flex" aria-hidden="true" inert>
+          <div class="lcell"><article class="person">
+            <img src="https://www.hhmi.org/sites/default/files/2026-08/ann-hermundstad-400x400.png" alt="" width="400" height="400" loading="lazy">
+            <h3>Ann Hermundstad</h3>
+            <p>Head of Theory@HHMI and Group Leader</p>
+          </article></div>
+          <div class="lcell"><article class="person">
+            <img src="https://www.hhmi.org/sites/default/files/2026-08/ann-hermundstad-400x400.png" alt="" width="400" height="400" loading="lazy">
+            <h3>Ann Hermundstad</h3>
+            <p>Head of Theory@HHMI and Group Leader</p>
+          </article></div>
+          <div class="lcell"><article class="person">
+            <img src="https://www.hhmi.org/sites/default/files/2026-08/ann-hermundstad-400x400.png" alt="" width="400" height="400" loading="lazy">
+            <h3>Ann Hermundstad</h3>
+            <p>Head of Theory@HHMI and Group Leader</p>
+          </article></div>
+          <div class="lcell"><article class="person">
+            <img src="https://www.hhmi.org/sites/default/files/2026-08/ann-hermundstad-400x400.png" alt="" width="400" height="400" loading="lazy">
+            <h3>Ann Hermundstad</h3>
+            <p>Head of Theory@HHMI and Group Leader</p>
+          </article></div>
+          <div class="lcell"><article class="person">
+            <img src="https://www.hhmi.org/sites/default/files/2026-08/ann-hermundstad-400x400.png" alt="" width="400" height="400" loading="lazy">
+            <h3>Ann Hermundstad</h3>
+            <p>Head of Theory@HHMI and Group Leader</p>
+          </article></div>
+          <div class="lcell"><article class="person">
+            <img src="https://www.hhmi.org/sites/default/files/2026-08/ann-hermundstad-400x400.png" alt="" width="400" height="400" loading="lazy">
+            <h3>Ann Hermundstad</h3>
+            <p>Head of Theory@HHMI and Group Leader</p>
+          </article></div>
+          <div class="lcell"><article class="person">
+            <img src="https://www.hhmi.org/sites/default/files/2026-08/ann-hermundstad-400x400.png" alt="" width="400" height="400" loading="lazy">
+            <h3>Ann Hermundstad</h3>
+            <p>Head of Theory@HHMI and Group Leader</p>
+          </article></div>
+          <div class="lcell"><article class="person">
+            <img src="https://www.hhmi.org/sites/default/files/2026-08/ann-hermundstad-400x400.png" alt="" width="400" height="400" loading="lazy">
+            <h3>Ann Hermundstad</h3>
+            <p>Head of Theory@HHMI and Group Leader</p>
+          </article></div>
         </div>
       </div>
     </div>
