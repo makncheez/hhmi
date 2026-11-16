@@ -709,19 +709,37 @@
   }
   .mj-text { margin: 0; }            /* paragraph font: global 17px / 1.35 */
   .mj-text + .mj-text { margin-top: 1.35em; }   /* blank line between paragraphs */
+  /* Read More: label + a 72px square arrow box tucked into the cell's
+     bottom-right corner (its right and bottom edges are the grid lines).
+     The arrow points down to expand and turns up to collapse. */
+  .mj-body:has(.mj-more) { padding-bottom: 112px; }   /* room for the corner box */
   .mj-more {
-    align-self: flex-end;            /* right */
-    margin-top: 24px;
-    padding-bottom: 4px;
-    border-bottom: 1px solid #000;
+    position: absolute;
+    right: 0; bottom: 0;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 0;
+    border: 0;
+    background: none;
     color: #000;
     font: 400 15px/1 var(--font-sans);
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    text-decoration: none;
+    cursor: pointer;
   }
-  button.mj-more { background: none; border-width: 0 0 1px; border-radius: 0; cursor: pointer; }
-  .mj-more:hover, .mj-more:focus-visible { color: #006b2a; border-color: #006b2a; }   /* darker green on white */
+  .mj-more-box {
+    display: grid;
+    place-items: center;
+    width: 72px; height: 72px;
+    border-top: 1px solid #000;
+    border-left: 1px solid #000;
+  }
+  .mj-row2 .mj-more-box { border-bottom: 1px solid #000; }   /* last row has no row line below */
+  .mj-more-box svg { width: 34px; height: 36px; transform: rotate(90deg); transition: transform .35s ease; }
+  .mj-more[aria-expanded="true"] .mj-more-box svg { transform: rotate(-90deg); }   /* up: collapse */
+  .mj-more:hover, .mj-more:focus-visible { color: #006b2a; }   /* darker green on hover, as before */
+  .mj-more:hover .mj-more-box svg path, .mj-more:focus-visible .mj-more-box svg path { stroke: #006b2a; }
   /* Expandable extra paragraphs: height animates 0 -> auto via grid rows */
   .mj-extra { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .45s ease; }
   .mj-extra > div { overflow: hidden; }
@@ -730,6 +748,7 @@
   .mj-extra--cont p:first-child { margin-top: 0; }   /* continues the visible sentence's paragraph */
   @media (prefers-reduced-motion: reduce) { .mj-extra { transition: none; } }
   .mj-more:focus-visible { outline: 2px solid #006b2a; outline-offset: 4px; }
+  @media (prefers-reduced-motion: reduce) { .mj-more-box svg { transition: none; } }
   @media (max-width: 991.98px) {
     .mj-head { align-items: flex-start; text-align: left; padding-bottom: 16px; }
     .mj-head::before { content: none; }          /* heading and its text read as one block */
@@ -1427,14 +1446,15 @@
         <div class="col-12 col-lg-4 mj-cell mj-head mj-rowm"><h3 class="mj-title">Journey</h3></div>
         <div class="col-12 col-lg-8 mj-cell mj-body mj-rowm">
           <p class="mj-text">After centuries of investigation, scientists still cannot explain how the brain integrates sensory information, internal states, memories, and physiology to produce behaviors.</p>
+          <p class="mj-text">Understanding the fundamental function of the brain is vital not only in its own right, but as the key to making real progress against brain disorders, like Alzheimer’s disease and depression, that impact hundreds of millions of people worldwide.</p>
           <div class="mj-extra mj-extra--cont" id="journeyMore">
             <div>
-              <p>Understanding the fundamental function of the brain is vital not only in its own right, but as the key to making real progress against brain disorders, like Alzheimer’s disease and depression, that impact hundreds of millions of people worldwide. Janelia’s grand challenge is to build a mechanistic account connecting molecules, neural circuits, brain activity, and complex behavior in a whole animal in motion.</p>
+              <p>Janelia’s grand challenge is to build a mechanistic account connecting molecules, neural circuits, brain activity, and complex behavior in a whole animal in motion.</p>
               <p>Two forces have converged to bring what was previously impossible within reach: a new generation of tools that lets us observe whole biological systems with a completeness that wasn’t possible a decade ago, and AI capable of parsing data at scales no human scientist can manage. The identification of a new experimental model, <i>Danionella</i> — a small fish that stays transparent into adulthood — also now gives researchers a way to see the whole brain at work.</p>
               <p>Seizing the moment requires exactly what Janelia was built to provide: sustained support, shared infrastructure, interdisciplinary teams, and the time to ask the hard questions.</p>
             </div>
           </div>
-          <button class="mj-more" type="button" aria-expanded="false" aria-controls="journeyMore"><span class="mj-more-label">Read More</span><span class="visually-hidden"> about the journey</span></button>
+          <button class="mj-more" type="button" aria-expanded="false" aria-controls="journeyMore"><span class="mj-more-label">Read More</span><span class="visually-hidden"> about the journey</span><span class="mj-more-box" aria-hidden="true"><svg viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke="black" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round" stroke="black"/></svg></span></button>
         </div>
         <div class="col-12 col-lg-4 mj-cell mj-head mj-row2"><h3 class="mj-title">Why</h3></div>
         <div class="col-12 col-lg-8 mj-cell mj-body mj-row2">
@@ -1445,7 +1465,7 @@
               <p>Janelia’s three lead scientist roles — Principal Scientists, AI Scientists, and Group Leaders — bring complementary forms of scientific leadership and take intellectual responsibility for their work. All three feature stable internal funding and minimal administrative duties. Each spends their time doing science and working with collaborators across campus.</p>
             </div>
           </div>
-          <button class="mj-more" type="button" aria-expanded="false" aria-controls="whyMore"><span class="mj-more-label">Read More</span><span class="visually-hidden"> about why Janelia</span></button>
+          <button class="mj-more" type="button" aria-expanded="false" aria-controls="whyMore"><span class="mj-more-label">Read More</span><span class="visually-hidden"> about why Janelia</span><span class="mj-more-box" aria-hidden="true"><svg viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke="black" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round" stroke="black"/></svg></span></button>
         </div>
       </div>
     </div>
