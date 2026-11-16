@@ -1115,7 +1115,7 @@
     top: 0;
     z-index: 1;
     display: flex;
-    justify-content: flex-start;     /* both icons on the left: close, then open-in-new-window */
+    justify-content: flex-end;       /* open-in-new-window, then close at the far right */
     gap: 8px;
     padding: 20px 24px 0;
     pointer-events: none;
@@ -1132,7 +1132,7 @@
     pointer-events: auto;
   }
   .lm-close:hover { background: #ececec; }
-  .lm-ext { color: #000; }
+  .lm-ext { order: -1; color: #000; }
   .lm-ext[hidden] { display: none; }
   .lm-close:focus-visible { outline: 2px solid #021341; outline-offset: 2px; }
   .lm-body { padding: 36px 24px 96px; }        /* tight sides, same as phones */
