@@ -672,6 +672,7 @@
     text-align: center;
   }
   .sc-label { position: absolute; top: 20px; left: 24px; margin: 0; font: 400 14px/1.2 var(--font-sans); }
+  .sc-label--long { right: 24px; max-width: 300px; text-align: left; }   /* longer notes wrap within the cell */
   .sc-fig {
     margin: 0;
     font: 400 clamp(40px, 18cqw, 88px)/1 var(--font-sans);
@@ -682,6 +683,7 @@
   @media (max-width: 767.98px) {
     .vs .sc { padding: 40px 12px 16px; }
     .vs .sc-label { top: 14px; left: 14px; font-size: 12px; }
+    .vs .sc-label--long { right: 14px; }
     .vs .sc-fig { font-size: clamp(26px, 20cqw, 40px); }
     .vs .sc-cap { margin-top: 8px; font-size: 12px; }
   }
@@ -1599,8 +1601,8 @@
             <div class="col-6 col-lg-4 gcell"><div class="sc"><p class="sc-label">Location</p><p class="sc-fig" data-count="30" data-suffix=" Miles">30 Miles</p><p class="sc-cap">From D.C.</p></div></div>
             <div class="col-6 col-lg-4 gcell"><div class="sc"><p class="sc-label">Employees</p><p class="sc-fig" data-count="650" data-prefix="+">+650</p><p class="sc-cap">Staffs &amp; Researchers</p></div></div>
             <div class="col-6 col-lg-4 gcell"><div class="sc"><p class="sc-label">Campus</p><p class="sc-fig" data-count="689">689</p><p class="sc-cap">Acres</p></div></div>
-            <div class="col-6 col-lg-4 gcell"><div class="sc"><p class="sc-fig" data-count="140000" data-commas>140,000</p><p class="sc-cap">Mapped Neurons</p></div></div>
-            <div class="col-6 col-lg-4 gcell"><div class="sc"><p class="sc-fig" data-count="5000" data-commas>5,000</p><p class="sc-cap">Neurons Per Hour</p></div></div>
+            <div class="col-6 col-lg-4 gcell"><div class="sc"><p class="sc-label sc-label--long">World’s first complete connectome of an adult animal’s central nervous system, 2025</p><p class="sc-fig" data-count="140000" data-commas>140,000</p><p class="sc-cap">Mapped Neurons</p></div></div>
+            <div class="col-6 col-lg-4 gcell"><div class="sc"><p class="sc-label sc-label--long">Recording Capability of Co-Developed Neuropixels Probes</p><p class="sc-fig" data-count="5000" data-commas>5,000</p><p class="sc-cap">Neurons Per Hour</p></div></div>
           </div>
         </div>
       </div>
