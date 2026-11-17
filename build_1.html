@@ -1409,8 +1409,10 @@
   .mf-col .sub:first-child { margin-top: 0; }
   .mf-col .sel .t { text-decoration: underline; text-underline-offset: 4px; }
   .mf-base { display: flex; justify-content: flex-end; gap: 24px; margin-top: 56px; padding-top: 20px; border-top: 1px solid var(--rule); font-size: 12px; color: var(--dim); }
-  .mfoot .totop { color: var(--dim); border-bottom: 1px solid var(--rule); padding-bottom: 2px; }
-  .mfoot .totop:hover { color: #fff; border-color: var(--dim); }
+  .mfoot .totop { display: inline-flex; padding: 4px; }   /* just the CTA arrow, pointing up */
+  .mfoot .totop svg { width: 26px; height: 27px; transform: rotate(-90deg); overflow: visible; }
+  .mfoot .totop svg path { stroke: var(--dim); transition: stroke .2s ease; }
+  .mfoot .totop:hover svg path { stroke: #fff; }
   .mfoot :focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
   .mf-stage { position: fixed; left: 0; right: 0; bottom: 0; z-index: 0; height: var(--stage-h, calc(22.3vw + 80px)); background: #000; }
   .mf-stage canvas { display: block; width: 100%; height: 100%; touch-action: pan-y; }
@@ -1952,7 +1954,7 @@
 
   <footer class="mfoot" id="mfoot"><div class="in">
     <nav class="mf-cols" id="mfcols" aria-label="Footer"></nav>
-    <div class="mf-base"><a class="totop" href="#" id="totop">Back to top <span aria-hidden="true">↑</span></a></div>
+    <div class="mf-base"><a class="totop" href="#" id="totop" aria-label="Back to top"><svg viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
   </div></footer>
 </main>
 <div class="mf-reveal" id="mfReveal" aria-hidden="true"></div>
