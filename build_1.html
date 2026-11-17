@@ -874,12 +874,15 @@
     transition: width .45s cubic-bezier(.65,0,.35,1), height .45s cubic-bezier(.65,0,.35,1),
                 background-color .3s ease, color .3s ease;
   }
-  .unit-explore svg {                /* arrow: hidden at rest, slides in when grown */
-    width: 0; height: 27px;
-    margin-left: 0;
+  .unit-explore svg {                /* arrow: hidden at rest; when grown it fades in on the line
+                                        below the label, centred, 16px under it (the label never moves) */
+    position: absolute;
+    left: 50%; top: calc(50% + 25px);   /* label is 18px tall and centred: its bottom + 16px */
+    width: 26px; height: 27px;
+    transform: translateX(-50%);
     opacity: 0;
     overflow: visible;
-    transition: width .45s cubic-bezier(.65,0,.35,1), margin-left .45s cubic-bezier(.65,0,.35,1), opacity .3s ease;
+    transition: opacity .3s ease;
   }
   .unit-explore svg path { stroke: #fff; }
   .unit-explore .deco {
@@ -896,11 +899,11 @@
   .unit-explore:focus-visible { outline: 2px solid #fff; outline-offset: 4px; }
   /* Grown state */
   .unit-explore:focus-visible { width: 78%; height: 76%; background: #000; color: #fff; }
-  .unit-explore:focus-visible svg { width: 26px; margin-left: 20px; opacity: 1; transition-delay: 0s, 0s, .15s; }
+  .unit-explore:focus-visible svg { opacity: 1; transition-delay: .15s; }
   .unit-explore:focus-visible .deco { opacity: 1; transition-delay: .2s; }
   @media (hover: hover) {             /* the button itself is the hot spot */
     .unit-explore:hover { width: 78%; height: 76%; background: #000; color: #fff; }
-    .unit-explore:hover svg { width: 26px; margin-left: 20px; opacity: 1; transition-delay: 0s, 0s, .15s; }
+    .unit-explore:hover svg { opacity: 1; transition-delay: .15s; }
     .unit-explore:hover .deco { opacity: 1; transition-delay: .2s; }
   }
   @media (prefers-reduced-motion: reduce) {
@@ -1284,8 +1287,8 @@
   @media (min-width: 1200px) { .nl { --col: 93px; } }
   @media (min-width: 1400px) { .nl { --col: 108px; } }
   @media (max-width: 767.98px) { .nl { --col: 58px; } }
-  .nl .unit-explore:focus-visible { width: min(560px, 90%); height: 148px; }
-  @media (hover: hover) { .nl .unit-explore:hover { width: min(560px, 90%); height: 148px; } }
+  .nl .unit-explore:focus-visible { width: min(560px, 90%); height: 172px; }   /* label, arrow below, subline at the bottom */
+  @media (hover: hover) { .nl .unit-explore:hover { width: min(560px, 90%); height: 172px; } }
   .nl .unit-explore .deco { --deco-h: 70%; }
 
   /* ---------- Highlighted Stories (1 col, after Senior Leadership) ---------- */
@@ -1298,13 +1301,8 @@
      pinned to the bottom edge of the grown box. */
   .unit-explore--light { background: #fff; color: #000; }
   .unit-explore--light svg path { stroke: #000; }
-  /* The label stays put on hover: the arrow is taken out of the flow and
-     fades in near the right edge of the grown box. */
-  .unit-explore--light svg { position: absolute; right: 48px; top: 50%; width: 26px; margin: 0; transform: translateY(-50%); }
-  .unit-explore--light:focus-visible svg { width: 26px; margin: 0; }
-  @media (hover: hover) { .unit-explore--light:hover svg { width: 26px; margin: 0; } }
   .unit-explore--light .ue-sub {
-    position: absolute; left: 50%; bottom: 16px;
+    position: absolute; left: 50%; bottom: 12px;
     transform: translateX(-50%);
     opacity: 0;
     font: 400 13px/1 var(--font-sans); letter-spacing: 0;
