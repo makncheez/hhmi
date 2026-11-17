@@ -1261,7 +1261,7 @@
   .cta-arrow { width: 26px; height: 27px; margin-left: -3px; flex: none; overflow: visible; }
   .cta, .unit-explore { cursor: pointer; }   /* placeholder CTAs have no href yet; keep the hand cursor */
 
-  /* Hover / focus: the four colours are reshuffled at random every 0.5s
+  /* Hover / focus: the four colours are reshuffled at random every 0.8s
      (script at the end of the page). Reduced motion: no shuffle. */
 
   .role-cta { margin-top: auto; padding-top: 40px; text-align: right; }   /* bottom right of the column */
@@ -2035,11 +2035,11 @@
 })();
 
 // CTA hover: reassign the four .deco colours to the squares in a random
-// order every 0.5s (always a new order); restore the original on leave.
+// order every 0.8s (always a new order); restore the original on leave.
 // DECO_STEP sets the speed for every CTA on the page.
 (function () {
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  var DECO_STEP = 500;   // ms between colour changes (was 200)
+  var DECO_STEP = 800;   // ms between colour changes
   function shuffle(a) {
     for (var i = a.length - 1; i > 0; i--) {
       var j = Math.floor(Math.random() * (i + 1)), t = a[i]; a[i] = a[j]; a[j] = t;
