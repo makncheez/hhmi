@@ -1269,7 +1269,7 @@
   /* ---------- Placeholder content below the hero ---------- */
   .filler { min-height: 150vh; }
   /* ---------- Newsletter banner (after Highlighted Stories, before the footer) ----------
-     Full width, 180px tall, black with one row of white crosshairs (50%),
+     Full width, 180px tall, black with one row of colour-wave crosshairs,
      the white "Join Newsletter" button centred. On hover it grows to the
      banner's height and shows "Stay Connected with HHMI" underneath. */
   .nl {
@@ -1281,10 +1281,20 @@
   }
   .nl::before {
     content: ""; position: absolute; inset: 0; pointer-events: none;
-    background: #fff; opacity: .5;
+    /* Same drifting colour wave as the other crosshair grids (dark-section
+       variant with white, as in Project Teams), every 10s. */
+    background: repeating-linear-gradient(135deg,
+      #111    calc(var(--wave) + 0px),
+      #A5F300 calc(var(--wave) + 800px),
+      #00AC1D calc(var(--wave) + 1600px),
+      #FFFFFF calc(var(--wave) + 2400px),
+      #111    calc(var(--wave) + 3200px));
+    animation: xhair-wave 10s linear infinite;
+    opacity: .7;
     -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' stroke='%23000' stroke-width='1' shape-rendering='crispEdges'%3E%3Csvg x='50%25' y='50%25' overflow='visible'%3E%3Cpath d='M0 -10V-2.25M0 2.25V10M-10 0H-2.25M2.25 0H10'/%3E%3C/svg%3E%3C/svg%3E") center center / var(--col) 100% repeat-x;
             mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' stroke='%23000' stroke-width='1' shape-rendering='crispEdges'%3E%3Csvg x='50%25' y='50%25' overflow='visible'%3E%3Cpath d='M0 -10V-2.25M0 2.25V10M-10 0H-2.25M2.25 0H10'/%3E%3C/svg%3E%3C/svg%3E") center center / var(--col) 100% repeat-x;
   }
+  @media (prefers-reduced-motion: reduce) { .nl::before { animation: none; background: #fff; opacity: .5; } }
   @media (min-width: 1200px) { .nl { --col: 93px; } }
   @media (min-width: 1400px) { .nl { --col: 108px; } }
   @media (max-width: 767.98px) { .nl { --col: 58px; } }
