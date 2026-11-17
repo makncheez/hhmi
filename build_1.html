@@ -934,7 +934,7 @@
     z-index: 2;
   }
   .hfs-band--top { top: 0; transform: translateY(-50%); }
-  .hfs-band--bottom { bottom: 0; transform: translateY(50%); }
+  .hfs-band--bottom { bottom: 0; transform: translateY(50%); --deco-w: clamp(90px, 10vw, 165px); }   /* half the top band's width */
   @media (min-width: 992px) {        /* desktop: 700px tall, content centred */
     .hfs { display: flex; align-items: center; height: 700px; padding: 0; }
     .hfs > .container { width: 100%; }
