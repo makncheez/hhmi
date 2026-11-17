@@ -1367,10 +1367,27 @@
   .hs-title { margin: 28px 0 14px; font: 400 clamp(18px, 1.6vw, 22px)/1.25 var(--font-sans); }
   .hs-date { display: block; font: 400 12px/1.4 var(--font-mono); letter-spacing: .02em; }
   .hs-author { margin-top: 6px; }   /* same style as the date, on the next line */
-  .hs-dots { display: flex; justify-content: center; gap: 22px; margin-top: 40px; }
-  .hs-dots button { width: 15px; height: 15px; padding: 0; border: 0; border-radius: 50%; background: #2DB44A; cursor: pointer; transition: background-color .2s ease; }
-  .hs-dots button[aria-current="true"], .hs-dots button:hover { background: #A5F300; }
+  /* Gooey dots: the visible dots and a lime blob are drawn in .hs-goo under
+     a "goo" SVG filter (blur + alpha threshold), so the blob melts into each
+     dot it passes. The blob follows the scroll position. The real buttons sit
+     on top, transparent, for clicks and keyboard focus. */
+  .hs-dots { position: relative; display: flex; justify-content: center; gap: 22px; margin-top: 40px; }
+  .hs-dots button { position: relative; z-index: 1; width: 15px; height: 15px; padding: 0; border: 0; border-radius: 50%; background: transparent; cursor: pointer; }
   .hs-dots button:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
+  .hs-goo {
+    position: absolute; left: 0; right: 0; top: -12px; bottom: -12px;
+    display: flex; justify-content: center; align-items: center; gap: 22px;
+    pointer-events: none;
+    filter: url(#hsGoo);
+  }
+  .hs-goo i { width: 15px; height: 15px; border-radius: 50%; background: #2DB44A; transition: transform .2s ease; }
+  .hs-goo i.is-hover { transform: scale(1.2); }
+  .hs-goo b {
+    position: absolute; top: 50%; left: 0;
+    width: var(--blob, 19px); height: var(--blob, 19px);
+    border-radius: 50%; background: #A5F300;
+    transform: translate(calc(var(--bx, 0px) - 50%), -50%);
+  }
   @media (max-width: 575.98px) { .hs-card { flex-basis: 85%; } }
 
   /* ---------- Footer (from studies/footer.html) ----------
@@ -1919,6 +1936,9 @@
       </div>
     </div>
     <div class="hs-dots" id="hsDots" role="group" aria-label="Choose story"></div>
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+      <filter id="hsGoo"><feGaussianBlur in="SourceGraphic" stdDeviation="5" result="b"/><feColorMatrix in="b" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 22 -9" result="g"/><feComposite in="SourceGraphic" in2="g" operator="atop"/></filter>
+    </svg>
   </section>
 
   <section class="nl" aria-label="Newsletter">
@@ -2696,21 +2716,43 @@ var TREE=[{"l": "Programs", "r": "programs", "k": [{"l": "All programs", "r": "p
     stops = [];
     for (var k = 0; k < pages; k++) stops.push(Math.min(pos(cards[k * per]), max()));
     dots.innerHTML = '';
+    goo = document.createElement('div'); goo.className = 'hs-goo'; goo.setAttribute('aria-hidden', 'true');
     btns = stops.map(function (x, k) {
       var b = document.createElement('button');
       b.type = 'button';
       b.setAttribute('aria-label', 'Page ' + (k + 1) + ' of ' + pages);
       b.addEventListener('click', function () { go(stops[k]); });
+      var dot = document.createElement('i'); goo.appendChild(dot);
+      b.addEventListener('mouseenter', function () { dot.classList.add('is-hover'); });
+      b.addEventListener('mouseleave', function () { dot.classList.remove('is-hover'); });
       dots.appendChild(b);
       return b;
     });
+    blob = document.createElement('b'); goo.appendChild(blob);
+    dots.insertBefore(goo, dots.firstChild);
     dots.hidden = pages < 2;
     sync();
   }
+  var goo = null, blob = null;
   function sync() {
-    var cur = 0, d = 1e9;
-    stops.forEach(function (x, k) { var e = Math.abs(x - vp.scrollLeft); if (e < d) { d = e; cur = k; } });
+    var cur = 0, d = 1e9, x = vp.scrollLeft;
+    stops.forEach(function (sx, k) { var e = Math.abs(sx - x); if (e < d) { d = e; cur = k; } });
     btns.forEach(function (b, k) { b.setAttribute('aria-current', k === cur ? 'true' : 'false'); });
+    if (!blob || !btns.length) return;
+    // Position along the dots: piecewise between page stops, so the blob
+    // travels dot to dot as the cards scroll; it slims a little mid-way.
+    var f = 0;
+    for (var k = 0; k < stops.length - 1; k++) {
+      if (x >= stops[k + 1]) { f = k + 1; continue; }
+      var span = stops[k + 1] - stops[k];
+      f = k + (span > 0 ? Math.max(0, x - stops[k]) / span : 0);
+      break;
+    }
+    var i = Math.min(Math.floor(f), btns.length - 1), t = f - i;
+    var a = btns[i], c = btns[Math.min(i + 1, btns.length - 1)];
+    var ax = a.offsetLeft + a.offsetWidth / 2, cx = c.offsetLeft + c.offsetWidth / 2;
+    blob.style.setProperty('--bx', (ax + (cx - ax) * t) + 'px');
+    blob.style.setProperty('--blob', (19 - 6 * Math.sin(Math.PI * t)) + 'px');
   }
   vp.addEventListener('scroll', function () { requestAnimationFrame(sync); }, { passive: true });
   var rq = 0;
