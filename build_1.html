@@ -348,8 +348,8 @@
   .units-tab:focus-visible { outline: 2px solid #fff; outline-offset: -3px; }
   .units-tab[aria-selected="true"]:focus-visible { outline-color: #021341; }
   .units-panel {
-    border-top: 1px solid #fff;
-    border-bottom: 1px solid #fff;
+    margin-inline: 12px;             /* inset from the screen edges, framed on all sides */
+    border: 1px solid #fff;
     background: #000;
     color: var(--ink);
     min-height: 600px;
@@ -419,6 +419,7 @@
     height: 100%;
     object-fit: cover;               /* fill, crop the sides, keep it centred */
   }
+  @media (min-width: 768px) { .units-panel { margin-inline: 28px; } }
   @media (min-width: 992px) {
     .units-panel { min-height: 700px; }   /* desktop panels: 700px tall */
     .unit-split { min-height: 700px; }
@@ -429,12 +430,12 @@
       display: grid;
       grid-template-rows: auto 1fr;
       min-height: calc(700px - 114px);   /* panel minus 56px top/bottom and the 1px top/bottom borders */
-      padding-inline: 0;             /* the column is exactly half the screen */
+      padding-inline: 0;             /* the column is exactly half the panel */
     }
     .unit-split .unit-desc {         /* column = half the screen, so the screen is 200% */
-      padding-left: calc(100% - var(--cw) / 2 + 12px);
+      padding-left: 48px;            /* text inset from the panel's left line */
       padding-right: 24px;
-      max-width: calc(100% - var(--cw) / 2 + 12px + 560px);   /* text itself stays ≤ 560px */
+      max-width: calc(48px + 560px);   /* text itself stays ≤ 560px */
     }
     .unit-split .unit-desc { grid-row: 1; align-self: start; padding-bottom: 48px; }
     .unit-split .unit-figure { grid-row: 2; align-self: center; margin: 0 auto; width: 100%; max-width: min(400px, 100% - 48px); }        /* square photo: 400 x 400 */
@@ -442,7 +443,7 @@
     .unit-media {
       position: absolute;
       top: 0; bottom: 0;
-      left: 50%; right: 0;           /* right half, to the screen edge */
+      left: 50%; right: 0;           /* right half, to the panel's right line */
     }
   }
   @media (max-width: 991.98px) {
@@ -1423,7 +1424,7 @@
   <section class="units" aria-labelledby="unitsTitle">
     <div class="container units-head">
       <div class="units-intro">
-        <h2 class="units-title" id="unitsTitle">Four units. Connected scientific work.</h2>
+        <h2 class="units-title" id="unitsTitle">Four units.<br><br>Connected scientific work.</h2>
         <p class="units-lead">Integrated teams of biologists, AI researchers, tool builders, and theorists work together to pursue Janelia’s overarching mission and move biological discoveries forward across HHMI and in the larger scientific community.</p>
       </div>
       <div class="units-tabs" role="tablist" aria-label="Research units">
