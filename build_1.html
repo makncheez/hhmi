@@ -309,12 +309,12 @@
     align-items: center;
     gap: 40px;
   }
-  .units-intro { max-width: 640px; text-align: center; }
+  .units-intro { align-self: flex-start; max-width: 640px; text-align: left; }   /* heading + paragraph on the left; tabs stay centred */
   .units-title {
     margin: 0 0 16px;
     font: 400 clamp(25px, 2.35vw, 40px)/1.15 var(--font-sans);
     letter-spacing: -0.005em;
-    text-align: center;
+    text-align: left;
   }
   .units-lead { margin: 0; }          /* uses the global body paragraph style */
   .units-tabs {
@@ -1424,7 +1424,7 @@
   <section class="units" aria-labelledby="unitsTitle">
     <div class="container units-head">
       <div class="units-intro">
-        <h2 class="units-title" id="unitsTitle">Four units.<br><br>Connected scientific work.</h2>
+        <h2 class="units-title" id="unitsTitle">Four units.<br>Connected scientific work.</h2>
         <p class="units-lead">Integrated teams of biologists, AI researchers, tool builders, and theorists work together to pursue Janelia’s overarching mission and move biological discoveries forward across HHMI and in the larger scientific community.</p>
       </div>
       <div class="units-tabs" role="tablist" aria-label="Research units">
