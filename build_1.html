@@ -1371,12 +1371,12 @@
      a "goo" SVG filter (blur + alpha threshold), so the blob melts into each
      dot it passes. The blob follows the scroll position. The real buttons sit
      on top, transparent, for clicks and keyboard focus. */
-  .hs-dots { position: relative; display: flex; justify-content: center; gap: 22px; margin-top: 40px; }
+  .hs-dots { --dot-gap: 12px; position: relative; display: flex; justify-content: center; gap: var(--dot-gap); margin-top: 40px; }
   .hs-dots button { position: relative; z-index: 1; width: 15px; height: 15px; padding: 0; border: 0; border-radius: 50%; background: transparent; cursor: pointer; }
   .hs-dots button:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
   .hs-goo {
     position: absolute; left: 0; right: 0; top: -12px; bottom: -12px;
-    display: flex; justify-content: center; align-items: center; gap: 22px;
+    display: flex; justify-content: center; align-items: center; gap: var(--dot-gap);
     pointer-events: none;
     filter: url(#hsGoo);
   }
