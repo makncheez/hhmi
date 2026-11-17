@@ -349,14 +349,24 @@
   .units-tab:focus-visible { outline: 2px solid #fff; outline-offset: -3px; }
   .units-tab[aria-selected="true"]:focus-visible { outline-color: #021341; }
   .units-panel {
-    margin-inline: 12px;             /* inset from the screen edges, framed on all sides */
-    border: 1px solid #fff;
+    position: relative;
+    margin-inline: 12px;             /* inset from the screen edges */
+    border: 1px solid transparent;   /* frame drawn by ::before / ::after with open corners */
     background: #000;
     color: var(--ink);
     min-height: 600px;
     padding: 56px 0;
   }
   .units-panel[hidden] { display: none; }
+  /* Frame with open corners (like the leadership cards): the top and bottom
+     lines stop 18px short of the sides, the side lines 18px short of the top
+     and bottom. Drawn over the video. The tabs keep their own borders. */
+  .units-panel::before, .units-panel::after {
+    content: ""; position: absolute; z-index: 2; pointer-events: none;
+    border: 0 solid #fff;
+  }
+  .units-panel::before { top: -1px; bottom: -1px; left: 17px; right: 17px; border-top-width: 1px; border-bottom-width: 1px; }
+  .units-panel::after  { top: 17px; bottom: 17px; left: -1px; right: -1px; border-left-width: 1px; border-right-width: 1px; }
 
   /* Panel left column: unit name (lime) + one-line description, then a square image */
   .unit-desc { margin: 0; max-width: 560px; }      /* global paragraph style, 17px / 1.35 */
