@@ -1366,7 +1366,6 @@
   .hs-link:focus-visible { outline: 2px solid #fff; outline-offset: -6px; }
   .hs-title { margin: 28px 0 14px; font: 400 clamp(18px, 1.6vw, 22px)/1.25 var(--font-sans); }
   .hs-date { display: block; font: 400 12px/1.4 var(--font-mono); letter-spacing: .02em; }
-  .hs-author { margin-top: 6px; }   /* same style as the date, on the next line */
   /* Gooey dots: the visible dots and a lime blob are drawn in .hs-goo under
      a "goo" SVG filter (blur + alpha threshold), so the blob melts into each
      dot it passes. The blob follows the scroll position. The real buttons sit
@@ -1876,7 +1875,6 @@
             <img src="assets/stories/reddien-danionella.webp" alt="" width="1000" height="667" loading="lazy" draggable="false">
             <h3 class="hs-title">Small Fish, Big Data: Exploring All the Cells in an Adult Vertebrate</h3>
             <time class="hs-date" datetime="2026-10-29">October 29, 2026</time>
-            <span class="hs-date hs-author">By Peter W Reddien</span>
           </a>
         </article>
         <article class="hs-card">
@@ -1884,7 +1882,6 @@
             <img src="assets/stories/cdc-coronavirus.webp" alt="" width="1000" height="667" loading="lazy" draggable="false">
             <h3 class="hs-title">Nasal Spray Booster Keeps COVID-19 at Bay</h3>
             <time class="hs-date" datetime="2020-11-11">November 11, 2020</time>
-            <span class="hs-date hs-author">By Akiko Iwasaki</span>
           </a>
         </article>
         <article class="hs-card">
@@ -1892,7 +1889,6 @@
             <img src="assets/stories/cell-infected-coronavirus.webp" alt="" width="1000" height="667" loading="lazy" draggable="false">
             <h3 class="hs-title">Why Men May Fare Worse than Women Against SARS-CoV-2</h3>
             <time class="hs-date" datetime="2020-11-11">November 11, 2020</time>
-            <span class="hs-date hs-author">By Akiko Iwasaki</span>
           </a>
         </article>
         <article class="hs-card" aria-hidden="true">
@@ -1900,7 +1896,6 @@
             <img src="assets/stories/reddien-danionella.webp" alt="" width="1000" height="667" loading="lazy" draggable="false">
             <h3 class="hs-title">Small Fish, Big Data: Exploring All the Cells in an Adult Vertebrate</h3>
             <time class="hs-date" datetime="2026-10-29">October 29, 2026</time>
-            <span class="hs-date hs-author">By Peter W Reddien</span>
           </a>
         </article>
         <article class="hs-card" aria-hidden="true">
@@ -1908,7 +1903,6 @@
             <img src="assets/stories/cdc-coronavirus.webp" alt="" width="1000" height="667" loading="lazy" draggable="false">
             <h3 class="hs-title">Nasal Spray Booster Keeps COVID-19 at Bay</h3>
             <time class="hs-date" datetime="2020-11-11">November 11, 2020</time>
-            <span class="hs-date hs-author">By Akiko Iwasaki</span>
           </a>
         </article>
         <article class="hs-card" aria-hidden="true">
@@ -1916,7 +1910,6 @@
             <img src="assets/stories/cell-infected-coronavirus.webp" alt="" width="1000" height="667" loading="lazy" draggable="false">
             <h3 class="hs-title">Why Men May Fare Worse than Women Against SARS-CoV-2</h3>
             <time class="hs-date" datetime="2020-11-11">November 11, 2020</time>
-            <span class="hs-date hs-author">By Akiko Iwasaki</span>
           </a>
         </article>
         <article class="hs-card" aria-hidden="true">
@@ -1924,7 +1917,6 @@
             <img src="assets/stories/reddien-danionella.webp" alt="" width="1000" height="667" loading="lazy" draggable="false">
             <h3 class="hs-title">Small Fish, Big Data: Exploring All the Cells in an Adult Vertebrate</h3>
             <time class="hs-date" datetime="2026-10-29">October 29, 2026</time>
-            <span class="hs-date hs-author">By Peter W Reddien</span>
           </a>
         </article>
         <article class="hs-card" aria-hidden="true">
@@ -1932,7 +1924,6 @@
             <img src="assets/stories/cdc-coronavirus.webp" alt="" width="1000" height="667" loading="lazy" draggable="false">
             <h3 class="hs-title">Nasal Spray Booster Keeps COVID-19 at Bay</h3>
             <time class="hs-date" datetime="2020-11-11">November 11, 2020</time>
-            <span class="hs-date hs-author">By Akiko Iwasaki</span>
           </a>
         </article>
       </div>
@@ -2216,7 +2207,7 @@ document.querySelectorAll('button.mj-more').forEach(function (btn) {
 (function () {
   var WORDS = [
     "Technologists", "Futurists", "Engineers", "Undergraduates", "Physician Scientists",
-    "Chemists", "MDs", "AI Scientists", "Biologists", "Physicists", "PhDs", "Postdocs",
+    "Chemists", "AI Scientists", "Biologists", "Physicists", "PhDs", "Postdocs",
     "Data Scientists", "Optimists", "Investigators", "Scholars", "Faculty", "Creative Minds"
   ];
   var START_INDEX = 3;          // word centred on load ("Undergraduates")
