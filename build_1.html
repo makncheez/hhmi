@@ -1421,6 +1421,62 @@
     .mfoot .in { padding-left: 24px; padding-right: 24px; }
   }
   @media (max-width: 560px) { .mf-cols { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px 20px; } }
+  /* ---------- Sidebar menu (opened by Explore) ----------
+     A <dialog> flush right: 480px on desktop, full width on phones. It fades
+     in (with a slight slide) over a dimmed page. Dark by default; the switch
+     in the top-left turns the sidebar (only) light, remembered per browser.
+     Rows use the CTA arrow: down for sections (up when open), right for updates. */
+  .smenu {
+    position: fixed; inset: 0 0 0 auto;
+    width: 480px; max-width: 100vw; height: 100%; max-height: none;
+    margin: 0; padding: 0; border: 0;
+    background: #000; color: #fff;
+    opacity: 0; transform: translateX(24px);
+    transition: opacity .35s ease, transform .35s cubic-bezier(.2,.7,.2,1), background-color .3s ease, color .3s ease;
+    font-family: var(--font-sans);
+  }
+  .smenu.is-open { opacity: 1; transform: none; }
+  .smenu::backdrop { background: rgba(0,0,0,0); transition: background .35s ease; }
+  .smenu.is-open::backdrop { background: rgba(0,0,0,.5); }
+  .smenu.is-light { background: #fff; color: #000; }
+  html.sm-open { overflow: hidden; }
+  .sm-in { display: flex; flex-direction: column; min-height: 100%; padding: 0 24px 40px; }
+  .sm-top { display: flex; align-items: center; justify-content: space-between; height: 96px; }
+  .smenu button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+  .smenu :focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
+  .smenu svg path { stroke: currentColor; }
+
+  /* Light-mode switch */
+  .smenu .sm-mode { display: inline-flex; align-items: center; gap: 10px; font: 400 12px/1 var(--font-sans); letter-spacing: .2em; text-transform: uppercase; }
+  .sm-track { position: relative; width: 40px; height: 22px; border: 1px solid currentColor; border-radius: 11px; }
+  .sm-track::after { content: ""; position: absolute; top: 3px; left: 3px; width: 14px; height: 14px; border-radius: 50%; background: currentColor; transition: transform .25s ease; }
+  .sm-mode[aria-checked="true"] .sm-track::after { transform: translateX(18px); }
+
+  /* Close: a thin "H", like the Explore icon's H state */
+  .sm-close { position: relative; width: 32px; height: 32px; }
+  .sm-close i { position: absolute; background: currentColor; }
+  .sm-close i:nth-child(1) { left: 3px;  top: 2px; width: 2px; height: 28px; }
+  .sm-close i:nth-child(2) { right: 3px; top: 2px; width: 2px; height: 28px; }
+  .sm-close i:nth-child(3) { left: 5px; right: 5px; top: 15px; height: 2px; }
+
+  .sm-nav { list-style: none; margin: 0; padding: 0; border-top: 1px solid currentColor; }
+  .sm-nav > li { border-bottom: 1px solid currentColor; }
+  .smenu .sm-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; width: 100%; min-height: 76px; padding: 14px 0; text-align: left; font-size: 26px; line-height: 1.15; }
+  .sm-row svg { flex: none; width: 32px; height: 34px; transform: rotate(90deg); transition: transform .35s ease; }
+  .sm-row[aria-expanded="true"] svg { transform: rotate(-90deg); }
+  .sm-row:hover svg path { stroke: #A5F300; }
+  .smenu.is-light .sm-row:hover svg path { stroke: #2DB44A; }
+  .sm-sub { list-style: none; margin: 0; padding: 0 0 18px; }
+  .sm-sub:empty { display: none; }
+
+  .sm-updates { margin-top: auto; padding-top: 56px; }
+  .sm-label { margin: 0 0 0; padding-bottom: 16px; border-bottom: 1px solid currentColor; font: 400 14px/1 var(--font-sans); letter-spacing: .2em; text-transform: uppercase; }
+  .sm-up { list-style: none; margin: 0; padding: 0; }
+  .sm-up a { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 28px 0 0; color: inherit; text-decoration: none; cursor: pointer; font-size: 17px; line-height: 1.12; }
+  .sm-up svg { flex: none; width: 32px; height: 34px; transition: transform .25s ease; }
+  .sm-up a:hover svg { transform: translateX(4px); }
+  @media (max-width: 575.98px) { .smenu { width: 100vw; } }
+  @media (prefers-reduced-motion: reduce) { .smenu, .smenu::backdrop, .sm-row svg, .sm-track::after { transition: none; } }
 </style>
 </head>
 <body>
@@ -1434,11 +1490,46 @@
     </span>
     <span class="brand-tile brand-campus">Janelia Research Campus</span>
   </a>
-  <button class="explore" type="button" aria-label="Explore menu" aria-expanded="false">
+  <button class="explore" type="button" aria-label="Explore menu" aria-expanded="false" aria-controls="smenu" aria-haspopup="dialog">
     <span class="explore-label">Explore</span>
     <span class="explore-icon" aria-hidden="true"><i></i><i></i><i></i></span>
   </button>
 </header>
+
+<dialog class="smenu" id="smenu" aria-label="Menu">
+  <div class="sm-in">
+    <div class="sm-top">
+      <button class="sm-mode" type="button" role="switch" aria-checked="false"><span class="sm-track" aria-hidden="true"></span><span>Light mode</span></button>
+      <button class="sm-close" type="button" aria-label="Close menu"><i></i><i></i><i></i></button>
+    </div>
+    <ul class="sm-nav">
+      <li>
+        <button class="sm-row" type="button" aria-expanded="false" aria-controls="smSub1"><span>Inside HHMI</span><svg viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        <ul class="sm-sub" id="smSub1" hidden></ul>
+      </li>
+      <li>
+        <button class="sm-row" type="button" aria-expanded="false" aria-controls="smSub2"><span>Opportunities for Scientists</span><svg viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        <ul class="sm-sub" id="smSub2" hidden></ul>
+      </li>
+      <li>
+        <button class="sm-row" type="button" aria-expanded="false" aria-controls="smSub3"><span>For Educators &amp; Students</span><svg viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        <ul class="sm-sub" id="smSub3" hidden></ul>
+      </li>
+      <li>
+        <button class="sm-row" type="button" aria-expanded="false" aria-controls="smSub4"><span>Our Scientists</span><svg viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        <ul class="sm-sub" id="smSub4" hidden></ul>
+      </li>
+      <li><button class="sm-row sm-search" type="button"><span>Search</span></button></li>
+    </ul>
+    <div class="sm-updates">
+      <p class="sm-label">Updates</p>
+      <ul class="sm-up">
+        <li><a>Applications are now open for Freeman Hrabowski Scholars Program. Apply Now!<svg viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round"/></svg></a></li>
+        <li><a>Applications are now open for Hanna Gray Fellows Program. Apply Now!<svg viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round"/></svg></a></li>
+      </ul>
+    </div>
+  </div>
+</dialog>
 
 <main>
   <section class="hero" id="hero" aria-label="Janelia Research Campus">
@@ -2772,6 +2863,61 @@ var TREE=[{"l": "Programs", "r": "programs", "k": [{"l": "All programs", "r": "p
     go(best);
   });
   vp.addEventListener('click', function (e) { if (moved) { e.preventDefault(); e.stopPropagation(); moved = false; } }, true);
+})();
+</script>
+<script>
+/* Sidebar menu: Explore opens it (fade + slight slide from the right);
+   H button, Esc or a click on the dimmed page closes it. Section rows
+   toggle their sub-lists (to be filled in later). The switch turns the
+   sidebar light; the choice is remembered in this browser. */
+(function () {
+  var dlg = document.getElementById('smenu'), btn = document.querySelector('.explore');
+  if (!dlg || !btn) return;
+  var reduce = matchMedia('(prefers-reduced-motion: reduce)');
+  var mode = dlg.querySelector('.sm-mode');
+  function setLight(on) { dlg.classList.toggle('is-light', on); mode.setAttribute('aria-checked', on ? 'true' : 'false'); }
+  try { setLight(localStorage.getItem('hhmiMenuLight') === '1'); } catch (e) {}
+  mode.addEventListener('click', function () {
+    var on = mode.getAttribute('aria-checked') !== 'true';
+    setLight(on);
+    try { localStorage.setItem('hhmiMenuLight', on ? '1' : '0'); } catch (e) {}
+  });
+  function open() {
+    if (dlg.open) return;
+    dlg.showModal();
+    document.documentElement.classList.add('sm-open');
+    btn.setAttribute('aria-expanded', 'true');
+    requestAnimationFrame(function () { requestAnimationFrame(function () { dlg.classList.add('is-open'); }); });
+  }
+  var closing = 0;
+  function close() {
+    if (!dlg.open) return;
+    dlg.classList.remove('is-open');
+    btn.setAttribute('aria-expanded', 'false');
+    clearTimeout(closing);
+    closing = setTimeout(function () {
+      dlg.close();
+      document.documentElement.classList.remove('sm-open');
+      btn.classList.remove('is-h');
+      btn.focus({ preventScroll: true });
+    }, reduce.matches ? 0 : 350);
+  }
+  btn.addEventListener('click', open);
+  dlg.querySelector('.sm-close').addEventListener('click', close);
+  dlg.addEventListener('cancel', function (e) { e.preventDefault(); close(); });
+  dlg.addEventListener('click', function (e) {
+    if (e.target !== dlg) return;
+    var r = dlg.getBoundingClientRect();
+    if (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom) close();
+  });
+  [].forEach.call(dlg.querySelectorAll('.sm-row[aria-controls]'), function (row) {
+    var sub = document.getElementById(row.getAttribute('aria-controls'));
+    row.addEventListener('click', function () {
+      var on = row.getAttribute('aria-expanded') !== 'true';
+      row.setAttribute('aria-expanded', on ? 'true' : 'false');
+      sub.hidden = !on;
+    });
+  });
 })();
 </script>
 </body>
