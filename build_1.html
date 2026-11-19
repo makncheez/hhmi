@@ -1410,7 +1410,12 @@
      so only its own bottom line is drawn; its sides break at the row line. */
   .mf-box--links { display: grid; grid-template-columns: 1fr 1fr; padding: 0; }   /* 2 cells: links | copyright */
   .mf-half { position: relative; padding: 28px 40px; }
-  .mf-half--copy::before { content: ""; position: absolute; left: -.5px; top: 10px; bottom: 0; border-left: 1px solid #fff; }   /* middle line: breaks at the row line, open at the bottom */
+  /* Middle line + where it meets the row line: a three-armed crosshair
+     (left, right, down) with a 6px gap at the centre, like the frame's
+     crosshairs: the row line is cut 6px either side, the middle line starts
+     6px below. Open at the bottom. */
+  .mf-half--copy::before { content: ""; position: absolute; left: -.5px; top: 6px; bottom: 0; border-left: 1px solid #fff; }
+  .mf-half--copy::after { content: ""; position: absolute; left: -6px; top: -1.5px; width: 12px; height: 3px; background: #000; }   /* cuts the row line at the junction */
   .mf-box--links::before { border-bottom-width: 0; }   /* last row: no bottom line */
   .mf-box:not(.mf-box--links)::after { top: 0; }   /* open outer edges, as in the Schema: sides run to the top / bottom */
   .mf-box--links::after { bottom: 0; }
@@ -1442,7 +1447,8 @@
     .mf-box { padding: 32px 20px 24px; }
     .mf-box--links { grid-template-columns: 1fr; padding: 0; }
     .mf-half { padding: 24px 20px; }
-    .mf-half--copy::before { left: 12px; right: 12px; top: -.5px; bottom: auto; border-left: 0; border-top: 1px solid #fff; }   /* stacked: a row line between, stopping short of the sides */
+    .mf-half--copy::before { left: 12px; right: 12px; top: -.5px; bottom: auto; border-left: 0; border-top: 1px solid #fff; }
+    .mf-half--copy::after { display: none; }   /* stacked: a row line between, stopping short of the sides */
     .mf-cols { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 36px 20px; }
   }
   /* ---------- Sidebar menu (opened by Explore) ----------
