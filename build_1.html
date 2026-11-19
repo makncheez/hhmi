@@ -1397,11 +1397,25 @@
   .mfoot { --dim: #9a9a9a; --soft: #cfcfcf; --rule: #2b2b2b; background: #000; color: #fff; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); font: 400 15px/1.4 var(--font-sans); }
   .mfoot a { color: inherit; text-decoration: none; cursor: pointer; }
   .mfoot .in { max-width: 1440px; margin: 0 auto; padding: 64px 32px 28px; }
-  .mf-cols { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 40px 28px; }   /* the sidebar menu's five groups */
+  /* Footer menu in the Schema grid: six broken-line cells (the menu's five
+     groups + Back to top), 3 across on desktop, 2 on tablets, 1 on phones.
+     As in Janelia at a Glance: each cell draws its bottom line (stopping 12px
+     short of the sides) and its sides (stopping 10px short of the row lines);
+     the outer top/bottom rows stay open. */
+  .mf-cols { --cols: 3; display: grid; grid-template-columns: repeat(var(--cols), minmax(0, 1fr)); }
+  .mf-cell { position: relative; padding: 28px 28px 40px; min-height: 260px; }
+  .mf-cell::before, .mf-cell::after { content: ""; position: absolute; pointer-events: none; border: 0 solid var(--rule-line, #5a5a5a); }
+  .mf-cell::before { left: 12px; right: 12px; bottom: -.5px; border-bottom-width: 1px; }
+  .mf-cell::after  { top: 10px; bottom: 10px; left: -.5px; right: -.5px; border-left-width: 1px; border-right-width: 1px; }
+  .mf-cell:nth-child(-n+3)::after { top: 0; }
+  .mf-cell:nth-last-child(-n+3)::after { bottom: 0; }
+  .mf-cell:nth-last-child(-n+3)::before { border-bottom-width: 0; }
+  .mf-cell--top { display: grid; place-items: center; }
+  .mfoot .mf-cell--top .totop svg { width: 40px; height: 42px; }
   .mf-col .mf-pair .t { display: block; }
   .mf-col li + li > .mf-pair { margin-top: 6px; }
   .mf-col { min-width: 0; }
-  .mf-col h3 { font: 400 12px/1.4 var(--font-mono); letter-spacing: .12em; text-transform: uppercase; color: var(--dim); margin: 0 0 12px; padding-bottom: 10px; border-bottom: 1px solid var(--rule); }
+  .mf-col h3 { font: 400 12px/1.4 var(--font-mono); letter-spacing: .12em; text-transform: uppercase; color: var(--dim); margin: 0 0 20px; }
   .mf-col h3 a:hover { color: #fff; }
   .mf-col ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 1px; }
   .mf-col li > a { display: block; padding: 5px 0; line-height: 1.3; font-size: 14px; }
@@ -1409,7 +1423,6 @@
   .mf-col .sub { margin-top: 14px; padding-bottom: 2px; font: 400 11px/1.4 var(--font-mono); letter-spacing: .1em; text-transform: uppercase; color: var(--dim); }
   .mf-col .sub:first-child { margin-top: 0; }
   .mf-col .sel .t { text-decoration: underline; text-underline-offset: 4px; }
-  .mf-base { display: flex; justify-content: flex-end; gap: 24px; margin-top: 56px; padding-top: 20px; border-top: 1px solid var(--rule); font-size: 12px; color: var(--dim); }
   .mfoot .totop { display: inline-flex; padding: 4px; }   /* just the CTA arrow, pointing up */
   .mfoot .totop svg { width: 26px; height: 27px; transform: rotate(-90deg); overflow: visible; }
   .mfoot .totop svg path { stroke: var(--dim); transition: stroke .2s ease; }
@@ -1418,11 +1431,21 @@
   .mf-stage { position: fixed; left: 0; right: 0; bottom: 0; z-index: 0; height: var(--stage-h, calc(22.3vw + 80px)); background: #000; }
   .mf-stage canvas { display: block; width: 100%; height: 100%; touch-action: pan-y; }
   .mf-reveal { height: var(--stage-h, calc(22.3vw + 80px)); }
-  @media (max-width: 1060px) {
-    .mf-cols { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-    .mfoot .in { padding-left: 24px; padding-right: 24px; }
+  @media (max-width: 1060px) { .mfoot .in { padding-left: 24px; padding-right: 24px; } }
+  @media (max-width: 991.98px) {
+    .mf-cols { --cols: 2; }
+    .mf-cell:nth-child(3)::after { top: 10px; }
+    .mf-cell:nth-last-child(3)::after { bottom: 10px; }
+    .mf-cell:nth-last-child(3)::before { border-bottom-width: 1px; }
   }
-  @media (max-width: 560px) { .mf-cols { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px 20px; } }
+  @media (max-width: 575.98px) {
+    .mf-cols { --cols: 1; }
+    .mf-cell { min-height: 0; padding: 24px 12px 32px; }
+    .mf-cell:nth-child(2)::after { top: 10px; }
+    .mf-cell:nth-last-child(2)::after { bottom: 10px; }
+    .mf-cell:nth-last-child(2)::before { border-bottom-width: 1px; }
+    .mf-cell--top { padding: 32px 0; }
+  }
   /* ---------- Sidebar menu (opened by Explore) ----------
      A <dialog> flush right: 480px on desktop, full width on phones. It
      appears instantly over a dimmed page (no fade, no movement). Dark by default; the switch
@@ -2108,13 +2131,13 @@
 
   <footer class="mfoot" id="mfoot"><div class="in">
     <nav class="mf-cols" id="mfcols" aria-label="Footer">
-      <div class="mf-col"><h3>Janelia Research Campus</h3><ul><li><a><span class="t">Overview</span></a></li><li><a><span class="t">Biology</span></a></li><li><a><span class="t">AI@HHMI</span></a></li><li><a><span class="t">Theory@HHMI</span></a></li><li><a><span class="t">Tools@HHMI</span></a></li><li><a><span class="t">Senior Leadership</span></a></li><li><a><span class="t">20th Anniversary</span></a></li><li><a><span class="t">Group Leaders</span></a></li><li><a><span class="t">Leader Labs</span></a></li><li><a><span class="t">Project &amp; Support Teams</span></a></li><li><a><span class="t">Careers &amp; Opportunities</span></a></li><li><a><span class="t">Tools and Resources</span></a></li></ul></div>
-      <div class="mf-col"><h3>Inside HHMI</h3><ul><li><a><span class="t">About</span></a></li><li><a><span class="t">HHMI Senior Leadership</span></a></li><li><a><span class="t">HHMI Board of Trustees</span></a></li><li><a><span class="t">Medical Advisory Board</span></a></li><li><a><span class="t">Scientific Review Board</span></a></li></ul></div>
-      <div class="mf-col"><h3>Opportunities for Scientists</h3><ul><li class="sub">Science Programs</li><li><a class="mf-pair"><span class="t">Mid-Career &amp; Senior Faculty</span><span class="t">HHMI Investigator Program</span></a></li><li><a class="mf-pair"><span class="t">Early Career Faculty</span><span class="t">Freeman Hrabowski Scholars</span></a></li><li><a class="mf-pair"><span class="t">Postdoc-Faculty Transition</span><span class="t">Hanna Gray Fellows</span></a></li><li><a class="mf-pair"><span class="t">PhD &amp; Postdoc Transition</span><span class="t">Gilliam Fellows Program</span></a></li></ul></div>
-      <div class="mf-col"><h3>For Educators &amp; Students</h3><ul><li class="sub">Educators</li><li><a><span class="t">BioInteractive</span></a></li><li><a><span class="t">Science Education Alliance (SEA)</span></a></li><li><a><span class="t">Success in Science</span></a></li><li class="sub">Students</li><li><a><span class="t">Cech Fellows Program</span></a></li><li><a><span class="t">Undergraduate Science Scholars Program</span></a></li></ul></div>
-      <div class="mf-col"><h3>Our Scientists</h3><ul><li class="sub">Program Scientists</li><li><a class="mf-pair"><span class="t">Mid-Career &amp; Senior Faculty</span><span class="t">HHMI Investigator Program</span></a></li><li><a class="mf-pair"><span class="t">Early Career Faculty</span><span class="t">Freeman Hrabowski Scholars</span></a></li><li><a class="mf-pair"><span class="t">Postdoc-Faculty Transition</span><span class="t">Hanna Gray Fellows</span></a></li><li><a class="mf-pair"><span class="t">PhD &amp; Postdoc Transition</span><span class="t">Gilliam Fellows Program</span></a></li></ul></div>
+      <div class="mf-cell mf-col"><h3>Janelia Research Campus</h3><ul><li><a><span class="t">Overview</span></a></li><li><a><span class="t">Biology</span></a></li><li><a><span class="t">AI@HHMI</span></a></li><li><a><span class="t">Theory@HHMI</span></a></li><li><a><span class="t">Tools@HHMI</span></a></li><li><a><span class="t">Senior Leadership</span></a></li><li><a><span class="t">20th Anniversary</span></a></li><li><a><span class="t">Group Leaders</span></a></li><li><a><span class="t">Leader Labs</span></a></li><li><a><span class="t">Project &amp; Support Teams</span></a></li><li><a><span class="t">Careers &amp; Opportunities</span></a></li><li><a><span class="t">Tools and Resources</span></a></li></ul></div>
+      <div class="mf-cell mf-col"><h3>Inside HHMI</h3><ul><li><a><span class="t">About</span></a></li><li><a><span class="t">HHMI Senior Leadership</span></a></li><li><a><span class="t">HHMI Board of Trustees</span></a></li><li><a><span class="t">Medical Advisory Board</span></a></li><li><a><span class="t">Scientific Review Board</span></a></li></ul></div>
+      <div class="mf-cell mf-col"><h3>Opportunities for Scientists</h3><ul><li class="sub">Science Programs</li><li><a class="mf-pair"><span class="t">Mid-Career &amp; Senior Faculty</span><span class="t">HHMI Investigator Program</span></a></li><li><a class="mf-pair"><span class="t">Early Career Faculty</span><span class="t">Freeman Hrabowski Scholars</span></a></li><li><a class="mf-pair"><span class="t">Postdoc-Faculty Transition</span><span class="t">Hanna Gray Fellows</span></a></li><li><a class="mf-pair"><span class="t">PhD &amp; Postdoc Transition</span><span class="t">Gilliam Fellows Program</span></a></li></ul></div>
+      <div class="mf-cell mf-col"><h3>For Educators &amp; Students</h3><ul><li class="sub">Educators</li><li><a><span class="t">BioInteractive</span></a></li><li><a><span class="t">Science Education Alliance (SEA)</span></a></li><li><a><span class="t">Success in Science</span></a></li><li class="sub">Students</li><li><a><span class="t">Cech Fellows Program</span></a></li><li><a><span class="t">Undergraduate Science Scholars Program</span></a></li></ul></div>
+      <div class="mf-cell mf-col"><h3>Our Scientists</h3><ul><li class="sub">Program Scientists</li><li><a class="mf-pair"><span class="t">Mid-Career &amp; Senior Faculty</span><span class="t">HHMI Investigator Program</span></a></li><li><a class="mf-pair"><span class="t">Early Career Faculty</span><span class="t">Freeman Hrabowski Scholars</span></a></li><li><a class="mf-pair"><span class="t">Postdoc-Faculty Transition</span><span class="t">Hanna Gray Fellows</span></a></li><li><a class="mf-pair"><span class="t">PhD &amp; Postdoc Transition</span><span class="t">Gilliam Fellows Program</span></a></li></ul></div>
+      <div class="mf-cell mf-cell--top"><a class="totop" href="#" id="totop" aria-label="Back to top"><svg viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
     </nav>
-    <div class="mf-base"><a class="totop" href="#" id="totop" aria-label="Back to top"><svg viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
   </div></footer>
 </main>
 <div class="mf-reveal" id="mfReveal" aria-hidden="true"></div>
