@@ -1439,7 +1439,8 @@
   html.sm-open { overflow: hidden; }
   html { scrollbar-gutter: stable; }   /* locking the scroll never shifts the header, so the close H stays on the Explore H */
   .sm-in { display: flex; flex-direction: column; min-height: 100%; padding: 0 24px 40px; }
-  .sm-top { display: flex; align-items: center; justify-content: space-between; height: 96px; }
+  .sm-top { position: sticky; top: 0; z-index: 1; display: flex; align-items: center; justify-content: space-between; height: 96px; background: inherit; }   /* stays put while the list scrolls under it */
+  .sm-in { background: inherit; }
   .smenu button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
   .smenu :focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
   .smenu svg path { stroke: currentColor; }
@@ -1527,7 +1528,7 @@
       </li>
       <li>
         <button class="sm-row" type="button" aria-expanded="false" aria-controls="smSub4"><span>Our Scientists</span><svg viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-        <ul class="sm-sub" id="smSub4" hidden><li class="sm-group"><p class="sm-gh">Program Scientists</p></li><li class="sm-group"><p class="sm-gh">Janelia Scientists</p></li></ul>
+        <ul class="sm-sub" id="smSub4" hidden><li class="sm-group"><p class="sm-gh">Program Scientists</p><ul class="sm-list sm-list--pairs"><li><a><span>Mid-Career &amp; Senior Faculty</span><span>HHMI Investigator Program</span></a></li><li><a><span>Early Career Faculty</span><span>Freeman Hrabowski Scholars</span></a></li><li><a><span>Postdoc-Faculty Transition</span><span>Hanna Gray Fellows</span></a></li><li><a><span>PhD &amp; Postdoc Transition</span><span>Gilliam Fellows Program</span></a></li></ul></li><li class="sm-group"><p class="sm-gh">Janelia Scientists</p><ul class="sm-list"><li><a>Group Leaders</a></li></ul></li></ul>
       </li>
       <li><button class="sm-row sm-search" type="button"><span>Search</span></button></li>
     </ul>
