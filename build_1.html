@@ -1518,6 +1518,7 @@
   .smenu { --sm-hover: #7DE050; scrollbar-width: none; }
   .smenu::-webkit-scrollbar { display: none; }   /* rules and colour bars run to the edge */
   .smenu.is-light { --sm-hover: #006B2A; }
+  .smenu .sm-links a[aria-current="page"] { color: var(--sm-hover); }   /* current page (Overview): lime in dark, #006B2A in light */
   .smenu .sm-row, .smenu .sm-links a, .smenu .sm-list a, .smenu .sm-up a { transition: color .2s ease; }
   .smenu .sm-row:hover, .smenu .sm-main:hover, .smenu .sm-links a:hover, .smenu .sm-nav .sm-list a:hover, .smenu .sm-news .sm-up a:hover { color: var(--sm-hover); }   /* beats Bootstrap's a:not([href]):not([class]):hover */
   /* Close H: white in dark mode, black in light (not the header's greens) */
@@ -1567,7 +1568,7 @@
         <nav class="sm-panel sm-panel--jrc" id="smJrc" aria-label="Janelia Research Campus">
           <div class="sm-jrc">
             <p class="sm-jh">Janelia Research Campus</p>
-            <ul class="sm-links"><li><a>Overview</a></li><li><a>Biology</a></li><li><a>AI@HHMI</a></li><li><a>Theory@HHMI</a></li><li><a>Tools@HHMI</a></li><li><a>Senior Leadership</a></li><li><a>20th Anniversary</a></li><li><a>Group Leaders</a></li><li><a>Leader Labs</a></li><li><a>Project &amp; Support Teams</a></li><li><a>Careers &amp; Opportunities</a></li><li><a>Tools and Resources</a></li></ul>
+            <ul class="sm-links"><li><a aria-current="page">Overview</a></li><li><a>Biology</a></li><li><a>AI@HHMI</a></li><li><a>Theory@HHMI</a></li><li><a>Tools@HHMI</a></li><li><a>Senior Leadership</a></li><li><a>20th Anniversary</a></li><li><a>Group Leaders</a></li><li><a>Leader Labs</a></li><li><a>Project &amp; Support Teams</a></li><li><a>Careers &amp; Opportunities</a></li><li><a>Tools and Resources</a></li></ul>
           </div>
         </nav>
       </div>
