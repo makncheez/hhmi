@@ -1374,10 +1374,14 @@
     scroll-padding: 0 12px;
     overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none;
     overscroll-behavior-x: contain;
-    cursor: grab;
+    cursor: default;
   }
   .hs-viewport::-webkit-scrollbar { display: none; }
-  .hs-viewport.is-dragging { cursor: grabbing; scroll-snap-type: none; user-select: none; }
+  .hs-viewport.is-dragging, .hs-viewport.is-gliding { scroll-snap-type: none; }
+  .hs-viewport.is-dragging { user-select: none; }
+  /* Cursor: pointer over a story (it opens in a new tab); a closed hand while
+     the mouse button is held down to drag. */
+  .hs-viewport.is-holding, .hs-viewport.is-holding * { cursor: grabbing !important; }
   .hs-track { display: flex; padding: 1px 0; }
   .hs-card { position: relative; flex: 0 0 25%; scroll-snap-align: start; }   /* 4 per view */
   .hs-track::after { content: ""; flex: 0 0 12px; }   /* end padding inside the scroller */
@@ -1387,7 +1391,7 @@
   .hs-card::before { top: 0; bottom: 0; left: 18px; right: 18px; border-top-width: 1px; border-bottom-width: 1px; }
   .hs-card::after  { top: 23px; bottom: 12px; left: 0; right: 0; border-left-width: 1px; border-right-width: 1px; }
   .hs-card + .hs-card { margin-left: -1px; }   /* neighbours share one side line */
-  .hs-link { display: block; height: 100%; padding: 32px 22px 56px; color: inherit; text-decoration: none; cursor: inherit; -webkit-user-drag: none; }
+  .hs-link { display: block; height: 100%; padding: 32px 22px 56px; color: inherit; text-decoration: none; cursor: pointer; -webkit-user-drag: none; }
   .hs-img { display: block; width: 100%; aspect-ratio: 3 / 2; background: #1a1a1a; }   /* image placeholder (images to come) */
   .hs-link:hover .hs-img { background: #222; }
   .hs-link img { display: block; width: 100%; height: auto; aspect-ratio: 3 / 2; object-fit: cover; background: #222; -webkit-user-drag: none; transition: opacity .2s ease; }
@@ -2095,77 +2099,77 @@
     <div class="hs-viewport" id="hsViewport">
       <div class="hs-track">
         <article class="hs-card">
-          <a class="hs-link" href="https://www.hhmi.org/news/wholistic-whole-organism-cellular-imaging-zebrafish">
+          <a class="hs-link" href="https://www.hhmi.org/news/wholistic-whole-organism-cellular-imaging-zebrafish" target="_blank" rel="noopener">
             <span class="hs-img" aria-hidden="true"></span>
             <h3 class="hs-title">A ‘WHOLISTIC’ View of Cellular Communication Across an Entire Animal</h3>
             <time class="hs-date" datetime="2026-09-10">September 10, 2026</time>
           </a>
         </article>
         <article class="hs-card">
-          <a class="hs-link" href="https://www.hhmi.org/news/scientists-complete-full-map-fruit-fly-brain-connectome">
+          <a class="hs-link" href="https://www.hhmi.org/news/scientists-complete-full-map-fruit-fly-brain-connectome" target="_blank" rel="noopener">
             <span class="hs-img" aria-hidden="true"></span>
             <h3 class="hs-title">Completing the Connectome: How Pursuing a Map of the Fly Brain Rewired Neuroscience</h3>
             <time class="hs-date" datetime="2026-09-03">September 3, 2026</time>
           </a>
         </article>
         <article class="hs-card">
-          <a class="hs-link" href="https://www.hhmi.org/news/how-one-postdocs-problem-solving-changing-way-scientists-work">
+          <a class="hs-link" href="https://www.hhmi.org/news/how-one-postdocs-problem-solving-changing-way-scientists-work" target="_blank" rel="noopener">
             <span class="hs-img" aria-hidden="true"></span>
             <h3 class="hs-title">How One Postdoc’s Problem Solving is Changing the Way Scientists Work</h3>
             <time class="hs-date" datetime="2026-08-27">August 27, 2026</time>
           </a>
         </article>
         <article class="hs-card">
-          <a class="hs-link" href="https://www.hhmi.org/news/meet-ann-hermundstad-leader-janelias-newest-research-area-theory">
+          <a class="hs-link" href="https://www.hhmi.org/news/meet-ann-hermundstad-leader-janelias-newest-research-area-theory" target="_blank" rel="noopener">
             <span class="hs-img" aria-hidden="true"></span>
             <h3 class="hs-title">Meet Ann Hermundstad, Leader of HHMI Janelia’s Newest Initiative, Theory@HHMI</h3>
             <time class="hs-date" datetime="2026-08-10">August 10, 2026</time>
           </a>
         </article>
         <article class="hs-card">
-          <a class="hs-link" href="https://www.hhmi.org/news/janelias-two-big-bets-decoding-brain-and-reinventing-how-science-done">
+          <a class="hs-link" href="https://www.hhmi.org/news/janelias-two-big-bets-decoding-brain-and-reinventing-how-science-done" target="_blank" rel="noopener">
             <span class="hs-img" aria-hidden="true"></span>
             <h3 class="hs-title">Janelia’s Two Big Bets: Decoding the Brain and Reinventing How Science is Done</h3>
             <time class="hs-date" datetime="2026-06-16">June 16, 2026</time>
           </a>
         </article>
         <article class="hs-card">
-          <a class="hs-link" href="https://www.hhmi.org/news/bigger-rewards-speed-up-learning-dopamine-study">
+          <a class="hs-link" href="https://www.hhmi.org/news/bigger-rewards-speed-up-learning-dopamine-study" target="_blank" rel="noopener">
             <span class="hs-img" aria-hidden="true"></span>
             <h3 class="hs-title">The Bigger the Reward, the Faster We Learn</h3>
             <time class="hs-date" datetime="2026-05-21">May 21, 2026</time>
           </a>
         </article>
         <article class="hs-card">
-          <a class="hs-link" href="https://www.hhmi.org/news/ai-protein-design-fluorescent-imaging-probes-novotag">
+          <a class="hs-link" href="https://www.hhmi.org/news/ai-protein-design-fluorescent-imaging-probes-novotag" target="_blank" rel="noopener">
             <span class="hs-img" aria-hidden="true"></span>
             <h3 class="hs-title">AI@HHMI: Lighting Up Life Inside Cells With AI-Designed Proteins</h3>
             <time class="hs-date" datetime="2026-05-13">May 13, 2026</time>
           </a>
         </article>
         <article class="hs-card">
-          <a class="hs-link" href="https://www.hhmi.org/news/blood-brain-barrier-proteins-drug-delivery">
+          <a class="hs-link" href="https://www.hhmi.org/news/blood-brain-barrier-proteins-drug-delivery" target="_blank" rel="noopener">
             <span class="hs-img" aria-hidden="true"></span>
             <h3 class="hs-title">In or Out? Researchers Uncover New Controls on the Brain’s ‘Bouncer’</h3>
             <time class="hs-date" datetime="2026-04-09">April 9, 2026</time>
           </a>
         </article>
         <article class="hs-card">
-          <a class="hs-link" href="https://www.hhmi.org/news/how-ai-is-advancing-cryo-electron-tomography">
+          <a class="hs-link" href="https://www.hhmi.org/news/how-ai-is-advancing-cryo-electron-tomography" target="_blank" rel="noopener">
             <span class="hs-img" aria-hidden="true"></span>
             <h3 class="hs-title">AI@HHMI: AI Takes Imaging to the Molecular Level</h3>
             <time class="hs-date" datetime="2026-04-02">April 2, 2026</time>
           </a>
         </article>
         <article class="hs-card">
-          <a class="hs-link" href="https://www.hhmi.org/news/david-clapham-ion-channels-life-in-science">
+          <a class="hs-link" href="https://www.hhmi.org/news/david-clapham-ion-channels-life-in-science" target="_blank" rel="noopener">
             <span class="hs-img" aria-hidden="true"></span>
             <h3 class="hs-title">David Clapham: A Life in Science Chasing Ion Channels</h3>
             <time class="hs-date" datetime="2026-02">February 2026</time>
           </a>
         </article>
         <article class="hs-card">
-          <a class="hs-link" href="https://www.hhmi.org/news/ai-hhmi-accelerates-biosensor-development">
+          <a class="hs-link" href="https://www.hhmi.org/news/ai-hhmi-accelerates-biosensor-development" target="_blank" rel="noopener">
             <span class="hs-img" aria-hidden="true"></span>
             <h3 class="hs-title">AI@HHMI: Accelerating the Development of New Biological Sensors</h3>
             <time class="hs-date" datetime="2026-01-22">January 22, 2026</time>
@@ -2965,14 +2969,14 @@ document.querySelectorAll('button.mj-more').forEach(function (btn) {
     x = Math.max(0, Math.min(x, max()));
     stopGlide();
     var from = vp.scrollLeft, d = x - from;
-    if (reduce.matches || Math.abs(d) < 1) { vp.scrollLeft = x; vp.classList.remove('is-dragging'); return; }
+    if (reduce.matches || Math.abs(d) < 1) { vp.scrollLeft = x; vp.classList.remove('is-dragging', 'is-gliding'); return; }
     var dur = Math.min(750, 320 + Math.abs(d) * 0.35), t0 = performance.now();
-    vp.classList.add('is-dragging');
+    vp.classList.remove('is-dragging'); vp.classList.add('is-gliding');
     (function frame(now) {
       var t = Math.min(1, (now - t0) / dur), e = 1 - Math.pow(1 - t, 3);   // ease-out cubic
       vp.scrollLeft = from + d * e;
       if (t < 1) raf = requestAnimationFrame(frame);
-      else { raf = 0; vp.classList.remove('is-dragging'); }
+      else { raf = 0; vp.classList.remove('is-gliding'); }
     })(t0);
   }
   function build() {
@@ -3031,6 +3035,7 @@ document.querySelectorAll('button.mj-more').forEach(function (btn) {
     if (e.pointerType !== 'mouse' || e.button !== 0) return;
     stopGlide();
     down = true; moved = false; x0 = e.clientX; s0 = vp.scrollLeft;
+    vp.classList.add('is-holding');
     samples = [{ x: e.clientX, t: e.timeStamp }];
   });
   window.addEventListener('pointermove', function (e) {
@@ -3044,6 +3049,7 @@ document.querySelectorAll('button.mj-more').forEach(function (btn) {
   });
   window.addEventListener('pointerup', function (e) {
     if (!down) return; down = false;
+    vp.classList.remove('is-holding');
     if (!moved) return;
     // Throw speed (px/ms) over the last ~100ms of movement
     var last = samples[samples.length - 1], first = samples[0];
