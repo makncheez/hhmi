@@ -1428,7 +1428,7 @@
      Rows use the CTA arrow: down for sections (up when open), right for updates. */
   .smenu {
     position: fixed; inset: 0 0 0 auto;
-    width: 480px; max-width: 100vw; height: 100%; max-height: none;
+    width: 480px; max-width: 100%; height: 100%; max-height: none;
     margin: 0; padding: 0; border: 0;
     background: #000; color: #fff;
     transition: background-color .3s ease, color .3s ease;
@@ -1508,6 +1508,7 @@
   .sm-x--tr { top: 20px; right: 1px; }
   .sm-x--bl { bottom: 20px; left: 1px; }
   .sm-x--br { bottom: 20px; right: 1px; }
+  .smenu .sm-mode { position: absolute; right: 24px; bottom: calc(100% + 16px); }   /* dark/light switch: just above the News box, top right */
   .sm-label { margin: 0 0 40px; font: 400 14px/1 var(--font-sans); letter-spacing: .2em; text-transform: uppercase; }
   .sm-up { list-style: none; margin: 0; padding: 0; }
   .sm-up li + li { margin-top: 40px; }
@@ -1522,7 +1523,7 @@
   /* Close H: white in dark mode, black in light (not the header's greens) */
   .smenu .sm-close .explore-icon i { background: currentColor; }
   .smenu .sm-close:hover { color: var(--sm-hover); }
-  @media (max-width: 575.98px) { .smenu { width: 100vw; } }
+  @media (max-width: 575.98px) { .smenu { width: 100%; } }   /* the visible width (100vw would include a scrollbar gutter and push the panel off the left edge) */
   @media (prefers-reduced-motion: reduce) { .smenu, .sm-row svg, .sm-track::after { transition: none; } }
 </style>
 </head>
@@ -1548,7 +1549,6 @@
     <div class="sm-top">
       <button class="sm-main" type="button" aria-controls="smMain"><span>Main</span><svg viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
       <button class="sm-main sm-back" type="button" aria-controls="smJrc" hidden><svg viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Back</span></button>
-      <button class="sm-mode" type="button" role="switch" aria-checked="false" aria-label="Light mode" hidden><span class="sm-track" aria-hidden="true"></span></button>
       <button class="sm-close" type="button" aria-label="Close menu"><span class="explore-icon" aria-hidden="true"><i></i><i></i><i></i></span></button>
     </div>
     <div class="sm-stage">
@@ -1573,6 +1573,7 @@
       </div>
     </div>
     <section class="sm-news" aria-label="News and updates">
+      <button class="sm-mode" type="button" role="switch" aria-checked="false" aria-label="Light mode"><span class="sm-track" aria-hidden="true"></span></button>
       <span class="deco sm-band sm-band--top" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
       <span class="sm-x sm-x--tl" aria-hidden="true"></span><span class="sm-x sm-x--tr" aria-hidden="true"></span><span class="sm-x sm-x--bl" aria-hidden="true"></span><span class="sm-x sm-x--br" aria-hidden="true"></span>
       <p class="sm-label">News &amp; Updates</p>
