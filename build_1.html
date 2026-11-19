@@ -1408,14 +1408,16 @@
   .mf-top { display: flex; justify-content: flex-end; margin-top: 40px; }
   /* Second row of the Schema (1 col): shares the first box's bottom line,
      so only its own bottom line is drawn; its sides break at the row line. */
-  .mf-box--links { padding: 28px 40px; }
+  .mf-box--links { display: grid; grid-template-columns: 1fr 1fr; padding: 0; }   /* 2 cells: links | copyright */
+  .mf-half { position: relative; padding: 28px 40px; }
+  .mf-half--copy::before { content: ""; position: absolute; left: -.5px; top: 10px; bottom: 0; border-left: 1px solid #fff; }   /* middle line: breaks at the row line, open at the bottom */
   .mf-box--links::before { border-bottom-width: 0; }   /* last row: no bottom line */
   .mf-box:not(.mf-box--links)::after { top: 0; }   /* open outer edges, as in the Schema: sides run to the top / bottom */
   .mf-box--links::after { bottom: 0; }
   .mf-legal { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 10px 28px; font-size: 15px; }
   .mfoot .mf-legal a { color: inherit; text-decoration: none; }
   .mfoot .mf-legal a:hover { text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 1px; }
-  .mf-copy { color: var(--dim); margin-left: auto; }
+  .mf-copy { margin: 0; font-size: 15px; color: var(--dim); }
   .mf-col .mf-pair .t { display: block; }
   .mf-col li + li > .mf-pair { margin-top: 6px; }
   .mf-col { min-width: 0; }
@@ -1438,8 +1440,9 @@
   @media (max-width: 1199.98px) { .mf-cols { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
   @media (max-width: 575.98px) {
     .mf-box { padding: 32px 20px 24px; }
-    .mf-box--links { padding: 24px 20px; }
-    .mf-copy { margin-left: 0; flex-basis: 100%; }
+    .mf-box--links { grid-template-columns: 1fr; padding: 0; }
+    .mf-half { padding: 24px 20px; }
+    .mf-half--copy::before { left: 12px; right: 12px; top: -.5px; bottom: auto; border-left: 0; border-top: 1px solid #fff; }   /* stacked: a row line between, stopping short of the sides */
     .mf-cols { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 36px 20px; }
   }
   /* ---------- Sidebar menu (opened by Explore) ----------
@@ -2138,7 +2141,10 @@
       <div class="mf-top"><a class="totop" href="#" id="totop" aria-label="Back to top"><svg viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
     </nav>
     <div class="mf-box mf-box--links">
-      <ul class="mf-legal"><li><a href="https://www.hhmi.org/about/doing-business-with-hhmi">Doing Business with HHMI</a></li><li><a href="https://www.hhmi.org/about/for-host-institutions">For Host Institutions</a></li><li><a href="https://www.hhmi.org/news/press-room">Press Room</a></li><li><a href="https://www.hhmi.org/about/policies">Policies</a></li><li><a href="https://www.hhmi.org/careers">Careers</a></li><li><a href="https://www.hhmi.org/contact-us">Contact Us</a></li><li><a href="https://www.hhmi.org/privacy-policy">Privacy Policy &amp; Cookie Notice</a></li><li><a href="https://www.hhmi.org/terms-of-use">Terms of Use</a></li><li class="mf-copy">© Howard Hughes Medical Institute 2026</li></ul>
+      <div class="mf-half">
+        <ul class="mf-legal"><li><a href="https://www.hhmi.org/about/doing-business-with-hhmi">Doing Business with HHMI</a></li><li><a href="https://www.hhmi.org/about/for-host-institutions">For Host Institutions</a></li><li><a href="https://www.hhmi.org/news/press-room">Press Room</a></li><li><a href="https://www.hhmi.org/about/policies">Policies</a></li><li><a href="https://www.hhmi.org/careers">Careers</a></li><li><a href="https://www.hhmi.org/contact-us">Contact Us</a></li><li><a href="https://www.hhmi.org/privacy-policy">Privacy Policy &amp; Cookie Notice</a></li><li><a href="https://www.hhmi.org/terms-of-use">Terms of Use</a></li></ul>
+      </div>
+      <div class="mf-half mf-half--copy"><p class="mf-copy">© Howard Hughes Medical Institute 2026</p></div>
     </div>
   </div></footer>
 </main>
