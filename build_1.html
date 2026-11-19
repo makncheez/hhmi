@@ -1496,19 +1496,15 @@
   .sm-list--pairs li + li { margin-top: 12px; }
   .sm-list--pairs a span { display: block; }
   /* News & Updates: framed by colour bars and corner crosshairs; follows the menu */
-  .sm-news { position: relative; margin-top: auto; padding: 50px 36px 64px; }   /* pushed to the bottom; follows the menu when it is longer */
-  .sm-band { position: absolute; left: 0; --deco-w: 100%; --deco-h: 12px; }
-  .sm-band--top { top: 0; --deco-1: #000d42; --deco-2: #a5f300; --deco-3: #3fc2cd; --deco-4: #00ac1d; }
-  .sm-band--bottom { bottom: 0; --deco-1: #00ac1d; --deco-2: #3fc2cd; --deco-3: #a5f300; --deco-4: #000d42; }
-  .sm-x { position: absolute; width: 29px; height: 29px; }
-  .sm-x::before, .sm-x::after { content: ""; position: absolute; background: currentColor; }
-  .sm-x::before { left: 14px; top: 0; width: 1px; height: 29px; -webkit-mask: linear-gradient(#000 0 11px, transparent 11px 18px, #000 18px); mask: linear-gradient(#000 0 11px, transparent 11px 18px, #000 18px); }
-  .sm-x::after  { top: 14px; left: 0; height: 1px; width: 29px; -webkit-mask: linear-gradient(90deg, #000 0 11px, transparent 11px 18px, #000 18px); mask: linear-gradient(90deg, #000 0 11px, transparent 11px 18px, #000 18px); }
-  .sm-x--tl { top: 20px; left: 1px; }
-  .sm-x--tr { top: 20px; right: 1px; }
-  .sm-x--bl { bottom: 20px; left: 1px; }
-  .sm-x--br { bottom: 20px; right: 1px; }
-  .smenu .sm-mode { position: absolute; right: 24px; bottom: calc(100% + 16px); }   /* dark/light switch: just above the News box, top right */
+  .sm-news { position: relative; margin-top: auto; padding: 50px 0 0; }   /* pushed to the bottom; follows the menu when it is longer */
+  /* News sits inside the careers section's HHMI frame (.hframe): edges,
+     long corner crosshairs and H / H / M / I at the corners, drawn here in
+     the sidebar's ink (white in dark, black in light). */
+  .sm-frame { --hf-ink: currentColor; display: block; aspect-ratio: auto; margin: 0 40px 56px; padding: 40px 28px; }
+  .sm-frame .hf-x { background: currentColor;
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' stroke='%23000' stroke-width='1' shape-rendering='crispEdges'%3E%3Csvg x='50%25' y='50%25' overflow='visible'%3E%3Cpath d='M0 -30V-6M0 6V30M-30 0H-6M6 0H30'/%3E%3C/svg%3E%3C/svg%3E") no-repeat;
+            mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' stroke='%23000' stroke-width='1' shape-rendering='crispEdges'%3E%3Csvg x='50%25' y='50%25' overflow='visible'%3E%3Cpath d='M0 -30V-6M0 6V30M-30 0H-6M6 0H30'/%3E%3C/svg%3E%3C/svg%3E") no-repeat; }
+  .smenu .sm-mode { position: absolute; right: 24px; top: 0; transform: translateY(-50%); }   /* dark/light switch: just above the News box, top right */
   .sm-label { margin: 0 0 40px; font: 400 14px/1 var(--font-sans); letter-spacing: .2em; text-transform: uppercase; }
   .sm-up { list-style: none; margin: 0; padding: 0; }
   .sm-up li + li { margin-top: 40px; }
@@ -1575,14 +1571,19 @@
     </div>
     <section class="sm-news" aria-label="News and updates">
       <button class="sm-mode" type="button" role="switch" aria-checked="false" aria-label="Light mode"><span class="sm-track" aria-hidden="true"></span></button>
-      <span class="deco sm-band sm-band--top" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
-      <span class="sm-x sm-x--tl" aria-hidden="true"></span><span class="sm-x sm-x--tr" aria-hidden="true"></span><span class="sm-x sm-x--bl" aria-hidden="true"></span><span class="sm-x sm-x--br" aria-hidden="true"></span>
-      <p class="sm-label">News &amp; Updates</p>
-      <ul class="sm-up">
-        <li><a>Applications are now open for Freeman Hrabowski Scholars Program. Apply Now!</a></li>
-        <li><a>Applications are now open for Hanna Gray Fellows Program. Apply Now!</a></li>
-      </ul>
-      <span class="deco sm-band sm-band--bottom" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
+      <div class="hframe sm-frame">
+        <span aria-hidden="true" class="hf-edge hf-t"></span><span aria-hidden="true" class="hf-edge hf-b"></span>
+        <span aria-hidden="true" class="hf-edge hf-l"></span><span aria-hidden="true" class="hf-edge hf-r"></span>
+        <span aria-hidden="true" class="hf-x hf-tl"></span><span aria-hidden="true" class="hf-x hf-tr"></span>
+        <span aria-hidden="true" class="hf-x hf-bl"></span><span aria-hidden="true" class="hf-x hf-br"></span>
+        <span aria-hidden="true" class="hf-ch hf-ch-tl">H</span><span aria-hidden="true" class="hf-ch hf-ch-tr">H</span>
+        <span aria-hidden="true" class="hf-ch hf-ch-bl">M</span><span aria-hidden="true" class="hf-ch hf-ch-br">I</span>
+        <p class="sm-label">News &amp; Updates</p>
+        <ul class="sm-up">
+          <li><a>Applications are now open for Freeman Hrabowski Scholars Program. Apply Now!</a></li>
+          <li><a>Applications are now open for Hanna Gray Fellows Program. Apply Now!</a></li>
+        </ul>
+      </div>
     </section>
   </div>
 </dialog>
