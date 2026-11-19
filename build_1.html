@@ -1469,10 +1469,10 @@
   .sm-slide { display: flex; align-items: flex-start; width: 200%; transform: translateX(-50%); transition: transform .45s cubic-bezier(.65,0,.35,1); }
   .smenu.is-main .sm-slide { transform: none; }
   .sm-panel { flex: 0 0 50%; padding: 0 24px; }
-  /* "Main" link: hidden while the main panel is showing */
+  /* "Main →" / "← Back" share the top-left slot */
   .smenu .sm-main { display: inline-flex; align-items: center; gap: 18px; font-size: 26px; line-height: 1; transition: opacity .3s ease, color .2s ease; }
   .sm-main svg { width: 32px; height: 34px; }
-  .smenu.is-main .sm-main { opacity: 0; pointer-events: none; }
+  .sm-back svg { transform: rotate(180deg); }   /* "← Back": shown in place of "Main" on the main panel */
   /* Janelia panel */
   .sm-jrc { margin-right: -24px; padding: 28px 24px 40px 0; border-top: 1px solid currentColor; border-bottom: 1px solid currentColor; }
   .sm-jh { margin: 0 0 18px; font: 400 26px/1.15 var(--font-sans); }
@@ -1482,10 +1482,8 @@
   .sm-nav { list-style: none; margin: 0 0 0 -24px; padding: 0; border-top: 1px solid currentColor; border-bottom: 1px solid currentColor; }
   .sm-nav > li { margin-left: 24px; }
   .sm-nav > li + li { border-top: 1px solid currentColor; }
-  .sm-nav > li:first-child { margin-left: 0; padding-left: 24px; }   /* the back row's rule is the bleeding top line */
   .smenu .sm-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; width: 100%; min-height: 76px; padding: 14px 0; text-align: left; font-size: 26px; line-height: 1.15; color: inherit; text-decoration: none; cursor: pointer; }
   .sm-row svg { flex: none; width: 32px; height: 34px; transform: rotate(90deg); }
-  .sm-back svg { transform: rotate(180deg); }
   .sm-nav > li:last-child .sm-row { padding-bottom: 40px; }
   /* News & Updates: framed by colour bars and corner crosshairs; follows the menu */
   .sm-news { position: relative; margin-top: auto; padding: 50px 36px 64px; }   /* pushed to the bottom; follows the menu when it is longer */
@@ -1539,6 +1537,7 @@
   <div class="sm-in">
     <div class="sm-top">
       <button class="sm-main" type="button" aria-controls="smMain"><span>Main</span><svg viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <button class="sm-main sm-back" type="button" aria-controls="smJrc" hidden><svg viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Back</span></button>
       <button class="sm-mode" type="button" role="switch" aria-checked="false" aria-label="Light mode" hidden><span class="sm-track" aria-hidden="true"></span></button>
       <button class="sm-close" type="button" aria-label="Close menu"><span class="explore-icon" aria-hidden="true"><i></i><i></i><i></i></span></button>
     </div>
@@ -1547,7 +1546,6 @@
         <!-- Main menu (left; slides in from the left when "Main" is clicked) -->
         <nav class="sm-panel sm-panel--main" id="smMain" aria-label="Main menu" inert>
           <ul class="sm-nav">
-            <li><button class="sm-row sm-back" type="button"><span>Janelia Research Campus</span><svg viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round"/></svg></button></li>
             <li><a class="sm-row"><span>Inside HHMI</span><svg viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round"/></svg></a></li>
             <li><a class="sm-row"><span>Opportunities for Scientists</span><svg viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round"/></svg></a></li>
             <li><a class="sm-row"><span>For Educators &amp; Students</span><svg viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round"/></svg></a></li>
@@ -2961,15 +2959,15 @@ var TREE=[{"l": "Programs", "r": "programs", "k": [{"l": "All programs", "r": "p
     if (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom) close();
   });
   // Two panels: Janelia (default) and Main. "Main" slides the main panel in
-  // from the left; its "Janelia Research Campus" row slides back. The stage
+  // from the left; "Back" (same spot) slides back. The stage
   // takes the height of the panel showing, so News & Updates follows it.
   var stage = dlg.querySelector('.sm-stage'), mainP = dlg.querySelector('.sm-panel--main'), jrcP = dlg.querySelector('.sm-panel--jrc');
-  var mainBtn = dlg.querySelector('.sm-main'), backBtn = dlg.querySelector('.sm-back');
+  var mainBtn = dlg.querySelector('.sm-main:not(.sm-back)'), backBtn = dlg.querySelector('.sm-back');
   function fit() { stage.style.height = (dlg.classList.contains('is-main') ? mainP : jrcP).offsetHeight + 'px'; }
   function show(main, focus) {
     dlg.classList.toggle('is-main', main);
     mainP.inert = !main; jrcP.inert = main;
-    mainBtn.setAttribute('aria-expanded', main ? 'true' : 'false');
+    mainBtn.hidden = main; backBtn.hidden = !main;
     fit();
     if (focus) (main ? backBtn : mainBtn).focus({ preventScroll: true });
   }
