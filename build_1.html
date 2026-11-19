@@ -1466,8 +1466,18 @@
   .sm-row[aria-expanded="true"] svg { transform: rotate(-90deg); }
   .sm-row:hover svg path { stroke: #A5F300; }
   .smenu.is-light .sm-row:hover svg path { stroke: #2DB44A; }
-  .sm-sub { list-style: none; margin: 0; padding: 0 0 18px; }
-  .sm-sub:empty { display: none; }
+  /* Sub-menus (shown when a section is open): green group headings, links
+     indented beneath; Science Programs links are two-line pairs. */
+  .sm-sub { list-style: none; margin: 0; padding: 0 0 36px; }
+  .sm-sub[hidden] { display: none; }
+  .sm-group + .sm-group { margin-top: 28px; }
+  .sm-gh { margin: 4px 0 14px; font: 400 17px/1.25 var(--font-sans); color: var(--green-1); }
+  .smenu.is-light .sm-gh { color: var(--green-3); }
+  .sm-list { list-style: none; margin: 0; padding: 0 0 0 28px; }
+  .sm-list a { display: block; padding: 2px 0; color: inherit; text-decoration: none; cursor: pointer; font-size: 17px; line-height: 1.3; }
+  .sm-list--pairs li + li { margin-top: 12px; }
+  .sm-list--pairs a span { display: block; }
+  .sm-list a:hover { text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 1px; }
 
   .sm-updates { margin-top: auto; padding-top: 56px; }
   .sm-label { margin: 0 0 0; padding-bottom: 16px; border-bottom: 1px solid currentColor; font: 400 14px/1 var(--font-sans); letter-spacing: .2em; text-transform: uppercase; }
@@ -1505,19 +1515,19 @@
     <ul class="sm-nav">
       <li>
         <button class="sm-row" type="button" aria-expanded="false" aria-controls="smSub1"><span>Inside HHMI</span><svg viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-        <ul class="sm-sub" id="smSub1" hidden></ul>
+        <ul class="sm-sub" id="smSub1" hidden><li><ul class="sm-list"><li><a>About</a></li><li><a>HHMI Senior Leadership</a></li><li><a>HHMI Board of Trustees</a></li><li><a>Medical Advisory Board</a></li><li><a>Scientific Review Board</a></li></ul></li></ul>
       </li>
       <li>
         <button class="sm-row" type="button" aria-expanded="false" aria-controls="smSub2"><span>Opportunities for Scientists</span><svg viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-        <ul class="sm-sub" id="smSub2" hidden></ul>
+        <ul class="sm-sub" id="smSub2" hidden><li class="sm-group"><p class="sm-gh">Science Programs</p><ul class="sm-list sm-list--pairs"><li><a><span>Mid-Career &amp; Senior Faculty</span><span>HHMI Investigator Program</span></a></li><li><a><span>Early Career Faculty</span><span>Freeman Hrabowski Scholars</span></a></li><li><a><span>Postdoc-Faculty Transition</span><span>Hanna Gray Fellows</span></a></li><li><a><span>PhD &amp; Postdoc Transition</span><span>Gilliam Fellows Program</span></a></li></ul></li><li class="sm-group"><p class="sm-gh">Janelia Research Campus</p><ul class="sm-list"><li><a>Overview</a></li><li><a>20th Anniversary</a></li><li><a>Biology</a></li><li><a>AI@HHMI</a></li><li><a>Theory@HHMI</a></li><li><a>Tools@HHMI</a></li><li><a>Senior Leadership</a></li><li><a>Group Leaders</a></li><li><a>Leader Labs</a></li><li><a>Project &amp; Support Teams</a></li><li><a>Careers &amp; Opportunities</a></li><li><a>Tools and Resources</a></li></ul></li></ul>
       </li>
       <li>
         <button class="sm-row" type="button" aria-expanded="false" aria-controls="smSub3"><span>For Educators &amp; Students</span><svg viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-        <ul class="sm-sub" id="smSub3" hidden></ul>
+        <ul class="sm-sub" id="smSub3" hidden><li class="sm-group"><p class="sm-gh">Educators</p><ul class="sm-list"><li><a>BioInteractive</a></li><li><a>Science Education Alliance (SEA)</a></li><li><a>Success in Science</a></li></ul></li><li class="sm-group"><p class="sm-gh">Students</p><ul class="sm-list"><li><a>Cech Fellows Program</a></li><li><a>Undergraduate Science Scholars Program</a></li></ul></li></ul>
       </li>
       <li>
         <button class="sm-row" type="button" aria-expanded="false" aria-controls="smSub4"><span>Our Scientists</span><svg viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-        <ul class="sm-sub" id="smSub4" hidden></ul>
+        <ul class="sm-sub" id="smSub4" hidden><li class="sm-group"><p class="sm-gh">Program Scientists</p></li><li class="sm-group"><p class="sm-gh">Janelia Scientists</p></li></ul>
       </li>
       <li><button class="sm-row sm-search" type="button"><span>Search</span></button></li>
     </ul>
@@ -2868,7 +2878,7 @@ var TREE=[{"l": "Programs", "r": "programs", "k": [{"l": "All programs", "r": "p
 <script>
 /* Sidebar menu: Explore opens it instantly;
    H button, Esc or a click on the dimmed page closes it. Section rows
-   toggle their sub-lists (to be filled in later). The switch turns the
+   open and close their sub-menus. The switch turns the
    sidebar light; the choice is remembered in this browser. */
 (function () {
   var dlg = document.getElementById('smenu'), btn = document.querySelector('.explore');
