@@ -1387,7 +1387,9 @@
   .hs-card::before { top: 0; bottom: 0; left: 18px; right: 18px; border-top-width: 1px; border-bottom-width: 1px; }
   .hs-card::after  { top: 23px; bottom: 12px; left: 0; right: 0; border-left-width: 1px; border-right-width: 1px; }
   .hs-card + .hs-card { margin-left: -1px; }   /* neighbours share one side line */
-  .hs-link { display: block; height: 100%; padding: 32px 22px 56px; color: inherit; text-decoration: none; cursor: inherit; }
+  .hs-link { display: block; height: 100%; padding: 32px 22px 56px; color: inherit; text-decoration: none; cursor: inherit; -webkit-user-drag: none; }
+  .hs-img { display: block; width: 100%; aspect-ratio: 3 / 2; background: #1a1a1a; }   /* image placeholder (images to come) */
+  .hs-link:hover .hs-img { background: #222; }
   .hs-link img { display: block; width: 100%; height: auto; aspect-ratio: 3 / 2; object-fit: cover; background: #222; -webkit-user-drag: none; transition: opacity .2s ease; }
   .hs-link:hover img { opacity: .8; }
   .hs-link:focus-visible { outline: 2px solid #fff; outline-offset: -6px; }
@@ -2093,59 +2095,80 @@
     <div class="hs-viewport" id="hsViewport">
       <div class="hs-track">
         <article class="hs-card">
-          <a class="hs-link">
-            <img src="assets/stories/reddien-danionella.webp" alt="" width="1000" height="667" loading="lazy" draggable="false">
-            <h3 class="hs-title">Small Fish, Big Data: Exploring All the Cells in an Adult Vertebrate</h3>
-            <time class="hs-date" datetime="2026-10-29">October 29, 2026</time>
+          <a class="hs-link" href="https://www.hhmi.org/news/wholistic-whole-organism-cellular-imaging-zebrafish">
+            <span class="hs-img" aria-hidden="true"></span>
+            <h3 class="hs-title">A ‘WHOLISTIC’ View of Cellular Communication Across an Entire Animal</h3>
+            <time class="hs-date" datetime="2026-09-10">September 10, 2026</time>
           </a>
         </article>
         <article class="hs-card">
-          <a class="hs-link">
-            <img src="assets/stories/cdc-coronavirus.webp" alt="" width="1000" height="667" loading="lazy" draggable="false">
-            <h3 class="hs-title">Nasal Spray Booster Keeps COVID-19 at Bay</h3>
-            <time class="hs-date" datetime="2020-11-11">November 11, 2020</time>
+          <a class="hs-link" href="https://www.hhmi.org/news/scientists-complete-full-map-fruit-fly-brain-connectome">
+            <span class="hs-img" aria-hidden="true"></span>
+            <h3 class="hs-title">Completing the Connectome: How Pursuing a Map of the Fly Brain Rewired Neuroscience</h3>
+            <time class="hs-date" datetime="2026-09-03">September 3, 2026</time>
           </a>
         </article>
         <article class="hs-card">
-          <a class="hs-link">
-            <img src="assets/stories/cell-infected-coronavirus.webp" alt="" width="1000" height="667" loading="lazy" draggable="false">
-            <h3 class="hs-title">Why Men May Fare Worse than Women Against SARS-CoV-2</h3>
-            <time class="hs-date" datetime="2020-11-11">November 11, 2020</time>
+          <a class="hs-link" href="https://www.hhmi.org/news/how-one-postdocs-problem-solving-changing-way-scientists-work">
+            <span class="hs-img" aria-hidden="true"></span>
+            <h3 class="hs-title">How One Postdoc’s Problem Solving is Changing the Way Scientists Work</h3>
+            <time class="hs-date" datetime="2026-08-27">August 27, 2026</time>
           </a>
         </article>
-        <article class="hs-card" aria-hidden="true">
-          <a class="hs-link" tabindex="-1">
-            <img src="assets/stories/reddien-danionella.webp" alt="" width="1000" height="667" loading="lazy" draggable="false">
-            <h3 class="hs-title">Small Fish, Big Data: Exploring All the Cells in an Adult Vertebrate</h3>
-            <time class="hs-date" datetime="2026-10-29">October 29, 2026</time>
+        <article class="hs-card">
+          <a class="hs-link" href="https://www.hhmi.org/news/meet-ann-hermundstad-leader-janelias-newest-research-area-theory">
+            <span class="hs-img" aria-hidden="true"></span>
+            <h3 class="hs-title">Meet Ann Hermundstad, Leader of HHMI Janelia’s Newest Initiative, Theory@HHMI</h3>
+            <time class="hs-date" datetime="2026-08-10">August 10, 2026</time>
           </a>
         </article>
-        <article class="hs-card" aria-hidden="true">
-          <a class="hs-link" tabindex="-1">
-            <img src="assets/stories/cdc-coronavirus.webp" alt="" width="1000" height="667" loading="lazy" draggable="false">
-            <h3 class="hs-title">Nasal Spray Booster Keeps COVID-19 at Bay</h3>
-            <time class="hs-date" datetime="2020-11-11">November 11, 2020</time>
+        <article class="hs-card">
+          <a class="hs-link" href="https://www.hhmi.org/news/janelias-two-big-bets-decoding-brain-and-reinventing-how-science-done">
+            <span class="hs-img" aria-hidden="true"></span>
+            <h3 class="hs-title">Janelia’s Two Big Bets: Decoding the Brain and Reinventing How Science is Done</h3>
+            <time class="hs-date" datetime="2026-06-16">June 16, 2026</time>
           </a>
         </article>
-        <article class="hs-card" aria-hidden="true">
-          <a class="hs-link" tabindex="-1">
-            <img src="assets/stories/cell-infected-coronavirus.webp" alt="" width="1000" height="667" loading="lazy" draggable="false">
-            <h3 class="hs-title">Why Men May Fare Worse than Women Against SARS-CoV-2</h3>
-            <time class="hs-date" datetime="2020-11-11">November 11, 2020</time>
+        <article class="hs-card">
+          <a class="hs-link" href="https://www.hhmi.org/news/bigger-rewards-speed-up-learning-dopamine-study">
+            <span class="hs-img" aria-hidden="true"></span>
+            <h3 class="hs-title">The Bigger the Reward, the Faster We Learn</h3>
+            <time class="hs-date" datetime="2026-05-21">May 21, 2026</time>
           </a>
         </article>
-        <article class="hs-card" aria-hidden="true">
-          <a class="hs-link" tabindex="-1">
-            <img src="assets/stories/reddien-danionella.webp" alt="" width="1000" height="667" loading="lazy" draggable="false">
-            <h3 class="hs-title">Small Fish, Big Data: Exploring All the Cells in an Adult Vertebrate</h3>
-            <time class="hs-date" datetime="2026-10-29">October 29, 2026</time>
+        <article class="hs-card">
+          <a class="hs-link" href="https://www.hhmi.org/news/ai-protein-design-fluorescent-imaging-probes-novotag">
+            <span class="hs-img" aria-hidden="true"></span>
+            <h3 class="hs-title">AI@HHMI: Lighting Up Life Inside Cells With AI-Designed Proteins</h3>
+            <time class="hs-date" datetime="2026-05-13">May 13, 2026</time>
           </a>
         </article>
-        <article class="hs-card" aria-hidden="true">
-          <a class="hs-link" tabindex="-1">
-            <img src="assets/stories/cdc-coronavirus.webp" alt="" width="1000" height="667" loading="lazy" draggable="false">
-            <h3 class="hs-title">Nasal Spray Booster Keeps COVID-19 at Bay</h3>
-            <time class="hs-date" datetime="2020-11-11">November 11, 2020</time>
+        <article class="hs-card">
+          <a class="hs-link" href="https://www.hhmi.org/news/blood-brain-barrier-proteins-drug-delivery">
+            <span class="hs-img" aria-hidden="true"></span>
+            <h3 class="hs-title">In or Out? Researchers Uncover New Controls on the Brain’s ‘Bouncer’</h3>
+            <time class="hs-date" datetime="2026-04-09">April 9, 2026</time>
+          </a>
+        </article>
+        <article class="hs-card">
+          <a class="hs-link" href="https://www.hhmi.org/news/how-ai-is-advancing-cryo-electron-tomography">
+            <span class="hs-img" aria-hidden="true"></span>
+            <h3 class="hs-title">AI@HHMI: AI Takes Imaging to the Molecular Level</h3>
+            <time class="hs-date" datetime="2026-04-02">April 2, 2026</time>
+          </a>
+        </article>
+        <article class="hs-card">
+          <a class="hs-link" href="https://www.hhmi.org/news/david-clapham-ion-channels-life-in-science">
+            <span class="hs-img" aria-hidden="true"></span>
+            <h3 class="hs-title">David Clapham: A Life in Science Chasing Ion Channels</h3>
+            <time class="hs-date" datetime="2026-02">February 2026</time>
+          </a>
+        </article>
+        <article class="hs-card">
+          <a class="hs-link" href="https://www.hhmi.org/news/ai-hhmi-accelerates-biosensor-development">
+            <span class="hs-img" aria-hidden="true"></span>
+            <h3 class="hs-title">AI@HHMI: Accelerating the Development of New Biological Sensors</h3>
+            <time class="hs-date" datetime="2026-01-22">January 22, 2026</time>
           </a>
         </article>
       </div>
