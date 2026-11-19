@@ -1341,16 +1341,10 @@
     opacity: 0; visibility: hidden;
     transition: opacity .25s ease, visibility 0s linear .25s;
   }
-  .nlx.is-open, .nlx:focus-within { width: min(560px, 92%); height: 172px; background: #FBFBFB; }
-  .nlx.is-open .deco, .nlx:focus-within .deco { opacity: 1; transition-delay: .2s; }
-  .nlx.is-open .nlx-label, .nlx:focus-within .nlx-label { opacity: 0; pointer-events: none; }
-  .nlx.is-open .nlx-panel, .nlx:focus-within .nlx-panel { opacity: 1; visibility: visible; transition: opacity .3s ease .2s, visibility 0s; }
-  @media (hover: hover) {
-    .nlx:hover { width: min(560px, 92%); height: 172px; background: #FBFBFB; }
-    .nlx:hover .deco { opacity: 1; transition-delay: .2s; }
-    .nlx:hover .nlx-label { opacity: 0; pointer-events: none; }
-    .nlx:hover .nlx-panel { opacity: 1; visibility: visible; transition: opacity .3s ease .2s, visibility 0s; }
-  }
+  .nlx.is-open { width: min(560px, 92%); height: 172px; background: #FBFBFB; }   /* opens on click / tap only */
+  .nlx.is-open .deco { opacity: 1; transition-delay: .2s; }
+  .nlx.is-open .nlx-label { opacity: 0; pointer-events: none; }
+  .nlx.is-open .nlx-panel { opacity: 1; visibility: visible; transition: opacity .3s ease .2s, visibility 0s; }
   .nlx-join { display: flex; flex-direction: column; align-items: center; gap: 14px; color: inherit; text-decoration: none; cursor: pointer; text-align: center; font: 400 18px/1.25 var(--font-mono); letter-spacing: .02em; transition: color .2s ease; }
   .nlx-arrow { width: 26px; height: 27px; overflow: visible; }
   .nlx-arrow path { stroke: currentColor; }
@@ -1363,7 +1357,7 @@
   .nl .nlx-join:hover, .nl .nlx-join:focus-visible, .nl .nlx-ic:hover, .nl .nlx-ic:focus-visible { color: #00AC1D; }
   .nlx :focus-visible { outline: 2px solid #00AC1D; outline-offset: 3px; }
   @media (max-width: 575.98px) {
-    .nlx.is-open, .nlx:focus-within { width: 94%; }
+    .nlx.is-open { width: 94%; }
     .nlx-panel { padding: 14px 24px; }
     .nlx-icons { grid-template-columns: repeat(3, 34px); gap: 8px 10px; }
     .nlx-ic { width: 34px; height: 34px; }
@@ -2362,6 +2356,11 @@
       clearInterval(timer); timer = null;
       decos.forEach(function (d) { d.last = ''; d.cells.forEach(function (c) { c.style.backgroundColor = ''; }); });
     }
+    if (cta.classList.contains('nlx')) {   // Stay Connected: shuffles while its panel is open (click to open)
+      cta.addEventListener('deco:start', start);
+      cta.addEventListener('deco:stop', stop);
+      return;
+    }
     cta.addEventListener('mouseenter', start);
     cta.addEventListener('mouseleave', stop);
     cta.addEventListener('focus', function () { if (cta.matches(':focus-visible')) start(); });
@@ -3085,8 +3084,8 @@ document.querySelectorAll('button.mj-more').forEach(function (btn) {
 })();
 </script>
 <script>
-/* Stay Connected: tap (or Enter) opens the panel, tap outside or Esc closes
-   it; on hover devices hovering opens it too. */
+/* Stay Connected: a click / tap (or Enter) opens the panel; a click or tap
+   outside, Esc, or tabbing out of it closes it. No hover opening. */
 (function () {
   var box = document.getElementById('nlx'); if (!box) return;
   var btn = box.querySelector('.nlx-label');
@@ -3094,9 +3093,12 @@ document.querySelectorAll('button.mj-more').forEach(function (btn) {
     if (box.classList.contains('is-open') === on) return;
     box.classList.toggle('is-open', on);
     btn.setAttribute('aria-expanded', on ? 'true' : 'false');
-    box.dispatchEvent(new Event(on ? 'mouseenter' : 'mouseleave'));   // colour bars shuffle while open
+    box.dispatchEvent(new Event(on ? 'deco:start' : 'deco:stop'));   // colour bars shuffle while open
   }
-  btn.addEventListener('click', function () { set(!box.classList.contains('is-open')); });
+  btn.addEventListener('click', function () {
+    set(!box.classList.contains('is-open'));
+  });
+  box.addEventListener('focusout', function (e) { if (!box.contains(e.relatedTarget) && e.relatedTarget) set(false); });
   document.addEventListener('pointerdown', function (e) {   // pointerdown: iOS doesn't send clicks from plain areas
     if (box.contains(e.target)) return;
     set(false);
