@@ -1423,7 +1423,7 @@
   @media (max-width: 560px) { .mf-cols { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px 20px; } }
   /* ---------- Sidebar menu (opened by Explore) ----------
      A <dialog> flush right: 480px on desktop, full width on phones. It fades
-     in (with a slight slide) over a dimmed page. Dark by default; the switch
+     in over a dimmed page (no movement). Dark by default; the switch
      in the top-left turns the sidebar (only) light, remembered per browser.
      Rows use the CTA arrow: down for sections (up when open), right for updates. */
   .smenu {
@@ -1431,11 +1431,11 @@
     width: 480px; max-width: 100vw; height: 100%; max-height: none;
     margin: 0; padding: 0; border: 0;
     background: #000; color: #fff;
-    opacity: 0; transform: translateX(24px);
-    transition: opacity .35s ease, transform .35s cubic-bezier(.2,.7,.2,1), background-color .3s ease, color .3s ease;
+    opacity: 0;
+    transition: opacity .35s ease, background-color .3s ease, color .3s ease;
     font-family: var(--font-sans);
   }
-  .smenu.is-open { opacity: 1; transform: none; }
+  .smenu.is-open { opacity: 1; }
   .smenu::backdrop { background: rgba(0,0,0,0); transition: background .35s ease; }
   .smenu.is-open::backdrop { background: rgba(0,0,0,.5); }
   .smenu.is-light { background: #fff; color: #000; }
@@ -1452,12 +1452,13 @@
   .sm-track::after { content: ""; position: absolute; top: 3px; left: 3px; width: 14px; height: 14px; border-radius: 50%; background: currentColor; transition: transform .25s ease; }
   .sm-mode[aria-checked="true"] .sm-track::after { transform: translateX(18px); }
 
-  /* Close: a thin "H", like the Explore icon's H state */
-  .sm-close { position: relative; width: 32px; height: 32px; }
-  .sm-close i { position: absolute; background: currentColor; }
-  .sm-close i:nth-child(1) { left: 3px;  top: 2px; width: 2px; height: 28px; }
-  .sm-close i:nth-child(2) { right: 3px; top: 2px; width: 2px; height: 28px; }
-  .sm-close i:nth-child(3) { left: 5px; right: 5px; top: 15px; height: 2px; }
+  /* Close: the Explore icon itself in its "H" (hover) state, placed by JS
+     exactly over the header's Explore icon. */
+  .sm-close { position: fixed; padding: 0; line-height: 0; }
+  .sm-close .explore-icon i { transition: none; }
+  .sm-close .explore-icon i:nth-child(1) { transform: rotate(90deg) scaleX(.84375); }
+  .sm-close .explore-icon i:nth-child(2) { transform: translateY(-12.5px) rotate(-90deg) scaleX(.84375); }
+  .sm-close .explore-icon i:nth-child(3) { transform: translate(5px, -12.5px) scaleX(.6875); }
 
   .sm-nav { list-style: none; margin: 0; padding: 0; border-top: 1px solid currentColor; }
   .sm-nav > li { border-bottom: 1px solid currentColor; }
@@ -1499,8 +1500,8 @@
 <dialog class="smenu" id="smenu" aria-label="Menu">
   <div class="sm-in">
     <div class="sm-top">
-      <button class="sm-mode" type="button" role="switch" aria-checked="false"><span class="sm-track" aria-hidden="true"></span><span>Light mode</span></button>
-      <button class="sm-close" type="button" aria-label="Close menu"><i></i><i></i><i></i></button>
+      <button class="sm-mode" type="button" role="switch" aria-checked="false" aria-label="Light mode"><span class="sm-track" aria-hidden="true"></span></button>
+      <button class="sm-close" type="button" aria-label="Close menu"><span class="explore-icon" aria-hidden="true"><i></i><i></i><i></i></span></button>
     </div>
     <ul class="sm-nav">
       <li>
@@ -2882,9 +2883,20 @@ var TREE=[{"l": "Programs", "r": "programs", "k": [{"l": "All programs", "r": "p
     setLight(on);
     try { localStorage.setItem('hhmiMenuLight', on ? '1' : '0'); } catch (e) {}
   });
+  var closeBtn = dlg.querySelector('.sm-close'), top = dlg.querySelector('.sm-top');
+  // Put the close H exactly where the header's Explore icon is; centre the
+  // switch on the same line.
+  function place() {
+    var r = btn.querySelector('.explore-icon').getBoundingClientRect(), d = dlg.getBoundingClientRect();
+    closeBtn.style.left = r.left + 'px';
+    closeBtn.style.top = r.top + 'px';
+    top.style.height = (2 * (r.top + r.height / 2 - d.top)) + 'px';
+  }
+  window.addEventListener('resize', function () { if (dlg.open) place(); });
   function open() {
     if (dlg.open) return;
     dlg.showModal();
+    place();
     document.documentElement.classList.add('sm-open');
     btn.setAttribute('aria-expanded', 'true');
     requestAnimationFrame(function () { requestAnimationFrame(function () { dlg.classList.add('is-open'); }); });
