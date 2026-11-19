@@ -1463,9 +1463,9 @@
   /* Two panels side by side in .sm-slide (200% wide). Default shows the
      Janelia panel (right); "Main" slides the main panel in from the left.
      Each panel's rules bleed past the side the other panel lives on. */
-  .sm-in { padding-left: 0; padding-right: 0; }
+  .sm-in { padding: 0; }   /* no bottom padding: the News colour bars sit flush on the sidebar's bottom edge */
   .sm-top { padding: 0 24px; }
-  .sm-stage { overflow: hidden; transition: height .45s cubic-bezier(.65,0,.35,1); }
+  .sm-stage { flex: none; margin-bottom: 96px; overflow: hidden; transition: height .45s cubic-bezier(.65,0,.35,1); }
   .sm-slide { display: flex; align-items: flex-start; width: 200%; transform: translateX(-50%); transition: transform .45s cubic-bezier(.65,0,.35,1); }
   .smenu.is-main .sm-slide { transform: none; }
   .sm-panel { flex: 0 0 50%; padding: 0 24px; }
@@ -1488,7 +1488,7 @@
   .sm-back svg { transform: rotate(180deg); }
   .sm-nav > li:last-child .sm-row { padding-bottom: 40px; }
   /* News & Updates: framed by colour bars and corner crosshairs; follows the menu */
-  .sm-news { position: relative; margin-top: 96px; padding: 50px 36px 64px; }
+  .sm-news { position: relative; margin-top: auto; padding: 50px 36px 64px; }   /* pushed to the bottom; follows the menu when it is longer */
   .sm-band { position: absolute; left: 0; --deco-w: 100%; --deco-h: 12px; }
   .sm-band--top { top: 0; --deco-1: #000d42; --deco-2: #a5f300; --deco-3: #3fc2cd; --deco-4: #00ac1d; }
   .sm-band--bottom { bottom: 0; --deco-1: #00ac1d; --deco-2: #3fc2cd; --deco-3: #a5f300; --deco-4: #000d42; }
