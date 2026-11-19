@@ -1484,6 +1484,19 @@
   .smenu .sm-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; width: 100%; min-height: 76px; padding: 14px 0; text-align: left; font-size: 26px; line-height: 1.15; color: inherit; text-decoration: none; cursor: pointer; }
   .sm-row svg { flex: none; width: 32px; height: 34px; transform: rotate(90deg); transition: transform .35s ease; }
   .sm-nav > li:last-child .sm-row { padding-bottom: 40px; }
+  /* Search: looks exactly like the other rows; click it and you can type
+     (a stand-in for now, nothing is submitted). */
+  .sm-search { cursor: text; }
+  .sm-search input {
+    width: 100%; min-width: 0; margin: 0; padding: 0;
+    border: 0; border-radius: 0; background: none; outline: none;
+    font: inherit; color: inherit; caret-color: currentColor;
+    -webkit-appearance: none; appearance: none;
+  }
+  .smenu .sm-search input:focus-visible { outline: none; }   /* no box: the caret shows it's active */
+  .sm-search input::placeholder { color: inherit; opacity: 1; }
+  .sm-search input:focus::placeholder { opacity: .35; }
+  .sm-search input::-webkit-search-cancel-button { -webkit-appearance: none; }
   .sm-row[aria-expanded="true"] svg { transform: rotate(-90deg); }
   /* Sub-menus (open under a section): green group headings, links indented */
   .sm-sub { list-style: none; margin: 0; padding: 0 0 36px; }
@@ -1557,7 +1570,7 @@
             <li><button class="sm-row" type="button" aria-expanded="false" aria-controls="smSub2"><span>Opportunities for Scientists</span><svg viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round"/></svg></button><ul class="sm-sub" id="smSub2" hidden><li class="sm-group"><p class="sm-gh">Science Programs</p><ul class="sm-list sm-list--pairs"><li><a><span>Mid-Career &amp; Senior Faculty</span><span>HHMI Investigator Program</span></a></li><li><a><span>Early Career Faculty</span><span>Freeman Hrabowski Scholars</span></a></li><li><a><span>Postdoc-Faculty Transition</span><span>Hanna Gray Fellows</span></a></li><li><a><span>PhD &amp; Postdoc Transition</span><span>Gilliam Fellows Program</span></a></li></ul></li></ul></li>
             <li><button class="sm-row" type="button" aria-expanded="false" aria-controls="smSub3"><span>For Educators &amp; Students</span><svg viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round"/></svg></button><ul class="sm-sub" id="smSub3" hidden><li class="sm-group"><p class="sm-gh">Educators</p><ul class="sm-list"><li><a>BioInteractive</a></li><li><a>Science Education Alliance (SEA)</a></li><li><a>Success in Science</a></li></ul></li><li class="sm-group"><p class="sm-gh">Students</p><ul class="sm-list"><li><a>Cech Fellows Program</a></li><li><a>Undergraduate Science Scholars Program</a></li></ul></li></ul></li>
             <li><button class="sm-row" type="button" aria-expanded="false" aria-controls="smSub4"><span>Our Scientists</span><svg viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round"/></svg></button><ul class="sm-sub" id="smSub4" hidden><li class="sm-group"><p class="sm-gh">Program Scientists</p><ul class="sm-list sm-list--pairs"><li><a><span>Mid-Career &amp; Senior Faculty</span><span>HHMI Investigator Program</span></a></li><li><a><span>Early Career Faculty</span><span>Freeman Hrabowski Scholars</span></a></li><li><a><span>Postdoc-Faculty Transition</span><span>Hanna Gray Fellows</span></a></li><li><a><span>PhD &amp; Postdoc Transition</span><span>Gilliam Fellows Program</span></a></li></ul></li><li class="sm-group"><p class="sm-gh">Janelia Scientists</p><ul class="sm-list"><li><a>Group Leaders</a></li></ul></li></ul></li>
-            <li><a class="sm-row sm-search"><span>Search</span></a></li>
+            <li><label class="sm-row sm-search"><input type="search" placeholder="Search" aria-label="Search" autocomplete="off" spellcheck="false"></label></li>
           </ul>
         </nav>
         <!-- Janelia Research Campus (default) -->
