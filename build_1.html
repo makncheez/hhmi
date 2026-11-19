@@ -2957,7 +2957,24 @@ document.querySelectorAll('button.mj-more').forEach(function (btn) {
   var stops = [], btns = [];
   function pos(c) { return c.getBoundingClientRect().left - vp.getBoundingClientRect().left + vp.scrollLeft - 12; }
   function max() { return vp.scrollWidth - vp.clientWidth; }
-  function go(x) { vp.scrollTo({ left: Math.max(0, Math.min(x, max())), behavior: reduce.matches ? 'auto' : 'smooth' }); }
+  // Eased glide to a position (snap is switched off while it runs, so the
+  // browser's own snapping can't fight the animation).
+  var raf = 0;
+  function stopGlide() { if (raf) { cancelAnimationFrame(raf); raf = 0; } }
+  function go(x) {
+    x = Math.max(0, Math.min(x, max()));
+    stopGlide();
+    var from = vp.scrollLeft, d = x - from;
+    if (reduce.matches || Math.abs(d) < 1) { vp.scrollLeft = x; vp.classList.remove('is-dragging'); return; }
+    var dur = Math.min(750, 320 + Math.abs(d) * 0.35), t0 = performance.now();
+    vp.classList.add('is-dragging');
+    (function frame(now) {
+      var t = Math.min(1, (now - t0) / dur), e = 1 - Math.pow(1 - t, 3);   // ease-out cubic
+      vp.scrollLeft = from + d * e;
+      if (t < 1) raf = requestAnimationFrame(frame);
+      else { raf = 0; vp.classList.remove('is-dragging'); }
+    })(t0);
+  }
   function build() {
     var per = Math.max(1, Math.round((vp.clientWidth - 24) / cards[0].getBoundingClientRect().width));
     var pages = Math.ceil(cards.length / per);
@@ -3006,24 +3023,36 @@ document.querySelectorAll('button.mj-more').forEach(function (btn) {
   var rq = 0;
   window.addEventListener('resize', function () { if (rq) return; rq = requestAnimationFrame(function () { rq = 0; build(); }); });
   build();
-  // Mouse drag; snaps to the nearest card on release.
-  var down = false, x0 = 0, s0 = 0, moved = false;
+  // Mouse drag with momentum: the track follows the pointer 1:1; on release
+  // it keeps the throw's speed and glides (ease-out) to the card nearest to
+  // where that momentum would carry it. Touch uses the native swipe + snap.
+  var down = false, x0 = 0, s0 = 0, moved = false, samples = [];
   vp.addEventListener('pointerdown', function (e) {
-    if (e.pointerType !== 'mouse') return;
+    if (e.pointerType !== 'mouse' || e.button !== 0) return;
+    stopGlide();
     down = true; moved = false; x0 = e.clientX; s0 = vp.scrollLeft;
+    samples = [{ x: e.clientX, t: e.timeStamp }];
   });
   window.addEventListener('pointermove', function (e) {
     if (!down) return;
     var dx = e.clientX - x0;
     if (!moved && Math.abs(dx) > 4) { moved = true; vp.classList.add('is-dragging'); }
-    if (moved) vp.scrollLeft = s0 - dx;
+    if (!moved) return;
+    vp.scrollLeft = s0 - dx;
+    samples.push({ x: e.clientX, t: e.timeStamp });
+    if (samples.length > 6) samples.shift();
   });
-  window.addEventListener('pointerup', function () {
+  window.addEventListener('pointerup', function (e) {
     if (!down) return; down = false;
     if (!moved) return;
-    vp.classList.remove('is-dragging');
+    // Throw speed (px/ms) over the last ~100ms of movement
+    var last = samples[samples.length - 1], first = samples[0];
+    for (var i = samples.length - 1; i >= 0; i--) { if (last.t - samples[i].t > 100) break; first = samples[i]; }
+    var v = (last.t - first.t) > 0 ? (last.x - first.x) / (last.t - first.t) : 0;
+    if (e.timeStamp - last.t > 80) v = 0;                   // held still before letting go: no throw
+    var target = vp.scrollLeft - v * 260;                    // where the momentum would carry it
     var best = 0, d = 1e9;
-    cards.map(pos).concat(max()).forEach(function (x) { var k = Math.abs(x - vp.scrollLeft); if (k < d) { d = k; best = x; } });
+    cards.map(pos).concat(max()).forEach(function (x) { var k = Math.abs(x - target); if (k < d) { d = k; best = x; } });
     go(best);
   });
   vp.addEventListener('click', function (e) { if (moved) { e.preventDefault(); e.stopPropagation(); moved = false; } }, true);
