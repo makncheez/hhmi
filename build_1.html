@@ -1309,34 +1309,68 @@
   @media (min-width: 1200px) { .nl { --col: 93px; } }
   @media (min-width: 1400px) { .nl { --col: 108px; } }
   @media (max-width: 767.98px) { .nl { --col: 58px; } }
-  .nl .unit-explore:focus-visible { width: min(560px, 90%); height: 172px; }   /* label, arrow below, subline at the bottom */
-  @media (hover: hover) { .nl .unit-explore:hover { width: min(560px, 90%); height: 172px; } }
-  .nl .unit-explore .deco { --deco-h: 70%; }
 
   /* ---------- Highlighted Stories (1 col, after Senior Leadership) ---------- */
   .hs { padding: 120px 0 80px; background: #000; color: #fff; }
   .hs-title-main { margin: 0; font: 400 clamp(25px, 2.35vw, 40px)/1.15 var(--font-sans); letter-spacing: -0.005em; }
   @media (max-width: 767.98px) { .hs { padding: 80px 0 56px; } }
 
-  /* White version of the Explore button (Join Newsletter): white at rest
-     and when grown, black type. On hover "Stay Connected with HHMI" fades in,
-     pinned to the top edge of the grown box, above the label. */
-  .unit-explore--light { background: #fff; color: #000; }
-  .unit-explore--light svg path { stroke: #000; }
-  .unit-explore--light .ue-sub {
-    position: absolute; left: 50%; top: 12px;
-    transform: translateX(-50%);
-    opacity: 0;
-    font: 400 13px/1 var(--font-sans); letter-spacing: 0;
-    transition: opacity .3s ease;
+  /* "Stay Connected with HHMI": a white button at rest. Hover (or tap on
+     touch screens) grows it into a light panel inside the 180px banner:
+     "Join Newsletter" + arrow on the left, a thin rule, and "Stay Social"
+     with six round social icons on the right. Colour bars shuffle on the
+     sides. Links and icons turn #00AC1D on hover / focus. */
+  .nlx {
+    position: absolute; top: 50%; left: 50%; z-index: 1;
+    width: 320px; height: 64px;
+    transform: translate(-50%, -50%);
+    background: #fff; color: #000;
+    transition: width .45s cubic-bezier(.65,0,.35,1), height .45s cubic-bezier(.65,0,.35,1), background-color .3s ease;
   }
-  .unit-explore--light:focus-visible { background: #fff; color: #000; }
-  .unit-explore--light:focus-visible .ue-sub { opacity: 1; transition-delay: .2s; }
+  .nlx .deco { --deco-w: 17px; --deco-h: 70%; position: absolute; top: 50%; transform: translateY(-50%); opacity: 0; transition: opacity .3s ease; }
+  .nlx-label {
+    position: absolute; inset: 0; width: 100%;
+    padding: 0; border: 0; background: none; color: inherit; cursor: pointer;
+    font: 400 18px/1 var(--font-mono); letter-spacing: .02em; white-space: nowrap;
+    transition: opacity .2s ease;
+  }
+  .nlx-panel {
+    position: absolute; inset: 0;
+    display: grid; grid-template-columns: 1fr 1px 1fr; align-items: center;
+    padding: 14px 40px;
+    opacity: 0; visibility: hidden;
+    transition: opacity .25s ease, visibility 0s linear .25s;
+  }
+  .nlx.is-open, .nlx:focus-within { width: min(560px, 92%); height: 172px; background: #FBFBFB; }
+  .nlx.is-open .deco, .nlx:focus-within .deco { opacity: 1; transition-delay: .2s; }
+  .nlx.is-open .nlx-label, .nlx:focus-within .nlx-label { opacity: 0; pointer-events: none; }
+  .nlx.is-open .nlx-panel, .nlx:focus-within .nlx-panel { opacity: 1; visibility: visible; transition: opacity .3s ease .2s, visibility 0s; }
   @media (hover: hover) {
-    .unit-explore--light:hover { background: #fff; color: #000; }
-    .unit-explore--light:hover .ue-sub { opacity: 1; transition-delay: .2s; }
+    .nlx:hover { width: min(560px, 92%); height: 172px; background: #FBFBFB; }
+    .nlx:hover .deco { opacity: 1; transition-delay: .2s; }
+    .nlx:hover .nlx-label { opacity: 0; pointer-events: none; }
+    .nlx:hover .nlx-panel { opacity: 1; visibility: visible; transition: opacity .3s ease .2s, visibility 0s; }
   }
-  @media (prefers-reduced-motion: reduce) { .unit-explore--light .ue-sub { transition: none; } }
+  .nlx-join { display: flex; flex-direction: column; align-items: center; gap: 14px; color: inherit; text-decoration: none; cursor: pointer; text-align: center; font: 400 18px/1.25 var(--font-mono); letter-spacing: .02em; transition: color .2s ease; }
+  .nlx-arrow { width: 26px; height: 27px; overflow: visible; }
+  .nlx-arrow path { stroke: currentColor; }
+  .nlx-rule { align-self: stretch; margin: 8px 0; background: currentColor; }
+  .nlx-social { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+  .nlx-h { margin: 0; font: 400 18px/1 var(--font-mono); letter-spacing: .02em; }
+  .nlx-icons { display: grid; grid-template-columns: repeat(3, 40px); gap: 8px 16px; margin: 0; padding: 0; list-style: none; }
+  .nlx-ic { display: grid; place-items: center; width: 40px; height: 40px; border: 1px solid currentColor; border-radius: 50%; color: #000; transition: color .2s ease; }
+  .nlx-ic svg { width: 20px; height: 20px; }
+  .nl .nlx-join:hover, .nl .nlx-join:focus-visible, .nl .nlx-ic:hover, .nl .nlx-ic:focus-visible { color: #00AC1D; }
+  .nlx :focus-visible { outline: 2px solid #00AC1D; outline-offset: 3px; }
+  @media (max-width: 575.98px) {
+    .nlx.is-open, .nlx:focus-within { width: 94%; }
+    .nlx-panel { padding: 14px 24px; }
+    .nlx-icons { grid-template-columns: repeat(3, 34px); gap: 8px 10px; }
+    .nlx-ic { width: 34px; height: 34px; }
+    .nlx-ic svg { width: 17px; height: 17px; }
+    .nlx-join, .nlx-h { font-size: 15px; }
+  }
+  @media (prefers-reduced-motion: reduce) { .nlx, .nlx .deco, .nlx-label, .nlx-panel { transition: none; } }
   /* Highlighted Stories: 4 cards per view (3 / 2 / 1 on smaller screens), scroll-snap slider, dots.
      Cards use the leadership carousel's broken lines: top/bottom lines
      inset 18px from the sides, side lines stop short of the corners. */
@@ -2128,13 +2162,20 @@
     </svg>
   </section>
 
-  <section class="nl" aria-label="Newsletter">
-      <a class="unit-explore unit-explore--light">
-        <span class="deco ue-bar--l" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
-        <span>Join Newsletter</span><span class="ue-sub">Stay Connected with HHMI</span>
-        <svg viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke="black" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round" stroke="black"/></svg>
-        <span class="deco ue-bar--r" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
-      </a>
+  <section class="nl" aria-label="Stay connected">
+    <div class="nlx" id="nlx">
+      <span class="deco ue-bar--l" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
+      <button class="nlx-label" type="button" aria-expanded="false" aria-controls="nlxPanel">Stay Connected with HHMI</button>
+      <div class="nlx-panel" id="nlxPanel">
+        <a class="nlx-join"><span>Join<br>Newsletter</span><svg class="nlx-arrow" viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        <span class="nlx-rule" aria-hidden="true"></span>
+        <div class="nlx-social">
+          <p class="nlx-h">Stay Social</p>
+          <ul class="nlx-icons"><li><a class="nlx-ic" href="https://bsky.app/profile/hhmi-science.bsky.social" target="_blank" rel="noopener" aria-label="HHMI on Bluesky (opens in a new tab)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 11.2C10.6 8.4 7 4 4.3 4 2.7 4 2.6 5.6 2.9 7.6c.4 2.6 1.6 4.3 4.9 4.5-3.6.6-4.4 2.6-2.4 4.6 3.4 3.4 5.4-.3 6.6-3.6 1.2 3.3 3.2 7 6.6 3.6 2-2 1.2-4-2.4-4.6 3.3-.2 4.5-1.9 4.9-4.5.3-2-.2-3.6-1.4-3.6-2.7 0-6.3 4.4-7.7 7.2Z"/></svg></a></li><li><a class="nlx-ic" href="https://www.instagram.com/hhmi_science" target="_blank" rel="noopener" aria-label="HHMI on Instagram (opens in a new tab)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="4.5"/><circle cx="12" cy="12" r="3.6"/><circle cx="16.6" cy="7.4" r=".6" fill="currentColor" stroke="none"/></svg></a></li><li><a class="nlx-ic" href="https://www.linkedin.com/company/howard-hughes-medical-institute" target="_blank" rel="noopener" aria-label="HHMI on LinkedIn (opens in a new tab)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.5 10v8M6.5 6.4v.2M10.5 18v-8M10.5 13.2c0-2 1.3-3.4 3.2-3.4s3 1.3 3 3.4V18"/></svg></a></li><li><a class="nlx-ic" href="https://x.com/hhmi_science" target="_blank" rel="noopener" aria-label="HHMI on X (opens in a new tab)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19"/></svg></a></li><li><a class="nlx-ic" href="https://www.facebook.com/HowardHughesMed" target="_blank" rel="noopener" aria-label="HHMI on Facebook (opens in a new tab)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13.8 20v-7.4h2.6l.4-2.9h-3V7.9c0-.8.3-1.4 1.5-1.4h1.6V4c-.3 0-1.2-.1-2.3-.1-2.3 0-3.8 1.4-3.8 3.9v1.9H8.2v2.9h2.6V20"/></svg></a></li><li><a class="nlx-ic" href="https://www.youtube.com/c/HHMI" target="_blank" rel="noopener" aria-label="HHMI on YouTube (opens in a new tab)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="6.5" width="18" height="11" rx="3.2"/><path d="M10.3 9.6v4.8l4.2-2.4z"/></svg></a></li></ul>
+        </div>
+      </div>
+      <span class="deco ue-bar--r" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
+    </div>
   </section>
 
   <footer class="mfoot" id="mfoot"><div class="in">
@@ -2300,7 +2341,7 @@
     return a;
   }
   // Also the "Explore" buttons, whose two side bars shuffle independently.
-  document.querySelectorAll('.cta, .unit-explore').forEach(function (cta) {
+  document.querySelectorAll('.cta, .unit-explore, .nlx').forEach(function (cta) {
     var decos = Array.prototype.slice.call(cta.querySelectorAll('.deco')).map(function (d) {
       return { el: d, cells: Array.prototype.slice.call(d.children), last: '' };
     }).filter(function (d) { return d.cells.length === 4; });
@@ -3041,6 +3082,27 @@ document.querySelectorAll('button.mj-more').forEach(function (btn) {
       fit();
     });
   });
+})();
+</script>
+<script>
+/* Stay Connected: tap (or Enter) opens the panel, tap outside or Esc closes
+   it; on hover devices hovering opens it too. */
+(function () {
+  var box = document.getElementById('nlx'); if (!box) return;
+  var btn = box.querySelector('.nlx-label');
+  function set(on) {
+    if (box.classList.contains('is-open') === on) return;
+    box.classList.toggle('is-open', on);
+    btn.setAttribute('aria-expanded', on ? 'true' : 'false');
+    box.dispatchEvent(new Event(on ? 'mouseenter' : 'mouseleave'));   // colour bars shuffle while open
+  }
+  btn.addEventListener('click', function () { set(!box.classList.contains('is-open')); });
+  document.addEventListener('pointerdown', function (e) {   // pointerdown: iOS doesn't send clicks from plain areas
+    if (box.contains(e.target)) return;
+    set(false);
+    if (box.contains(document.activeElement)) document.activeElement.blur();
+  });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && box.classList.contains('is-open')) { set(false); btn.focus(); } });
 })();
 </script>
 </body>
