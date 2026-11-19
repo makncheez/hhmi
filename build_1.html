@@ -1407,8 +1407,8 @@
   .mf-box::after  { top: 10px; bottom: 10px; left: 0; right: 0; border-left-width: 1px; border-right-width: 1px; }
   .mf-cols { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 48px 32px; }
   /* Back to top: a 50px corner box like Read More's (.mj-more-box), tucked
-     into the bottom-left corner of the menu box: lines on its top and right. */
-  .mf-top { position: absolute; left: 0; bottom: 0; z-index: 1; background: #000; }
+     into the bottom-right corner of the menu box: lines on its top and left. */
+  .mf-top { position: absolute; right: 0; bottom: 0; z-index: 1; background: #000; }
   /* Second row of the Schema (1 col): shares the first box's bottom line,
      so only its own bottom line is drawn; its sides break at the row line. */
   .mf-box--links { display: grid; grid-template-columns: 1fr 1fr; padding: 0; }   /* 2 cells: links | copyright */
@@ -1437,7 +1437,7 @@
   .mf-col .sub { margin-top: 14px; padding-bottom: 2px; font: 400 15px/1.3 var(--font-sans); color: var(--dim); }
   .mf-col .sub:first-child { margin-top: 0; }
   .mf-col .sel .t { text-decoration: underline; text-underline-offset: 4px; }
-  .mfoot .totop { display: grid; place-items: center; width: 50px; height: 50px; border-top: 1px solid #fff; border-right: 1px solid #fff; }
+  .mfoot .totop { display: grid; place-items: center; width: 50px; height: 50px; border-top: 1px solid #fff; border-left: 1px solid #fff; }
   .mfoot .totop svg { width: 24px; height: 25px; transform: rotate(-90deg); overflow: visible; }
   .mfoot .totop svg path { stroke: #fff; transition: stroke .2s ease; }
   .mfoot .totop:hover svg path { stroke: #7DE050; }
