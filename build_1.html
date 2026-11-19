@@ -1465,8 +1465,6 @@
   .smenu .sm-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; width: 100%; min-height: 76px; padding: 14px 0; text-align: left; font-size: 26px; line-height: 1.15; }
   .sm-row svg { flex: none; width: 32px; height: 34px; transform: rotate(90deg); transition: transform .35s ease; }
   .sm-row[aria-expanded="true"] svg { transform: rotate(-90deg); }
-  .sm-row:hover svg path { stroke: #7DE050; }
-  .smenu.is-light .sm-row:hover svg path { stroke: #2DB44A; }
   /* Sub-menus (shown when a section is open): green group headings, links
      indented beneath; Science Programs links are two-line pairs. */
   .sm-sub { list-style: none; margin: 0; padding: 0 0 36px; }
@@ -1478,14 +1476,22 @@
   .sm-list a { display: block; padding: 2px 0; color: inherit; text-decoration: none; cursor: pointer; font-size: 17px; line-height: 1.3; }
   .sm-list--pairs li + li { margin-top: 12px; }
   .sm-list--pairs a span { display: block; }
-  .sm-list a:hover { text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 1px; }
+  .smenu .sm-nav .sm-list a:hover { text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 1px; }
+  /* Hover colour by mode: lime in dark, dark green in light. Text and arrows
+     both pick it up (arrows draw in currentColor); nothing moves. */
+  .smenu { --sm-hover: #7DE050; }
+  .smenu.is-light { --sm-hover: #006B2A; }
+  .smenu .sm-row, .sm-list a, .sm-up a { transition: color .2s ease; }
+  .smenu .sm-row:hover, .smenu .sm-nav .sm-list a:hover, .smenu .sm-updates .sm-up a:hover { color: var(--sm-hover); }   /* beats Bootstrap's a:not([href]):not([class]):hover */
+  /* Close H: white in dark mode, black in light (not the header's greens) */
+  .smenu .sm-close .explore-icon i { background: currentColor; }
+  .smenu .sm-close:hover { color: var(--sm-hover); }
 
   .sm-updates { margin-top: auto; padding-top: 56px; }
   .sm-label { margin: 0 0 0; padding-bottom: 16px; border-bottom: 1px solid currentColor; font: 400 14px/1 var(--font-sans); letter-spacing: .2em; text-transform: uppercase; }
   .sm-up { list-style: none; margin: 0; padding: 0; }
   .sm-up a { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 28px 0 0; color: inherit; text-decoration: none; cursor: pointer; font-size: 17px; line-height: 1.12; }
-  .sm-up svg { flex: none; width: 32px; height: 34px; transition: transform .25s ease; }
-  .sm-up a:hover svg { transform: translateX(4px); }
+  .sm-up svg { flex: none; width: 32px; height: 34px; }
   @media (max-width: 575.98px) { .smenu { width: 100vw; } }
   @media (prefers-reduced-motion: reduce) { .smenu, .sm-row svg, .sm-track::after { transition: none; } }
 </style>
