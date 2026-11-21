@@ -1589,7 +1589,7 @@
   .sm-list--pairs a span { display: block; }
   /* News & Updates: framed by colour bars and corner crosshairs; follows the menu */
   .sm-news[hidden] { display: none; }
-  .sm-in:has(.sm-news[hidden]) .sm-stage { margin-bottom: 40px; }
+  .sm-in:has(.sm-news[hidden]) .sm-stage { margin-bottom: 24px; }
   .sm-news { position: relative; margin-top: auto; padding: 50px 0 0; }   /* pushed to the bottom; follows the menu when it is longer */
   /* News sits inside the careers section's HHMI frame (.hframe): edges,
      long corner crosshairs and H / H / M / I at the corners, drawn here in
@@ -1598,7 +1598,10 @@
   .sm-frame .hf-x { background: currentColor;
     -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' stroke='%23000' stroke-width='1' shape-rendering='crispEdges'%3E%3Csvg x='50%25' y='50%25' overflow='visible'%3E%3Cpath d='M0 -30V-6M0 6V30M-30 0H-6M6 0H30'/%3E%3C/svg%3E%3C/svg%3E") no-repeat;
             mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' stroke='%23000' stroke-width='1' shape-rendering='crispEdges'%3E%3Csvg x='50%25' y='50%25' overflow='visible'%3E%3Cpath d='M0 -30V-6M0 6V30M-30 0H-6M6 0H30'/%3E%3C/svg%3E%3C/svg%3E") no-repeat; }
-  .smenu .sm-mode { position: absolute; left: 50%; top: calc(100% + 8px); transform: translateX(-50%); }   /* dark/light switch: centred on the frame's bottom edge, on the M / I line */   /* dark/light switch: just above the News box, top right */
+  /* Dark/light switch: bottom-left corner of the sidebar, always in view
+     (sticks to the bottom while the menu scrolls). */
+  .sm-foot { position: sticky; bottom: 0; z-index: 1; margin-top: auto; padding: 16px var(--sm-pad) 20px; background: inherit; }
+  .smenu .sm-mode { display: flex; }   /* dark/light switch: just above the News box, top right */
   .sm-label { margin: 0 0 40px; font: 400 14px/1 var(--font-sans); letter-spacing: .2em; text-transform: uppercase; }
   .sm-up { list-style: none; margin: 0; padding: 0; }
   .sm-up li + li { margin-top: 40px; }
@@ -1676,9 +1679,11 @@
           <li><a>Applications are now open for Freeman Hrabowski Scholars Program. Apply Now!</a></li>
           <li><a>Applications are now open for Hanna Gray Fellows Program. Apply Now!</a></li>
         </ul>
-        <button class="sm-mode" type="button" role="switch" aria-checked="false" aria-label="Light mode"><span class="sm-track" aria-hidden="true"></span></button>
       </div>
     </section>
+    <div class="sm-foot">
+      <button class="sm-mode" type="button" role="switch" aria-checked="false" aria-label="Light mode"><span class="sm-track" aria-hidden="true"></span></button>
+    </div>
   </div>
 </dialog>
 
