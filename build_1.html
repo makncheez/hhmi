@@ -1532,20 +1532,32 @@
      Each panel's rules bleed past the side the other panel lives on. */
   .sm-in { padding: 0; }   /* no bottom padding: the News colour bars sit flush on the sidebar's bottom edge */
   .sm-top { padding: 0 24px; }
+  /* The line under the top bar belongs to the (sticky) bar, so it stays put
+     while the menu scrolls. It still bleeds toward the other panel: off the
+     right edge on the Janelia panel, off the left edge on the main panel,
+     and slides across with the panels. */
+  .sm-top::after {
+    content: ""; position: absolute; bottom: 0; left: var(--sm-pad); right: 0;
+    border-top: 1px solid currentColor;
+    transition: left .45s cubic-bezier(.65,0,.35,1), right .45s cubic-bezier(.65,0,.35,1);
+  }
+  .smenu.is-main .sm-top::after { left: 0; right: var(--sm-pad); }
+  @media (prefers-reduced-motion: reduce) { .sm-top::after { transition: none; } }
   .sm-stage { flex: none; margin-bottom: 96px; overflow: hidden; transition: height .45s cubic-bezier(.65,0,.35,1); }
   .sm-slide { display: flex; align-items: flex-start; width: 200%; transform: translateX(-50%); transition: transform .45s cubic-bezier(.65,0,.35,1); }
   .smenu.is-main .sm-slide { transform: none; }
-  .sm-panel { --sm-pad: 24px; flex: 0 0 50%; padding: 0 var(--sm-pad); }
-  @media (max-width: 575.98px) { .sm-panel { --sm-pad: 11px; } }
+  .smenu { --sm-pad: 24px; }
+  @media (max-width: 575.98px) { .smenu { --sm-pad: 11px; } }
+  .sm-panel { flex: 0 0 50%; padding: 0 var(--sm-pad); }
   /* "Main →" / "← Back" share the top-left slot */
   .smenu .sm-main { display: inline-flex; align-items: center; gap: 18px; font-size: 26px; line-height: 1; transition: opacity .3s ease, color .2s ease; }
   .sm-main svg { width: 32px; height: 34px; }
   .sm-back svg { transform: rotate(180deg); }   /* "← Back": shown in place of "Main" on the main panel */
   /* Janelia panel */
-  .sm-jrc { margin-right: calc(-1 * var(--sm-pad)); padding: 28px var(--sm-pad) 40px 0; border-top: 1px solid currentColor; }
+  .sm-jrc { margin-right: calc(-1 * var(--sm-pad)); padding: 28px var(--sm-pad) 40px 0; }
   .sm-jh { margin: 0 0 18px; font: 400 26px/1.15 var(--font-sans); }
   /* Main panel */
-  .sm-nav { list-style: none; margin: 0 0 0 calc(-1 * var(--sm-pad)); padding: 0; border-top: 1px solid currentColor; }
+  .sm-nav { list-style: none; margin: 0 0 0 calc(-1 * var(--sm-pad)); padding: 0; }
   .sm-nav > li { margin-left: var(--sm-pad); }
   .sm-nav > li + li { border-top: 1px solid currentColor; }
   .smenu .sm-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; width: 100%; min-height: 76px; padding: 14px 0; text-align: left; font-size: 26px; line-height: 1.15; color: inherit; text-decoration: none; cursor: pointer; }
