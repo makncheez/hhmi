@@ -32,7 +32,6 @@
   .toggle { display: none; }
   /* Phones: the Explore button from build_1 (three green lines that turn
      into an H). Open = H. */
-  .explore-label { font-size: 12px; }
   .explore-icon { position: relative; width: 32px; height: 27px; }
   .explore-icon i { position: absolute; left: 0; width: 32px; height: 2px; transition: transform .35s cubic-bezier(.65,0,.35,1); }
   .explore-icon i:nth-child(1) { top: 0;      background: #a5f300; transform-origin: 1px 1px; }
@@ -44,7 +43,7 @@
 
   .menu { display: flex; align-self: stretch; gap: 0 clamp(24px, 4.2vw, 64px); margin: 0; padding: 0; list-style: none; }
   .mi { position: static; display: flex; }
-  .mt { position: relative; display: flex; align-items: center; font-size: 20px; white-space: nowrap; }
+  .mt { position: relative; display: flex; align-items: center; font-size: 17px; white-space: nowrap; }
   /* Hover marker: the deco bar (navy|lime over cyan|green) sits on the rule */
   .mt .deco { position: absolute; left: -8px; right: -8px; bottom: 0; display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 5px 5px; opacity: 0; transition: opacity .2s ease; }
   .mt .deco span:nth-child(1) { background: #000d42; }
@@ -90,7 +89,7 @@
 <header class="site" id="site">
   <div class="bar">
     <a class="brand" aria-label="HHMI home"><svg width="113" height="34" viewBox="0 0 128 38" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><g fill="currentColor" fill-rule="evenodd"><path d="M0,0 L10.6326783,0 L10.6326783,13.3585568 L10.7405466,13.3585568 C12.5660116,11.2287875 14.9303817,9.68631694 19.4398916,9.68631694 C24.4354642,9.68631694 29,12.719323 29,19.0532334 L29,38 L18.3673217,38 L18.3673217,23.5222432 C18.3673217,20.3299697 17.9908742,18.0954648 14.8753558,18.0954648 C13.0498908,18.0954648 10.6326783,18.9991344 10.6326783,23.4175076 L10.6326783,38 L0,38 L0,0"/><path d="M33,0 L43.6324017,0 L43.6324017,13.3585568 L43.7402717,13.3585568 C45.5657641,11.2287875 47.9301699,9.68631694 52.4419312,9.68631694 C57.4353955,9.68631694 62,12.719323 62,19.0532334 L62,38 L51.3671616,38 L51.3671616,23.5222432 C51.3671616,20.3299697 50.9907084,18.0954648 47.8751431,18.0954648 C46.0500873,18.0954648 43.6324017,18.9991344 43.6324017,23.4175076 L43.6324017,38 L33,38 L33,0"/><path d="M66,10.6843569 L76.2404845,10.6843569 L76.2404845,14.3158571 L76.3481689,14.3158571 C78.4913943,11.1568585 81.6011638,10 85.4612366,10 C88.4637577,10 91.6794677,11.5257864 92.9673213,14.2619302 C93.3958791,13.9469292 95.5391046,10 102.456195,10 C109.586474,10 112,14.8422855 112,19.2617162 L112,38 L101.38371,38 L101.38371,23.2103574 C101.38371,20.6317141 101.115589,18.3141451 97.8998787,18.3141451 C95.2182311,18.3141451 94.3079271,20.3684999 94.3079271,23.2103574 L94.3079271,38 L83.691637,38 L83.691637,23.2103574 C83.691637,20.6317141 83.4235158,18.3141451 80.2078057,18.3141451 C77.5261582,18.3141451 76.6162901,20.3684999 76.6162901,23.2103574 L76.6162901,38 L66,38 L66,10.6843569"/><polygon points="116 38 127 38 127 10 116 10"/><path d="M127.750439,7 C127.911577,6.50960867 128,5.98823666 128,5.45015141 C128,2.43931982 125.314083,0 121.999327,0 C118.686366,0 116,2.43931982 116,5.45015141 C116,5.98823666 116.088872,6.50960867 116.250009,7 L127.750439,7"/></g></svg></a>
-    <button class="toggle" id="toggle" type="button" aria-label="Explore menu" aria-expanded="false" aria-controls="menu"><span class="explore-label">Explore</span><span class="explore-icon" aria-hidden="true"><i></i><i></i><i></i></span></button>
+    <button class="toggle" id="toggle" type="button" aria-label="Explore menu" aria-expanded="false" aria-controls="menu"><span class="explore-icon" aria-hidden="true"><i></i><i></i><i></i></span></button>
     <ul class="menu" id="menu">
       <li class="mi">
         <button class="mt" type="button" aria-expanded="false" aria-controls="mp0">Inside HHMI<span class="deco" aria-hidden="true"><span></span><span></span><span></span><span></span></span></button>
