@@ -1576,6 +1576,8 @@
   .sm-list--pairs li + li { margin-top: 12px; }
   .sm-list--pairs a span { display: block; }
   /* News & Updates: framed by colour bars and corner crosshairs; follows the menu */
+  .sm-news[hidden] { display: none; }
+  .sm-in:has(.sm-news[hidden]) .sm-stage { margin-bottom: 40px; }
   .sm-news { position: relative; margin-top: auto; padding: 50px 0 0; }   /* pushed to the bottom; follows the menu when it is longer */
   /* News sits inside the careers section's HHMI frame (.hframe): edges,
      long corner crosshairs and H / H / M / I at the corners, drawn here in
@@ -1649,7 +1651,7 @@
         </nav>
       </div>
     </div>
-    <section class="sm-news" aria-label="News and updates">
+    <section class="sm-news" aria-label="News and updates" hidden>   <!-- hidden for now: remove "hidden" to bring News & Updates (and the mode switch) back -->
       <div class="hframe sm-frame">
         <span aria-hidden="true" class="hf-edge hf-t"></span><span aria-hidden="true" class="hf-edge hf-b"></span>
         <span aria-hidden="true" class="hf-edge hf-l"></span><span aria-hidden="true" class="hf-edge hf-r"></span>
