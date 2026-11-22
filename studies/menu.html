@@ -83,6 +83,9 @@
   .mp-cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0 48px; max-width: 1100px; }
   .mp-col a { display: block; font-size: 17px; line-height: 1.32; transition: color .2s ease; }
   .mp-col a:hover, .mp-col a:focus-visible { color: var(--hover); }
+  /* External links: small "opens in a new window" arrow after the label */
+  .ext { display: inline-block; width: .62em; height: .62em; margin-left: .4em; vertical-align: .08em; }
+  .vh { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
   /* Science Programs: career stage (link) with its program in smaller grey underneath */
   .sp li + li { margin-top: 10px; }
   .sp-prog { display: block; font-size: 14px; line-height: 1.3; color: #8a8a8a; }
@@ -137,7 +140,7 @@
             <div class="mp-main">
               <p class="mp-h">Inside HHMI</p>
               <div class="mp-cols">
-                <div class="mp-col"><p class="gh">About</p><ul><li><a>Overview</a></li><li><a>Careers</a></li><li><a>Tangled Bank Studios</a></li><li><a>HHMI Senior Leadership</a></li><li><a>HHMI Board of Trustees</a></li><li><a>Medical Advisory Board</a></li><li><a>Scientific Review Board</a></li><li><a>Policies</a></li></ul></div>
+                <div class="mp-col"><p class="gh">About</p><ul><li><a>Overview</a></li><li><a>Careers</a></li><li><a target="_blank" rel="noopener">Tangled Bank Studios<svg class="ext" viewBox="0 0 12 12" aria-hidden="true"><path d="M4.5 1.5h6v6M10.5 1.5 1.5 10.5" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="square"/></svg><span class="vh"> (opens in a new window)</span></a></li><li><a>HHMI Senior Leadership</a></li><li><a>HHMI Board of Trustees</a></li><li><a>Medical Advisory Board</a></li><li><a>Scientific Review Board</a></li><li><a>Policies</a></li></ul></div>
                 <div class="mp-col"><p class="gh">Shaping How Science is Done</p><ul><li><a>News &amp; Stories</a></li><li><a>Open Science</a></li><li><a>Science Leadership &amp; Lab Culture</a></li><li><a>For Host Institutions</a></li></ul></div>
               </div>
             </div>
@@ -153,8 +156,7 @@
               <p class="mp-h">Opportunities for Scientists</p>
               <div class="mp-cols">
                 <div class="mp-col"><p class="gh">Science Programs</p><ul class="sp"><li><a>Overview</a></li><li><a>Mid-Career &amp; Senior Faculty<span class="sp-prog">HHMI Investigator Program</span></a></li><li><a>Early Career Faculty<span class="sp-prog">Freeman Hrabowski Scholars</span></a></li><li><a>Postdoc-Faculty Transition<span class="sp-prog">Hanna Gray Fellows</span></a></li><li><a>PhD &amp; Postdoc Transition<span class="sp-prog">Gilliam Fellows Program</span></a></li></ul></div>
-                <div class="mp-col"><p class="gh">Janelia Research Campus</p><ul><li><a>Overview</a></li><li><a>Biology</a></li><li><a>AI@HHMI</a></li><li><a>Theory@HHMI</a></li><li><a>Tools@HHMI</a></li><li><a>Senior Leadership</a></li></ul></div>
-                <div class="mp-col"><p class="gh" aria-hidden="true">&nbsp;</p><ul><li><a>20th Anniversary</a></li><li><a>Group Leaders</a></li><li><a>Leader Labs</a></li><li><a>Project &amp; Support Teams</a></li><li><a>Careers &amp; Opportunities</a></li><li><a>Tools and Resources</a></li></ul></div>
+                <div class="mp-col"><p class="gh">Janelia Research Campus</p><ul><li><a>Overview</a></li><li><a>Biology</a></li><li><a>AI@HHMI</a></li><li><a>Theory@HHMI</a></li><li><a>Tools@HHMI</a></li><li><a>Senior Leadership</a></li><li><a>20th Anniversary</a></li><li><a>Group Leaders</a></li><li><a>Leader Labs</a></li><li><a>Project &amp; Support Teams</a></li><li><a>Careers &amp; Opportunities</a></li><li><a>Tools and Resources</a></li></ul></div>
               </div>
             </div>
           </div>
@@ -168,7 +170,7 @@
             <div class="mp-main">
               <p class="mp-h">For Educators &amp; Students</p>
               <div class="mp-cols">
-                <div class="mp-col"><p class="gh">Educators</p><ul><li><a>Overview</a></li><li><a>Biointeractive</a></li><li><a>Science Education Alliance (SEA)</a></li><li><a>Success in Science Program</a></li></ul></div>
+                <div class="mp-col"><p class="gh">Educators</p><ul><li><a>Overview</a></li><li><a target="_blank" rel="noopener">BioInteractive<svg class="ext" viewBox="0 0 12 12" aria-hidden="true"><path d="M4.5 1.5h6v6M10.5 1.5 1.5 10.5" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="square"/></svg><span class="vh"> (opens in a new window)</span></a></li><li><a>Science Education Alliance (SEA)</a></li><li><a>Success in Science Program</a></li></ul></div>
                 <div class="mp-col"><p class="gh">Students</p><ul><li><a>Cech Fellows Program</a></li><li><a>Undergraduate Science Scholars Program</a></li></ul></div>
               </div>
             </div>
