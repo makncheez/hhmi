@@ -95,6 +95,21 @@
   .pairs li + li { margin-top: 12px; }
   .pairs span { display: block; }
 
+  /* Light-mode switch: bottom-right corner of each panel's main cell; one shared setting */
+  .mode { position: absolute; right: 30px; bottom: 12px; z-index: 1; line-height: 0; }
+  .mode-track { display: block; position: relative; width: 40px; height: 22px; border: 1px solid currentColor; border-radius: 11px; }
+  .mode-track::after { content: ""; position: absolute; top: 3px; left: 3px; width: 14px; height: 14px; border-radius: 50%; background: currentColor; transition: transform .25s ease; }
+  .mode[aria-checked="true"] .mode-track::after { transform: translateX(18px); }
+  .mode:hover { color: var(--hover); }
+
+  /* Light mode: the header bar and its panels turn white */
+  .site, .mp, .mi .mt { transition: background-color .3s ease, color .3s ease; }
+  .site.is-light { --line: #000; --soft: #c4c4c4; --hover: #006B2A; background: #fff; color: #000; }
+  .site.is-light .brand, .site.is-light .mi.is-open .mt { color: #000; }
+  .site.is-light .mi.is-open .mt, .site.is-light .mp { background: #fff; }
+  .site.is-light .sp-prog { color: #6e6e6e; }
+  .site.is-light :focus-visible { outline-color: #000; }
+
   /* Phones: the Explore button (three green lines that turn into an H) */
   .explore-icon { position: relative; width: 32px; height: 27px; }
   .explore-icon i { position: absolute; left: 0; width: 32px; height: 2px; transition: transform .35s cubic-bezier(.65,0,.35,1); }
@@ -120,6 +135,8 @@
     .mp-in { display: block; padding: 0 var(--pad) 28px; }
     .mp-up, .mp-h, .mp-main::before, .mp-main::after { display: none; }
     .mp-main { padding: 0; }
+    .mode { display: none; }   /* desktop study only */
+    .site.is-light .menu { background: #fff; }
     .mp-cols { grid-template-columns: 1fr; gap: 20px; }
     .gh[aria-hidden] { display: none; }
   }
@@ -143,6 +160,7 @@
                 <div class="mp-col"><p class="gh">About</p><ul><li><a>Overview</a></li><li><a>Careers</a></li><li><a target="_blank" rel="noopener">Tangled Bank Studios<svg class="ext" viewBox="0 0 12 12" aria-hidden="true"><path d="M4.5 1.5h6v6M10.5 1.5 1.5 10.5" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="square"/></svg><span class="vh"> (opens in a new window)</span></a></li><li><a>HHMI Senior Leadership</a></li><li><a>HHMI Board of Trustees</a></li><li><a>Medical Advisory Board</a></li><li><a>Scientific Review Board</a></li><li><a>Policies</a></li></ul></div>
                 <div class="mp-col"><p class="gh">Shaping How Science is Done</p><ul><li><a>News &amp; Stories</a></li><li><a>Open Science</a></li><li><a>Science Leadership &amp; Lab Culture</a></li><li><a>For Host Institutions</a></li></ul></div>
               </div>
+              <button class="mode" type="button" role="switch" aria-checked="false" aria-label="Light mode"><span class="mode-track" aria-hidden="true"></span></button>
             </div>
           </div>
         </div>
@@ -158,6 +176,7 @@
                 <div class="mp-col"><p class="gh">Science Programs</p><ul class="sp"><li><a>Overview</a></li><li><a>Mid-Career &amp; Senior Faculty<span class="sp-prog">HHMI Investigator Program</span></a></li><li><a>Early Career Faculty<span class="sp-prog">Freeman Hrabowski Scholars</span></a></li><li><a>Postdoc-Faculty Transition<span class="sp-prog">Hanna Gray Fellows</span></a></li><li><a>PhD &amp; Postdoc Transition<span class="sp-prog">Gilliam Fellows Program</span></a></li></ul></div>
                 <div class="mp-col"><p class="gh">Janelia Research Campus</p><ul><li><a>Overview</a></li><li><a>Biology</a></li><li><a>AI@HHMI</a></li><li><a>Theory@HHMI</a></li><li><a>Tools@HHMI</a></li><li><a>Senior Leadership</a></li><li><a>20th Anniversary</a></li><li><a>Group Leaders</a></li><li><a>Leader Labs</a></li><li><a>Project &amp; Support Teams</a></li><li><a>Careers &amp; Opportunities</a></li><li><a>Tools and Resources</a></li></ul></div>
               </div>
+              <button class="mode" type="button" role="switch" aria-checked="false" aria-label="Light mode"><span class="mode-track" aria-hidden="true"></span></button>
             </div>
           </div>
         </div>
@@ -173,6 +192,7 @@
                 <div class="mp-col"><p class="gh">Educators</p><ul><li><a>Overview</a></li><li><a target="_blank" rel="noopener">BioInteractive<svg class="ext" viewBox="0 0 12 12" aria-hidden="true"><path d="M4.5 1.5h6v6M10.5 1.5 1.5 10.5" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="square"/></svg><span class="vh"> (opens in a new window)</span></a></li><li><a>Science Education Alliance (SEA)</a></li><li><a>Success in Science Program</a></li></ul></div>
                 <div class="mp-col"><p class="gh">Students</p><ul class="sp"><li><a>Undergraduate Four-Year College<span class="sp-prog">Cech Fellows Program</span></a></li><li><a>Undergraduate Two-Year College<span class="sp-prog">Undergraduate Science Scholars</span></a></li></ul></div>
               </div>
+              <button class="mode" type="button" role="switch" aria-checked="false" aria-label="Light mode"><span class="mode-track" aria-hidden="true"></span></button>
             </div>
           </div>
         </div>
@@ -187,6 +207,7 @@
               <div class="mp-cols">
                 <div class="mp-col"><p class="gh">Program Scientists</p><ul class="sp"><li><a>Mid-Career &amp; Senior Faculty<span class="sp-prog">HHMI Investigator Program</span></a></li><li><a>Early Career Faculty<span class="sp-prog">Freeman Hrabowski Scholars</span></a></li><li><a>Postdoc-Faculty Transition<span class="sp-prog">Hanna Gray Fellows</span></a></li><li><a>PhD &amp; Postdoc Transition<span class="sp-prog">Gilliam Fellows Program</span></a></li></ul></div>
               </div>
+              <button class="mode" type="button" role="switch" aria-checked="false" aria-label="Light mode"><span class="mode-track" aria-hidden="true"></span></button>
             </div>
           </div>
         </div>
@@ -243,6 +264,20 @@
     function stop() { row.classList.remove('is-marquee'); }
     row.addEventListener('mouseenter', start); row.addEventListener('mouseleave', stop);
     row.addEventListener('focus', start); row.addEventListener('blur', stop);
+  });
+  // Light mode: any panel's switch flips the whole header; remembered in this browser
+  var modes = document.querySelectorAll('.mode');
+  function setLight(on) {
+    site.classList.toggle('is-light', on);
+    [].forEach.call(modes, function (b) { b.setAttribute('aria-checked', on ? 'true' : 'false'); });
+  }
+  try { setLight(localStorage.getItem('hhmiHeaderLight') === '1'); } catch (e) {}
+  [].forEach.call(modes, function (b) {
+    b.addEventListener('click', function () {
+      var on = !site.classList.contains('is-light');
+      setLight(on);
+      try { localStorage.setItem('hhmiHeaderLight', on ? '1' : '0'); } catch (e) {}
+    });
   });
   tg.addEventListener('click', function () {
     var on = !site.classList.contains('is-open');
