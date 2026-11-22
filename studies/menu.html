@@ -46,9 +46,10 @@
   .mi.is-open .mt { color: #fff; border-color: var(--line); background: #000; margin-bottom: -1px; padding-bottom: 8px; }   /* sits over the bar line: the gap */
 
   /* Panel: two broken-line cells under the bar */
-  .mp { position: absolute; left: 0; right: 0; top: 100%; background: #000; }
-  .mp[hidden] { display: none; }
-  .mp-in { display: grid; grid-template-columns: minmax(280px, 26%) 1fr; gap: 0 12px; max-width: 1320px; margin: 0 auto; padding: 12px var(--pad) 0; }   /* the bar is full width; the dropdown is a centred container */
+  .mp { position: absolute; left: 0; right: 0; top: 100%; background: #000;
+        opacity: 0; visibility: hidden; transition: opacity .25s ease, visibility 0s linear .25s; }
+  .mi.is-open .mp { opacity: 1; visibility: visible; transition: opacity .25s ease, visibility 0s; }   /* fade in / out */
+  .mp-in { display: grid; grid-template-columns: minmax(280px, 26%) 1fr; gap: 0 12px; padding: 12px var(--pad) 0; }   /* full width */
   .mp-up, .mp-main { position: relative; padding-bottom: 28px; }
   /* sides: start/stop short of the rules; bottom line: stops short of the sides */
   .mp-up::before, .mp-main::before { content: ""; position: absolute; top: 0; bottom: 22px; left: 0; right: 0; border: 0 solid var(--line); border-left-width: 1px; border-right-width: 1px; pointer-events: none; }
@@ -100,14 +101,15 @@
     .mi { flex-direction: column; padding: 0; border-top: 1px solid #333; }
     .mt, .mi.is-open .mt { justify-content: space-between; margin: 0; padding: 22px var(--pad); border: 0; font-size: 22px; }
     .mi.is-open .mt { color: var(--hover); }
-    .mp { position: static; }
+    .mp { position: static; display: none; opacity: 1; visibility: visible; transition: none; }
+    .mi.is-open .mp { display: block; }
     .mp-in { display: block; padding: 0 var(--pad) 28px; }
     .mp-up, .mp-h, .mp-main::before, .mp-main::after { display: none; }
     .mp-main { padding: 0; }
     .mp-cols { grid-template-columns: 1fr; gap: 20px; }
     .gh[aria-hidden] { display: none; }
   }
-  @media (prefers-reduced-motion: reduce) { .mt, .mp-col a, .up-t, .explore-icon i { transition: none; } }
+  @media (prefers-reduced-motion: reduce) { .mt, .mp, .mp-col a, .up-t, .explore-icon i { transition: none; } }
 </style>
 </head>
 <body>
@@ -118,7 +120,7 @@
     <ul class="menu" id="menu">
       <li class="mi">
         <button class="mt" type="button" aria-expanded="false" aria-controls="mp0">Inside HHMI</button>
-        <div class="mp" id="mp0" hidden>
+        <div class="mp" id="mp0" inert>
           <div class="mp-in">
             <aside class="mp-up" aria-label="Updates"><p class="up-h">Updates</p><ul><li><a class="up-row"><span class="up-ic" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="up-tag">Apply</span><span class="up-t">Cech Fellows applications are available</span></a></li><li><a class="up-row"><span class="up-ic" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="up-tag">Apply</span><span class="up-t">Freeman Hrabowski Scholars applications are now open</span></a></li><li><a class="up-row"><span class="up-ic" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="up-tag">News</span><span class="up-t">HHMI Launches Undergraduate Science Scholars Program</span></a></li><li><a class="up-row"><span class="up-ic" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="up-tag">News</span><span class="up-t">Freeman Hrabowski Scholars applications are now open</span></a></li><li><a class="up-row"><span class="up-ic" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="up-tag">News</span><span class="up-t">HHMI Launches Undergraduate Science Scholars Program</span></a></li></ul></aside>
             <div class="mp-main">
@@ -133,7 +135,7 @@
       </li>
       <li class="mi">
         <button class="mt" type="button" aria-expanded="false" aria-controls="mp1">Opportunities for Scientists</button>
-        <div class="mp" id="mp1" hidden>
+        <div class="mp" id="mp1" inert>
           <div class="mp-in">
             <aside class="mp-up" aria-label="Updates"><p class="up-h">Updates</p><ul><li><a class="up-row"><span class="up-ic" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="up-tag">Apply</span><span class="up-t">Cech Fellows applications are available</span></a></li><li><a class="up-row"><span class="up-ic" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="up-tag">Apply</span><span class="up-t">Freeman Hrabowski Scholars applications are now open</span></a></li><li><a class="up-row"><span class="up-ic" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="up-tag">News</span><span class="up-t">HHMI Launches Undergraduate Science Scholars Program</span></a></li><li><a class="up-row"><span class="up-ic" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="up-tag">News</span><span class="up-t">Freeman Hrabowski Scholars applications are now open</span></a></li><li><a class="up-row"><span class="up-ic" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="up-tag">News</span><span class="up-t">HHMI Launches Undergraduate Science Scholars Program</span></a></li></ul></aside>
             <div class="mp-main">
@@ -149,7 +151,7 @@
       </li>
       <li class="mi">
         <button class="mt" type="button" aria-expanded="false" aria-controls="mp2">For Educators &amp; Students</button>
-        <div class="mp" id="mp2" hidden>
+        <div class="mp" id="mp2" inert>
           <div class="mp-in">
             <aside class="mp-up" aria-label="Updates"><p class="up-h">Updates</p><ul><li><a class="up-row"><span class="up-ic" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="up-tag">Apply</span><span class="up-t">Cech Fellows applications are available</span></a></li><li><a class="up-row"><span class="up-ic" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="up-tag">Apply</span><span class="up-t">Freeman Hrabowski Scholars applications are now open</span></a></li><li><a class="up-row"><span class="up-ic" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="up-tag">News</span><span class="up-t">HHMI Launches Undergraduate Science Scholars Program</span></a></li><li><a class="up-row"><span class="up-ic" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="up-tag">News</span><span class="up-t">Freeman Hrabowski Scholars applications are now open</span></a></li><li><a class="up-row"><span class="up-ic" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="up-tag">News</span><span class="up-t">HHMI Launches Undergraduate Science Scholars Program</span></a></li></ul></aside>
             <div class="mp-main">
@@ -164,7 +166,7 @@
       </li>
       <li class="mi">
         <button class="mt" type="button" aria-expanded="false" aria-controls="mp3">Our Scientists</button>
-        <div class="mp" id="mp3" hidden>
+        <div class="mp" id="mp3" inert>
           <div class="mp-in">
             <aside class="mp-up" aria-label="Updates"><p class="up-h">Updates</p><ul><li><a class="up-row"><span class="up-ic" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="up-tag">Apply</span><span class="up-t">Cech Fellows applications are available</span></a></li><li><a class="up-row"><span class="up-ic" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="up-tag">Apply</span><span class="up-t">Freeman Hrabowski Scholars applications are now open</span></a></li><li><a class="up-row"><span class="up-ic" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="up-tag">News</span><span class="up-t">HHMI Launches Undergraduate Science Scholars Program</span></a></li><li><a class="up-row"><span class="up-ic" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="up-tag">News</span><span class="up-t">Freeman Hrabowski Scholars applications are now open</span></a></li><li><a class="up-row"><span class="up-ic" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="up-tag">News</span><span class="up-t">HHMI Launches Undergraduate Science Scholars Program</span></a></li></ul></aside>
             <div class="mp-main">
@@ -194,7 +196,7 @@
       var on = m === mi;
       m.classList.toggle('is-open', on);
       m.querySelector('.mt').setAttribute('aria-expanded', on ? 'true' : 'false');
-      m.querySelector('.mp').hidden = !on;
+      m.querySelector('.mp').inert = !on;
     });
   }
   items.forEach(function (mi) {
