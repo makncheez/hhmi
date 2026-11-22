@@ -74,8 +74,8 @@
      then back; the fade drops while it moves. */
   .up-tx { display: inline-block; }
   .up-row.is-marquee .up-t { -webkit-mask-image: none; mask-image: none; }
-  .up-row.is-marquee .up-tx { animation: up-marquee var(--dur, 4s) ease-in-out infinite; }
-  @keyframes up-marquee { 0%, 12% { transform: translateX(0); } 50%, 62% { transform: translateX(var(--shift, 0px)); } 100% { transform: translateX(0); } }
+  .up-row.is-marquee .up-tx { animation: up-marquee var(--dur, 4s) linear infinite; }   /* linear: moves from the first frame */
+  @keyframes up-marquee { 0% { transform: translateX(0); } 42%, 58% { transform: translateX(var(--shift, 0px)); } 100% { transform: translateX(0); } }   /* no hold at the start; short pause at the end */
 
   /* Section title + link columns */
   .mp-main { padding: 22px 56px 52px; }
@@ -228,7 +228,7 @@
       var over = tx.offsetWidth - box.clientWidth + 12;   // 12px: the left padding
       if (over <= 4) return;
       row.style.setProperty('--shift', -over + 'px');
-      row.style.setProperty('--dur', Math.max(1.2, over / 120 * 2 + 0.6) + 's');   // ~120px/s each way
+      row.style.setProperty('--dur', Math.max(4, over / 30 * 2 / 0.84) + 's');   // slow, ~30px/s each way
       row.classList.add('is-marquee');
     }
     function stop() { row.classList.remove('is-marquee'); }
