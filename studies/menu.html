@@ -92,7 +92,7 @@
   .site.is-open .explore-icon i:nth-child(3) { transform: translate(5px, -12.5px) scaleX(.6875); }
 
   /* Demo page behind the menu */
-  .hero { height: 80vh; background: #111; }
+  .hero { position: fixed; inset: 0; background: #111 url("https://www.hhmi.org/sites/default/files/styles/3840x2400/public/2024-01/hhmi-homepage-hero-desktop-1v3.jpg?itok=HIjV0wqK") center/cover no-repeat; }   /* placeholder page body: the HHMI homepage hero from the previous study */
 
   @media (max-width: 991.98px) {
     .toggle { display: inline-flex; align-items: center; }
@@ -182,7 +182,7 @@
     </ul>
   </div>
 </header>
-<main><div class="hero" role="img" aria-label="Page content"></div></main>
+<main><div class="hero" role="img" aria-label="HHMI homepage hero image (placeholder)"></div></main>
 <script>
 /* Desktop: hovering a section opens its panel (a short delay stops flicker
    when the pointer crosses between items); click / tap or Enter toggles it.
