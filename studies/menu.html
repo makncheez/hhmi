@@ -49,7 +49,7 @@
   .mp { position: absolute; left: 0; right: 0; top: 100%; background: #000;
         opacity: 0; visibility: hidden; transition: opacity .25s ease, visibility 0s linear .25s; }
   .mi.is-open .mp { opacity: 1; visibility: visible; transition: opacity .25s ease, visibility 0s; }   /* fade in / out */
-  .mp-in { display: grid; grid-template-columns: minmax(280px, 26%) 1fr; gap: 0 12px; padding: 12px var(--pad) 0; }   /* full width */
+  .mp-in { display: grid; grid-template-columns: minmax(280px, 26%) 1fr; gap: 0 12px; padding: 20px; }   /* full width */
   .mp-up, .mp-main { position: relative; padding-bottom: 28px; }
   /* sides: start/stop short of the rules; bottom line: stops short of the sides */
   .mp-up::before, .mp-main::before { content: ""; position: absolute; top: 0; bottom: 22px; left: 0; right: 0; border: 0 solid var(--line); border-left-width: 1px; border-right-width: 1px; pointer-events: none; }
@@ -228,7 +228,7 @@
       var over = tx.offsetWidth - box.clientWidth + 12;   // 12px: the left padding
       if (over <= 4) return;
       row.style.setProperty('--shift', -over + 'px');
-      row.style.setProperty('--dur', Math.max(3, over / 40 * 2 + 1.5) + 's');   // ~40px/s each way
+      row.style.setProperty('--dur', Math.max(1.2, over / 120 * 2 + 0.6) + 's');   // ~120px/s each way
       row.classList.add('is-marquee');
     }
     function stop() { row.classList.remove('is-marquee'); }
