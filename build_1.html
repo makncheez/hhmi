@@ -1552,7 +1552,12 @@
   /* "Main →" / "← Back" share the top-left slot */
   .smenu .sm-main { display: inline-flex; align-items: center; gap: 18px; font-size: 26px; line-height: 1; transition: opacity .3s ease, color .2s ease; }
   .sm-main svg { width: 32px; height: 34px; }
-  .sm-back svg { transform: rotate(180deg); }   /* "← Back": shown in place of "Main" on the main panel */
+  .sm-back svg { transform: rotate(180deg); }
+  .smenu .sm-back { white-space: nowrap; }
+  @media (max-width: 575.98px) {   /* the longer label fits beside the close H on phones */
+    .smenu .sm-back { gap: 12px; font-size: clamp(16px, 5.3vw, 26px); }
+    .sm-back svg { width: 26px; height: 28px; }
+  }   /* "← Janelia Research Campus": shown in place of "Main" on the main panel */
   /* Janelia panel */
   .sm-jrc { margin-right: calc(-1 * var(--sm-pad)); padding: 28px var(--sm-pad) 40px 0; }
   .sm-jh { margin: 0 0 18px; font: 400 26px/1.15 var(--font-sans); }
@@ -1642,7 +1647,7 @@
   <div class="sm-in">
     <div class="sm-top">
       <button class="sm-main" type="button" aria-controls="smMain"><span>Main</span><svg viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-      <button class="sm-main sm-back" type="button" aria-controls="smJrc" hidden><svg viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Back</span></button>
+      <button class="sm-main sm-back" type="button" aria-controls="smJrc" hidden><svg viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Janelia Research Campus</span></button>
       <button class="sm-close" type="button" aria-label="Close menu"><span class="explore-icon" aria-hidden="true"><i></i><i></i><i></i></span></button>
     </div>
     <div class="sm-stage">
