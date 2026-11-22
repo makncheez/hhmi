@@ -70,6 +70,12 @@
            -webkit-mask-image: linear-gradient(90deg, #000 calc(100% - 48px), transparent); mask-image: linear-gradient(90deg, #000 calc(100% - 48px), transparent);
            transition: color .2s ease; }
   .up-row:hover .up-t, .up-row:focus-visible .up-t { color: var(--hover); }
+  /* Hover: a headline that doesn't fit scrolls (marquee) to show the rest,
+     then back; the fade drops while it moves. */
+  .up-tx { display: inline-block; }
+  .up-row.is-marquee .up-t { -webkit-mask-image: none; mask-image: none; }
+  .up-row.is-marquee .up-tx { animation: up-marquee var(--dur, 4s) ease-in-out infinite; }
+  @keyframes up-marquee { 0%, 12% { transform: translateX(0); } 50%, 62% { transform: translateX(var(--shift, 0px)); } 100% { transform: translateX(0); } }
 
   /* Section title + link columns */
   .mp-main { padding: 22px 56px 52px; }
@@ -78,6 +84,7 @@
   .mp-col a { display: block; font-size: 17px; line-height: 1.32; transition: color .2s ease; }
   .mp-col a:hover, .mp-col a:focus-visible { color: var(--hover); }
   .gh { margin: 0 0 10px; font-size: 14px; color: var(--hover); }
+  #mp1 .gh { margin-bottom: 26px; font-size: 17px; color: #fff; }   /* Opportunities: white group headings, as in the mock-up */
   .pairs li + li { margin-top: 12px; }
   .pairs span { display: block; }
 
@@ -109,7 +116,7 @@
     .mp-cols { grid-template-columns: 1fr; gap: 20px; }
     .gh[aria-hidden] { display: none; }
   }
-  @media (prefers-reduced-motion: reduce) { .mt, .mp, .mp-col a, .up-t, .explore-icon i { transition: none; } }
+  @media (prefers-reduced-motion: reduce) { .mt, .mp, .mp-col a, .up-t, .explore-icon i { transition: none; } .up-row.is-marquee .up-tx { animation: none; } }
 </style>
 </head>
 <body>
@@ -122,7 +129,7 @@
         <button class="mt" type="button" aria-expanded="false" aria-controls="mp0">Inside HHMI</button>
         <div class="mp" id="mp0" inert>
           <div class="mp-in">
-            <aside class="mp-up" aria-label="Updates"><p class="up-h">Updates</p><ul><li><a class="up-row"><span class="up-ic" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="up-tag">Apply</span><span class="up-t">Cech Fellows applications are available</span></a></li><li><a class="up-row"><span class="up-ic" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="up-tag">Apply</span><span class="up-t">Freeman Hrabowski Scholars applications are now open</span></a></li><li><a class="up-row"><span class="up-ic" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="up-tag">News</span><span class="up-t">HHMI Launches Undergraduate Science Scholars Program</span></a></li><li><a class="up-row"><span class="up-ic" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="up-tag">News</span><span class="up-t">Freeman Hrabowski Scholars applications are now open</span></a></li><li><a class="up-row"><span class="up-ic" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="up-tag">News</span><span class="up-t">HHMI Launches Undergraduate Science Scholars Program</span></a></li></ul></aside>
+            <aside class="mp-up" aria-label="Updates"><p class="up-h">Updates</p><ul><li><a class="up-row"><span class="up-ic" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="up-tag">Apply</span><span class="up-t"><span class="up-tx">Cech Fellows applications are available</span></span></a></li><li><a class="up-row"><span class="up-ic" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="up-tag">Apply</span><span class="up-t"><span class="up-tx">Freeman Hrabowski Scholars applications are now open</span></span></a></li><li><a class="up-row"><span class="up-ic" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="up-tag">News</span><span class="up-t"><span class="up-tx">HHMI Launches Undergraduate Science Scholars Program</span></span></a></li><li><a class="up-row"><span class="up-ic" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="up-tag">News</span><span class="up-t"><span class="up-tx">Freeman Hrabowski Scholars applications are now open</span></span></a></li><li><a class="up-row"><span class="up-ic" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="up-tag">News</span><span class="up-t"><span class="up-tx">HHMI Launches Undergraduate Science Scholars Program</span></span></a></li></ul></aside>
             <div class="mp-main">
               <p class="mp-h">Inside HHMI</p>
               <div class="mp-cols">
@@ -137,11 +144,11 @@
         <button class="mt" type="button" aria-expanded="false" aria-controls="mp1">Opportunities for Scientists</button>
         <div class="mp" id="mp1" inert>
           <div class="mp-in">
-            <aside class="mp-up" aria-label="Updates"><p class="up-h">Updates</p><ul><li><a class="up-row"><span class="up-ic" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="up-tag">Apply</span><span class="up-t">Cech Fellows applications are available</span></a></li><li><a class="up-row"><span class="up-ic" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="up-tag">Apply</span><span class="up-t">Freeman Hrabowski Scholars applications are now open</span></a></li><li><a class="up-row"><span class="up-ic" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="up-tag">News</span><span class="up-t">HHMI Launches Undergraduate Science Scholars Program</span></a></li><li><a class="up-row"><span class="up-ic" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="up-tag">News</span><span class="up-t">Freeman Hrabowski Scholars applications are now open</span></a></li><li><a class="up-row"><span class="up-ic" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="up-tag">News</span><span class="up-t">HHMI Launches Undergraduate Science Scholars Program</span></a></li></ul></aside>
+            <aside class="mp-up" aria-label="Updates"><p class="up-h">Updates</p><ul><li><a class="up-row"><span class="up-ic" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="up-tag">Apply</span><span class="up-t"><span class="up-tx">Cech Fellows applications are available</span></span></a></li><li><a class="up-row"><span class="up-ic" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="up-tag">Apply</span><span class="up-t"><span class="up-tx">Freeman Hrabowski Scholars applications are now open</span></span></a></li><li><a class="up-row"><span class="up-ic" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="up-tag">News</span><span class="up-t"><span class="up-tx">HHMI Launches Undergraduate Science Scholars Program</span></span></a></li><li><a class="up-row"><span class="up-ic" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="up-tag">News</span><span class="up-t"><span class="up-tx">Freeman Hrabowski Scholars applications are now open</span></span></a></li><li><a class="up-row"><span class="up-ic" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="up-tag">News</span><span class="up-t"><span class="up-tx">HHMI Launches Undergraduate Science Scholars Program</span></span></a></li></ul></aside>
             <div class="mp-main">
               <p class="mp-h">Opportunities for Scientists</p>
               <div class="mp-cols">
-                <div class="mp-col"><p class="gh">Science Programs</p><ul class="pairs"><li><a><span>Mid-Career &amp; Senior Faculty</span><span>HHMI Investigator Program</span></a></li><li><a><span>Early Career Faculty</span><span>Freeman Hrabowski Scholars</span></a></li><li><a><span>Postdoc-Faculty Transition</span><span>Hanna Gray Fellows</span></a></li><li><a><span>PhD &amp; Postdoc Transition</span><span>Gilliam Fellows Program</span></a></li></ul></div>
+                <div class="mp-col"><p class="gh">Science Programs</p><ul><li><a>Overview</a></li><li><a>Mid-Career &amp; Senior Faculty</a></li><li><a>Early Career Faculty</a></li><li><a>Postdoc-Faculty Transition</a></li><li><a>PhD &amp; Postdoc Transition</a></li></ul></div>
                 <div class="mp-col"><p class="gh">Janelia Research Campus</p><ul><li><a>Overview</a></li><li><a>Biology</a></li><li><a>AI@HHMI</a></li><li><a>Theory@HHMI</a></li><li><a>Tools@HHMI</a></li><li><a>Senior Leadership</a></li></ul></div>
                 <div class="mp-col"><p class="gh" aria-hidden="true">&nbsp;</p><ul><li><a>20th Anniversary</a></li><li><a>Group Leaders</a></li><li><a>Leader Labs</a></li><li><a>Project &amp; Support Teams</a></li><li><a>Careers &amp; Opportunities</a></li><li><a>Tools and Resources</a></li></ul></div>
               </div>
@@ -153,7 +160,7 @@
         <button class="mt" type="button" aria-expanded="false" aria-controls="mp2">For Educators &amp; Students</button>
         <div class="mp" id="mp2" inert>
           <div class="mp-in">
-            <aside class="mp-up" aria-label="Updates"><p class="up-h">Updates</p><ul><li><a class="up-row"><span class="up-ic" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="up-tag">Apply</span><span class="up-t">Cech Fellows applications are available</span></a></li><li><a class="up-row"><span class="up-ic" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="up-tag">Apply</span><span class="up-t">Freeman Hrabowski Scholars applications are now open</span></a></li><li><a class="up-row"><span class="up-ic" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="up-tag">News</span><span class="up-t">HHMI Launches Undergraduate Science Scholars Program</span></a></li><li><a class="up-row"><span class="up-ic" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="up-tag">News</span><span class="up-t">Freeman Hrabowski Scholars applications are now open</span></a></li><li><a class="up-row"><span class="up-ic" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="up-tag">News</span><span class="up-t">HHMI Launches Undergraduate Science Scholars Program</span></a></li></ul></aside>
+            <aside class="mp-up" aria-label="Updates"><p class="up-h">Updates</p><ul><li><a class="up-row"><span class="up-ic" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="up-tag">Apply</span><span class="up-t"><span class="up-tx">Cech Fellows applications are available</span></span></a></li><li><a class="up-row"><span class="up-ic" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="up-tag">Apply</span><span class="up-t"><span class="up-tx">Freeman Hrabowski Scholars applications are now open</span></span></a></li><li><a class="up-row"><span class="up-ic" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="up-tag">News</span><span class="up-t"><span class="up-tx">HHMI Launches Undergraduate Science Scholars Program</span></span></a></li><li><a class="up-row"><span class="up-ic" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="up-tag">News</span><span class="up-t"><span class="up-tx">Freeman Hrabowski Scholars applications are now open</span></span></a></li><li><a class="up-row"><span class="up-ic" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="up-tag">News</span><span class="up-t"><span class="up-tx">HHMI Launches Undergraduate Science Scholars Program</span></span></a></li></ul></aside>
             <div class="mp-main">
               <p class="mp-h">For Educators &amp; Students</p>
               <div class="mp-cols">
@@ -168,7 +175,7 @@
         <button class="mt" type="button" aria-expanded="false" aria-controls="mp3">Our Scientists</button>
         <div class="mp" id="mp3" inert>
           <div class="mp-in">
-            <aside class="mp-up" aria-label="Updates"><p class="up-h">Updates</p><ul><li><a class="up-row"><span class="up-ic" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="up-tag">Apply</span><span class="up-t">Cech Fellows applications are available</span></a></li><li><a class="up-row"><span class="up-ic" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="up-tag">Apply</span><span class="up-t">Freeman Hrabowski Scholars applications are now open</span></a></li><li><a class="up-row"><span class="up-ic" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="up-tag">News</span><span class="up-t">HHMI Launches Undergraduate Science Scholars Program</span></a></li><li><a class="up-row"><span class="up-ic" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="up-tag">News</span><span class="up-t">Freeman Hrabowski Scholars applications are now open</span></a></li><li><a class="up-row"><span class="up-ic" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="up-tag">News</span><span class="up-t">HHMI Launches Undergraduate Science Scholars Program</span></a></li></ul></aside>
+            <aside class="mp-up" aria-label="Updates"><p class="up-h">Updates</p><ul><li><a class="up-row"><span class="up-ic" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="up-tag">Apply</span><span class="up-t"><span class="up-tx">Cech Fellows applications are available</span></span></a></li><li><a class="up-row"><span class="up-ic" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="up-tag">Apply</span><span class="up-t"><span class="up-tx">Freeman Hrabowski Scholars applications are now open</span></span></a></li><li><a class="up-row"><span class="up-ic" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="up-tag">News</span><span class="up-t"><span class="up-tx">HHMI Launches Undergraduate Science Scholars Program</span></span></a></li><li><a class="up-row"><span class="up-ic" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="up-tag">News</span><span class="up-t"><span class="up-tx">Freeman Hrabowski Scholars applications are now open</span></span></a></li><li><a class="up-row"><span class="up-ic" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="up-tag">News</span><span class="up-t"><span class="up-tx">HHMI Launches Undergraduate Science Scholars Program</span></span></a></li></ul></aside>
             <div class="mp-main">
               <p class="mp-h">Our Scientists</p>
               <div class="mp-cols">
@@ -213,6 +220,20 @@
   document.addEventListener('pointerdown', function (e) {
     if (site.contains(e.target)) return;
     open(null); site.classList.remove('is-open'); tg.setAttribute('aria-expanded', 'false');
+  });
+  // Updates headlines: on hover (or keyboard focus), marquee the ones that don't fit
+  [].forEach.call(document.querySelectorAll('.up-row'), function (row) {
+    var box = row.querySelector('.up-t'), tx = row.querySelector('.up-tx');
+    function start() {
+      var over = tx.offsetWidth - box.clientWidth + 12;   // 12px: the left padding
+      if (over <= 4) return;
+      row.style.setProperty('--shift', -over + 'px');
+      row.style.setProperty('--dur', Math.max(3, over / 40 * 2 + 1.5) + 's');   // ~40px/s each way
+      row.classList.add('is-marquee');
+    }
+    function stop() { row.classList.remove('is-marquee'); }
+    row.addEventListener('mouseenter', start); row.addEventListener('mouseleave', stop);
+    row.addEventListener('focus', start); row.addEventListener('blur', stop);
   });
   tg.addEventListener('click', function () {
     var on = !site.classList.contains('is-open');
