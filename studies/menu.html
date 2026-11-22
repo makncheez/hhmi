@@ -84,7 +84,8 @@
   .mp-col a { display: block; font-size: 17px; line-height: 1.32; transition: color .2s ease; }
   .mp-col a:hover, .mp-col a:focus-visible { color: var(--hover); }
   .gh { margin: 0 0 10px; font-size: 14px; color: var(--hover); }
-  #mp1 .gh { margin-bottom: 10px; font-size: 18px; color: dimgrey; }
+  #mp1 .gh, #mp2 .gh { margin-bottom: 10px; font-size: 18px; color: dimgrey; }
+  @media (min-width: 992px) { #mp2 .mp-cols { grid-template-columns: 1fr 1fr; max-width: none; } }   /* Educators | Students, half each */
   .pairs li + li { margin-top: 12px; }
   .pairs span { display: block; }
 
@@ -164,7 +165,7 @@
             <div class="mp-main">
               <p class="mp-h">For Educators &amp; Students</p>
               <div class="mp-cols">
-                <div class="mp-col"><p class="gh">Educators</p><ul><li><a>BioInteractive</a></li><li><a>Science Education Alliance (SEA)</a></li><li><a>Success in Science</a></li></ul></div>
+                <div class="mp-col"><p class="gh">Educators</p><ul><li><a>Overview</a></li><li><a>Biointeractive</a></li><li><a>Science Education Alliance (SEA)</a></li><li><a>Success in Science Program</a></li></ul></div>
                 <div class="mp-col"><p class="gh">Students</p><ul><li><a>Cech Fellows Program</a></li><li><a>Undergraduate Science Scholars Program</a></li></ul></div>
               </div>
             </div>
