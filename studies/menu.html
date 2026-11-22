@@ -58,11 +58,11 @@
   .mp-main::before { border-left-width: 0; }   /* one line between the cells: the Updates cell's right side */
 
   /* UPDATES */
-  .up-h { margin: 0; padding: 14px 20px 14px; font-size: 17px; letter-spacing: .02em; text-transform: uppercase; }
+  .up-h { margin: 0; padding: 14px 20px 14px; font-family: "ABC Diatype Semi-Mono", monospace; font-size: 13px; letter-spacing: .02em; text-transform: uppercase; }
   .mp-up ul { border-top: 1px solid var(--soft); margin: 0 12px 0 12px; }
   .mp-up li { border-bottom: 1px solid var(--soft); }
   .up-row { display: grid; grid-template-columns: minmax(0, 1fr) 64px; align-items: center; column-gap: 8px; height: 42px; }
-  .up-tag { align-self: stretch; display: flex; align-items: center; padding-left: 12px; border-left: 1px solid var(--soft); font-size: 12px; letter-spacing: .06em; text-transform: uppercase; }
+  .up-tag { align-self: stretch; display: flex; align-items: center; padding-left: 12px; border-left: 1px solid var(--soft); font-family: "ABC Diatype Semi-Mono", monospace; font-size: 12px; letter-spacing: .06em; text-transform: uppercase; }
   .up-t { padding-right: 4px; white-space: nowrap; overflow: hidden;
            -webkit-mask-image: linear-gradient(90deg, #000 calc(100% - 48px), transparent); mask-image: linear-gradient(90deg, #000 calc(100% - 48px), transparent);
            transition: color .2s ease; }
@@ -70,9 +70,12 @@
   /* Hover: a headline that doesn't fit scrolls (marquee) to show the rest,
      then back; the fade drops while it moves. */
   .up-tx { display: inline-block; }
-  .up-row.is-marquee .up-t { -webkit-mask-image: none; mask-image: none; }
-  .up-row.is-marquee .up-tx { animation: up-marquee var(--dur, 4s) linear infinite; }   /* linear: moves from the first frame */
-  @keyframes up-marquee { 0% { transform: translateX(0); } 42%, 58% { transform: translateX(var(--shift, 0px)); } 100% { transform: translateX(0); } }   /* no hold at the start; short pause at the end */
+  .up-c + .up-c { display: none; }   /* the second copy only shows while the ticker runs */
+  .up-row.is-marquee .up-c { padding-right: 48px; }
+  .up-row.is-marquee .up-c + .up-c { display: inline; }
+  .up-row.is-marquee .up-tx { animation: up-marquee var(--dur, 6s) linear infinite; }
+  /* Ticker: two copies side by side; slide left by exactly one copy and wrap, so it loops seamlessly */
+  @keyframes up-marquee { from { transform: translateX(0); } to { transform: translateX(var(--shift, 0px)); } }
 
   /* Section title + link columns */
   .mp-main { padding: 22px 56px 52px; }
@@ -126,7 +129,7 @@
         <button class="mt" type="button" aria-expanded="false" aria-controls="mp0">Inside HHMI</button>
         <div class="mp" id="mp0" inert>
           <div class="mp-in">
-            <aside class="mp-up" aria-label="Updates"><p class="up-h">Updates</p><ul><li><a class="up-row"><span class="up-t"><span class="up-tx">Cech Fellows applications are available</span></span><span class="up-tag">Apply</span></a></li><li><a class="up-row"><span class="up-t"><span class="up-tx">Freeman Hrabowski Scholars applications are now open</span></span><span class="up-tag">Apply</span></a></li><li><a class="up-row"><span class="up-t"><span class="up-tx">HHMI Launches Undergraduate Science Scholars Program</span></span><span class="up-tag">News</span></a></li><li><a class="up-row"><span class="up-t"><span class="up-tx">Freeman Hrabowski Scholars applications are now open</span></span><span class="up-tag">News</span></a></li><li><a class="up-row"><span class="up-t"><span class="up-tx">HHMI Launches Undergraduate Science Scholars Program</span></span><span class="up-tag">News</span></a></li></ul></aside>
+            <aside class="mp-up" aria-label="Updates"><p class="up-h">Updates</p><ul><li><a class="up-row"><span class="up-t"><span class="up-tx">The Freeman Hrabowski Scholars Program is now open to early career scientists.</span></span><span class="up-tag">Apply</span></a></li><li><a class="up-row"><span class="up-t"><span class="up-tx">The Hanna H. Gray Fellows Program is now open to postdoctoral scientists.</span></span><span class="up-tag">Apply</span></a></li><li><a class="up-row"><span class="up-t"><span class="up-tx">The Cech Fellows Program is now open to postdoctoral scientists.</span></span><span class="up-tag">Apply</span></a></li><li><a class="up-row"><span class="up-t"><span class="up-tx">HHMI Launches Undergraduate Science Scholars Program to Support Community College Students Pursuing Careers in the Life Sciences.</span></span><span class="up-tag">News</span></a></li><li><a class="up-row"><span class="up-t"><span class="up-tx">The Surprising Cancer Connection at the Heart of Alzheimer’s.</span></span><span class="up-tag">News</span></a></li></ul></aside>
             <div class="mp-main">
               <p class="mp-h">Inside HHMI</p>
               <div class="mp-cols">
@@ -141,7 +144,7 @@
         <button class="mt" type="button" aria-expanded="false" aria-controls="mp1">Opportunities for Scientists</button>
         <div class="mp" id="mp1" inert>
           <div class="mp-in">
-            <aside class="mp-up" aria-label="Updates"><p class="up-h">Updates</p><ul><li><a class="up-row"><span class="up-t"><span class="up-tx">Cech Fellows applications are available</span></span><span class="up-tag">Apply</span></a></li><li><a class="up-row"><span class="up-t"><span class="up-tx">Freeman Hrabowski Scholars applications are now open</span></span><span class="up-tag">Apply</span></a></li><li><a class="up-row"><span class="up-t"><span class="up-tx">HHMI Launches Undergraduate Science Scholars Program</span></span><span class="up-tag">News</span></a></li><li><a class="up-row"><span class="up-t"><span class="up-tx">Freeman Hrabowski Scholars applications are now open</span></span><span class="up-tag">News</span></a></li><li><a class="up-row"><span class="up-t"><span class="up-tx">HHMI Launches Undergraduate Science Scholars Program</span></span><span class="up-tag">News</span></a></li></ul></aside>
+            <aside class="mp-up" aria-label="Updates"><p class="up-h">Updates</p><ul><li><a class="up-row"><span class="up-t"><span class="up-tx">The Freeman Hrabowski Scholars Program is now open to early career scientists.</span></span><span class="up-tag">Apply</span></a></li><li><a class="up-row"><span class="up-t"><span class="up-tx">The Hanna H. Gray Fellows Program is now open to postdoctoral scientists.</span></span><span class="up-tag">Apply</span></a></li><li><a class="up-row"><span class="up-t"><span class="up-tx">The Cech Fellows Program is now open to postdoctoral scientists.</span></span><span class="up-tag">Apply</span></a></li><li><a class="up-row"><span class="up-t"><span class="up-tx">HHMI Launches Undergraduate Science Scholars Program to Support Community College Students Pursuing Careers in the Life Sciences.</span></span><span class="up-tag">News</span></a></li><li><a class="up-row"><span class="up-t"><span class="up-tx">The Surprising Cancer Connection at the Heart of Alzheimer’s.</span></span><span class="up-tag">News</span></a></li></ul></aside>
             <div class="mp-main">
               <p class="mp-h">Opportunities for Scientists</p>
               <div class="mp-cols">
@@ -157,7 +160,7 @@
         <button class="mt" type="button" aria-expanded="false" aria-controls="mp2">For Educators &amp; Students</button>
         <div class="mp" id="mp2" inert>
           <div class="mp-in">
-            <aside class="mp-up" aria-label="Updates"><p class="up-h">Updates</p><ul><li><a class="up-row"><span class="up-t"><span class="up-tx">Cech Fellows applications are available</span></span><span class="up-tag">Apply</span></a></li><li><a class="up-row"><span class="up-t"><span class="up-tx">Freeman Hrabowski Scholars applications are now open</span></span><span class="up-tag">Apply</span></a></li><li><a class="up-row"><span class="up-t"><span class="up-tx">HHMI Launches Undergraduate Science Scholars Program</span></span><span class="up-tag">News</span></a></li><li><a class="up-row"><span class="up-t"><span class="up-tx">Freeman Hrabowski Scholars applications are now open</span></span><span class="up-tag">News</span></a></li><li><a class="up-row"><span class="up-t"><span class="up-tx">HHMI Launches Undergraduate Science Scholars Program</span></span><span class="up-tag">News</span></a></li></ul></aside>
+            <aside class="mp-up" aria-label="Updates"><p class="up-h">Updates</p><ul><li><a class="up-row"><span class="up-t"><span class="up-tx">The Freeman Hrabowski Scholars Program is now open to early career scientists.</span></span><span class="up-tag">Apply</span></a></li><li><a class="up-row"><span class="up-t"><span class="up-tx">The Hanna H. Gray Fellows Program is now open to postdoctoral scientists.</span></span><span class="up-tag">Apply</span></a></li><li><a class="up-row"><span class="up-t"><span class="up-tx">The Cech Fellows Program is now open to postdoctoral scientists.</span></span><span class="up-tag">Apply</span></a></li><li><a class="up-row"><span class="up-t"><span class="up-tx">HHMI Launches Undergraduate Science Scholars Program to Support Community College Students Pursuing Careers in the Life Sciences.</span></span><span class="up-tag">News</span></a></li><li><a class="up-row"><span class="up-t"><span class="up-tx">The Surprising Cancer Connection at the Heart of Alzheimer’s.</span></span><span class="up-tag">News</span></a></li></ul></aside>
             <div class="mp-main">
               <p class="mp-h">For Educators &amp; Students</p>
               <div class="mp-cols">
@@ -172,7 +175,7 @@
         <button class="mt" type="button" aria-expanded="false" aria-controls="mp3">Our Scientists</button>
         <div class="mp" id="mp3" inert>
           <div class="mp-in">
-            <aside class="mp-up" aria-label="Updates"><p class="up-h">Updates</p><ul><li><a class="up-row"><span class="up-t"><span class="up-tx">Cech Fellows applications are available</span></span><span class="up-tag">Apply</span></a></li><li><a class="up-row"><span class="up-t"><span class="up-tx">Freeman Hrabowski Scholars applications are now open</span></span><span class="up-tag">Apply</span></a></li><li><a class="up-row"><span class="up-t"><span class="up-tx">HHMI Launches Undergraduate Science Scholars Program</span></span><span class="up-tag">News</span></a></li><li><a class="up-row"><span class="up-t"><span class="up-tx">Freeman Hrabowski Scholars applications are now open</span></span><span class="up-tag">News</span></a></li><li><a class="up-row"><span class="up-t"><span class="up-tx">HHMI Launches Undergraduate Science Scholars Program</span></span><span class="up-tag">News</span></a></li></ul></aside>
+            <aside class="mp-up" aria-label="Updates"><p class="up-h">Updates</p><ul><li><a class="up-row"><span class="up-t"><span class="up-tx">The Freeman Hrabowski Scholars Program is now open to early career scientists.</span></span><span class="up-tag">Apply</span></a></li><li><a class="up-row"><span class="up-t"><span class="up-tx">The Hanna H. Gray Fellows Program is now open to postdoctoral scientists.</span></span><span class="up-tag">Apply</span></a></li><li><a class="up-row"><span class="up-t"><span class="up-tx">The Cech Fellows Program is now open to postdoctoral scientists.</span></span><span class="up-tag">Apply</span></a></li><li><a class="up-row"><span class="up-t"><span class="up-tx">HHMI Launches Undergraduate Science Scholars Program to Support Community College Students Pursuing Careers in the Life Sciences.</span></span><span class="up-tag">News</span></a></li><li><a class="up-row"><span class="up-t"><span class="up-tx">The Surprising Cancer Connection at the Heart of Alzheimer’s.</span></span><span class="up-tag">News</span></a></li></ul></aside>
             <div class="mp-main">
               <p class="mp-h">Our Scientists</p>
               <div class="mp-cols">
@@ -218,15 +221,19 @@
     if (site.contains(e.target)) return;
     open(null); site.classList.remove('is-open'); tg.setAttribute('aria-expanded', 'false');
   });
-  // Updates headlines: on hover (or keyboard focus), marquee the ones that don't fit
+  // Updates headlines: on hover (or keyboard focus), headlines that don't fit scroll as an endless ticker
   [].forEach.call(document.querySelectorAll('.up-row'), function (row) {
-    var box = row.querySelector('.up-t'), tx = row.querySelector('.up-tx');
+    var box = row.querySelector('.up-t'), tx = row.querySelector('.up-tx'), text = tx.textContent;
+    tx.innerHTML = '';
+    var a = document.createElement('span'), b = document.createElement('span');
+    a.className = b.className = 'up-c'; a.textContent = b.textContent = text; b.setAttribute('aria-hidden', 'true');
+    tx.appendChild(a); tx.appendChild(b);
     function start() {
-      var over = tx.offsetWidth - box.clientWidth + 4;   // 4px: the right padding
-      if (over <= 4) return;
-      row.style.setProperty('--shift', -over + 'px');
-      row.style.setProperty('--dur', Math.max(4, over / 30 * 2 / 0.84) + 's');   // slow, ~30px/s each way
+      if (a.offsetWidth <= box.clientWidth - 4) return;   // fits: nothing to scroll
       row.classList.add('is-marquee');
+      var loop = a.offsetWidth;                            // one copy + its 48px gap
+      row.style.setProperty('--shift', -loop + 'px');
+      row.style.setProperty('--dur', loop / 30 + 's');     // slow, ~30px/s
     }
     function stop() { row.classList.remove('is-marquee'); }
     row.addEventListener('mouseenter', start); row.addEventListener('mouseleave', stop);
