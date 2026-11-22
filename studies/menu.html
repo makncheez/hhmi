@@ -21,6 +21,7 @@
     --hover: #7DE050;
     --line: #fff;
     --soft: #5a5a5a;
+    --g: 20px;   /* schema grid: every line stops this far short of the line it meets */
   }
   * { box-sizing: border-box; }
   html, body { margin: 0; background: #000; color: #fff; font: 400 17px/1.35 var(--font-sans); }
@@ -49,12 +50,12 @@
   .mp { position: absolute; left: 0; right: 0; top: 100%; background: #000;
         opacity: 0; visibility: hidden; transition: opacity .25s ease, visibility 0s linear .25s; }
   .mi.is-open .mp { opacity: 1; visibility: visible; transition: opacity .25s ease, visibility 0s; }   /* fade in / out */
-  .mp-in { display: grid; grid-template-columns: minmax(280px, 26%) 1fr; gap: 0 12px; padding: 20px; }   /* full width */
+  .mp-in { display: grid; grid-template-columns: minmax(280px, 26%) 1fr; gap: 0 12px; padding: var(--g) 20px 20px; }   /* full width; top = the grid gap below the header line */
   .mp-up, .mp-main { position: relative; padding-bottom: 28px; }
   /* sides: start/stop short of the rules; bottom line: stops short of the sides */
-  .mp-up::before, .mp-main::before { content: ""; position: absolute; top: 0; bottom: 22px; left: 0; right: 0; border: 0 solid var(--line); border-left-width: 1px; border-right-width: 1px; pointer-events: none; }
-  .mp-up::after, .mp-main::after { content: ""; position: absolute; left: 0; right: 12px; bottom: 0; border-top: 1px solid var(--line); pointer-events: none; }
-  .mp-main::after { left: 12px; right: 18px; }
+  .mp-up::before, .mp-main::before { content: ""; position: absolute; top: 0; bottom: calc(var(--g) + 1px); left: 0; right: 0; border: 0 solid var(--line); border-left-width: 1px; border-right-width: 1px; pointer-events: none; }
+  .mp-up::after, .mp-main::after { content: ""; position: absolute; left: calc(var(--g) + 1px); right: calc(var(--g) + 1px); bottom: 0; border-top: 1px solid var(--line); pointer-events: none; }
+  .mp-main::after { left: calc(var(--g) - 12px); }   /* the divider is the Updates cell's right side, 12px (the column gap) to the left */
   .mp-main::before { border-left-width: 0; }   /* one line between the cells: the Updates cell's right side */
 
   /* UPDATES */
