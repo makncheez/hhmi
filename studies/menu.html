@@ -6,32 +6,81 @@
 <title>HHMI Menu bar (study)</title>
 <link rel="stylesheet" href="../assets/fonts.css">
 <style>
-  /* HHMI menu bar study.
-     Black bar: wordmark left, four sections right. A full-width rule runs
-     under the bar. Hovering (or clicking / tapping) a section marks it with a
-     colour bar sitting on the rule and opens its panel: the section name large
-     on the left, link columns, closed by another full-width rule.
-     Phones: the sections collapse behind the Explore (H) button and stack. */
+  /* HHMI global header study.
+     60px black bar: wordmark left, four sections right (17px). Opening a
+     section (hover, click or tap) turns it into a tab: white lines on its
+     top and sides, and the bar's bottom line breaks under it so the tab opens
+     into the panel. The panel is two broken-line cells (as in the Schema
+     grid): UPDATES on the left (tag + headline rows, headlines fade out),
+     the section title and its link columns on the right.
+     Phones: the Explore (H) button shows the sections stacked. */
   :root {
     --font-sans: "ABC Diatype", "Helvetica Neue", Arial, sans-serif;
     --font-mono: "ABC Diatype Semi-Mono", ui-monospace, Menlo, monospace;
-    --pad: 24px;
+    --pad: 20px;
     --hover: #7DE050;
+    --line: #fff;
+    --soft: #5a5a5a;
   }
   * { box-sizing: border-box; }
   html, body { margin: 0; background: #000; color: #fff; font: 400 17px/1.35 var(--font-sans); }
   a { color: inherit; text-decoration: none; cursor: pointer; }
   button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+  ul { margin: 0; padding: 0; list-style: none; }
   :focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
 
-  .site { position: relative; z-index: 10; background: #000; border-bottom: 1px solid transparent; }
-  .site:has(.mi.is-open), .site.is-open { border-bottom-color: #fff; }   /* the white line shows only while a panel / the phone menu is open */
-  .bar { display: flex; align-items: center; justify-content: space-between; height: 60px; padding: 0 var(--pad); }
-  .brand { display: inline-flex; color: #fff; }
-  .brand svg { width: 100px; height: auto; }
+  .site { position: relative; z-index: 10; background: #000; }
+  /* the bar's bottom line: only while a panel is open; the open tab covers it */
+  .site::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; border-top: 1px solid var(--line); opacity: 0; pointer-events: none; }
+  .site:has(.mi.is-open)::after, .site.is-open::after { opacity: 1; }
+  .bar { display: flex; align-items: stretch; justify-content: space-between; height: 60px; padding: 0 var(--pad); }
+  .brand { display: inline-flex; align-items: center; color: #fff; }
+  .brand svg { width: 92px; height: auto; }
   .toggle { display: none; }
-  /* Phones: the Explore button from build_1 (three green lines that turn
-     into an H). Open = H. */
+
+  .menu { display: flex; align-items: stretch; gap: 0 clamp(8px, 2vw, 36px); }
+  .mi { display: flex; padding-top: 8px; }
+  /* Section names; the open one becomes a tab */
+  .mt { position: relative; z-index: 2; display: flex; align-items: center; padding: 0 12px 7px; border: 1px solid transparent; border-bottom: 0; font-size: 17px; white-space: nowrap; transition: color .2s ease; }
+  .mt:hover { color: var(--hover); }
+  .mi.is-open .mt { color: #fff; border-color: var(--line); background: #000; margin-bottom: -1px; padding-bottom: 8px; }   /* sits over the bar line: the gap */
+
+  /* Panel: two broken-line cells under the bar */
+  .mp { position: absolute; left: 0; right: 0; top: 100%; background: #000; }
+  .mp[hidden] { display: none; }
+  .mp-in { display: grid; grid-template-columns: minmax(280px, 26%) 1fr; gap: 0 12px; max-width: 1320px; margin: 0 auto; padding: 12px var(--pad) 0; }   /* the bar is full width; the dropdown is a centred container */
+  .mp-up, .mp-main { position: relative; padding-bottom: 28px; }
+  /* sides: start/stop short of the rules; bottom line: stops short of the sides */
+  .mp-up::before, .mp-main::before { content: ""; position: absolute; top: 0; bottom: 22px; left: 0; right: 0; border: 0 solid var(--line); border-left-width: 1px; border-right-width: 1px; pointer-events: none; }
+  .mp-up::after, .mp-main::after { content: ""; position: absolute; left: 0; right: 12px; bottom: 0; border-top: 1px solid var(--line); pointer-events: none; }
+  .mp-main::after { left: 12px; right: 18px; }
+  .mp-main::before { border-left-width: 0; }   /* one line between the cells: the Updates cell's right side */
+
+  /* UPDATES */
+  .up-h { margin: 0; padding: 14px 20px 14px; font-size: 17px; letter-spacing: .02em; text-transform: uppercase; }
+  .mp-up ul { border-top: 1px solid var(--soft); margin: 0 12px 0 4px; }
+  .mp-up li { border-bottom: 1px solid var(--soft); }
+  .up-row { display: grid; grid-template-columns: 12px 64px minmax(0, 1fr); align-items: center; column-gap: 8px; height: 42px; }
+  .up-ic { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; width: 11px; height: 15px; }
+  .up-ic i:nth-child(1) { background: #3fc2cd; } .up-ic i:nth-child(2) { background: #000d42; }
+  .up-ic i:nth-child(3) { background: #00ac1d; } .up-ic i:nth-child(4) { background: #a5f300; }
+  .up-tag { align-self: stretch; display: flex; align-items: center; border-right: 1px solid var(--soft); font-size: 12px; letter-spacing: .06em; text-transform: uppercase; }
+  .up-t { padding-left: 12px; white-space: nowrap; overflow: hidden;
+           -webkit-mask-image: linear-gradient(90deg, #000 calc(100% - 48px), transparent); mask-image: linear-gradient(90deg, #000 calc(100% - 48px), transparent);
+           transition: color .2s ease; }
+  .up-row:hover .up-t, .up-row:focus-visible .up-t { color: var(--hover); }
+
+  /* Section title + link columns */
+  .mp-main { padding: 22px 56px 52px; }
+  .mp-h { margin: 0 0 30px; font-size: 34px; line-height: 1.15; }
+  .mp-cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0 48px; max-width: 1100px; }
+  .mp-col a { display: block; font-size: 17px; line-height: 1.32; transition: color .2s ease; }
+  .mp-col a:hover, .mp-col a:focus-visible { color: var(--hover); }
+  .gh { margin: 0 0 10px; font-size: 14px; color: var(--hover); }
+  .pairs li + li { margin-top: 12px; }
+  .pairs span { display: block; }
+
+  /* Phones: the Explore button (three green lines that turn into an H) */
   .explore-icon { position: relative; width: 32px; height: 27px; }
   .explore-icon i { position: absolute; left: 0; width: 32px; height: 2px; transition: transform .35s cubic-bezier(.65,0,.35,1); }
   .explore-icon i:nth-child(1) { top: 0;      background: #a5f300; transform-origin: 1px 1px; }
@@ -41,52 +90,24 @@
   .site.is-open .explore-icon i:nth-child(2) { transform: translateY(-12.5px) rotate(-90deg) scaleX(.84375); }
   .site.is-open .explore-icon i:nth-child(3) { transform: translate(5px, -12.5px) scaleX(.6875); }
 
-  .menu { display: flex; align-self: stretch; gap: 0 clamp(24px, 4.2vw, 64px); margin: 0; padding: 0; list-style: none; }
-  .mi { position: static; display: flex; }
-  .mt { position: relative; display: flex; align-items: center; font-size: 17px; white-space: nowrap; }
-  /* Hover marker: the deco bar (navy|lime over cyan|green) sits on the rule */
-  .mt .deco { position: absolute; left: -8px; right: -8px; bottom: 0; display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 5px 5px; opacity: 0; transition: opacity .2s ease; }
-  .mt .deco span:nth-child(1) { background: #000d42; }
-  .mt .deco span:nth-child(2) { background: #a5f300; }
-  .mt .deco span:nth-child(3) { background: #3fc2cd; }
-  .mt .deco span:nth-child(4) { background: #00ac1d; }
-  .mi.is-open .mt .deco { opacity: 1; }
-
-  /* Panel: full width under the bar's rule, closed by its own rule */
-  .mp { position: absolute; left: 0; right: 0; top: calc(100% + 1px);   /* just under the bar's rule */ background: #000; border-bottom: 1px solid #fff; }
-  .mp[hidden] { display: none; }
-  /* Panel content hangs from the open section: the link column starts
-     under the section's name (x = --x, set by JS and kept on screen), and the
-     section title sits to its left. Groups sit side by side. */
-  .mp-in { position: relative; padding: 36px var(--pad) 52px var(--x, 40%); }
-  .mp-h { position: absolute; top: 30px; right: calc(100% - var(--x, 40%) + 56px); width: max-content; max-width: 300px; margin: 0; font-size: 34px; line-height: 1.15; }
-  .mp-cols { display: flex; width: max-content; gap: 0 72px; }
-  .mp-cols.is-stacked { flex-direction: column; gap: 28px; }
-  .mp-col ul { margin: 0; padding: 0; list-style: none; }
-  .mp-col a { display: block; font-size: 20px; line-height: 1.35; transition: color .2s ease; }
-  .mp-col a:hover, .mp-col a:focus-visible { color: var(--hover); }
-  .gh { margin: 0 0 12px; font-size: 15px; color: var(--hover); }
-  .pairs li + li { margin-top: 14px; }
-  .pairs span { display: block; }
-
   /* Demo page behind the menu */
-  .hero { height: 80vh; background: #111 center/cover; }
+  .hero { height: 80vh; background: #111; }
 
   @media (max-width: 991.98px) {
-    .bar { height: 60px; }
-    .toggle { display: inline-flex; align-items: center; gap: 14px; }
-    .menu { display: none; position: absolute; left: 0; right: 0; top: 100%; flex-direction: column; gap: 0; background: #000; border-bottom: 1px solid #fff; max-height: calc(100vh - 61px); overflow: auto; }
+    .toggle { display: inline-flex; align-items: center; }
+    .menu { display: none; position: absolute; left: 0; right: 0; top: 100%; flex-direction: column; gap: 0; background: #000; border-bottom: 1px solid var(--line); max-height: calc(100vh - 61px); overflow: auto; }
     .site.is-open .menu { display: flex; }
-    .mi { flex-direction: column; border-top: 1px solid #333; }
-    .mt { justify-content: space-between; padding: 22px var(--pad); font-size: 22px; }
-    .mt .deco { left: var(--pad); right: auto; width: 120px; bottom: 0; }
-    .mp { position: static; border-bottom: 0; }
-    .mp-in { padding: 20px var(--pad) 28px; }
-    .mp-h { display: none; }
-    .mp-cols { flex-direction: column; width: auto; gap: 24px; }
-    .mp-col a { font-size: 17px; }
+    .mi { flex-direction: column; padding: 0; border-top: 1px solid #333; }
+    .mt, .mi.is-open .mt { justify-content: space-between; margin: 0; padding: 22px var(--pad); border: 0; font-size: 22px; }
+    .mi.is-open .mt { color: var(--hover); }
+    .mp { position: static; }
+    .mp-in { display: block; padding: 0 var(--pad) 28px; }
+    .mp-up, .mp-h, .mp-main::before, .mp-main::after { display: none; }
+    .mp-main { padding: 0; }
+    .mp-cols { grid-template-columns: 1fr; gap: 20px; }
+    .gh[aria-hidden] { display: none; }
   }
-  @media (prefers-reduced-motion: reduce) { .mt .deco, .mp-col a, .explore-icon i { transition: none; } }
+  @media (prefers-reduced-motion: reduce) { .mt, .mp-col a, .up-t, .explore-icon i { transition: none; } }
 </style>
 </head>
 <body>
@@ -96,47 +117,62 @@
     <button class="toggle" id="toggle" type="button" aria-label="Explore menu" aria-expanded="false" aria-controls="menu"><span class="explore-icon" aria-hidden="true"><i></i><i></i><i></i></span></button>
     <ul class="menu" id="menu">
       <li class="mi">
-        <button class="mt" type="button" aria-expanded="false" aria-controls="mp0">Inside HHMI<span class="deco" aria-hidden="true"><span></span><span></span><span></span><span></span></span></button>
+        <button class="mt" type="button" aria-expanded="false" aria-controls="mp0">Inside HHMI</button>
         <div class="mp" id="mp0" hidden>
           <div class="mp-in">
-            <p class="mp-h">Inside HHMI</p>
-            <div class="mp-cols">
-              <div class="mp-col"><ul><li><a>About</a></li><li><a>Careers</a></li><li><a>News &amp; Stories</a></li><li><a>Tangled Bank Studios</a></li><li><a>HHMI Senior Leadership</a></li><li><a>HHMI Board of Trustees</a></li><li><a>Medical Advisory Board</a></li><li><a>Scientific Review Board</a></li><li><a>Shaping How Science is Done</a></li><li><a>Open Science</a></li><li><a>Science Leadership &amp; Lab Culture</a></li></ul></div>
+            <aside class="mp-up" aria-label="Updates"><p class="up-h">Updates</p><ul><li><a class="up-row"><span class="up-ic" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="up-tag">Apply</span><span class="up-t">Cech Fellows applications are available</span></a></li><li><a class="up-row"><span class="up-ic" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="up-tag">Apply</span><span class="up-t">Freeman Hrabowski Scholars applications are now open</span></a></li><li><a class="up-row"><span class="up-ic" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="up-tag">News</span><span class="up-t">HHMI Launches Undergraduate Science Scholars Program</span></a></li><li><a class="up-row"><span class="up-ic" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="up-tag">News</span><span class="up-t">Freeman Hrabowski Scholars applications are now open</span></a></li><li><a class="up-row"><span class="up-ic" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="up-tag">News</span><span class="up-t">HHMI Launches Undergraduate Science Scholars Program</span></a></li></ul></aside>
+            <div class="mp-main">
+              <p class="mp-h">Inside HHMI</p>
+              <div class="mp-cols">
+                <div class="mp-col"><ul><li><a>About</a></li><li><a>Careers</a></li><li><a>News &amp; Stories</a></li><li><a>Tangled Bank Studios</a></li><li><a>HHMI Senior Leadership</a></li><li><a>HHMI Board of Trustees</a></li></ul></div>
+                <div class="mp-col"><ul><li><a>Medical Advisory Board</a></li><li><a>Scientific Review Board</a></li><li><a>Shaping How Science is Done</a></li><li><a>Open Science</a></li><li><a>Science Leadership &amp; Lab Culture</a></li></ul></div>
+              </div>
             </div>
           </div>
         </div>
       </li>
       <li class="mi">
-        <button class="mt" type="button" aria-expanded="false" aria-controls="mp1">Opportunities for Scientists<span class="deco" aria-hidden="true"><span></span><span></span><span></span><span></span></span></button>
+        <button class="mt" type="button" aria-expanded="false" aria-controls="mp1">Opportunities for Scientists</button>
         <div class="mp" id="mp1" hidden>
           <div class="mp-in">
-            <p class="mp-h">Opportunities for Scientists</p>
-            <div class="mp-cols">
-              <div class="mp-col"><p class="gh">Science Programs</p><ul class="pairs"><li><a><span>Mid-Career &amp; Senior Faculty</span><span>HHMI Investigator Program</span></a></li><li><a><span>Early Career Faculty</span><span>Freeman Hrabowski Scholars</span></a></li><li><a><span>Postdoc-Faculty Transition</span><span>Hanna Gray Fellows</span></a></li><li><a><span>PhD &amp; Postdoc Transition</span><span>Gilliam Fellows Program</span></a></li></ul></div>
-              <div class="mp-col"><p class="gh">Janelia Research Campus</p><ul><li><a>Overview</a></li><li><a>Biology</a></li><li><a>AI@HHMI</a></li><li><a>Theory@HHMI</a></li><li><a>Tools@HHMI</a></li><li><a>Senior Leadership</a></li><li><a>20th Anniversary</a></li><li><a>Group Leaders</a></li><li><a>Leader Labs</a></li><li><a>Project &amp; Support Teams</a></li><li><a>Careers &amp; Opportunities</a></li><li><a>Tools and Resources</a></li></ul></div>
+            <aside class="mp-up" aria-label="Updates"><p class="up-h">Updates</p><ul><li><a class="up-row"><span class="up-ic" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="up-tag">Apply</span><span class="up-t">Cech Fellows applications are available</span></a></li><li><a class="up-row"><span class="up-ic" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="up-tag">Apply</span><span class="up-t">Freeman Hrabowski Scholars applications are now open</span></a></li><li><a class="up-row"><span class="up-ic" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="up-tag">News</span><span class="up-t">HHMI Launches Undergraduate Science Scholars Program</span></a></li><li><a class="up-row"><span class="up-ic" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="up-tag">News</span><span class="up-t">Freeman Hrabowski Scholars applications are now open</span></a></li><li><a class="up-row"><span class="up-ic" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="up-tag">News</span><span class="up-t">HHMI Launches Undergraduate Science Scholars Program</span></a></li></ul></aside>
+            <div class="mp-main">
+              <p class="mp-h">Opportunities for Scientists</p>
+              <div class="mp-cols">
+                <div class="mp-col"><p class="gh">Science Programs</p><ul class="pairs"><li><a><span>Mid-Career &amp; Senior Faculty</span><span>HHMI Investigator Program</span></a></li><li><a><span>Early Career Faculty</span><span>Freeman Hrabowski Scholars</span></a></li><li><a><span>Postdoc-Faculty Transition</span><span>Hanna Gray Fellows</span></a></li><li><a><span>PhD &amp; Postdoc Transition</span><span>Gilliam Fellows Program</span></a></li></ul></div>
+                <div class="mp-col"><p class="gh">Janelia Research Campus</p><ul><li><a>Overview</a></li><li><a>Biology</a></li><li><a>AI@HHMI</a></li><li><a>Theory@HHMI</a></li><li><a>Tools@HHMI</a></li><li><a>Senior Leadership</a></li></ul></div>
+                <div class="mp-col"><p class="gh" aria-hidden="true">&nbsp;</p><ul><li><a>20th Anniversary</a></li><li><a>Group Leaders</a></li><li><a>Leader Labs</a></li><li><a>Project &amp; Support Teams</a></li><li><a>Careers &amp; Opportunities</a></li><li><a>Tools and Resources</a></li></ul></div>
+              </div>
             </div>
           </div>
         </div>
       </li>
       <li class="mi">
-        <button class="mt" type="button" aria-expanded="false" aria-controls="mp2">For Educators &amp; Students<span class="deco" aria-hidden="true"><span></span><span></span><span></span><span></span></span></button>
+        <button class="mt" type="button" aria-expanded="false" aria-controls="mp2">For Educators &amp; Students</button>
         <div class="mp" id="mp2" hidden>
           <div class="mp-in">
-            <p class="mp-h">For Educators &amp; Students</p>
-            <div class="mp-cols">
-              <div class="mp-col"><p class="gh">Educators</p><ul><li><a>BioInteractive</a></li><li><a>Science Education Alliance (SEA)</a></li><li><a>Success in Science</a></li></ul></div>
-              <div class="mp-col"><p class="gh">Students</p><ul><li><a>Cech Fellows Program</a></li><li><a>Undergraduate Science Scholars Program</a></li></ul></div>
+            <aside class="mp-up" aria-label="Updates"><p class="up-h">Updates</p><ul><li><a class="up-row"><span class="up-ic" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="up-tag">Apply</span><span class="up-t">Cech Fellows applications are available</span></a></li><li><a class="up-row"><span class="up-ic" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="up-tag">Apply</span><span class="up-t">Freeman Hrabowski Scholars applications are now open</span></a></li><li><a class="up-row"><span class="up-ic" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="up-tag">News</span><span class="up-t">HHMI Launches Undergraduate Science Scholars Program</span></a></li><li><a class="up-row"><span class="up-ic" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="up-tag">News</span><span class="up-t">Freeman Hrabowski Scholars applications are now open</span></a></li><li><a class="up-row"><span class="up-ic" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="up-tag">News</span><span class="up-t">HHMI Launches Undergraduate Science Scholars Program</span></a></li></ul></aside>
+            <div class="mp-main">
+              <p class="mp-h">For Educators &amp; Students</p>
+              <div class="mp-cols">
+                <div class="mp-col"><p class="gh">Educators</p><ul><li><a>BioInteractive</a></li><li><a>Science Education Alliance (SEA)</a></li><li><a>Success in Science</a></li></ul></div>
+                <div class="mp-col"><p class="gh">Students</p><ul><li><a>Cech Fellows Program</a></li><li><a>Undergraduate Science Scholars Program</a></li></ul></div>
+              </div>
             </div>
           </div>
         </div>
       </li>
       <li class="mi">
-        <button class="mt" type="button" aria-expanded="false" aria-controls="mp3">Our Scientists<span class="deco" aria-hidden="true"><span></span><span></span><span></span><span></span></span></button>
+        <button class="mt" type="button" aria-expanded="false" aria-controls="mp3">Our Scientists</button>
         <div class="mp" id="mp3" hidden>
           <div class="mp-in">
-            <p class="mp-h">Our Scientists</p>
-            <div class="mp-cols">
-              <div class="mp-col"><p class="gh">Program Scientists</p><ul class="pairs"><li><a><span>Mid-Career &amp; Senior Faculty</span><span>HHMI Investigator Program</span></a></li><li><a><span>Early Career Faculty</span><span>Freeman Hrabowski Scholars</span></a></li><li><a><span>Postdoc-Faculty Transition</span><span>Hanna Gray Fellows</span></a></li><li><a><span>PhD &amp; Postdoc Transition</span><span>Gilliam Fellows Program</span></a></li></ul></div>
+            <aside class="mp-up" aria-label="Updates"><p class="up-h">Updates</p><ul><li><a class="up-row"><span class="up-ic" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="up-tag">Apply</span><span class="up-t">Cech Fellows applications are available</span></a></li><li><a class="up-row"><span class="up-ic" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="up-tag">Apply</span><span class="up-t">Freeman Hrabowski Scholars applications are now open</span></a></li><li><a class="up-row"><span class="up-ic" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="up-tag">News</span><span class="up-t">HHMI Launches Undergraduate Science Scholars Program</span></a></li><li><a class="up-row"><span class="up-ic" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="up-tag">News</span><span class="up-t">Freeman Hrabowski Scholars applications are now open</span></a></li><li><a class="up-row"><span class="up-ic" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="up-tag">News</span><span class="up-t">HHMI Launches Undergraduate Science Scholars Program</span></a></li></ul></aside>
+            <div class="mp-main">
+              <p class="mp-h">Our Scientists</p>
+              <div class="mp-cols">
+                <div class="mp-col"><p class="gh">Program Scientists</p><ul class="pairs"><li><a><span>Mid-Career &amp; Senior Faculty</span><span>HHMI Investigator Program</span></a></li><li><a><span>Early Career Faculty</span><span>Freeman Hrabowski Scholars</span></a></li></ul></div>
+                <div class="mp-col"><p class="gh" aria-hidden="true">&nbsp;</p><ul class="pairs"><li><a><span>Postdoc-Faculty Transition</span><span>Hanna Gray Fellows</span></a></li><li><a><span>PhD &amp; Postdoc Transition</span><span>Gilliam Fellows Program</span></a></li></ul></div>
+              </div>
             </div>
           </div>
         </div>
@@ -152,7 +188,7 @@
 (function () {
   var site = document.getElementById('site'), items = [].slice.call(document.querySelectorAll('.mi'));
   var desk = matchMedia('(min-width: 992px)'), hoverOK = matchMedia('(hover: hover)');
-  var timer = 0;
+  var timer = 0, tg = document.getElementById('toggle');
   function open(mi) {
     items.forEach(function (m) {
       var on = m === mi;
@@ -160,25 +196,9 @@
       m.querySelector('.mt').setAttribute('aria-expanded', on ? 'true' : 'false');
       m.querySelector('.mp').hidden = !on;
     });
-    if (mi) place(mi);
   }
-  // Line the links up under the open section's name, kept on screen; the
-  // title sits to their left (and never off the left edge).
-  function place(mi) {
-    if (!desk.matches) return;
-    var mp = mi.querySelector('.mp'), cols = mp.querySelector('.mp-cols'), h = mp.querySelector('.mp-h');
-    var name = mi.querySelector('.mt').getBoundingClientRect().left;
-    var vw = document.documentElement.clientWidth, pad = 24, minX = pad + h.offsetWidth + 56;
-    cols.classList.remove('is-stacked');
-    if (minX + cols.scrollWidth > vw - pad) cols.classList.add('is-stacked');   // too wide: stack the groups
-    var x = Math.min(name, vw - pad - cols.scrollWidth);
-    x = Math.max(x, minX);
-    mp.style.setProperty('--x', Math.round(x) + 'px');
-  }
-  window.addEventListener('resize', function () { items.forEach(function (m) { if (m.classList.contains('is-open')) place(m); }); });
   items.forEach(function (mi) {
-    var bt = mi.querySelector('.mt');
-    bt.addEventListener('click', function () { open(mi.classList.contains('is-open') ? null : mi); });
+    mi.querySelector('.mt').addEventListener('click', function () { open(mi.classList.contains('is-open') ? null : mi); });
     mi.addEventListener('mouseenter', function () { if (!desk.matches || !hoverOK.matches) return; clearTimeout(timer); timer = setTimeout(function () { open(mi); }, 80); });
   });
   site.addEventListener('mouseleave', function () { if (!desk.matches || !hoverOK.matches) return; clearTimeout(timer); timer = setTimeout(function () { open(null); }, 150); });
@@ -188,8 +208,10 @@
     var cur = items.filter(function (m) { return m.classList.contains('is-open'); })[0];
     open(null); if (cur) cur.querySelector('.mt').focus();
   });
-  document.addEventListener('pointerdown', function (e) { if (!site.contains(e.target)) { open(null); site.classList.remove('is-open'); document.getElementById('toggle').setAttribute('aria-expanded', 'false'); } });
-  var tg = document.getElementById('toggle');
+  document.addEventListener('pointerdown', function (e) {
+    if (site.contains(e.target)) return;
+    open(null); site.classList.remove('is-open'); tg.setAttribute('aria-expanded', 'false');
+  });
   tg.addEventListener('click', function () {
     var on = !site.classList.contains('is-open');
     site.classList.toggle('is-open', on); tg.setAttribute('aria-expanded', on ? 'true' : 'false');
