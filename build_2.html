@@ -900,6 +900,7 @@
   @media (hover: none) { .unit-explore:not(.is-open):active { background: #7DE050; } }   /* centred over the two videos, above everything in the panel */
   .unit-media--stack { display: grid; grid-template-rows: 1fr 1fr; }
   .unit-media--stack video { min-height: 0; }
+  .unit-media--stack video[src*="lens_of_eye"] { object-position: 50% 82%; }   /* keep the bright lens cells near the bottom edge, as in the mock-up */
   @media (max-width: 991.98px) {
     .unit-media--stack { aspect-ratio: auto; }
     .unit-media--stack video { aspect-ratio: 16 / 9; height: auto; }
@@ -1861,9 +1862,9 @@
         </div>
       </div></div>
       <div class="unit-media unit-media--stack">
-        <video aria-hidden="true" src="assets/video/zebrafish_brain_imaging.mp4" poster="assets/zebrafish_brain_imaging-poster.jpg"
+        <video aria-hidden="true" src="assets/video/danionella_lens_of_eye.mp4" poster="assets/danionella_lens_of_eye-poster.jpg"
                autoplay muted loop playsinline preload="metadata"></video>
-        <video aria-hidden="true" src="assets/video/danionella_eye_crop.mp4" poster="assets/danionella_eye_crop-poster.jpg"
+        <video aria-hidden="true" src="assets/video/danionella_swim.mp4" poster="assets/danionella_swim-poster.jpg"
                autoplay muted loop playsinline preload="metadata"></video>
         <a class="unit-explore" tabindex="0">
           <span class="deco ue-bar--l" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
