@@ -315,7 +315,7 @@
      with the bottom of the tabs (both rest on the panel's top edge). */
   @media (min-width: 1200px) {
     .units-head { flex-direction: row; align-items: flex-end; justify-content: space-between; }
-    .units-intro { align-self: auto; flex: 1 1 auto; min-width: 0; margin-bottom: 5px; }   /* lifts the last line onto the tab labels' baseline */
+    .units-intro { align-self: auto; flex: 1 1 auto; min-width: 0; margin-right: 40px; margin-bottom: calc(.61 * clamp(25px, 2.35vw, 40px) - 6px); }   /* last line on the tab labels' baseline (it scales with the tabs) */
   }
   .units-title {
     margin: 0 0 16px;
@@ -325,33 +325,29 @@
   }
   .units-lead { margin: 0; }
   .units-lead + .units-lead { margin-top: 1em; }          /* uses the global body paragraph style */
-  .units-tabs {
+  .units-tabs {                      /* tab labels at the heading's size; tabs scale with it (em) */
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    width: min(510px, 100%);
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr;          /* four equal tabs, as wide as the longest label needs */
     flex-shrink: 0;
+    font: 400 clamp(25px, 2.35vw, 40px)/1 var(--font-sans);
+    letter-spacing: -0.005em;
   }
   .units-tab {
     position: relative;
-    height: 35px;
-    padding: 0 0 0 15px;
+    height: 1.95em;                  /* was 35px at 18px */
+    padding: 0 .85em 0 .83em;
     border: 1px solid #fff;
     border-bottom: 0;
-    border-radius: 7px 7px 0 0;
+    border-radius: .39em .39em 0 0;
     background: #000;
     color: #fff;
-    font: 400 18px/1 var(--font-sans);
+    font: inherit;
     text-align: left;
     white-space: nowrap;
     cursor: pointer;
   }
   .units-tab + .units-tab { margin-left: -1px; }   /* touching tabs share one border line */
-  .units-tab sup {
-    top: -0.85em;
-    margin-left: 3px;
-    font-size: 9px;
-    letter-spacing: 0.02em;
-  }
   .units-tab[aria-selected="true"] { background: #a5f300; color: #021341; }   /* selected: lime with navy text, as before */
   .units-tab:focus-visible { outline: 2px solid #fff; outline-offset: -3px; }
   .units-tab[aria-selected="true"]:focus-visible { outline-color: #021341; }
@@ -469,8 +465,7 @@
     .unit-media { margin-top: 56px; aspect-ratio: 4 / 3; }
   }
   @media (max-width: 575.98px) {
-    .units-tab { padding-left: 8px; font-size: 15px; }
-    .units-tab sup { font-size: 8px; margin-left: 1px; }
+    .units-tabs { font-size: clamp(14px, 4.5vw, 25px); }   /* phones: four tabs across still fit */
   }
 
   /* ---------- Grid section: Background Grid crosshairs from studies/grid.html ----------
@@ -1730,9 +1725,9 @@
       </div>
       <div class="units-tabs" role="tablist" aria-label="Research units">
       <button class="units-tab" role="tab" id="tab-biology" aria-controls="panel-biology" aria-selected="true">Biology</button>
-      <button class="units-tab" role="tab" id="tab-ai" aria-controls="panel-ai" aria-selected="false" tabindex="-1">AI<sup>@HHMI</sup></button>
-      <button class="units-tab" role="tab" id="tab-tool" aria-controls="panel-tool" aria-selected="false" tabindex="-1">Tools<sup>@HHMI</sup></button>
-      <button class="units-tab" role="tab" id="tab-theory" aria-controls="panel-theory" aria-selected="false" tabindex="-1">Theory<sup>@HHMI</sup></button>
+      <button class="units-tab" role="tab" id="tab-ai" aria-controls="panel-ai" aria-selected="false" tabindex="-1">AI</button>
+      <button class="units-tab" role="tab" id="tab-tool" aria-controls="panel-tool" aria-selected="false" tabindex="-1">Tools</button>
+      <button class="units-tab" role="tab" id="tab-theory" aria-controls="panel-theory" aria-selected="false" tabindex="-1">Theory</button>
       </div>
     </div>
     <div class="units-panel unit-split" role="tabpanel" id="panel-biology" aria-labelledby="tab-biology">
