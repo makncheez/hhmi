@@ -1414,7 +1414,7 @@
     opacity: 0; visibility: hidden;
     transition: opacity .25s ease, visibility 0s linear .25s;
   }
-  .nlx.is-open { width: min(560px, 92%); height: 172px; background: #FBFBFB; }   /* opens on click / tap only */
+  .nlx.is-open { width: min(560px, 92%); height: 172px; background: #FBFBFB; }   /* opens on hover (mouse) or tap (touch) */
   .nlx.is-open .deco { opacity: 1; transition-delay: .2s; }
   .nlx.is-open .nlx-label { opacity: 0; pointer-events: none; }
   .nlx.is-open .nlx-panel { opacity: 1; visibility: visible; transition: opacity .3s ease .2s, visibility 0s; }
@@ -3494,8 +3494,9 @@ document.querySelectorAll('button.mj-more, button.ul-more').forEach(function (bt
 })();
 </script>
 <script>
-/* Stay Connected: a click / tap (or Enter) opens the panel; a click or tap
-   outside, Esc, or tabbing out of it closes it. No hover opening. */
+/* Stay Connected. Desktop (mouse): opens on hover, closes when the pointer
+   leaves. Touch screens: a tap opens it; a tap outside closes it. Keyboard:
+   Enter opens; Esc or tabbing out closes. */
 (function () {
   var box = document.getElementById('nlx'); if (!box) return;
   var btn = box.querySelector('.nlx-label');
@@ -3505,8 +3506,14 @@ document.querySelectorAll('button.mj-more, button.ul-more').forEach(function (bt
     btn.setAttribute('aria-expanded', on ? 'true' : 'false');
     box.dispatchEvent(new Event(on ? 'deco:start' : 'deco:stop'));   // colour bars shuffle while open
   }
+  var hover = matchMedia('(hover: hover) and (pointer: fine)'), leaveT;
   btn.addEventListener('click', function () {
+    if (hover.matches && box.classList.contains('is-open')) return;   // mouse: hover already opened it
     set(!box.classList.contains('is-open'));
+  });
+  box.addEventListener('mouseenter', function () { if (hover.matches) { clearTimeout(leaveT); set(true); } });
+  box.addEventListener('mouseleave', function () {
+    if (hover.matches) leaveT = setTimeout(function () { if (!box.contains(document.activeElement) || !document.activeElement.matches(':focus-visible')) set(false); }, 150);
   });
   box.addEventListener('focusout', function (e) { if (!box.contains(e.relatedTarget) && e.relatedTarget) set(false); });
   document.addEventListener('pointerdown', function (e) {   // pointerdown: iOS doesn't send clicks from plain areas
