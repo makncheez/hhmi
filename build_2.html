@@ -415,17 +415,17 @@
     height: auto;
   }
   /* "@HHMI" tag after a unit name: black on a lime pill, top aligned with the cap height */
-  .unit-tag {                        /* "@HHMI" after a unit name: lime pill, same size and baseline as the name */
+  .unit-tag {                        /* "@HHMI" after a unit name: lime pill, smaller text, top level with the name's cap height */
     display: inline-block;
-    margin-left: 0.2em;
-    padding: 0 0.2em;
-    border-radius: 0.08em;
+    margin-left: 0.25em;
+    padding: 0.16em 0.7em;
+    border-radius: 999px;
     background: #a5f300;
     color: #000;
-    font-size: 1em;
-    line-height: 1.15;
-    vertical-align: baseline;
-    letter-spacing: inherit;
+    font-size: 0.4em;
+    line-height: 1;
+    vertical-align: 0.8em;           /* pill top level with the top of the name's capitals */
+    letter-spacing: 0.01em;
   }
   .unit-desc p { margin: 0; }
   .unit-desc p + p { margin-top: 1em; }   /* unit text with more than one paragraph */
