@@ -896,7 +896,7 @@
   #panel-biology .unit-explore { z-index: 10; }
   /* Touch: a plain 240 x 64 target (no grow), instant press feedback, no grey tap flash */
   .unit-explore { -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
-  @media (hover: none) { .unit-explore:active { background: #7DE050; } }   /* centred over the two videos, above everything in the panel */
+  @media (hover: none) { .unit-explore:not(.is-open):active { background: #7DE050; } }   /* centred over the two videos, above everything in the panel */
   .unit-media--stack { display: grid; grid-template-rows: 1fr 1fr; }
   .unit-media--stack video { min-height: 0; }
   @media (max-width: 991.98px) {
@@ -968,15 +968,11 @@
   .ue-bar--l { left: 0;  --deco-1: #000d42; --deco-2: #a5f300; --deco-3: #3fc2cd; --deco-4: #00ac1d; }
   .ue-bar--r { right: 0; --deco-1: #00ac1d; --deco-2: #3fc2cd; --deco-3: #a5f300; --deco-4: #000d42; }
   .unit-explore:focus-visible { outline: 2px solid #fff; outline-offset: 4px; }
-  /* Grown state */
-  .unit-explore:focus-visible { width: 78%; height: 76%; background: #000; color: #fff; }
-  .unit-explore:focus-visible svg { opacity: 1; transition-delay: .15s; }
-  .unit-explore:focus-visible .deco { opacity: 1; transition-delay: .2s; }
-  @media (hover: hover) {             /* the button itself is the hot spot */
-    .unit-explore:hover { width: 78%; height: 76%; background: #000; color: #fff; }
-    .unit-explore:hover svg { opacity: 1; transition-delay: .15s; }
-    .unit-explore:hover .deco { opacity: 1; transition-delay: .2s; }
-  }
+  /* Grown state: opens on click / tap (or Enter / Space); closes on a second
+     click, a click outside, or Escape. */
+  .unit-explore.is-open { width: 78%; height: 76%; background: #000; color: #fff; }
+  .unit-explore.is-open svg { opacity: 1; transition-delay: .15s; }
+  .unit-explore.is-open .deco { opacity: 1; transition-delay: .2s; }
   @media (prefers-reduced-motion: reduce) {
     .unit-explore, .unit-explore svg, .unit-explore .deco { transition: none; }
   }
@@ -1853,7 +1849,7 @@
                autoplay muted loop playsinline preload="metadata"></video>
         <video aria-hidden="true" src="assets/video/danionella_eye_crop.mp4" poster="assets/danionella_eye_crop-poster.jpg"
                autoplay muted loop playsinline preload="metadata"></video>
-        <a class="unit-explore">
+        <a class="unit-explore" role="button" tabindex="0" aria-expanded="false">
           <span class="deco ue-bar--l" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
           <span>Explore Biology</span>
           <svg viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke="black" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round" stroke="black"/></svg>
@@ -1874,7 +1870,7 @@
       <div class="unit-media">
         <video aria-hidden="true" src="assets/video/danionella_eye_crop.mp4" poster="assets/danionella_eye_crop-poster.jpg"
                muted loop playsinline preload="none"></video>
-        <a class="unit-explore">
+        <a class="unit-explore" role="button" tabindex="0" aria-expanded="false">
           <span class="deco ue-bar--l" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
           <span>Explore AI@HHMI</span>
           <svg viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke="black" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round" stroke="black"/></svg>
@@ -1895,7 +1891,7 @@
       <div class="unit-media">
         <video aria-hidden="true" src="assets/video/danionella_eye_crop.mp4" poster="assets/danionella_eye_crop-poster.jpg"
                muted loop playsinline preload="none"></video>
-        <a class="unit-explore">
+        <a class="unit-explore" role="button" tabindex="0" aria-expanded="false">
           <span class="deco ue-bar--l" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
           <span>Explore Tools@HHMI</span>
           <svg viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke="black" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round" stroke="black"/></svg>
@@ -1916,7 +1912,7 @@
       <div class="unit-media">
         <video aria-hidden="true" src="assets/video/zebrafish_brain_imaging.mp4" poster="assets/zebrafish_brain_imaging-poster.jpg"
                muted loop playsinline preload="none"></video>
-        <a class="unit-explore">
+        <a class="unit-explore" role="button" tabindex="0" aria-expanded="false">
           <span class="deco ue-bar--l" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
           <span>Explore Theory@HHMI</span>
           <svg viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke="black" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round" stroke="black"/></svg>
@@ -2521,7 +2517,7 @@
       clearInterval(timer); timer = null;
       decos.forEach(function (d) { d.last = ''; d.cells.forEach(function (c) { c.style.backgroundColor = ''; }); });
     }
-    if (cta.classList.contains('nlx')) {   // Stay Connected: shuffles while its panel is open (click to open)
+    if (cta.classList.contains('nlx') || cta.classList.contains('unit-explore')) {   // Stay Connected / Explore: shuffle while open (click to open)
       cta.addEventListener('deco:start', start);
       cta.addEventListener('deco:stop', stop);
       return;
@@ -2590,6 +2586,31 @@
   window.addEventListener('resize', fit);
   if ('ResizeObserver' in window) new ResizeObserver(fit).observe(stage);
   fit();
+})();
+
+// Unit "Explore" buttons: click / tap (or Enter / Space) grows the button into
+// the big black box; a second click, a click outside or Escape shrinks it.
+(function () {
+  var ctas = document.querySelectorAll('.unit-explore');
+  function set(c, on) {
+    if (c.classList.contains('is-open') === on) return;
+    c.classList.toggle('is-open', on);
+    c.setAttribute('aria-expanded', on ? 'true' : 'false');
+    c.dispatchEvent(new Event(on ? 'deco:start' : 'deco:stop'));
+  }
+  ctas.forEach(function (c) {
+    c.addEventListener('click', function (e) { e.preventDefault(); set(c, !c.classList.contains('is-open')); });
+    c.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); set(c, !c.classList.contains('is-open')); }
+      if (e.key === 'Escape') set(c, false);
+    });
+  });
+  document.addEventListener('pointerdown', function (e) {
+    ctas.forEach(function (c) { if (!c.contains(e.target)) set(c, false); });
+  });
+  document.querySelectorAll('.units-tab').forEach(function (t) {   // switching tabs closes any open one
+    t.addEventListener('click', function () { ctas.forEach(function (c) { set(c, false); }); });
+  });
 })();
 
 // Biology Q&A: each question opens / closes its answer (arrow down -> up).
