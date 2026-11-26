@@ -310,7 +310,8 @@
     align-items: flex-end;           /* tabs on the right at every width */
     gap: 40px;
   }
-  .units-intro { align-self: flex-start; max-width: 640px; text-align: left; }   /* heading + paragraph on the left; tabs stay centred */
+  .units-intro { text-align: left; }   /* heading + paragraphs: the middle 8 of 12 columns of the container (2 / 8 / 2) */
+  .units-intro-wrap { margin-bottom: 56px; }
   /* Wide screens: tabs on the right; the paragraph's last line sits flush
      with the bottom of the tabs (both rest on the panel's top edge). */
   /* Desktop: the head runs full width, its text in line with the panel's
@@ -318,8 +319,7 @@
   @media (min-width: 992px) { .units-head { max-width: none; padding-inline: 76px; } }
   @media (min-width: 1200px) {
     .units-head { display: grid; grid-template-columns: 1fr 1fr; align-items: end; gap: 0; }   /* 50 / 50: intro | tabs */
-    .units-tabs { width: 100%; }   /* the tabs fill the right half */
-    .units-intro { align-self: auto; min-width: 0; padding-right: 40px; margin-bottom: calc(.61 * clamp(25px, 2.35vw, 40px) - 6px); }   /* last line on the tab labels' baseline (it scales with the tabs) */
+    .units-tabs { grid-column: 2; width: 100%; }   /* the tabs fill the right half */
   }
   .units-title {
     margin: 0 0 16px;
@@ -1769,13 +1769,15 @@
   </section>
 
   <section class="units" aria-labelledby="unitsTitle">
+    <div class="container units-intro-wrap"><div class="row">
+        <div class="col-12 col-lg-8 offset-lg-2 units-intro">
+          <h2 class="units-title" id="unitsTitle">Four units.<br>Connected scientific work.</h2>
+          <p class="units-lead">Integrated teams of biologists, theorists, tool builders and AI researchers work together to pursue Janelia’s overarching mission and move biological discoveries forward across HHMI and in the larger scientific community.</p>
+          <p class="units-lead">Biology pursues the central scientific research questions at the heart of Janelia’s mission. Theory@HHMI guides these questions, developing conceptual frameworks that can be tested in the lab. Tools@HHMI enables this work, building the microscopes, molecular tools, and instruments that drive biological discovery. AI@HHMI powers this research, creating AI systems that help scientists analyze and understand their data and eventually design and run experiments as well.</p>
+          <p class="units-lead">Theory, Tools, and AI set their research priorities in dialogue with Biology’s scientific questions, and with one another. Together, they operate as a single, integrated enterprise united by and working toward a common vision.</p>
+        </div>
+    </div></div>
     <div class="container units-head">
-      <div class="units-intro">
-        <h2 class="units-title" id="unitsTitle">Four units.<br>Connected scientific work.</h2>
-        <p class="units-lead">Integrated teams of biologists, theorists, tool builders and AI researchers work together to pursue Janelia’s overarching mission and move biological discoveries forward across HHMI and in the larger scientific community.</p>
-        <p class="units-lead">Biology pursues the central scientific research questions at the heart of Janelia’s mission. Theory@HHMI guides these questions, developing conceptual frameworks that can be tested in the lab. Tools@HHMI enables this work, building the microscopes, molecular tools, and instruments that drive biological discovery. AI@HHMI powers this research, creating AI systems that help scientists analyze and understand their data and eventually design and run experiments as well.</p>
-        <p class="units-lead">Theory, Tools, and AI set their research priorities in dialogue with Biology’s scientific questions, and with one another. Together, they operate as a single, integrated enterprise united by and working toward a common vision.</p>
-      </div>
       <div class="units-tabs" role="tablist" aria-label="Research units">
       <button class="units-tab" role="tab" id="tab-biology" aria-controls="panel-biology" aria-selected="true">Biology</button>
       <button class="units-tab" role="tab" id="tab-ai" aria-controls="panel-ai" aria-selected="false" tabindex="-1">AI</button>
