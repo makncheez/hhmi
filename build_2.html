@@ -311,6 +311,12 @@
     gap: 40px;
   }
   .units-intro { align-self: flex-start; max-width: 640px; text-align: left; }   /* heading + paragraph on the left; tabs stay centred */
+  /* Wide screens: tabs on the right; the paragraph's last line sits flush
+     with the bottom of the tabs (both rest on the panel's top edge). */
+  @media (min-width: 1200px) {
+    .units-head { flex-direction: row; align-items: flex-end; justify-content: space-between; }
+    .units-intro { align-self: auto; flex: 1 1 auto; min-width: 0; }
+  }
   .units-title {
     margin: 0 0 16px;
     font: 400 clamp(25px, 2.35vw, 40px)/1.15 var(--font-sans);
