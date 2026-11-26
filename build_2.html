@@ -483,7 +483,11 @@
     .unit-media { margin-top: 56px; aspect-ratio: 4 / 3; }
   }
   @media (max-width: 575.98px) {
-    .units-tabs { font-size: clamp(14px, 4.5vw, 25px); }   /* phones: four tabs across still fit */
+    /* Phones: labels stay at the heading size (25px); tabs size to their labels
+       with tighter padding, and on the narrowest screens the row scrolls sideways. */
+    .units-tabs { grid-auto-columns: auto; max-width: 100%; overflow-x: auto; scrollbar-width: none; }
+    .units-tabs::-webkit-scrollbar { display: none; }
+    .units-tab { padding: 0 .4em; }
   }
 
   /* ---------- Grid section: Background Grid crosshairs from studies/grid.html ----------
