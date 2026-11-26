@@ -908,7 +908,9 @@
   .qa-item { border-bottom: 1px solid #fff; }
   .qa-lead + .qa-item { border-top: 1px solid #fff; }
   .qa-group + .qa-group, .qa-more .qa-group:first-child { margin-top: 48px; }
-  .qa-more-btn { margin-top: 28px; }   /* Read More: reveals the second and third groups */   /* each group: a plain line, then its questions */
+  /* Row under the questions: Read More on the left, View Open Roles on the right */
+  .qa-foot { display: flex; align-items: center; justify-content: space-between; gap: 16px 24px; flex-wrap: wrap; margin-top: 28px; }
+  .qa-foot .qa-more-btn { margin-top: 0; }   /* each group: a plain line, then its questions */
   .qa-h { margin: 0; font: inherit; }
   .qa-q {
     display: flex; align-items: center; justify-content: space-between; gap: 24px;
@@ -1847,7 +1849,14 @@
                 </div>
               </div>
             </div></div>
-            <button class="ul-more qa-more-btn" type="button" aria-expanded="false" aria-controls="bioMore"><span class="mj-more-label">Read More</span><span class="visually-hidden"> Biology questions</span><svg viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+            <div class="qa-foot">
+              <button class="ul-more qa-more-btn" type="button" aria-expanded="false" aria-controls="bioMore"><span class="mj-more-label">Read More</span><span class="visually-hidden"> Biology questions</span><svg viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+              <a class="cta cta--light qa-roles">
+                <span class="deco" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
+                <span>View Open Roles<span class="visually-hidden"> in Biology</span></span>
+                <svg class="cta-arrow" viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke="black" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round" stroke="black"/></svg>
+              </a>
+            </div>
           </div>
         </div>
       </div></div>
