@@ -317,8 +317,9 @@
      text (panel margin 28px + 48px inset); the tabs end the same distance in. */
   @media (min-width: 992px) { .units-head { max-width: none; padding-inline: 76px; } }
   @media (min-width: 1200px) {
-    .units-head { flex-direction: row; align-items: flex-end; justify-content: space-between; }
-    .units-intro { align-self: auto; flex: 1 1 auto; min-width: 0; margin-right: 40px; margin-bottom: calc(.61 * clamp(25px, 2.35vw, 40px) - 6px); }   /* last line on the tab labels' baseline (it scales with the tabs) */
+    .units-head { display: grid; grid-template-columns: 1fr 1fr; align-items: end; gap: 0; }   /* 50 / 50: intro | tabs */
+    .units-tabs { width: 100%; }   /* the tabs fill the right half */
+    .units-intro { align-self: auto; min-width: 0; padding-right: 40px; margin-bottom: calc(.61 * clamp(25px, 2.35vw, 40px) - 6px); }   /* last line on the tab labels' baseline (it scales with the tabs) */
   }
   .units-title {
     margin: 0 0 16px;
@@ -895,7 +896,7 @@
     .unit-media--stack { aspect-ratio: auto; }
     .unit-media--stack video { aspect-ratio: 16 / 9; height: auto; }
   }
-  .qa-lead { margin: 0 0 18px; font: 400 17px/1.35 var(--font-sans); }   /* paragraph size */   /* plain line above the questions, no answer */
+  .qa .qa-lead { margin: 0; padding: 0 0 18px; font: 700 17px/1.35 var(--font-sans); }   /* bold, paragraph size; same spacing in every group (beats .mj-extra p) */   /* plain line above the questions, no answer */
   .qa-item { border-bottom: 1px solid #fff; }
   .qa-lead + .qa-item { border-top: 1px solid #fff; }
   .qa-group + .qa-group, .qa-more .qa-group:first-child { margin-top: 48px; }
