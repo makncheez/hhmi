@@ -894,7 +894,7 @@
   @media (max-width: 991.98px) { .unit-media { position: relative; } }
   /* Biology panel (Build 2): two videos stacked in the right half; the
      Explore CTA is hidden for now; Q&A list under the paragraph. */
-  #panel-biology .unit-explore { z-index: 10; }
+  .unit-media--stack .unit-explore { z-index: 10; }
   /* Touch: a plain 240 x 64 target (no grow), instant press feedback, no grey tap flash */
   .unit-explore { -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
   @media (hover: none) { .unit-explore:not(.is-open):active { background: #7DE050; } }   /* centred over the two videos, above everything in the panel */
@@ -1881,13 +1881,64 @@
       <div class="container-fluid px-0"><div class="row g-0">
         <div class="col-lg-6 unit-col">
           <p class="unit-desc"><span class="unit-name">AI<span class="unit-tag">@HHMI</span></span> powers this research, creating AI systems that help scientists analyze and understand their data and eventually design and run experiments as well.</p>
-          <figure class="unit-figure unit-figure--video">
-            <video src="assets/video/danionella.mp4" muted loop playsinline preload="none"
-                   aria-label="Close-up footage of a Danionella research setup"></video>
-          </figure>
+          <div class="qa">
+            <div class="qa-group">
+              <p class="qa-lead">Group heading one (placeholder)</p>
+              <div class="qa-item">
+                <h3 class="qa-h"><button class="qa-q" type="button" aria-expanded="false" aria-controls="aiQ1"><span>Question placeholder 1?</span><svg class="qa-x" viewBox="-10 -10 20 20" fill="none" aria-hidden="true" shape-rendering="crispEdges"><path class="qa-x-v" d="M0 -10V-2.25M0 2.25V10"/><path d="M-10 0H-2.25M2.25 0H10"/></svg></button></h3>
+                <div class="mj-extra qa-a" id="aiQ1"><div><p>Answer placeholder. New AI@HHMI content will be added here.</p></div></div>
+              </div>
+              <div class="qa-item">
+                <h3 class="qa-h"><button class="qa-q" type="button" aria-expanded="false" aria-controls="aiQ2"><span>Question placeholder 2?</span><svg class="qa-x" viewBox="-10 -10 20 20" fill="none" aria-hidden="true" shape-rendering="crispEdges"><path class="qa-x-v" d="M0 -10V-2.25M0 2.25V10"/><path d="M-10 0H-2.25M2.25 0H10"/></svg></button></h3>
+                <div class="mj-extra qa-a" id="aiQ2"><div><p>Answer placeholder. New AI@HHMI content will be added here.</p></div></div>
+              </div>
+              <div class="qa-item">
+                <h3 class="qa-h"><button class="qa-q" type="button" aria-expanded="false" aria-controls="aiQ3"><span>Question placeholder 3?</span><svg class="qa-x" viewBox="-10 -10 20 20" fill="none" aria-hidden="true" shape-rendering="crispEdges"><path class="qa-x-v" d="M0 -10V-2.25M0 2.25V10"/><path d="M-10 0H-2.25M2.25 0H10"/></svg></button></h3>
+                <div class="mj-extra qa-a" id="aiQ3"><div><p>Answer placeholder. New AI@HHMI content will be added here.</p></div></div>
+              </div>
+            </div>
+            <div class="mj-extra qa-more" id="aiMore"><div>
+              <div class="qa-group">
+                <p class="qa-lead">Group heading two (placeholder)</p>
+                <div class="qa-item">
+                  <h3 class="qa-h"><button class="qa-q" type="button" aria-expanded="false" aria-controls="aiQ4"><span>Question placeholder 4?</span><svg class="qa-x" viewBox="-10 -10 20 20" fill="none" aria-hidden="true" shape-rendering="crispEdges"><path class="qa-x-v" d="M0 -10V-2.25M0 2.25V10"/><path d="M-10 0H-2.25M2.25 0H10"/></svg></button></h3>
+                  <div class="mj-extra qa-a" id="aiQ4"><div><p>Answer placeholder. New AI@HHMI content will be added here.</p></div></div>
+                </div>
+                <div class="qa-item">
+                  <h3 class="qa-h"><button class="qa-q" type="button" aria-expanded="false" aria-controls="aiQ5"><span>Question placeholder 5?</span><svg class="qa-x" viewBox="-10 -10 20 20" fill="none" aria-hidden="true" shape-rendering="crispEdges"><path class="qa-x-v" d="M0 -10V-2.25M0 2.25V10"/><path d="M-10 0H-2.25M2.25 0H10"/></svg></button></h3>
+                  <div class="mj-extra qa-a" id="aiQ5"><div><p>Answer placeholder. New AI@HHMI content will be added here.</p></div></div>
+                </div>
+                <div class="qa-item">
+                  <h3 class="qa-h"><button class="qa-q" type="button" aria-expanded="false" aria-controls="aiQ6"><span>Question placeholder 6?</span><svg class="qa-x" viewBox="-10 -10 20 20" fill="none" aria-hidden="true" shape-rendering="crispEdges"><path class="qa-x-v" d="M0 -10V-2.25M0 2.25V10"/><path d="M-10 0H-2.25M2.25 0H10"/></svg></button></h3>
+                  <div class="mj-extra qa-a" id="aiQ6"><div><p>Answer placeholder. New AI@HHMI content will be added here.</p></div></div>
+                </div>
+              </div>
+              <div class="qa-group">
+                <p class="qa-lead">Group heading three (placeholder)</p>
+                <div class="qa-item">
+                  <h3 class="qa-h"><button class="qa-q" type="button" aria-expanded="false" aria-controls="aiQ7"><span>Question placeholder 7?</span><svg class="qa-x" viewBox="-10 -10 20 20" fill="none" aria-hidden="true" shape-rendering="crispEdges"><path class="qa-x-v" d="M0 -10V-2.25M0 2.25V10"/><path d="M-10 0H-2.25M2.25 0H10"/></svg></button></h3>
+                  <div class="mj-extra qa-a" id="aiQ7"><div><p>Answer placeholder. New AI@HHMI content will be added here.</p></div></div>
+                </div>
+                <div class="qa-item">
+                  <h3 class="qa-h"><button class="qa-q" type="button" aria-expanded="false" aria-controls="aiQ8"><span>Question placeholder 8?</span><svg class="qa-x" viewBox="-10 -10 20 20" fill="none" aria-hidden="true" shape-rendering="crispEdges"><path class="qa-x-v" d="M0 -10V-2.25M0 2.25V10"/><path d="M-10 0H-2.25M2.25 0H10"/></svg></button></h3>
+                  <div class="mj-extra qa-a" id="aiQ8"><div><p>Answer placeholder. New AI@HHMI content will be added here.</p></div></div>
+                </div>
+                <div class="qa-item">
+                  <h3 class="qa-h"><button class="qa-q" type="button" aria-expanded="false" aria-controls="aiQ9"><span>Question placeholder 9?</span><svg class="qa-x" viewBox="-10 -10 20 20" fill="none" aria-hidden="true" shape-rendering="crispEdges"><path class="qa-x-v" d="M0 -10V-2.25M0 2.25V10"/><path d="M-10 0H-2.25M2.25 0H10"/></svg></button></h3>
+                  <div class="mj-extra qa-a" id="aiQ9"><div><p>Answer placeholder. New AI@HHMI content will be added here.</p></div></div>
+                </div>
+              </div>
+            </div></div>
+            <div class="qa-foot">
+              <button class="ul-more qa-more-btn" type="button" aria-expanded="false" aria-controls="aiMore"><span class="mj-more-label">Read More</span><span class="visually-hidden"> AI@HHMI questions</span><svg viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+              <a class="qa-roles">View Open Roles<span class="visually-hidden"> in AI@HHMI</span></a>
+            </div>
+          </div>
         </div>
       </div></div>
-      <div class="unit-media">
+      <div class="unit-media unit-media--stack">   <!-- placeholder videos until the AI@HHMI ones arrive -->
+        <video aria-hidden="true" src="assets/video/zebrafish_brain_imaging.mp4" poster="assets/zebrafish_brain_imaging-poster.jpg"
+               muted loop playsinline preload="none"></video>
         <video aria-hidden="true" src="assets/video/danionella_eye_crop.mp4" poster="assets/danionella_eye_crop-poster.jpg"
                muted loop playsinline preload="none"></video>
         <a class="unit-explore" tabindex="0">
