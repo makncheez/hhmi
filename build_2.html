@@ -1,0 +1,3193 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>HHMI Janelia · Build 2</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+<link rel="preload" href="assets/ABCDiatype-Regular.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/fonts.css">
+<style>
+  :root {
+    --page-bg: #000;               /* page background */
+    --tile: #000;
+    --ink: #fff;
+    --green-1: #a5f300;            /* menu icon: lime */
+    --green-2: #00ac1d;            /* menu icon: mid green */
+    --green-3: #006b2a;            /* menu icon: dark green */
+    --bar-h: 56px;
+    --font-sans: "ABC Diatype", "Helvetica Neue", Arial, sans-serif;
+    --font-mono: "ABC Diatype Semi-Mono", ui-monospace, Menlo, monospace;
+    color-scheme: light;
+  }
+  body {
+    margin: 0;
+    background: var(--page-bg);
+    color: var(--ink);
+    font: 400 17px/1.35 var(--font-sans);   /* global body paragraph: ABC Diatype Regular 17px, line-height 1.35em (~23px) */
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ---------- Fixed menu bar (transparent, stays transparent on scroll) ---------- */
+  .site-bar {
+    position: fixed;
+    inset: 0 0 auto 0;
+    z-index: 1030;
+    height: var(--bar-h);
+    padding: 0 24px 0 8px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: transparent;
+    pointer-events: none;          /* clicks pass through the empty middle */
+  }
+  .site-bar > * { pointer-events: auto; }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    color: var(--ink);
+  }
+  .brand-tile {
+    display: flex;
+    align-items: center;
+    height: 48px;
+    background: var(--tile);
+    border-radius: 4px;
+    color: var(--ink);
+  }
+  .brand-logo { padding: 0 6px; }
+  .brand-logo svg { display: block; width: 78px; height: auto; }
+  .brand-campus {
+    padding: 0 12px;
+    font-size: 21px;
+    line-height: 1;
+    letter-spacing: 0.005em;
+    white-space: nowrap;
+  }
+
+  .explore {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 0 8px 8px;
+    border: 0;
+    background: none;
+    color: var(--ink);
+    font: 400 15px/1 var(--font-sans);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+  .explore-label { font-size: 12px; transition: opacity .3s ease, visibility .3s; }
+  .explore.is-compact .explore-label { opacity: 0; visibility: hidden; }   /* past the hero: icon only */
+  .explore-icon {
+    position: relative;
+    width: 32px;
+    height: 27px;
+  }
+  .explore-icon i {
+    position: absolute;
+    left: 0;
+    width: 32px;
+    height: 2px;
+    transition: transform .35s cubic-bezier(.65,0,.35,1);
+  }
+  .explore-icon i:nth-child(1) { top: 0;      background: var(--green-1); transform-origin: 1px 1px; }   /* pivots on its left end */
+  .explore-icon i:nth-child(2) { top: 12.5px; background: var(--green-2); transform-origin: 31px 1px; }  /* pivots on its right end */
+  .explore-icon i:nth-child(3) { top: 25px;   background: var(--green-3); transform-origin: 0 1px; }
+  .explore:focus-visible { outline: 2px solid var(--green-1); outline-offset: 2px; }
+
+  /* "H" state: hover (mouse), keyboard focus, or tap on touch screens (.is-h).
+     Lines stay 2px thick throughout: top swings down into the left upright,
+     middle swings into the right upright, bottom rises and shortens into the crossbar. */
+  .explore.is-h .explore-icon i:nth-child(1),
+  .explore:focus-visible .explore-icon i:nth-child(1) { transform: rotate(90deg) scaleX(.84375); }
+  .explore.is-h .explore-icon i:nth-child(2),
+  .explore:focus-visible .explore-icon i:nth-child(2) { transform: translateY(-12.5px) rotate(-90deg) scaleX(.84375); }
+  .explore.is-h .explore-icon i:nth-child(3),
+  .explore:focus-visible .explore-icon i:nth-child(3) { transform: translate(5px, -12.5px) scaleX(.6875);   /* 22px crossbar, 3px gaps */ }
+  @media (hover: hover) {
+    .explore:hover .explore-icon i:nth-child(1) { transform: rotate(90deg) scaleX(.84375); }
+    .explore:hover .explore-icon i:nth-child(2) { transform: translateY(-12.5px) rotate(-90deg) scaleX(.84375); }
+    .explore:hover .explore-icon i:nth-child(3) { transform: translate(5px, -12.5px) scaleX(.6875);   /* 22px crossbar, 3px gaps */ }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .explore-icon i { transition: none; }
+  }
+
+  @media (max-width: 575.98px) {
+    .site-bar { padding-right: 12px; }
+    .brand-tile { height: 40px; }
+    .brand-logo svg { width: 64px; }
+    .brand-campus { font-size: 15px; padding: 0 10px; }
+    .explore-label { display: none; }
+  }
+
+  /* ---------- Hero: inset video that unmasks to full bleed over the first 300px ----------
+     The section is 100vh + 300px + 300px tall; its stage is sticky, so the video
+     stays pinned while it grows (300px), holds full screen (300px), then scrolls
+     away. Watch also takes it full bleed. JS sets the frame's
+     box from scroll progress (0 = inset 16:9, 1 = full screen). */
+  :root { --hero-unmask: 300px; --hero-hold: 300px; --hero-top: 72px; --hero-dim: .55; }
+  .hero {
+    position: relative;
+    height: calc(100vh + var(--hero-unmask) + var(--hero-hold));
+    height: calc(100svh + var(--hero-unmask) + var(--hero-hold));
+    background: #000;
+  }
+  .hero-stage {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    height: 100svh;
+    overflow: hidden;
+  }
+  .hero-frame {
+    position: absolute;
+    overflow: hidden;
+    background: #000;
+    border-radius: 6px;
+    will-change: left, top, width, height;
+  }
+  .hero-frame video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .hero-frame::after {               /* darkening for text on top */
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: #000;
+    opacity: var(--hero-dim);
+    transition: opacity .6s ease;
+    pointer-events: none;
+  }
+  .hero.is-watching .hero-frame::after { opacity: 0; }
+
+  .watch {
+    position: absolute;
+    right: 24px;
+    bottom: 20px;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 0 8px 8px;
+    border: 0;
+    background: none;
+    color: var(--ink);
+    font: 400 15px/1 var(--font-sans);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: opacity .3s ease;
+  }
+  .watch svg { width: 11px; height: 13px; fill: currentColor; }
+  .watch:focus-visible { outline: 2px solid var(--green-1); outline-offset: 2px; }
+  .watch .watch-stop { display: none; }
+  .hero.is-watching .watch .watch-play { display: none; }
+  .hero.is-watching .watch .watch-stop { display: flex; }
+  .watch-play, .watch-stop { align-items: center; gap: 10px; }
+  .watch-play { display: flex; }
+  .watch-stop svg { width: 11px; height: 11px; }
+
+
+  /* ---------- Headline over the video (not clipped by the frame) ---------- */
+  .hero-copy {
+    position: absolute;
+    left: 0; right: 0;
+    top: 49%;
+    transform: translateY(-50%);
+    z-index: 1;
+    padding: 0 3vw;
+    pointer-events: none;            /* Watch stays clickable underneath */
+    transition: opacity .6s ease;
+  }
+  .hero-title {
+    margin: 0;
+    color: var(--ink);
+    font: 400 4.74vw/1.08 var(--font-sans);
+    letter-spacing: -0.005em;
+    text-align: center;
+  }
+  .hero-sub {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    column-gap: 0.9em;               /* wider than a word space: each phrase its own beat */
+    row-gap: 0.15em;
+    margin: 2.9vw 0 0;               /* ~34px below the headline on a laptop */
+    color: var(--ink);
+    font: 400 20px/1.2 var(--font-sans);             /* desktop and tablet; phones use 17px below */
+    letter-spacing: 0;
+    text-align: center;
+  }
+  .hero-sub span { white-space: nowrap; }  /* phrases never break mid-phrase */
+  .hero.is-watching .hero-copy { opacity: 0; }
+  @media (max-width: 767.98px) {
+    .hero-title { font-size: clamp(32px, 9vw, 56px); }
+    .hero-sub { font-size: 17px; margin-top: 18px; }
+  }
+  @media (max-width: 575.98px) {
+    /* Phones: the copy block covers the 4:5 video box (72px from the top,
+       92vw x 115vw); the headline is centred in it and the subline sits
+       just below the box. */
+    .hero-copy {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      top: 72px;
+      height: 115vw;
+      padding: 0 calc(4vw + 16px);   /* keep text inside the 92%-wide video box */
+      transform: none;
+    }
+    .hero-sub {
+      position: absolute;
+      top: 100%;                     /* below the video box */
+      left: 0; right: 0;
+      margin-top: 24px;
+      padding: 0 24px;
+    }
+  }
+
+  /* ---------- Decorative block: 4 divs in a 2 x 2 grid (reusable) ----------
+     Usage: <div class="deco"><div></div><div></div><div></div><div></div></div>
+     Order: top-left, top-right, bottom-left, bottom-right.
+     Override --deco-w / --deco-h (whole block) or --deco-1..4 per instance. */
+  .deco {
+    --deco-w: 17px;
+    --deco-h: 172px;
+    --deco-1: #3fc2cd;   /* top-left: cyan */
+    --deco-2: #000d42;   /* top-right: navy */
+    --deco-3: #00ac1d;   /* bottom-left: green */
+    --deco-4: #a5f300;   /* bottom-right: lime */
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    width: var(--deco-w);
+    height: var(--deco-h);
+    flex: none;
+  }
+  .deco > :nth-child(1) { background: var(--deco-1); }
+  .deco > :nth-child(2) { background: var(--deco-2); }
+  .deco > :nth-child(3) { background: var(--deco-3); }
+  .deco > :nth-child(4) { background: var(--deco-4); }
+
+  .hero-deco {
+    position: absolute;
+    top: 45%;
+    transform: translateY(-50%);
+    z-index: 1;
+  }
+  .hero-deco--left  { left: 0; }
+  .hero-deco--right { right: 0; }
+  @media (max-width: 575.98px) {
+    .hero-deco {
+      --deco-w: 10px; --deco-h: 100px;
+      top: calc(72px + 57.5vw);      /* level with the headline: centre of the 4:5 video box */
+    }
+  }
+
+  /* ---------- Units: heading, tabs, and a black full-width panel per tab ---------- */
+  .units {
+    background: #000;
+    color: #fff;
+    padding-top: 150px;              /* space above "Four units…" */
+    padding-bottom: 50px;
+  }
+  /* Heading + paragraph on the left, tabs on the right sitting on the panel */
+  /* Heading + paragraph centred, tabs centred below sitting on the panel */
+  .units-head {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 40px;
+  }
+  .units-intro { align-self: flex-start; max-width: 640px; text-align: left; }   /* heading + paragraph on the left; tabs stay centred */
+  .units-title {
+    margin: 0 0 16px;
+    font: 400 clamp(25px, 2.35vw, 40px)/1.15 var(--font-sans);
+    letter-spacing: -0.005em;
+    text-align: left;
+  }
+  .units-lead { margin: 0; }          /* uses the global body paragraph style */
+  .units-tabs {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    width: min(510px, 100%);
+    flex-shrink: 0;
+  }
+  .units-tab {
+    position: relative;
+    height: 35px;
+    padding: 0 0 0 15px;
+    border: 1px solid #fff;
+    border-bottom: 0;
+    border-radius: 7px 7px 0 0;
+    background: #000;
+    color: #fff;
+    font: 400 18px/1 var(--font-sans);
+    text-align: left;
+    white-space: nowrap;
+    cursor: pointer;
+  }
+  .units-tab + .units-tab { margin-left: -1px; }   /* touching tabs share one border line */
+  .units-tab sup {
+    top: -0.85em;
+    margin-left: 3px;
+    font-size: 9px;
+    letter-spacing: 0.02em;
+  }
+  .units-tab[aria-selected="true"] { background: #a5f300; color: #021341; }   /* selected: lime with navy text, as before */
+  .units-tab:focus-visible { outline: 2px solid #fff; outline-offset: -3px; }
+  .units-tab[aria-selected="true"]:focus-visible { outline-color: #021341; }
+  .units-panel {
+    position: relative;
+    margin-inline: 12px;             /* inset from the screen edges */
+    border: 1px solid transparent;   /* frame drawn by ::before / ::after with open corners */
+    background: #000;
+    color: var(--ink);
+    min-height: 600px;
+    padding: 56px 0;
+  }
+  .units-panel[hidden] { display: none; }
+  /* Frame with open corners (like the leadership cards): the top and bottom
+     lines stop 18px short of the sides, the side lines 18px short of the top
+     and bottom. Drawn over the video. The tabs keep their own borders. */
+  .units-panel::before, .units-panel::after {
+    content: ""; position: absolute; z-index: 2; pointer-events: none;
+    border: 0 solid #fff;
+  }
+  .units-panel::before { top: -1px; bottom: -1px; left: 17px; right: 17px; border-top-width: 1px; border-bottom-width: 1px; }
+  .units-panel::after  { top: 17px; bottom: 17px; left: -1px; right: -1px; border-left-width: 1px; border-right-width: 1px; }
+
+  /* Panel left column: unit name (lime) + one-line description, then a square image */
+  .unit-desc { margin: 0; max-width: 560px; }      /* global paragraph style, 17px / 1.35 */
+  .unit-name {                       /* same size as the units heading */
+    display: block;
+    color: #a5f300;
+    font-size: clamp(25px, 2.35vw, 40px);
+    line-height: 1.15;
+    letter-spacing: -0.005em;
+  }
+  .unit-figure {
+    width: 60%;
+    margin: 180px auto 0;            /* centred in the column, 180px below the text */
+  }
+  .unit-figure img {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+  }
+  .unit-figure video {               /* keeps its own (16:9) shape */
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  /* "@HHMI" tag after a unit name: black on a lime pill, top aligned with the cap height */
+  .unit-tag {
+    display: inline-block;
+    margin-left: 0.39em;
+    padding: 0.08em 0.45em;
+    border-radius: 0.12em;
+    background: #a5f300;
+    color: #000;
+    font-size: 0.47em;
+    line-height: 1;
+    vertical-align: 0.56em;          /* pill top level with the cap height of the name */
+    letter-spacing: 0.01em;
+  }
+  @media (max-width: 991.98px) {
+    .unit-figure { width: 100%; margin-top: 40px; }
+  }
+
+  /* Split panel: full-width, split exactly in half. Left half: text + image,
+     right half: a full-bleed looping video. The text keeps the same left edge as
+     the heading above by matching the Bootstrap container's edge
+     (--cw = container width at each breakpoint; 12px = container padding). */
+  .unit-split { position: relative; --cw: 100%; }   /* phones: fluid container */
+  @media (min-width: 576px)  { .unit-split { --cw: 540px; } }
+  @media (min-width: 768px)  { .unit-split { --cw: 720px; } }
+  @media (min-width: 992px)  { .unit-split { --cw: 960px; } }
+  @media (min-width: 1200px) { .unit-split { --cw: 1140px; } }
+  @media (min-width: 1400px) { .unit-split { --cw: 1320px; } }
+  .unit-split .unit-col {            /* stacked: same edges as the container */
+    padding-inline: max(12px, calc((100% - var(--cw)) / 2 + 12px));
+  }
+  .unit-media { overflow: hidden; background: #000; }
+  .unit-media video {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;               /* fill, crop the sides, keep it centred */
+  }
+  @media (min-width: 768px) { .units-panel { margin-inline: 28px; } }
+  @media (min-width: 992px) {
+    .units-panel { min-height: 700px; }   /* desktop panels: 700px tall */
+    .unit-split { min-height: 700px; }
+    /* Two rows: text, then the image centred in the space below it.
+       The image never covers the text (always >= 48px gap), and with the
+       size caps below everything fits the 700px panel. */
+    .unit-split .unit-col {
+      display: grid;
+      grid-template-rows: auto 1fr;
+      min-height: calc(700px - 114px);   /* panel minus 56px top/bottom and the 1px top/bottom borders */
+      padding-inline: 0;             /* the column is exactly half the panel */
+    }
+    .unit-split .unit-desc {         /* column = half the screen, so the screen is 200% */
+      padding-left: 48px;            /* text inset from the panel's left line */
+      padding-right: 24px;
+      max-width: calc(48px + 560px);   /* text itself stays ≤ 560px */
+    }
+    .unit-split .unit-desc { grid-row: 1; align-self: start; padding-bottom: 48px; }
+    .unit-split .unit-figure { grid-row: 2; align-self: center; margin: 0 auto; width: 100%; max-width: min(400px, 100% - 48px); }        /* square photo: 400 x 400 */
+    .unit-split .unit-figure--video { max-width: min(600px, 100% - 48px); }                               /* 16:9 video: up to ~338px tall */
+    .unit-media {
+      position: absolute;
+      top: 0; bottom: 0;
+      left: 50%; right: 0;           /* right half, to the panel's right line */
+    }
+  }
+  @media (max-width: 991.98px) {
+    .unit-split { padding-bottom: 0; }
+    .unit-media { margin-top: 56px; aspect-ratio: 4 / 3; }
+  }
+  @media (max-width: 575.98px) {
+    .units-tab { padding-left: 8px; font-size: 15px; }
+    .units-tab sup { font-size: 8px; margin-left: 1px; }
+  }
+
+  /* ---------- Grid section: Background Grid crosshairs from studies/grid.html ----------
+     #FBFBFB, 162px + content + 162px, all covered by the grid.
+     Fixed 20 x 20px crosshairs (1px arms, 4.5px centre gap) on the Bootstrap
+     container's column lines, rows every 100px (rows sit at 50, 150 … 1150px,
+     so none are cut at the section edges). Phones: every 3rd column line.
+     Colour: the SVG is a mask over a diagonal gradient (black > #A5F300 >
+     #00AC1D > #000D42 > black, 3200px per cycle) that drifts every 10s.
+     Reduced motion: static black crosshairs. */
+  @property --wave { syntax: "<length>"; inherits: false; initial-value: 0px; }
+  @keyframes xhair-wave { to { --wave: 3200px; } }
+  .grid-section {
+    --col: calc((100% - 56px) / 12);   /* < 576px: fluid container */
+    --step: 1;
+    --row: 100px;
+    --xhair: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' stroke='%23000' stroke-width='1' shape-rendering='crispEdges'%3E%3Csvg x='50%25' y='50%25' overflow='visible'%3E%3Cpath d='M0 -10V-2.25M0 2.25V10M-10 0H-2.25M2.25 0H10'/%3E%3C/svg%3E%3C/svg%3E");
+    position: relative;
+    background: #fbfbfb;
+    padding: 162px 0;
+    overflow-x: clip;
+  }
+  .grid-section::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    --tile: calc(var(--col) * var(--step)) var(--row);
+    background: repeating-linear-gradient(135deg,
+      #111    calc(var(--wave) + 0px),
+      #A5F300 calc(var(--wave) + 800px),
+      #00AC1D calc(var(--wave) + 1600px),
+      #000D42 calc(var(--wave) + 2400px),
+      #111    calc(var(--wave) + 3200px));
+    -webkit-mask: var(--xhair) center 0 / var(--tile) repeat;
+            mask: var(--xhair) center 0 / var(--tile) repeat;
+    /* Whole-pixel snap so odd column spacings never blur the 1px arms. */
+    -webkit-mask-position: round(nearest, 50%, 1px) 0;
+            mask-position: round(nearest, 50%, 1px) 0;
+    animation: xhair-wave 10s linear infinite;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .grid-section::before { animation: none; background: #111; }
+  }
+  @media (min-width: 576px)  { .grid-section { --col: 43px; } }
+  @media (min-width: 768px)  { .grid-section { --col: 58px; } }
+  @media (min-width: 992px)  { .grid-section { --col: 78px; } }
+  @media (min-width: 1200px) { .grid-section { --col: 93px; } }
+  @media (min-width: 1400px) { .grid-section { --col: 108px; } }
+  @media (max-width: 767.98px) { .grid-section { --step: 3; } }
+  .grid-section > .container { position: relative; }   /* height follows the content */
+
+  /* ---------- Roles: "Find Your Scientific Role" with three columns ----------
+     Each column has a colour bar on its left edge behind the text, the role
+     name, three points between dotted rules and an optional mono footnote. */
+  .roles-title {
+    margin: 0 0 16px;
+    color: #021341;
+    font: 400 clamp(25px, 2.35vw, 40px)/1.15 var(--font-sans);
+    letter-spacing: -0.005em;
+    text-align: left;
+  }
+  .roles-lead {                      /* global paragraph style, 17px / 1.35 */
+    position: relative;
+    max-width: 640px;
+    margin: 0;
+    color: #021341;
+  }
+  /* Intro block: container width, #FBFBFB, with a full-width .deco band on top */
+  .roles-intro {
+    position: relative;              /* paints above the crosshair grid */
+    margin-bottom: 0;
+    padding-bottom: 100px;
+    background: #fbfbfb;             /* same as the section; still covers the crosshair grid */
+  }
+  .roles-intro .deco {
+    --deco-w: 100%;
+    --deco-h: 14px;                  /* two 7px rows */
+    --deco-1: #00ac1d;               /* top-left: green */
+    --deco-2: #3fc2cd;               /* top-right: cyan */
+    --deco-3: #a5f300;               /* bottom-left: lime */
+    --deco-4: #000d42;               /* bottom-right: navy */
+    margin-bottom: 32px;
+  }
+  .roles-intro .roles-title,
+  .roles-intro .roles-lead { margin-inline: 24px; }   /* same 24px inset as the role columns' text */
+  .role {
+    --bar: #a5f300;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 32px 24px 40px;
+    background: #fbfbfb;           /* covers the grid behind the column */
+    color: #021341;
+  }
+  .role::before {                    /* colour bar behind the text */
+    content: "";
+    position: absolute;
+    top: 0; bottom: 0; left: 0;
+    width: 20%;
+    background: var(--bar);
+  }
+  .role > * { position: relative; }
+  .role--ai    { --bar: #66bec9; }
+  .role--group { --bar: #d8d8d8; }
+  .role h3 {
+    margin: 0 0 22px;
+    font: 400 clamp(25px, 2.3vw, 40px)/1.1 var(--font-sans);
+    letter-spacing: -0.005em;
+  }
+  .role ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-top: 1px dotted #021341;
+  }
+  .role li {
+    padding: 16px 0 22px;
+    border-bottom: 1px dotted #021341;
+    font: 400 clamp(15px, 1.2vw, 19px)/1.35 var(--font-sans);
+    letter-spacing: 0.01em;
+  }
+  .role-note {
+    margin: 16px 0 0;
+    font: 400 12px/1.4 "ABC Diatype Semi-Mono", ui-monospace, monospace;
+    letter-spacing: 0.02em;
+  }
+  @media (max-width: 991.98px) {
+    .roles-row > * + * { margin-top: 48px; }
+  }
+
+
+  /* ---------- Video Grid and Schema (from studies/grid.html) ----------
+     Black band, bento of three muted looping videos in a .container (g-4):
+     a tall Exterior cell beside People and Interior stacked (16:9); below
+     992px all three stack at 16:9. Over it, the Schema grid (3 x 2 on
+     desktop, 2 x 3 below) with six facts on an 80% black overlay.
+     Scroll: the grid pins (sticky, centred) for 150px of scrolling while the
+     overlay fades in with the scroll (figures count up); then it unlocks.
+     Videos play only while on screen; reduced motion: no autoplay. */
+  .vs {
+    --grid-ink: #fff;
+    --grid-line: #fff;
+    --line-w: 1px;
+    --gap-h: 12px;
+    --gap-v-top: 24px;
+    --gap-v-bottom: 12px;
+    --cell-pad: clamp(20px, 2.6vw, 38px);
+    --vs-h: 740px;
+    --vs-pin: 150px;
+    padding: 200px 0;
+    background: #000;
+    color: var(--grid-ink);
+  }
+  .vs-title {                        /* same style as the Units heading */
+    margin: 0 0 48px;
+    font: 400 clamp(25px, 2.35vw, 40px)/1.15 var(--font-sans);
+    letter-spacing: -0.005em;
+    text-align: left;
+  }
+  .vcell { position: relative; overflow: hidden; aspect-ratio: 16 / 9; background: #111; }
+  .vcell video { position: absolute; inset: 0; display: block; width: 100%; height: 100%; object-fit: cover; }
+  @media (min-width: 992px) { .vcell-tall { aspect-ratio: auto; height: 100%; } }
+  .vs-pin { height: calc(var(--vs-h) + var(--vs-pin)); }
+  .vs-stage {
+    position: sticky;
+    top: max(0px, calc((100vh - var(--vs-h)) / 2));
+    display: flow-root;              /* keeps the row's negative gutter inside, so the overlay matches the videos */
+  }
+  .vs-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, .9);   /* 90% black */
+    opacity: var(--vs-p, 0);         /* 0 to 1 across the 150px pin, set by the script */
+    pointer-events: none;
+  }
+  /* Broken-line cell: ::before draws the bottom line, ::after the sides,
+     pulled in at the ends so lines never meet at intersections. */
+  .gcell { position: relative; container-type: inline-size; height: 33.3333%; }
+  .gcell::before, .gcell::after { content: ""; position: absolute; pointer-events: none; border: 0 solid var(--grid-line); }
+  .gcell::before {
+    top: auto; bottom: calc(var(--line-w) / -2);
+    left: var(--gap-h); right: var(--gap-h);
+    border-bottom-width: var(--line-w);
+  }
+  .gcell::after {
+    top: 10px; bottom: 10px;
+    left: calc(var(--line-w) / -2); right: calc(var(--line-w) / -2);
+    border-left-width: var(--line-w); border-right-width: var(--line-w);
+  }
+  .vs-overlay .schema { height: 100%; }
+  .vs-overlay .gcell:nth-child(-n+2)::after { top: 0; }                 /* 2 across: open the outer rows */
+  .vs-overlay .gcell:nth-last-child(-n+2)::after { bottom: 0; }
+  .vs-overlay .gcell:nth-last-child(-n+2)::before { border-bottom-width: 0; }
+  @media (min-width: 992px) {                                             /* 3 across */
+    .vs-overlay .gcell { height: 50%; }
+    .vs-overlay .gcell:nth-child(-n+3)::after { top: 0; }
+    .vs-overlay .gcell:nth-last-child(-n+3)::after { bottom: 0; }
+    .vs-overlay .gcell:nth-last-child(-n+3)::before { border-bottom-width: 0; }
+  }
+  .sc {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    padding: 48px 24px 32px;
+    text-align: center;
+  }
+  .sc-label { position: absolute; top: 20px; left: 24px; margin: 0; font: 400 14px/1.2 var(--font-sans); }
+  .sc-label--long { right: 24px; max-width: 300px; text-align: left; }   /* longer notes wrap within the cell */
+  .sc-fig {
+    margin: 0;
+    font: 400 clamp(40px, 18cqw, 88px)/1 var(--font-sans);
+    letter-spacing: -.01em;
+    white-space: nowrap;             /* proportional figures: normal spacing around commas and spaces */
+  }
+  .sc-cap { margin: 10px 0 0; font: 400 14px/1.3 var(--font-sans); }
+  @media (max-width: 767.98px) {
+    .vs .sc { padding: 40px 12px 16px; }
+    .vs .sc-label { top: 14px; left: 14px; font-size: 12px; }
+    .vs .sc-label--long { right: 14px; }
+    .vs .sc-fig { font-size: clamp(26px, 20cqw, 40px); }
+    .vs .sc-cap { margin-top: 8px; font-size: 12px; }
+  }
+
+  /* ---------- Mission / Journey: own #FBFBFB section after Janelia at a Glance ----------
+     3 rows (Mission, Journey, Why) in the .container: heading cell (4 cols) + text cell (8 cols) per
+     row. Broken lines as in the Schema: sides break 10px either side of the
+     row line, the row line stops 12px short of each side; no outer top or
+     bottom line. Below 992px each heading sits on top of its text. */
+  .mj-section {
+    --grid-line: #000;
+    --line-w: 1px;
+    --gap-h: 12px;
+    --cell-pad: clamp(20px, 2.6vw, 38px);
+    padding: 56px 0;
+    background: #fbfbfb;
+    color: #000;
+  }
+  .mj-cell { position: relative; display: flex; flex-direction: column; justify-content: center; padding: 40px var(--cell-pad); }
+  .mj-cell::before, .mj-cell::after { content: ""; position: absolute; pointer-events: none; border: 0 solid var(--grid-line); }
+  .mj-cell::before {                 /* row line */
+    left: var(--gap-h); right: var(--gap-h); bottom: calc(var(--line-w) / -2);
+    border-bottom-width: var(--line-w);
+  }
+  .mj-cell::after {                  /* sides */
+    top: 10px; bottom: 10px;
+    left: calc(var(--line-w) / -2); right: calc(var(--line-w) / -2);
+    border-left-width: var(--line-w); border-right-width: var(--line-w);
+  }
+  .mj-row1::after { top: 0; }                    /* first row: sides start at the top */
+  .mj-row2::after { bottom: 0; }                 /* last row: sides run to the bottom, no row line */
+  .mj-row2::before { content: none; }            /* (middle rows, .mj-rowm, keep the defaults) */
+  .mj-head { align-items: center; text-align: center; }
+  .mj-title {                        /* heading font: same as the section headings */
+    margin: 0;
+    font: 400 clamp(25px, 2.35vw, 40px)/1.15 var(--font-sans);
+    letter-spacing: -0.005em;
+  }
+  .mj-text { margin: 0; }            /* paragraph font: global 17px / 1.35 */
+  .mj-text + .mj-text { margin-top: 1.35em; }   /* blank line between paragraphs */
+  /* Read More: label + a 72px square arrow box tucked into the cell's
+     bottom-right corner (its right and bottom edges are the grid lines).
+     The arrow points down to expand and turns up to collapse. */
+  .mj-body:has(.mj-more) { padding-bottom: 90px; }   /* room for the corner box */
+  .mj-more {
+    position: absolute;
+    right: 0; bottom: 0;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: #000;
+    font: 400 15px/1 var(--font-sans);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+  .mj-more-box {
+    display: grid;
+    place-items: center;
+    width: 50px; height: 50px;
+    border-top: 1px solid #000;
+    border-left: 1px solid #000;
+  }
+  .mj-row2 .mj-more-box { border-bottom: 1px solid #000; }   /* last row has no row line below */
+  .mj-more-box svg { width: 24px; height: 25px; transform: rotate(90deg); transition: transform .35s ease; }
+  .mj-more[aria-expanded="true"] .mj-more-box svg { transform: rotate(-90deg); }   /* up: collapse */
+  .mj-more:hover, .mj-more:focus-visible { color: #006b2a; }   /* darker green on hover, as before */
+  .mj-more:hover .mj-more-box svg path, .mj-more:focus-visible .mj-more-box svg path { stroke: #006b2a; }
+  /* Expandable extra paragraphs: height animates 0 -> auto via grid rows */
+  .mj-extra { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .45s ease; }
+  .mj-extra > div { overflow: hidden; }
+  .mj-extra.is-open { grid-template-rows: 1fr; }
+  .mj-extra p { margin: 1.35em 0 0; }   /* one blank line between paragraphs */
+  .mj-extra--cont p:first-child { margin-top: 0; }   /* continues the visible sentence's paragraph */
+  @media (prefers-reduced-motion: reduce) { .mj-extra { transition: none; } }
+  .mj-more:focus-visible { outline: 2px solid #006b2a; outline-offset: 4px; }
+  @media (prefers-reduced-motion: reduce) { .mj-more-box svg { transition: none; } }
+  @media (max-width: 991.98px) {
+    .mj-head { align-items: flex-start; text-align: left; padding-bottom: 16px; }
+    .mj-head::before { content: none; }          /* heading and its text read as one block */
+    .mj-head::after { bottom: 0; }
+    .mj-body { padding-top: 0; padding-bottom: 40px; }
+    .mj-body::after { top: 0; }
+    .mj-row1.mj-head::after { top: 0; }
+  }
+
+  /* ---------- Video & Grid, Content mode (from studies/grid.html) ----------
+     Full-width black band, 450px tall. The danionella skin-cells calcium
+     video (muted loop, cropped to fit) fills the left half (screen edge to
+     the centre column line); phones: 300px of video with the card below.
+     On top, inside the .container: the animated crosshair grid on the
+     12-column lines (every 3rd on phones), rows 200px apart at 100, 300,
+     500, 700px, shown at 30%; and the Project Teams card over the right
+     7 columns, centred in the band (phones: the black half). */
+  .fwimg {
+    --grid-ink: #fff;
+    --grid-line: #fff;
+    --line-w: 1px;
+    --gap-h: 12px;
+    --cell-pad: clamp(20px, 2.6vw, 38px);
+    --row: 200px;
+    --step: 1;
+    --xhair: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' stroke='%23000' stroke-width='1' shape-rendering='crispEdges'%3E%3Csvg x='50%25' y='50%25' overflow='visible'%3E%3Cpath d='M0 -10V-2.25M0 2.25V10M-10 0H-2.25M2.25 0H10'/%3E%3C/svg%3E%3C/svg%3E");
+    position: relative;
+    height: 450px;
+    overflow-x: clip;
+    background: #000;
+    color: var(--grid-ink);
+  }
+  .fw-video { position: absolute; top: 0; left: 0; display: block; width: 50%; height: 100%; object-fit: cover; filter: brightness(.5); }   /* darker so the card text reads */
+  .fwimg > .container { position: relative; height: 100%; }
+  .fw-area { --col: calc(100cqw / 12); container-type: inline-size; position: relative; height: 100%; }
+  .fw-area::before {
+    content: "";
+    position: absolute;
+    inset: 0 calc(var(--col) * var(--step) / -2);
+    pointer-events: none;
+    --tile: calc(var(--col) * var(--step)) var(--row);
+    background: repeating-linear-gradient(135deg,
+      #111    calc(var(--wave) + 0px),
+      #A5F300 calc(var(--wave) + 800px),
+      #00AC1D calc(var(--wave) + 1600px),
+      #FFFFFF calc(var(--wave) + 2400px),
+      #111    calc(var(--wave) + 3200px));
+    -webkit-mask: var(--xhair) center 0 / var(--tile) repeat;
+            mask: var(--xhair) center 0 / var(--tile) repeat;
+    -webkit-mask-position: round(nearest, 50%, 1px) 0;
+            mask-position: round(nearest, 50%, 1px) 0;
+    animation: xhair-wave 10s linear infinite;
+    opacity: .3;                     /* Content mode: crosshairs at 30% so the figures read */
+  }
+  .fw-area > * { position: relative; }
+  /* Card: heading cell over a text cell (broken lines as in the Schema), then a
+     Learn More link under its right edge. Right 7 columns, centred in the band. */
+  .fw-card {
+    position: absolute;
+    top: 50%;
+    left: calc(100% * 5 / 12);       /* column line 5: overlaps the video by one column */
+    right: 0;
+    transform: translateY(-50%);
+  }
+  .fw-cell { position: relative; padding: 28px 48px; }
+  .fw-cell::before, .fw-cell::after { content: ""; position: absolute; pointer-events: none; border: 0 solid var(--grid-line); }
+  .fw-cell::after {                  /* sides, breaking 10px either side of the row line */
+    left: calc(var(--line-w) / -2); right: calc(var(--line-w) / -2);
+    border-left-width: var(--line-w); border-right-width: var(--line-w);
+  }
+  .fw-cell--head::after { top: 0; bottom: 10px; }
+  .fw-cell--head::before {           /* row line, stopping 12px short of each side */
+    left: var(--gap-h); right: var(--gap-h); bottom: calc(var(--line-w) / -2);
+    border-bottom-width: var(--line-w);
+  }
+  .fw-cell--body { padding-block: 48px; }
+  .fw-cell--body::after { top: 10px; bottom: 0; }
+  .fw-title {                        /* heading font */
+    margin: 0;
+    font: 400 clamp(25px, 2.35vw, 40px)/1.15 var(--font-sans);
+    letter-spacing: -0.005em;
+  }
+  .fw-text { margin: 0; max-width: 600px; }   /* paragraph font, 17px / 1.35 */
+  .fw-cta { margin-top: 24px; text-align: right; }
+  .cta.cta--light, .cta.cta--light:hover, .cta.cta--light:focus-visible { color: #fff; }   /* white on dark */
+  .cta--light .cta-arrow path { stroke: #fff; }
+  .cta.cta--light:focus-visible { outline-color: #fff; }
+  @media (max-width: 767.98px) {
+    .fwimg { --step: 3; }
+    .fwimg { height: auto; }                       /* phones: video on top, card below in the flow */
+    .fwimg > .container, .fw-area { height: auto; }
+    .fw-video { position: relative; width: 100%; height: 300px; }
+    .fw-card { position: static; transform: none; padding: 40px 0 56px; }
+    .fw-cell { padding: 20px 24px; }
+    .fw-cell--body { padding-block: 28px; }
+  }
+  @media (prefers-reduced-motion: reduce) { .fw-area::before { animation: none; background: #fff; } }
+
+  /* "Explore" CTA centred over each panel's right-half media.
+     Rest: lime rectangle, navy mono label. Hovering the button (or keyboard
+     focus) grows it into a large black box with a white
+     label + arrow and .deco colour bars on both sides. Touch screens keep
+     the resting button; reduced motion switches without the growth. */
+  @media (max-width: 991.98px) { .unit-media { position: relative; } }   /* desktop: already absolute */
+  .unit-explore {
+    position: absolute;
+    top: 50%; left: 50%;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 240px;
+    height: 64px;
+    transform: translate(-50%, -50%);
+    background: #a5f300;
+    color: #021341;
+    font: 400 18px/1 var(--font-mono);
+    letter-spacing: 0.02em;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: width .45s cubic-bezier(.65,0,.35,1), height .45s cubic-bezier(.65,0,.35,1),
+                background-color .3s ease, color .3s ease;
+  }
+  .unit-explore svg {                /* arrow: hidden at rest; when grown it fades in on the line
+                                        below the label, centred, 16px under it (the label never moves) */
+    position: absolute;
+    left: 50%; top: calc(50% + 25px);   /* label is 18px tall and centred: its bottom + 16px */
+    width: 26px; height: 27px;
+    transform: translateX(-50%);
+    opacity: 0;
+    overflow: visible;
+    transition: opacity .3s ease;
+  }
+  .unit-explore svg path { stroke: #fff; }
+  .unit-explore .deco {
+    --deco-w: 17px;                  /* same as the hero video's side bars */
+    --deco-h: 44%;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 0;
+    transition: opacity .3s ease;
+  }
+  .ue-bar--l { left: 0;  --deco-1: #000d42; --deco-2: #a5f300; --deco-3: #3fc2cd; --deco-4: #00ac1d; }
+  .ue-bar--r { right: 0; --deco-1: #00ac1d; --deco-2: #3fc2cd; --deco-3: #a5f300; --deco-4: #000d42; }
+  .unit-explore:focus-visible { outline: 2px solid #fff; outline-offset: 4px; }
+  /* Grown state */
+  .unit-explore:focus-visible { width: 78%; height: 76%; background: #000; color: #fff; }
+  .unit-explore:focus-visible svg { opacity: 1; transition-delay: .15s; }
+  .unit-explore:focus-visible .deco { opacity: 1; transition-delay: .2s; }
+  @media (hover: hover) {             /* the button itself is the hot spot */
+    .unit-explore:hover { width: 78%; height: 76%; background: #000; color: #fff; }
+    .unit-explore:hover svg { opacity: 1; transition-delay: .15s; }
+    .unit-explore:hover .deco { opacity: 1; transition-delay: .2s; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .unit-explore, .unit-explore svg, .unit-explore .deco { transition: none; }
+  }
+  /* Phones: the left column's photo / video at half size */
+  @media (max-width: 575.98px) {
+    .unit-figure { width: 50%; margin-left: auto; margin-right: auto; }
+  }
+
+  /* ---------- HHMI frame section (careers) ----------
+     #FBFBFB, full width, 700px tall on desktop; a 50/50 .container. Left: a frame
+     device: a navy crosshair at each corner (the grid crosshair, with longer
+     30px arms and a 6px centre gap) and 1px edges between them. H / H / M / I in Diatype Semi-Mono sit outside the corners. */
+  .hfs { --hf-ink: #021341; position: relative; padding: 80px 0; background: #fbfbfb; color: var(--hf-ink); }
+  /* Deco bands across the top and bottom edges: straddling each edge,
+     set a little left of centre (as in the mockup). */
+  .hfs-band {
+    --deco-w: clamp(90px, 10vw, 165px);   /* top and bottom bands, half the old width */
+    --deco-h: 18px;                  /* two 9px rows */
+    --deco-1: #00ac1d;               /* top-left: green */
+    --deco-2: #3fc2cd;               /* top-right: cyan */
+    --deco-3: #a5f300;               /* bottom-left: lime */
+    --deco-4: #000d42;               /* bottom-right: navy */
+    position: absolute;
+    left: 60%;
+    z-index: 2;
+  }
+  .hfs-band--top { top: 0; transform: translateY(-50%); }
+  .hfs-band--bottom { bottom: 0; transform: translateY(50%); }
+  @media (min-width: 992px) {        /* desktop: 700px tall, content centred */
+    .hfs { display: flex; align-items: center; height: 700px; padding: 0; }
+    .hfs > .container { width: 100%; }
+  }
+  .hframe {
+    position: relative;
+    aspect-ratio: 8 / 7;             /* a little wider than tall */
+    margin: 40px;                    /* room for the corner arms and letters */
+  }
+  .hf-edge { position: absolute; background: var(--hf-ink); }
+  .hf-t, .hf-b { left: 6px; right: 6px; height: 1px; }    /* edges start at the crosshair's 6px centre gap */
+  .hf-l, .hf-r { top: 6px; bottom: 6px; width: 1px; }
+  .hf-t { top: 0; }  .hf-b { bottom: 0; }
+  .hf-l { left: 0; } .hf-r { right: 0; }
+  .hf-x {                            /* longer corner crosshair: 6px centre gap, arms out to 30px */
+    position: absolute;
+    width: 61px; height: 61px;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' stroke='%23021341' stroke-width='1' shape-rendering='crispEdges'%3E%3Csvg x='50%25' y='50%25' overflow='visible'%3E%3Cpath d='M0 -30V-6M0 6V30M-30 0H-6M6 0H30'/%3E%3C/svg%3E%3C/svg%3E") no-repeat;
+  }
+  .hf-tl { top: -30px;    left: -30px; }
+  .hf-tr { top: -30px;    right: -30px; }
+  .hf-bl { bottom: -30px; left: -30px; }
+  .hf-br { bottom: -30px; right: -30px; }
+  .hf-ch { position: absolute; font: 400 14px/1 var(--font-mono); }
+  .hf-ch-tl { right: 100%; bottom: 100%; margin: 0 12px 12px 0; }
+  .hf-ch-tr { left: 100%;  bottom: 100%; margin: 0 0 12px 12px; }
+  .hf-ch-bl { right: 100%; top: 100%;    margin: 12px 12px 0 0; }
+  .hf-ch-br { left: 100%;  top: 100%;    margin: 12px 0 0 12px; }
+  /* Call for Applicants (from studies/call-for-applicants.html), inside the
+     HHMI frame: "Looking for" + a revolving drum of roles scrolling upward
+     forever; the centre word is navy, the others fade to light grey. Words
+     size themselves to fit the frame. Site fonts (Diatype Semi-Mono label,
+     Diatype words) instead of the study's Space Mono / Space Grotesk. */
+  .hframe { display: flex; align-items: center; }
+  .hframe .cfa { position: relative; flex: 1 1 auto; min-width: 0; padding: 0 40px; }
+  .cfa {
+    display: flex;
+    align-items: center;             /* label sits on the drum's centre line */
+    gap: clamp(12px, 1.6vw, 24px);
+  }
+  .cfa-label {
+    flex: none;
+    margin: 0;
+    font: 400 14px/1 var(--font-mono);
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+    color: var(--hf-ink);
+  }
+  .cfa-drum {
+    --cfa-size: 40px;
+    --cfa-row: 48px;
+    position: relative;
+    flex: 1 1 auto;
+    min-width: 0;
+    height: calc(var(--cfa-row) * 7);
+    overflow: hidden;
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 24%, #000 76%, transparent 100%);
+            mask-image: linear-gradient(to bottom, transparent 0%, #000 24%, #000 76%, transparent 100%);
+  }
+  .cfa-word {
+    position: absolute;
+    top: 0; left: 0;
+    display: flex;
+    align-items: center;
+    height: var(--cfa-row);
+    white-space: nowrap;
+    font: 400 var(--cfa-size)/1 var(--font-sans);
+    letter-spacing: -0.02em;
+    color: hsl(0 0% 72%);
+    will-change: transform, color;
+  }
+  @media (max-width: 575.98px) { .hframe .cfa { padding: 0 20px; } }
+  /* Right column: heading + paragraph, then the Apply button. */
+  .hfs-copy {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    height: 100%;
+    padding-left: clamp(0px, 3vw, 48px);
+  }
+  .hfs-title {                       /* heading font */
+    margin: 0 0 32px;
+    font: 400 clamp(25px, 2.35vw, 40px)/1.15 var(--font-sans);
+    letter-spacing: -0.005em;
+  }
+  .hfs-text { max-width: 560px; margin: 0; }   /* paragraph font, 17px / 1.35 */
+  .hfs-cta { margin-top: 40px; }   /* the reusable arrow CTA */
+  @media (max-width: 991.98px) {
+    .hfs-copy { height: auto; margin-top: 56px; padding-left: 0; }
+  }
+
+
+
+  /* ---------- Janelia Senior Leadership ----------
+     Black band. Heading in the .container, then a full-width carousel of
+     Post Grid person cards (from studies/grid.html): broken-line cells
+     (top/bottom lines stop 12px short of each side; side lines start 24px
+     down and stop 12px short of the bottom). The 8 cards are repeated once
+     so the strip loops seamlessly. It drifts left on its own, can be swiped,
+     trackpad-scrolled or dragged, and pauses on hover / touch.
+     Reduced motion: no drift, scrolling only. */
+  .lead {
+    --line-w: 1px;
+    --gap-h: 12px;
+    --gap-v-top: 24px;
+    --gap-v-bottom: 12px;
+    --cell-pad: clamp(20px, 2.6vw, 38px);
+    --card-w: 330px;                 /* a quarter of the widest container */
+    padding: 120px 0;
+    background: #000;
+    color: #fff;
+  }
+  .lead-title {                      /* heading font */
+    margin: 0 0 56px;
+    font: 400 clamp(25px, 2.35vw, 40px)/1.15 var(--font-sans);
+    letter-spacing: -0.005em;
+  }
+  /* Scrollable strip (swipe / trackpad / mouse drag); the script drifts it
+     left ~44px/s, pauses on hover or touch, and wraps it so it never ends. */
+  .lead-viewport {
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 1px 0;                  /* room for the cells' top and bottom lines */
+    scrollbar-width: none;
+    overscroll-behavior-x: contain;
+    cursor: grab;
+  }
+  .lead-viewport::-webkit-scrollbar { display: none; }
+  .lead-viewport.is-dragging { cursor: grabbing; user-select: none; }
+  .lead-viewport img { -webkit-user-drag: none; user-select: none; }
+  .lead-track { display: flex; width: max-content; }
+  .lcell { position: relative; flex: none; width: var(--card-w); }
+  .lcell::before, .lcell::after { content: ""; position: absolute; pointer-events: none; border: 0 solid #fff; }
+  .lcell::before {                   /* top and bottom lines */
+    top: calc(var(--line-w) / -2); bottom: calc(var(--line-w) / -2);
+    left: var(--gap-h); right: var(--gap-h);
+    border-top-width: var(--line-w); border-bottom-width: var(--line-w);
+  }
+  .lcell::after {                    /* side lines */
+    top: var(--gap-v-top); bottom: var(--gap-v-bottom);
+    left: calc(var(--line-w) / -2); right: calc(var(--line-w) / -2);
+    border-left-width: var(--line-w); border-right-width: var(--line-w);
+  }
+  .lead .person {
+    display: block;
+    width: 100%;
+    height: 100%;
+    padding: 10% 10% var(--cell-pad);
+    border: 0;
+    background: none;
+    color: inherit;
+    font: inherit;
+    text-align: center;
+    cursor: pointer;
+  }
+  .lead .person img { transition: opacity .2s ease; }
+  .lead button.person:hover img { opacity: .8; }        /* only cards with a profile (Spruston for now) */
+  .lead .person--static { cursor: inherit; }
+  .lead .person:focus-visible { outline: 2px solid #fff; outline-offset: -6px; }
+  .lead .person img {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    background: #333;
+  }
+  .lead .person-name {
+    display: block;
+    margin: clamp(24px, 3vw, 40px) 0 12px;
+    font: 400 clamp(18px, 1.6vw, 22px)/1.2 var(--font-sans);   /* Diatype Regular, like the title */
+  }
+  .lead .person-title {
+    display: block;
+    margin: 0 auto;
+    max-width: 18em;
+    font: 400 clamp(14px, 1.1vw, 16px)/1.4 var(--font-sans);
+    text-wrap: balance;
+  }
+  @media (max-width: 1399.98px) { .lead { --card-w: 285px; } }
+  @media (max-width: 1199.98px) { .lead { --card-w: 260px; } }
+  @media (max-width: 767.98px)  { .lead { --card-w: 72vw; padding: 80px 0; } }
+
+  /* ---------- Senior Leadership modal ----------
+     A <dialog> flush to the right edge: full height, 50% of the viewport
+     width (full width on phones), #FBFBFB, sliding in from the right over a
+     dimmed page. Content: photo + credit beside name + title, bio, media
+     contact, then Honorary & Professional Societies / Selected Awards /
+     Related Stories, each under a navy rule. Close: X, Esc or a click on
+     the dimmed page. The carousel stops while it is open. */
+  .lmodal {
+    position: fixed;
+    inset: 0 0 0 auto;
+    width: 50vw;
+    max-width: none;
+    height: 100dvh;
+    max-height: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: #fbfbfb;
+    color: #000;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    transform: translateX(100%);
+    transition: transform .45s cubic-bezier(.65,0,.35,1);
+  }
+  .lmodal.is-in { transform: none; }
+  /* Short profiles still fill the panel: the body grows so the bottom band
+     sits at the bottom edge instead of mid-panel. */
+  .lmodal[open] { display: flex; flex-direction: column; }
+  .lmodal > * { flex: none; }
+  .lmodal > .lm-body { flex: 1 0 auto; }
+  .lmodal:focus { outline: none; }   /* the panel takes focus on open, not the close button */
+  .lmodal::backdrop { background: rgba(0, 0, 0, .55); }
+  /* Deco bands across the full width of the panel, at the very top and
+     bottom of its content (they scroll with it). */
+  .lm-band {
+    --deco-w: 100%;
+    --deco-h: 18px;                  /* two 9px rows */
+    --deco-1: #00ac1d;               /* top-left: green */
+    --deco-2: #3fc2cd;               /* top-right: cyan */
+    --deco-3: #a5f300;               /* bottom-left: lime */
+    --deco-4: #000d42;               /* bottom-right: navy */
+  }
+  html.lm-open { overflow: hidden; }   /* page doesn't scroll behind it */
+  .lm-bar {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    display: flex;
+    justify-content: flex-end;       /* open-in-new-window, then close at the far right */
+    gap: 8px;
+    padding: 20px 24px 0;
+    pointer-events: none;
+  }
+  .lm-close {
+    display: grid;
+    place-items: center;
+    width: 44px; height: 44px;
+    border: 0;
+    border-radius: 50%;
+    background: #fbfbfb;
+    color: #000;
+    cursor: pointer;
+    pointer-events: auto;
+  }
+  .lm-close:hover { background: #ececec; }
+  .lm-ext { color: #000; }
+  .lm-actions {                      /* copy link + open in new window, under the title */
+    display: flex;
+    gap: 4px;
+    margin: 16px 0 0 -12px;          /* icon edges line up with the text */
+  }
+  .lm-copy .lm-copy-done { display: none; }
+  .lm-copy.is-copied .lm-copy-link { display: none; }
+  .lm-copy.is-copied .lm-copy-done { display: block; }
+  .lm-copy[hidden] { display: none; }
+  .lm-ext[hidden] { display: none; }
+  .lm-close:focus-visible { outline: 2px solid #021341; outline-offset: 2px; }
+  .lm-body { padding: 36px 24px 96px; }        /* tight sides, same as phones */
+  .lm-head { display: grid; grid-template-columns: 41% 1fr; gap: 0 11%; align-items: center; }
+  .lm-photo img { display: block; width: 100%; height: auto; aspect-ratio: 1 / 1; object-fit: cover; background: #ccc; }
+  .lm-credit { margin: 12px 0 0; font: 400 12px/1.3 var(--font-mono); }
+  .lm-name { margin: 0 0 20px; font: 400 clamp(24px, 2.4vw, 40px)/1.15 var(--font-sans); letter-spacing: -0.005em; }
+  .lm-role { margin: 0; font: 400 1em/1.25 var(--font-sans); letter-spacing: 0.04em; }
+  .lm-bio { margin-top: 48px; }
+  .lm-bio p { margin: 0 0 1.35em; }                       /* global 17px / 1.35 */
+  .lm-bio a, .lm-media a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
+  .lm-media { margin: 36px 0 0; text-align: right; }
+  .lm-sec { margin-top: 40px; padding-top: 24px; border-top: 1px solid #021341; }
+  .lm-label { margin: 0 0 24px; font: 400 16px/1.2 var(--font-mono); letter-spacing: 0.02em; }
+  .lm-sec ul { margin: 0; padding-left: 20px; }
+  .lm-stories {                      /* 250px cards in a sideways-scrolling row */
+    display: flex;
+    margin-top: 8px;
+    padding: 1px 0 12px;             /* room for the cards' top/bottom lines */
+    overflow-x: auto;
+    scroll-snap-type: x proximity;
+    overscroll-behavior-x: contain;
+  }
+  .lm-stories { cursor: grab; }
+  .lm-stories.is-dragging { cursor: grabbing; scroll-snap-type: none; user-select: none; }   /* snap only after letting go */
+  .lm-story { position: relative; flex: none; width: 250px; padding: 28px 24px 32px; scroll-snap-align: start; }
+  .lm-story::before, .lm-story::after { content: ""; position: absolute; pointer-events: none; border: 0 solid #000; }
+  .lm-story::before { top: -0.5px; bottom: -0.5px; left: 12px; right: 12px; border-top-width: 1px; border-bottom-width: 1px; }
+  .lm-story::after  { top: 24px; bottom: 12px; left: -0.5px; right: -0.5px; border-left-width: 1px; border-right-width: 1px; }
+  .lm-story-img { display: block; aspect-ratio: 3 / 2; background: #d9d9d9; }
+  .lm-story-date { display: block; margin: 16px 0 20px; font: 400 13px/1.2 var(--font-mono); }
+  .lm-story-title { display: block; }
+  @media (max-width: 991.98px) {
+    .lmodal { width: 100vw; }
+    .lm-body { padding: 24px 24px 72px; }
+  }
+  @media (max-width: 575.98px) {
+    .lm-head { grid-template-columns: 1fr; gap: 24px; }
+  }
+  @media (prefers-reduced-motion: reduce) { .lmodal { transition: none; } }
+
+  /* ---------- CTA arrow label (reusable): 4-square .deco + label + arrow, 30px tall ---------- */
+  .cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 18px;
+    height: 30px;
+    color: #021341;
+    text-decoration: none;
+    font: 400 14px/1 var(--font-sans);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .cta:hover, .cta:focus-visible { color: #021341; }
+  .cta:focus-visible { outline: 2px solid #021341; outline-offset: 4px; }
+  .cta .deco {                       /* square: navy / lime over cyan / green */
+    --deco-w: 24px;
+    --deco-h: 24px;
+    --deco-1: #000d42;
+    --deco-2: #a5f300;
+    --deco-3: #3fc2cd;
+    --deco-4: #00ac1d;
+  }
+  .cta-arrow { width: 26px; height: 27px; margin-left: -3px; flex: none; overflow: visible; }
+  .cta, .unit-explore { cursor: pointer; }   /* placeholder CTAs have no href yet; keep the hand cursor */
+
+  /* Hover / focus: the four colours are reshuffled at random every 0.8s
+     (script at the end of the page). Reduced motion: no shuffle. */
+
+  .role-cta { margin-top: auto; padding-top: 40px; text-align: right; }   /* bottom right of the column */
+
+  /* ---------- Placeholder content below the hero ---------- */
+  .filler { min-height: 150vh; }
+  /* ---------- Newsletter banner (after Highlighted Stories, before the footer) ----------
+     Full width, 180px tall, black with one row of colour-wave crosshairs,
+     the white "Join Newsletter" button centred. On hover it grows to the
+     banner's height and shows "Stay Connected with HHMI" underneath. */
+  .nl {
+    --col: 78px;
+    position: relative;
+    height: 180px;
+    background: #000;
+  }
+  .nl::before {
+    content: ""; position: absolute; inset: 0; pointer-events: none;
+    /* Same drifting colour wave as the other crosshair grids (dark-section
+       variant with white, as in Project Teams), every 10s. */
+    background: repeating-linear-gradient(135deg,
+      #111    calc(var(--wave) + 0px),
+      #A5F300 calc(var(--wave) + 800px),
+      #00AC1D calc(var(--wave) + 1600px),
+      #FFFFFF calc(var(--wave) + 2400px),
+      #111    calc(var(--wave) + 3200px));
+    animation: xhair-wave 10s linear infinite;
+    opacity: .7;
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' stroke='%23000' stroke-width='1' shape-rendering='crispEdges'%3E%3Csvg x='50%25' y='50%25' overflow='visible'%3E%3Cpath d='M0 -10V-2.25M0 2.25V10M-10 0H-2.25M2.25 0H10'/%3E%3C/svg%3E%3C/svg%3E") center center / var(--col) 100% repeat-x;
+            mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' stroke='%23000' stroke-width='1' shape-rendering='crispEdges'%3E%3Csvg x='50%25' y='50%25' overflow='visible'%3E%3Cpath d='M0 -10V-2.25M0 2.25V10M-10 0H-2.25M2.25 0H10'/%3E%3C/svg%3E%3C/svg%3E") center center / var(--col) 100% repeat-x;
+  }
+  @media (prefers-reduced-motion: reduce) { .nl::before { animation: none; background: #fff; opacity: .5; } }
+  @media (min-width: 1200px) { .nl { --col: 93px; } }
+  @media (min-width: 1400px) { .nl { --col: 108px; } }
+  @media (max-width: 767.98px) { .nl { --col: 58px; } }
+
+  /* ---------- Highlighted Stories (1 col, after Senior Leadership) ---------- */
+  .hs { padding: 120px 0 80px; background: #000; color: #fff; }
+  .hs-title-main { margin: 0; font: 400 clamp(25px, 2.35vw, 40px)/1.15 var(--font-sans); letter-spacing: -0.005em; }
+  @media (max-width: 767.98px) { .hs { padding: 80px 0 56px; } }
+
+  /* "Stay Connected with HHMI": a white button at rest. Hover (or tap on
+     touch screens) grows it into a light panel inside the 180px banner:
+     "Join Newsletter" + arrow on the left, a thin rule, and "Stay Social"
+     with six round social icons on the right. Colour bars shuffle on the
+     sides. Links and icons turn #00AC1D on hover / focus. */
+  .nlx {
+    position: absolute; top: 50%; left: 50%; z-index: 1;
+    width: 320px; height: 64px;
+    transform: translate(-50%, -50%);
+    background: #fff; color: #000;
+    transition: width .45s cubic-bezier(.65,0,.35,1), height .45s cubic-bezier(.65,0,.35,1), background-color .3s ease;
+  }
+  .nlx .deco { --deco-w: 17px; --deco-h: 70%; position: absolute; top: 50%; transform: translateY(-50%); opacity: 0; transition: opacity .3s ease; }
+  .nlx-label {
+    position: absolute; inset: 0; width: 100%;
+    padding: 0; border: 0; background: none; color: inherit; cursor: pointer;
+    font: 400 18px/1 var(--font-mono); letter-spacing: .02em; white-space: nowrap;
+    transition: opacity .2s ease;
+  }
+  .nlx-panel {
+    position: absolute; inset: 0;
+    display: grid; grid-template-columns: 1fr 1px 1fr; align-items: center;
+    padding: 14px 40px;
+    opacity: 0; visibility: hidden;
+    transition: opacity .25s ease, visibility 0s linear .25s;
+  }
+  .nlx.is-open { width: min(560px, 92%); height: 172px; background: #FBFBFB; }   /* opens on click / tap only */
+  .nlx.is-open .deco { opacity: 1; transition-delay: .2s; }
+  .nlx.is-open .nlx-label { opacity: 0; pointer-events: none; }
+  .nlx.is-open .nlx-panel { opacity: 1; visibility: visible; transition: opacity .3s ease .2s, visibility 0s; }
+  .nlx-join { display: flex; flex-direction: column; align-items: center; gap: 14px; color: inherit; text-decoration: none; cursor: pointer; text-align: center; font: 400 18px/1.25 var(--font-mono); letter-spacing: .02em; transition: color .2s ease; }
+  .nlx-arrow { width: 26px; height: 27px; overflow: visible; }
+  .nlx-arrow path { stroke: currentColor; }
+  .nlx-rule { align-self: stretch; margin: 8px 0; background: currentColor; }
+  .nlx-social { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+  .nlx-h { margin: 0; font: 400 18px/1 var(--font-mono); letter-spacing: .02em; }
+  .nlx-icons { display: grid; grid-template-columns: repeat(3, 40px); gap: 8px 16px; margin: 0; padding: 0; list-style: none; }
+  .nlx-ic { display: grid; place-items: center; width: 40px; height: 40px; border: 1px solid currentColor; border-radius: 50%; color: #000; transition: color .2s ease; }
+  .nlx-ic svg { width: 18px; height: 18px; }   /* Simple Icons (CC0) brand marks, filled in currentColor */
+  .nl .nlx-join:hover, .nl .nlx-join:focus-visible, .nl .nlx-ic:hover, .nl .nlx-ic:focus-visible { color: #00AC1D; }
+  .nlx :focus-visible { outline: 2px solid #00AC1D; outline-offset: 3px; }
+  @media (max-width: 575.98px) {
+    .nlx.is-open { width: 94%; }
+    .nlx-panel { padding: 14px 24px; }
+    .nlx-icons { grid-template-columns: repeat(3, 34px); gap: 8px 10px; }
+    .nlx-ic { width: 34px; height: 34px; }
+    .nlx-ic svg { width: 15px; height: 15px; }
+    .nlx-join, .nlx-h { font-size: 15px; }
+  }
+  @media (prefers-reduced-motion: reduce) { .nlx, .nlx .deco, .nlx-label, .nlx-panel { transition: none; } }
+  /* Highlighted Stories: 4 cards per view (3 / 2 / 1 on smaller screens), scroll-snap slider, dots.
+     Cards use the leadership carousel's broken lines: top/bottom lines
+     inset 18px from the sides, side lines stop short of the corners. */
+  .hs-viewport {
+    margin-top: 56px;
+    padding: 0 12px;
+    scroll-padding: 0 12px;
+    overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none;
+    overscroll-behavior-x: contain;
+    cursor: default;
+  }
+  .hs-viewport::-webkit-scrollbar { display: none; }
+  .hs-viewport.is-dragging, .hs-viewport.is-gliding { scroll-snap-type: none; }
+  .hs-viewport.is-dragging { user-select: none; }
+  /* Cursor: pointer over a story (it opens in a new tab); a closed hand while
+     the mouse button is held down to drag. */
+  .hs-viewport.is-holding, .hs-viewport.is-holding * { cursor: grabbing !important; }
+  .hs-track { display: flex; padding: 1px 0; }
+  .hs-card { position: relative; flex: 0 0 25%; scroll-snap-align: start; }   /* 4 per view */
+  .hs-track::after { content: ""; flex: 0 0 12px; }   /* end padding inside the scroller */
+  @media (max-width: 1199.98px) { .hs-card { flex-basis: 33.333%; } }
+  @media (max-width: 991.98px)  { .hs-card { flex-basis: 50%; } }
+  .hs-card::before, .hs-card::after { content: ""; position: absolute; pointer-events: none; border: 0 solid #fff; }
+  .hs-card::before { top: 0; bottom: 0; left: 18px; right: 18px; border-top-width: 1px; border-bottom-width: 1px; }
+  .hs-card::after  { top: 23px; bottom: 12px; left: 0; right: 0; border-left-width: 1px; border-right-width: 1px; }
+  .hs-card + .hs-card { margin-left: -1px; }   /* neighbours share one side line */
+  .hs-link { display: block; height: 100%; padding: 32px 22px 56px; color: inherit; text-decoration: none; cursor: pointer; -webkit-user-drag: none; }
+  .hs-img { display: block; width: 100%; aspect-ratio: 3 / 2; background: #1a1a1a; }   /* image; a dark placeholder until one is added */
+  .hs-link:hover .hs-img { background: #222; }
+  .hs-link img { display: block; width: 100%; height: auto; aspect-ratio: 3 / 2; object-fit: cover; background: #222; -webkit-user-drag: none; transition: opacity .2s ease; }
+  .hs-link:hover img { opacity: .8; }
+  .hs-link:focus-visible { outline: 2px solid #fff; outline-offset: -6px; }
+  .hs-title { margin: 28px 0 14px; font: 400 clamp(18px, 1.6vw, 22px)/1.25 var(--font-sans); }
+  .hs-date { display: block; font: 400 12px/1.4 var(--font-mono); letter-spacing: .02em; }
+  /* Gooey dots: the visible dots and a lime blob are drawn in .hs-goo under
+     a "goo" SVG filter (blur + alpha threshold), so the blob melts into each
+     dot it passes. The blob follows the scroll position. The real buttons sit
+     on top, transparent, for clicks and keyboard focus. */
+  .hs-dots { --dot-gap: 12px; position: relative; display: flex; justify-content: center; gap: var(--dot-gap); margin-top: 40px; }
+  .hs-dots button { position: relative; z-index: 1; width: 15px; height: 15px; padding: 0; border: 0; border-radius: 50%; background: transparent; cursor: pointer; }
+  .hs-dots button:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
+  .hs-goo {
+    position: absolute; left: 0; right: 0; top: -12px; bottom: -12px;
+    display: flex; justify-content: center; align-items: center; gap: var(--dot-gap);
+    pointer-events: none;
+    filter: url(#hsGoo);
+  }
+  .hs-goo i { width: 15px; height: 15px; border-radius: 50%; background: #2DB44A; transition: transform .2s ease; }
+  .hs-goo i.is-hover { transform: scale(1.2); }
+  .hs-goo b {
+    position: absolute; top: 50%; left: 0;
+    width: var(--blob, 19px); height: var(--blob, 19px);
+    border-radius: 50%; background: #A5F300;
+    transform: translate(calc(var(--bx, 0px) - 50%), -50%);
+  }
+  @media (max-width: 575.98px) { .hs-card { flex-basis: 85%; } }
+
+  /* ---------- Footer (from studies/footer.html) ----------
+     Black mega footer: one column per site section, then "Back to top".
+     The page lifts away like a curtain to uncover a particle HHMI wordmark
+     fixed underneath, which scatters from the pointer. Fonts: ABC Diatype. */
+  main { position: relative; z-index: 1; background: var(--page-bg); }   /* the curtain */
+  .mfoot { --dim: #9a9a9a; --soft: #cfcfcf; --rule: #2b2b2b; background: #000; color: #fff; font: 400 15px/1.4 var(--font-sans); }   /* no border */
+  .mfoot a { color: inherit; text-decoration: none; cursor: pointer; }
+  .mfoot .in { padding: 64px 12px 0; }   /* the Schema boxes run full width, 12px in from each side */
+  /* Footer menu inside one Schema cell (1 x 1): the box's lines break at
+     the corners like the Janelia at a Glance grid (top/bottom stop 12px short
+     of the sides, sides stop 10px short of top/bottom). The menu's five groups
+     sit in columns inside; Back to top in the bottom-right corner. */
+  .mf-box { position: relative; padding: 48px 22px 40px; }   /* 22px in from the lines, like the Highlighted Stories cards */
+  .mf-box:not(.mf-box--links) { padding-bottom: 100px; }   /* room for the Back to top box */
+  .mf-box::before, .mf-box::after { content: ""; position: absolute; pointer-events: none; border: 0 solid #fff; }   /* white grid */
+  .mf-box::before { top: 0; bottom: 0; left: 12px; right: 12px; border-bottom-width: 1px; }   /* no top line; the bottom line is the row line */
+  .mf-box::after  { top: 10px; bottom: 10px; left: 0; right: 0; border-left-width: 1px; border-right-width: 1px; }
+  .mf-cols { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 48px 32px; }
+  /* Back to top: a 50px corner box like Read More's (.mj-more-box), tucked
+     into the bottom-right corner of the menu box: lines on its top and left. */
+  .mf-top { position: absolute; right: 1px; bottom: 0; }   /* tucked against the frame's right line */
+  /* Second row of the Schema (1 col): shares the first box's bottom line,
+     so only its own bottom line is drawn; its sides break at the row line. */
+  .mf-box--links { display: grid; grid-template-columns: 1fr 1fr; padding: 0; }   /* 2 cells: links | copyright */
+  .mf-half { position: relative; padding: 28px 22px; }
+  /* Middle line + where it meets the row line: a three-armed crosshair
+     (left, right, down) with a 6px gap at the centre, like the frame's
+     crosshairs: the row line is cut 6px either side, the middle line starts
+     6px below. Open at the bottom. */
+  .mf-half--copy::before { content: ""; position: absolute; left: -.5px; top: 6px; bottom: 0; border-left: 1px solid #fff; }
+  .mf-half--copy::after { content: ""; position: absolute; left: -6px; top: -1.5px; width: 12px; height: 3px; background: #000; }   /* cuts the row line at the junction */
+  .mf-box--links::before { border-bottom-width: 0; }   /* last row: no bottom line */
+  .mf-box:not(.mf-box--links)::after { top: 0; }   /* open outer edges, as in the Schema: sides run to the top / bottom */
+  .mf-box--links::after { bottom: 0; }
+  .mf-legal { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 10px 28px; font-size: 15px; }
+  .mfoot .mf-legal a { color: inherit; text-decoration: none; }
+  .mfoot .mf-legal a:hover { text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 1px; }
+  .mf-copy { margin: 0; font-size: 15px; color: var(--dim); }
+  .mf-col .mf-pair .t { display: block; }
+  .mf-col li + li > .mf-pair { margin-top: 6px; }
+  .mf-col { min-width: 0; }
+  .mf-col h3 { font: 400 15px/1.3 var(--font-sans); color: var(--dim); margin: 0 0 16px; }   /* regular Diatype, 15px like everything in the footer */
+  .mf-col h3 a:hover { color: #fff; }
+  .mf-col ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 1px; }
+  .mf-col li > a { display: block; padding: 5px 0; line-height: 1.3; font-size: 15px; }
+  .mf-col a:hover .t { text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 1px; }
+  .mf-col .sub { margin-top: 14px; padding-bottom: 2px; font: 400 15px/1.3 var(--font-sans); color: var(--dim); }
+  .mf-col .sub:first-child { margin-top: 0; }
+  .mf-col .sel .t { text-decoration: underline; text-underline-offset: 4px; }
+  .mfoot .totop { display: grid; place-items: center; width: 50px; height: 50px; border-top: 1px solid #fff; border-left: 1px solid #fff; }   /* right side = the frame line (breaks 10px above the row line); bottom = the row line */
+  .mfoot .totop svg { width: 24px; height: 25px; transform: rotate(-90deg); overflow: visible; }
+  .mfoot .totop svg path { stroke: #fff; transition: stroke .2s ease; }
+  .mfoot .totop:hover svg path { stroke: #7DE050; }
+  .mfoot :focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
+  .mf-stage { position: fixed; left: 0; right: 0; bottom: 0; z-index: 0; height: var(--stage-h, calc(22.3vw + 80px)); background: #000; }
+  .mf-stage canvas { display: block; width: 100%; height: 100%; touch-action: pan-y; }
+  .mf-reveal { height: var(--stage-h, calc(22.3vw + 80px)); }
+  @media (max-width: 1199.98px) { .mf-cols { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+  @media (max-width: 575.98px) {
+    .mf-box { padding: 32px 22px 24px; }
+    .mf-box--links { grid-template-columns: 1fr; padding: 0; }
+    .mf-half { padding: 24px 22px; }
+    .mf-half--copy::before { left: 12px; right: 12px; top: -.5px; bottom: auto; border-left: 0; border-top: 1px solid #fff; }
+    .mf-half--copy::after { display: none; }   /* stacked: a row line between, stopping short of the sides */
+    .mf-cols { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 36px 20px; }
+  }
+  /* ---------- Sidebar menu (opened by Explore) ----------
+     A <dialog> flush right: 480px on desktop, full width on phones. It
+     appears instantly over a dimmed page (no fade, no movement). Dark by default; the switch
+     in the top-left turns the sidebar (only) light, remembered per browser.
+     Rows use the CTA arrow: down for sections (up when open), right for updates. */
+  .smenu {
+    position: fixed; inset: 0 0 0 auto;
+    width: 480px; max-width: 100%; height: 100%; max-height: none;
+    margin: 0; padding: 0; border: 0;
+    background: #000; color: #fff;
+    transition: background-color .3s ease, color .3s ease;
+    font-family: var(--font-sans);
+  }
+  .smenu::backdrop { background: rgba(0,0,0,.5); }
+  .smenu.is-light { background: #fff; color: #000; }
+  html.sm-open { overflow: hidden; }
+  html { scrollbar-gutter: stable; }   /* locking the scroll never shifts the header, so the close H stays on the Explore H */
+  .sm-in { display: flex; flex-direction: column; min-height: 100%; padding: 0 24px 40px; }
+  .sm-top { position: sticky; top: 0; z-index: 1; display: flex; align-items: center; justify-content: space-between; height: 96px; background: inherit; }   /* stays put while the list scrolls under it */
+  .sm-in { background: inherit; }
+  .smenu button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+  .smenu :focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
+  .smenu svg path { stroke: currentColor; }
+
+  /* Light-mode switch */
+  .smenu .sm-mode { display: inline-flex; align-items: center; gap: 10px; font: 400 12px/1 var(--font-sans); letter-spacing: .2em; text-transform: uppercase; }
+  .sm-track { position: relative; width: 40px; height: 22px; border: 1px solid currentColor; border-radius: 11px; }
+  .sm-track::after { content: ""; position: absolute; top: 3px; left: 3px; width: 14px; height: 14px; border-radius: 50%; background: currentColor; transition: transform .25s ease; }
+  .sm-mode[aria-checked="true"] .sm-track::after { transform: translateX(18px); }
+
+  /* Close: the Explore icon itself in its "H" (hover) state, placed by JS
+     exactly over the header's Explore icon. */
+  .sm-close { position: fixed; z-index: 1; display: block; padding: 0; line-height: 0; }
+  .sm-close .explore-icon { display: block; }   /* a real 32x27 hit area (an inline span had none) */
+  .sm-close .explore-icon i { transition: none; }
+  .sm-close .explore-icon i:nth-child(1) { transform: rotate(90deg) scaleX(.84375); }
+  .sm-close .explore-icon i:nth-child(2) { transform: translateY(-12.5px) rotate(-90deg) scaleX(.84375); }
+  .sm-close .explore-icon i:nth-child(3) { transform: translate(5px, -12.5px) scaleX(.6875); }
+
+  /* Two panels side by side in .sm-slide (200% wide). Default shows the
+     Janelia panel (right); "Main" slides the main panel in from the left.
+     Each panel's rules bleed past the side the other panel lives on. */
+  .sm-in { padding: 0; }   /* no bottom padding: the News colour bars sit flush on the sidebar's bottom edge */
+  .sm-top { padding: 0 24px; }
+  /* The line under the top bar belongs to the (sticky) bar, so it stays put
+     while the menu scrolls. It still bleeds toward the other panel: off the
+     right edge on the Janelia panel, off the left edge on the main panel,
+     and slides across with the panels. */
+  .sm-top::after {
+    content: ""; position: absolute; bottom: 0; left: var(--sm-pad); right: 0;
+    border-top: 1px solid currentColor;
+    transition: left .45s cubic-bezier(.65,0,.35,1), right .45s cubic-bezier(.65,0,.35,1);
+  }
+  .smenu.is-main .sm-top::after { left: 0; right: var(--sm-pad); }
+  @media (prefers-reduced-motion: reduce) { .sm-top::after { transition: none; } }
+  .sm-stage { flex: none; margin-bottom: 96px; overflow: hidden; transition: height .45s cubic-bezier(.65,0,.35,1); }
+  .sm-slide { display: flex; align-items: flex-start; width: 200%; transform: translateX(-50%); transition: transform .45s cubic-bezier(.65,0,.35,1); }
+  .smenu.is-main .sm-slide { transform: none; }
+  .smenu { --sm-pad: 24px; }
+  @media (max-width: 575.98px) { .smenu { --sm-pad: 11px; } }
+  .sm-panel { flex: 0 0 50%; padding: 0 var(--sm-pad); }
+  /* "Main →" / "← Back" share the top-left slot */
+  .smenu .sm-main { display: inline-flex; align-items: center; gap: 18px; font-size: 26px; line-height: 1; transition: opacity .3s ease, color .2s ease; }
+  .sm-main svg { width: 32px; height: 34px; }
+  .sm-back svg { transform: rotate(180deg); }
+  .smenu .sm-back { white-space: nowrap; }
+  @media (max-width: 575.98px) {   /* the longer label fits beside the close H on phones */
+    .smenu .sm-back { gap: 12px; font-size: clamp(16px, 5.3vw, 26px); }
+    .sm-back svg { width: 26px; height: 28px; }
+  }   /* "← Janelia Research Campus": shown in place of "Main" on the main panel */
+  /* Janelia panel */
+  .sm-jrc { margin-right: calc(-1 * var(--sm-pad)); padding: 28px var(--sm-pad) 40px 0; }
+  .sm-jh { margin: 0 0 18px; font: 400 26px/1.15 var(--font-sans); }
+  /* Main panel */
+  .sm-nav { list-style: none; margin: 0 0 0 calc(-1 * var(--sm-pad)); padding: 0; }
+  .sm-nav > li { margin-left: var(--sm-pad); }
+  .sm-nav > li + li { border-top: 1px solid currentColor; }
+  .smenu .sm-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; width: 100%; min-height: 76px; padding: 14px 0; text-align: left; font-size: 26px; line-height: 1.15; color: inherit; text-decoration: none; cursor: pointer; }
+  .sm-row svg { flex: none; width: 32px; height: 34px; transform: rotate(90deg); transition: transform .35s ease; }
+  .sm-nav > li:last-child .sm-row { padding-bottom: 40px; }
+  /* Search: looks exactly like the other rows; click it and you can type
+     (a stand-in for now, nothing is submitted). */
+  .sm-search { cursor: text; }
+  .sm-search input {
+    width: 100%; min-width: 0; margin: 0; padding: 0;
+    border: 0; border-radius: 0; background: none; outline: none;
+    font: inherit; color: inherit; caret-color: currentColor;
+    -webkit-appearance: none; appearance: none;
+  }
+  .smenu .sm-search input:focus-visible { outline: none; }   /* no box: the caret shows it's active */
+  .sm-search input::placeholder { color: inherit; opacity: 1; }
+  .sm-search input:focus::placeholder { opacity: .35; }
+  .sm-search input::-webkit-search-cancel-button { -webkit-appearance: none; }
+  .sm-row[aria-expanded="true"] svg { transform: rotate(-90deg); }
+  /* Sub-menus (open under a section): green group headings, links indented */
+  .sm-sub { list-style: none; margin: 0; padding: 0 0 36px; }
+  .sm-sub[hidden] { display: none; }
+  .sm-group + .sm-group { margin-top: 28px; }
+  .sm-gh { margin: 4px 0 14px; font: 400 17px/1.25 var(--font-sans); color: #7DE050; }
+  .smenu.is-light .sm-gh { color: var(--green-3); }
+  .sm-list, .sm-links { list-style: none; margin: 0; padding: 0 0 0 28px; }   /* Janelia links share the sub-menu style */
+  .sm-list a, .sm-links a { display: block; padding: 2px 0; color: inherit; text-decoration: none; cursor: pointer; font-size: 17px; line-height: 1.3; }
+  .sm-list--pairs li + li { margin-top: 12px; }
+  .sm-list--pairs a span { display: block; }
+  /* News & Updates: framed by colour bars and corner crosshairs; follows the menu */
+  .sm-news[hidden] { display: none; }
+  .sm-in:has(.sm-news[hidden]) .sm-stage { margin-bottom: 24px; }
+  .sm-news { position: relative; margin-top: auto; padding: 50px 0 0; }   /* pushed to the bottom; follows the menu when it is longer */
+  /* News sits inside the careers section's HHMI frame (.hframe): edges,
+     long corner crosshairs and H / H / M / I at the corners, drawn here in
+     the sidebar's ink (white in dark, black in light). */
+  .sm-frame { --hf-ink: currentColor; display: block; aspect-ratio: auto; margin: 0 40px 56px; padding: 40px 28px; }   /* 56px below: room for the M / I letters before the switch */
+  .sm-frame .hf-x { background: currentColor;
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' stroke='%23000' stroke-width='1' shape-rendering='crispEdges'%3E%3Csvg x='50%25' y='50%25' overflow='visible'%3E%3Cpath d='M0 -30V-6M0 6V30M-30 0H-6M6 0H30'/%3E%3C/svg%3E%3C/svg%3E") no-repeat;
+            mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' stroke='%23000' stroke-width='1' shape-rendering='crispEdges'%3E%3Csvg x='50%25' y='50%25' overflow='visible'%3E%3Cpath d='M0 -30V-6M0 6V30M-30 0H-6M6 0H30'/%3E%3C/svg%3E%3C/svg%3E") no-repeat; }
+  /* Dark/light switch: bottom-left corner of the sidebar, always in view
+     (sticks to the bottom while the menu scrolls). */
+  .sm-foot { position: sticky; bottom: 0; z-index: 1; margin-top: auto; padding: 16px var(--sm-pad) 20px; background: inherit; }
+  .smenu .sm-mode { display: flex; }   /* dark/light switch: just above the News box, top right */
+  .sm-label { margin: 0 0 40px; font: 400 14px/1 var(--font-sans); letter-spacing: .2em; text-transform: uppercase; }
+  .sm-up { list-style: none; margin: 0; padding: 0; }
+  .sm-up li + li { margin-top: 40px; }
+  .sm-up a { display: block; color: inherit; text-decoration: none; cursor: pointer; font-size: 17px; line-height: 1.12; }
+  /* Hover colour by mode: lime in dark, dark green in light. Text and arrows
+     both pick it up (arrows draw in currentColor); nothing moves. */
+  .smenu { --sm-hover: #7DE050; scrollbar-width: none; }
+  .smenu::-webkit-scrollbar { display: none; }   /* rules and colour bars run to the edge */
+  .smenu.is-light { --sm-hover: #006B2A; }
+  .smenu .sm-links a[aria-current="page"] { color: var(--sm-hover); }   /* current page (Overview): lime in dark, #006B2A in light */
+  .smenu .sm-row, .smenu .sm-links a, .smenu .sm-list a, .smenu .sm-up a { transition: color .2s ease; }
+  .smenu .sm-row:hover, .smenu .sm-main:hover, .smenu .sm-links a:hover, .smenu .sm-nav .sm-list a:hover, .smenu .sm-news .sm-up a:hover { color: var(--sm-hover); }   /* beats Bootstrap's a:not([href]):not([class]):hover */
+  /* Close H: white in dark mode, black in light (not the header's greens) */
+  .smenu .sm-close .explore-icon i { background: currentColor; }
+  .smenu .sm-close:hover { color: var(--sm-hover); }
+  @media (max-width: 575.98px) { .smenu { width: 100%; } }   /* the visible width (100vw would include a scrollbar gutter and push the panel off the left edge) */
+  @media (prefers-reduced-motion: reduce) { .smenu, .sm-row svg, .sm-track::after { transition: none; } }
+</style>
+</head>
+<body>
+
+<header class="site-bar">
+  <a class="brand" href="#" aria-label="HHMI Janelia Research Campus home">
+    <span class="brand-tile brand-logo">
+      <svg viewBox="0 0 128 38" role="img" aria-label="HHMI">
+        <g fill="currentColor" fill-rule="evenodd"><path d="M0,0 L10.6326783,0 L10.6326783,13.3585568 L10.7405466,13.3585568 C12.5660116,11.2287875 14.9303817,9.68631694 19.4398916,9.68631694 C24.4354642,9.68631694 29,12.719323 29,19.0532334 L29,38 L18.3673217,38 L18.3673217,23.5222432 C18.3673217,20.3299697 17.9908742,18.0954648 14.8753558,18.0954648 C13.0498908,18.0954648 10.6326783,18.9991344 10.6326783,23.4175076 L10.6326783,38 L0,38 L0,0"/><path d="M33,0 L43.6324017,0 L43.6324017,13.3585568 L43.7402717,13.3585568 C45.5657641,11.2287875 47.9301699,9.68631694 52.4419312,9.68631694 C57.4353955,9.68631694 62,12.719323 62,19.0532334 L62,38 L51.3671616,38 L51.3671616,23.5222432 C51.3671616,20.3299697 50.9907084,18.0954648 47.8751431,18.0954648 C46.0500873,18.0954648 43.6324017,18.9991344 43.6324017,23.4175076 L43.6324017,38 L33,38 L33,0"/><path d="M66,10.6843569 L76.2404845,10.6843569 L76.2404845,14.3158571 L76.3481689,14.3158571 C78.4913943,11.1568585 81.6011638,10 85.4612366,10 C88.4637577,10 91.6794677,11.5257864 92.9673213,14.2619302 C93.3958791,13.9469292 95.5391046,10 102.456195,10 C109.586474,10 112,14.8422855 112,19.2617162 L112,38 L101.38371,38 L101.38371,23.2103574 C101.38371,20.6317141 101.115589,18.3141451 97.8998787,18.3141451 C95.2182311,18.3141451 94.3079271,20.3684999 94.3079271,23.2103574 L94.3079271,38 L83.691637,38 L83.691637,23.2103574 C83.691637,20.6317141 83.4235158,18.3141451 80.2078057,18.3141451 C77.5261582,18.3141451 76.6162901,20.3684999 76.6162901,23.2103574 L76.6162901,38 L66,38 L66,10.6843569"/><path d="M127.750439,7 C127.911577,6.50960867 128,5.98823666 128,5.45015141 C128,2.43931982 125.314083,0 121.999327,0 C118.686366,0 116,2.43931982 116,5.45015141 C116,5.98823666 116.088872,6.50960867 116.250009,7 L127.750439,7"/><polygon points="116 38 127 38 127 10 116 10"/></g>
+      </svg>
+    </span>
+    <span class="brand-tile brand-campus">Janelia Research Campus</span>
+  </a>
+  <button class="explore" type="button" aria-label="Explore menu" aria-expanded="false" aria-controls="smenu" aria-haspopup="dialog">
+    <span class="explore-label">Explore</span>
+    <span class="explore-icon" aria-hidden="true"><i></i><i></i><i></i></span>
+  </button>
+</header>
+
+<dialog class="smenu" id="smenu" aria-label="Menu">
+  <div class="sm-in">
+    <div class="sm-top">
+      <button class="sm-main" type="button" aria-controls="smMain"><span>Main</span><svg viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <button class="sm-main sm-back" type="button" aria-controls="smJrc" hidden><svg viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Janelia Research Campus</span></button>
+      <button class="sm-close" type="button" aria-label="Close menu"><span class="explore-icon" aria-hidden="true"><i></i><i></i><i></i></span></button>
+    </div>
+    <div class="sm-stage">
+      <div class="sm-slide">
+        <!-- Main menu (left; slides in from the left when "Main" is clicked) -->
+        <nav class="sm-panel sm-panel--main" id="smMain" aria-label="Main menu" inert>
+          <ul class="sm-nav">
+            <li><button class="sm-row" type="button" aria-expanded="false" aria-controls="smSub1"><span>Inside HHMI</span><svg viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round"/></svg></button><ul class="sm-sub" id="smSub1" hidden><li><ul class="sm-list"><li><a>About</a></li><li><a>HHMI Senior Leadership</a></li><li><a>HHMI Board of Trustees</a></li><li><a>Medical Advisory Board</a></li><li><a>Scientific Review Board</a></li></ul></li></ul></li>
+            <li><button class="sm-row" type="button" aria-expanded="false" aria-controls="smSub2"><span>Opportunities for Scientists</span><svg viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round"/></svg></button><ul class="sm-sub" id="smSub2" hidden><li class="sm-group"><p class="sm-gh">Science Programs</p><ul class="sm-list sm-list--pairs"><li><a><span>Mid-Career &amp; Senior Faculty</span><span>HHMI Investigator Program</span></a></li><li><a><span>Early Career Faculty</span><span>Freeman Hrabowski Scholars</span></a></li><li><a><span>Postdoc-Faculty Transition</span><span>Hanna Gray Fellows</span></a></li><li><a><span>PhD &amp; Postdoc Transition</span><span>Gilliam Fellows Program</span></a></li></ul></li></ul></li>
+            <li><button class="sm-row" type="button" aria-expanded="false" aria-controls="smSub3"><span>For Educators &amp; Students</span><svg viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round"/></svg></button><ul class="sm-sub" id="smSub3" hidden><li class="sm-group"><p class="sm-gh">Educators</p><ul class="sm-list"><li><a>BioInteractive</a></li><li><a>Science Education Alliance (SEA)</a></li><li><a>Success in Science</a></li></ul></li><li class="sm-group"><p class="sm-gh">Students</p><ul class="sm-list"><li><a>Cech Fellows Program</a></li><li><a>Undergraduate Science Scholars Program</a></li></ul></li></ul></li>
+            <li><button class="sm-row" type="button" aria-expanded="false" aria-controls="smSub4"><span>Our Scientists</span><svg viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round"/></svg></button><ul class="sm-sub" id="smSub4" hidden><li class="sm-group"><p class="sm-gh">Program Scientists</p><ul class="sm-list sm-list--pairs"><li><a><span>Mid-Career &amp; Senior Faculty</span><span>HHMI Investigator Program</span></a></li><li><a><span>Early Career Faculty</span><span>Freeman Hrabowski Scholars</span></a></li><li><a><span>Postdoc-Faculty Transition</span><span>Hanna Gray Fellows</span></a></li><li><a><span>PhD &amp; Postdoc Transition</span><span>Gilliam Fellows Program</span></a></li></ul></li></ul></li>
+            <li><label class="sm-row sm-search"><input type="search" placeholder="Search" aria-label="Search" autocomplete="off" spellcheck="false"></label></li>
+          </ul>
+        </nav>
+        <!-- Janelia Research Campus (default) -->
+        <nav class="sm-panel sm-panel--jrc" id="smJrc" aria-label="Janelia Research Campus">
+          <div class="sm-jrc">
+            <p class="sm-jh">Janelia Research Campus</p>
+            <ul class="sm-links"><li><a aria-current="page">Overview</a></li><li><a>Biology</a></li><li><a>AI@HHMI</a></li><li><a>Theory@HHMI</a></li><li><a>Tools@HHMI</a></li><li><a>Senior Leadership</a></li><li><a>20th Anniversary</a></li><li><a>Group Leaders</a></li><li><a>Leader Labs</a></li><li><a>Project &amp; Support Teams</a></li><li><a>Careers &amp; Opportunities</a></li><li><a>Tools and Resources</a></li></ul>
+          </div>
+        </nav>
+      </div>
+    </div>
+    <section class="sm-news" aria-label="News and updates" hidden>   <!-- hidden for now: remove "hidden" to bring News & Updates (and the mode switch) back -->
+      <div class="hframe sm-frame">
+        <span aria-hidden="true" class="hf-edge hf-t"></span><span aria-hidden="true" class="hf-edge hf-b"></span>
+        <span aria-hidden="true" class="hf-edge hf-l"></span><span aria-hidden="true" class="hf-edge hf-r"></span>
+        <span aria-hidden="true" class="hf-x hf-tl"></span><span aria-hidden="true" class="hf-x hf-tr"></span>
+        <span aria-hidden="true" class="hf-x hf-bl"></span><span aria-hidden="true" class="hf-x hf-br"></span>
+        <span aria-hidden="true" class="hf-ch hf-ch-tl">H</span><span aria-hidden="true" class="hf-ch hf-ch-tr">H</span>
+        <span aria-hidden="true" class="hf-ch hf-ch-bl">M</span><span aria-hidden="true" class="hf-ch hf-ch-br">I</span>
+        <p class="sm-label">News &amp; Updates</p>
+        <ul class="sm-up">
+          <li><a>Applications are now open for Freeman Hrabowski Scholars Program. Apply Now!</a></li>
+          <li><a>Applications are now open for Hanna Gray Fellows Program. Apply Now!</a></li>
+        </ul>
+      </div>
+    </section>
+    <div class="sm-foot">
+      <button class="sm-mode" type="button" role="switch" aria-checked="false" aria-label="Light mode"><span class="sm-track" aria-hidden="true"></span></button>
+    </div>
+  </div>
+</dialog>
+
+<main>
+  <section class="hero" id="hero" aria-label="Janelia Research Campus">
+    <div class="hero-stage">
+      <div class="hero-frame" id="heroFrame">
+        <video id="heroVideo" src="assets/video/Janelia_Exterior.mp4"
+               autoplay muted loop playsinline preload="auto"
+               aria-label="Aerial view of the Janelia Research Campus"></video>
+        <button class="watch" id="heroWatch" type="button">
+          <span class="watch-play"><span>Watch</span><svg viewBox="0 0 11 13" aria-hidden="true"><path d="M0 0L11 6.5L0 13Z"/></svg></span>
+          <span class="watch-stop"><span>Stop</span><svg viewBox="0 0 11 11" aria-hidden="true"><path d="M0 0H11V11H0Z"/></svg></span>
+        </button>
+      </div>
+      <div class="hero-copy">
+        <h1 class="hero-title">Understanding how brains generate behavior.</h1>
+        <p class="hero-sub"><span>Big questions.</span> <span>Long horizons.</span> <span>Sustained support.</span></p>
+      </div>
+      <div class="deco hero-deco hero-deco--left" aria-hidden="true"><div></div><div></div><div></div><div></div></div>
+      <div class="deco hero-deco hero-deco--right" aria-hidden="true"><div></div><div></div><div></div><div></div></div>
+    </div>
+  </section>
+
+  <section class="units" aria-labelledby="unitsTitle">
+    <div class="container units-head">
+      <div class="units-intro">
+        <h2 class="units-title" id="unitsTitle">Four units.<br>Connected scientific work.</h2>
+        <p class="units-lead">Integrated teams of biologists, AI researchers, tool builders, and theorists work together to pursue Janelia’s overarching mission and move biological discoveries forward across HHMI and in the larger scientific community.</p>
+      </div>
+      <div class="units-tabs" role="tablist" aria-label="Research units">
+      <button class="units-tab" role="tab" id="tab-biology" aria-controls="panel-biology" aria-selected="true">Biology</button>
+      <button class="units-tab" role="tab" id="tab-ai" aria-controls="panel-ai" aria-selected="false" tabindex="-1">AI<sup>@HHMI</sup></button>
+      <button class="units-tab" role="tab" id="tab-tool" aria-controls="panel-tool" aria-selected="false" tabindex="-1">Tools<sup>@HHMI</sup></button>
+      <button class="units-tab" role="tab" id="tab-theory" aria-controls="panel-theory" aria-selected="false" tabindex="-1">Theory<sup>@HHMI</sup></button>
+      </div>
+    </div>
+    <div class="units-panel unit-split" role="tabpanel" id="panel-biology" aria-labelledby="tab-biology">
+      <div class="container-fluid px-0"><div class="row g-0">
+        <div class="col-lg-6 unit-col">
+          <p class="unit-desc"><span class="unit-name">Biology</span> pursues the central scientific research questions at the heart of Janelia’s mission.</p>
+          <figure class="unit-figure">
+            <img src="assets/biology-research-area-work-square.jpg" width="750" height="750" loading="lazy"
+                 alt="A researcher at a microscope rig, with a brain imaging scan on the monitor.">
+          </figure>
+        </div>
+      </div></div>
+      <div class="unit-media">
+        <video aria-hidden="true" src="assets/video/zebrafish_brain_imaging.mp4" poster="assets/zebrafish_brain_imaging-poster.jpg"
+               autoplay muted loop playsinline preload="metadata"></video>
+        <a class="unit-explore">
+          <span class="deco ue-bar--l" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
+          <span>Explore Biology</span>
+          <svg viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke="black" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round" stroke="black"/></svg>
+          <span class="deco ue-bar--r" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
+        </a>
+      </div>
+    </div>
+    <div class="units-panel unit-split" role="tabpanel" id="panel-ai" aria-labelledby="tab-ai" hidden>
+      <div class="container-fluid px-0"><div class="row g-0">
+        <div class="col-lg-6 unit-col">
+          <p class="unit-desc"><span class="unit-name">AI<span class="unit-tag">@HHMI</span></span> powers this research, creating AI systems that help scientists analyze and understand their data and eventually design and run experiments as well.</p>
+          <figure class="unit-figure unit-figure--video">
+            <video src="assets/video/danionella.mp4" muted loop playsinline preload="none"
+                   aria-label="Close-up footage of a Danionella research setup"></video>
+          </figure>
+        </div>
+      </div></div>
+      <div class="unit-media">
+        <video aria-hidden="true" src="assets/video/danionella_eye_crop.mp4" poster="assets/danionella_eye_crop-poster.jpg"
+               muted loop playsinline preload="none"></video>
+        <a class="unit-explore">
+          <span class="deco ue-bar--l" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
+          <span>Explore AI@HHMI</span>
+          <svg viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke="black" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round" stroke="black"/></svg>
+          <span class="deco ue-bar--r" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
+        </a>
+      </div>
+    </div>
+    <div class="units-panel unit-split" role="tabpanel" id="panel-tool" aria-labelledby="tab-tool" hidden>
+      <div class="container-fluid px-0"><div class="row g-0">
+        <div class="col-lg-6 unit-col">
+          <p class="unit-desc"><span class="unit-name">Tools<span class="unit-tag">@HHMI</span></span> enables this work, building the microscopes, molecular tools, and instruments that drive biological discovery.</p>
+          <figure class="unit-figure unit-figure--video">
+            <video src="assets/video/danionella.mp4" muted loop playsinline preload="none"
+                   aria-label="Close-up footage of a Danionella research setup"></video>
+          </figure>
+        </div>
+      </div></div>
+      <div class="unit-media">
+        <video aria-hidden="true" src="assets/video/danionella_eye_crop.mp4" poster="assets/danionella_eye_crop-poster.jpg"
+               muted loop playsinline preload="none"></video>
+        <a class="unit-explore">
+          <span class="deco ue-bar--l" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
+          <span>Explore Tools@HHMI</span>
+          <svg viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke="black" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round" stroke="black"/></svg>
+          <span class="deco ue-bar--r" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
+        </a>
+      </div>
+    </div>
+    <div class="units-panel unit-split" role="tabpanel" id="panel-theory" aria-labelledby="tab-theory" hidden>
+      <div class="container-fluid px-0"><div class="row g-0">
+        <div class="col-lg-6 unit-col">
+          <p class="unit-desc"><span class="unit-name">Theory<span class="unit-tag">@HHMI</span></span> guides these questions, developing conceptual frameworks that can be tested in the lab.</p>
+          <figure class="unit-figure">
+            <img src="assets/biology-research-area-work-square.jpg" width="750" height="750" loading="lazy"
+                 alt="A researcher at a microscope rig, with a brain imaging scan on the monitor.">
+          </figure>
+        </div>
+      </div></div>
+      <div class="unit-media">
+        <video aria-hidden="true" src="assets/video/zebrafish_brain_imaging.mp4" poster="assets/zebrafish_brain_imaging-poster.jpg"
+               muted loop playsinline preload="none"></video>
+        <a class="unit-explore">
+          <span class="deco ue-bar--l" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
+          <span>Explore Theory@HHMI</span>
+          <svg viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke="black" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round" stroke="black"/></svg>
+          <span class="deco ue-bar--r" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="mj-section" aria-label="Mission and journey">
+    <div class="container">
+      <div class="row g-0 mj">
+        <div class="col-12 col-lg-4 mj-cell mj-head mj-row1"><h3 class="mj-title">Mission</h3></div>
+        <div class="col-12 col-lg-8 mj-cell mj-body mj-row1">
+          <p class="mj-text">HHMI’s Janelia Research Campus in Ashburn, Virginia, is undertaking an ambitious, decade-long challenge to understand how a complex brain generates behavior, and to develop a new mode of discovery in which biologists and AI work together to drive science forward.</p>
+        </div>
+        <div class="col-12 col-lg-4 mj-cell mj-head mj-rowm"><h3 class="mj-title">Journey</h3></div>
+        <div class="col-12 col-lg-8 mj-cell mj-body mj-rowm">
+          <p class="mj-text">After centuries of investigation, scientists still cannot explain how the brain integrates sensory information, internal states, memories, and physiology to produce behaviors. Understanding the fundamental function of the brain is vital not only in its own right, but as the key to making real progress against brain disorders, like Alzheimer’s disease and depression, that impact hundreds of millions of people worldwide.</p>
+          <div class="mj-extra mj-extra--cont" id="journeyMore">
+            <div>
+              <p>Janelia’s grand challenge is to build a mechanistic account connecting molecules, neural circuits, brain activity, and complex behavior in a whole animal in motion.</p>
+              <p>Two forces have converged to bring what was previously impossible within reach: a new generation of tools that lets us observe whole biological systems with a completeness that wasn’t possible a decade ago, and AI capable of parsing data at scales no human scientist can manage. The identification of a new experimental model, <i>Danionella</i> — a small fish that stays transparent into adulthood — also now gives researchers a way to see the whole brain at work.</p>
+              <p>Seizing the moment requires exactly what Janelia was built to provide: sustained support, shared infrastructure, interdisciplinary teams, and the time to ask the hard questions.</p>
+            </div>
+          </div>
+          <button class="mj-more" type="button" aria-expanded="false" aria-controls="journeyMore"><span class="mj-more-label">Read More</span><span class="visually-hidden"> about the journey</span><span class="mj-more-box" aria-hidden="true"><svg viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke="black" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round" stroke="black"/></svg></span></button>
+        </div>
+        <div class="col-12 col-lg-4 mj-cell mj-head mj-row2"><h3 class="mj-title">Why</h3></div>
+        <div class="col-12 col-lg-8 mj-cell mj-body mj-row2">
+          <p class="mj-text">With small labs and large ambitions, Janelia welcomes biologists, AI scientists, physicists, chemists, engineers, theorists, and computational scientists to work side by side on groundbreaking research.</p>
+          <div class="mj-extra mj-extra--cont" id="whyMore">
+            <div>
+              <p>Internal funding, expert technical teams, and world-class facilities are all on one campus, giving Janelia scientists the intellectual freedom to take on big risks, and the sustained support to see them through.</p>
+              <p>Janelia’s three lead scientist roles — Principal Scientists, AI Scientists, and Group Leaders — bring complementary forms of scientific leadership and take intellectual responsibility for their work. All three feature stable internal funding and minimal administrative duties. Each spends their time doing science and working with collaborators across campus.</p>
+            </div>
+          </div>
+          <button class="mj-more" type="button" aria-expanded="false" aria-controls="whyMore"><span class="mj-more-label">Read More</span><span class="visually-hidden"> about why Janelia</span><span class="mj-more-box" aria-hidden="true"><svg viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke="black" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round" stroke="black"/></svg></span></button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="vs" aria-labelledby="vsTitle">
+    <div class="container">
+      <h2 class="vs-title" id="vsTitle">Janelia at a Glance</h2>
+      <div class="vs-pin">
+      <div class="vs-stage">
+        <div class="row g-4">
+          <div class="col-12 col-lg-6">
+            <div class="vcell vcell-tall">
+              <video src="assets/video/Janelia_Exterior.mp4" autoplay muted loop playsinline preload="metadata" aria-label="Janelia campus exterior"></video>
+            </div>
+          </div>
+          <div class="col-12 col-lg-6 d-flex flex-column gap-4">
+            <div class="vcell">
+              <video src="assets/video/Janelia_People.mp4" autoplay muted loop playsinline preload="metadata" aria-label="Researchers talking at a table"></video>
+            </div>
+            <div class="vcell">
+              <video src="assets/video/Janelia_Interior.mp4" autoplay muted loop playsinline preload="metadata" aria-label="Janelia interior"></video>
+            </div>
+          </div>
+        </div>
+        <div class="vs-overlay">
+          <div class="row g-0 schema" id="vs-content" inert>
+            <div class="col-6 col-lg-4 gcell"><div class="sc"><p class="sc-label">Established</p><p class="sc-fig" data-count="2006">2006</p></div></div>
+            <div class="col-6 col-lg-4 gcell"><div class="sc"><p class="sc-label">Location</p><p class="sc-fig" data-count="30" data-suffix=" Miles">30 Miles</p><p class="sc-cap">From D.C.</p></div></div>
+            <div class="col-6 col-lg-4 gcell"><div class="sc"><p class="sc-label">Employees</p><p class="sc-fig" data-count="650" data-prefix="+">+650</p><p class="sc-cap">Staffs &amp; Researchers</p></div></div>
+            <div class="col-6 col-lg-4 gcell"><div class="sc"><p class="sc-label">Campus</p><p class="sc-fig" data-count="689">689</p><p class="sc-cap">Acres</p></div></div>
+            <div class="col-6 col-lg-4 gcell"><div class="sc"><p class="sc-label sc-label--long">World’s First Complete Connectome of an Adult Animal’s Central Nervous System</p><p class="sc-fig" data-count="140000" data-commas>140,000</p><p class="sc-cap">Mapped Neurons</p></div></div>
+            <div class="col-6 col-lg-4 gcell"><div class="sc"><p class="sc-label sc-label--long">Recording Capability of Co-Developed Neuropixels Probes</p><p class="sc-fig" data-count="5000" data-commas>5,000</p><p class="sc-cap">Neurons Per Hour</p></div></div>
+          </div>
+        </div>
+      </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="grid-section" aria-labelledby="rolesTitle">
+    <div class="container">
+      <div class="roles-intro">
+        <div class="deco" aria-hidden="true"><div></div><div></div><div></div><div></div></div>
+        <h2 class="roles-title" id="rolesTitle">Janelia’s three lead scientist roles</h2>
+        <p class="roles-lead">Janelia’s ambitious mission needs scientists who work in different ways.</p>
+      </div>
+      <div class="row g-0 roles-row">
+        <div class="col-lg-4">
+          <article class="role role--principal">
+            <h3>Principal Scientist</h3>
+            <ul>
+              <li>Develop approaches and contribute deep expertise to shared questions.</li>
+              <li>A distinct career centered on direct scientific contribution.</li>
+              <li>Contribute intellectual leadership across projects and disciplines.</li>
+            </ul>
+            <p class="role-note">On-Site / Internally funded / No postdoc required</p>
+            <div class="role-cta">
+              <a class="cta">
+                <span class="deco" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
+                <span>Learn more<span class="visually-hidden"> about Principal Scientist roles</span></span>
+                <svg class="cta-arrow" viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke="black" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round" stroke="black"/></svg>
+              </a>
+            </div>
+          </article>
+        </div>
+        <div class="col-lg-4">
+          <article class="role role--ai">
+            <h3>AI Scientist</h3>
+            <ul>
+              <li>Develop AI methods and systems connected to scientific experiments.</li>
+              <li>Computational research, modeling, and scientific systems.</li>
+              <li>Connect computational approaches with biologists, theorists, and tool builders.</li>
+            </ul>
+            <div class="role-cta">
+              <a class="cta">
+                <span class="deco" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
+                <span>Learn more<span class="visually-hidden"> about AI Scientist roles</span></span>
+                <svg class="cta-arrow" viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke="black" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round" stroke="black"/></svg>
+              </a>
+            </div>
+          </article>
+        </div>
+        <div class="col-lg-4">
+          <article class="role role--group">
+            <h3>Group Leader</h3>
+            <ul>
+              <li>Build a laboratory around broad questions and a portfolio of projects.</li>
+              <li>The balance of research and team leadership depends on the role and program.</li>
+              <li>Lead a lab and collaborate across the shared scientific enterprise.</li>
+            </ul>
+            <div class="role-cta">
+              <a class="cta">
+                <span class="deco" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
+                <span>Learn more<span class="visually-hidden"> about Group Leader roles</span></span>
+                <svg class="cta-arrow" viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke="black" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round" stroke="black"/></svg>
+              </a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="fwimg" aria-labelledby="fwTitle">
+    <video class="fw-video" src="assets/video/danionella_skin_cells_calcium-web.mp4" poster="assets/danionella_skin_cells_calcium-poster.jpg"
+           autoplay muted loop playsinline preload="metadata" aria-hidden="true"></video>
+    <div class="container">
+      <div class="fw-area">
+        <div class="fw-card">
+          <div class="fw-cell fw-cell--head"><h2 class="fw-title" id="fwTitle">Project Teams</h2></div>
+          <div class="fw-cell fw-cell--body">
+            <p class="fw-text">Some scientific projects are too big for one lab to accomplish on its own, but have the potential to transform science. For these projects, Janelia created Project Teams: dedicated groups of scientists who come together to pursue a specialized goal.</p>
+          </div>
+          <div class="fw-cta">
+            <a class="cta cta--light">
+              <span class="deco" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
+              <span>Learn more<span class="visually-hidden"> about Project Teams</span></span>
+              <svg class="cta-arrow" viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke="black" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round" stroke="black"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="hfs" aria-label="Careers at Janelia">
+    <div class="deco hfs-band hfs-band--top" aria-hidden="true"><div></div><div></div><div></div><div></div></div>
+    <div class="deco hfs-band hfs-band--bottom" aria-hidden="true"><div></div><div></div><div></div><div></div></div>
+    <div class="container">
+      <div class="row">
+        <div class="col-12 col-lg-7">
+          <div class="hframe">
+            <span aria-hidden="true" class="hf-edge hf-t"></span><span aria-hidden="true" class="hf-edge hf-b"></span>
+            <span aria-hidden="true" class="hf-edge hf-l"></span><span aria-hidden="true" class="hf-edge hf-r"></span>
+            <span aria-hidden="true" class="hf-x hf-tl"></span><span aria-hidden="true" class="hf-x hf-tr"></span>
+            <span aria-hidden="true" class="hf-x hf-bl"></span><span aria-hidden="true" class="hf-x hf-br"></span>
+            <span aria-hidden="true" class="hf-ch hf-ch-tl">H</span><span aria-hidden="true" class="hf-ch hf-ch-tr">H</span>
+            <span aria-hidden="true" class="hf-ch hf-ch-bl">M</span><span aria-hidden="true" class="hf-ch hf-ch-br">I</span>
+            <section class="cfa" data-cfa aria-label="Call for applicants">
+              <p class="cfa-label">Looking for</p>
+              <p class="visually-hidden cfa-sr"></p>
+              <div class="cfa-drum" aria-hidden="true"></div>
+            </section>
+          </div>
+        </div>
+        <div class="col-12 col-lg-5">
+          <div class="hfs-copy">
+            <h2 class="hfs-title">Calling For Applications</h2>
+            <p class="hfs-text">Become part of Janelia’s vibrant scientific community. With small labs and large ambitions, Janelia welcomes biologists, AI scientists, physicists, chemists, engineers, theorists, and computational scientists to work side by side on groundbreaking research. Internal funding, expert technical teams, and world-class facilities are all on one campus, giving Janelia scientists the intellectual freedom to take on big risks, and the sustained support to see them through.</p>
+            <div class="hfs-cta">
+              <a class="cta">
+                <span class="deco" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
+                <span>Apply</span>
+                <svg class="cta-arrow" viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke="black" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round" stroke="black"/></svg>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="lead" aria-labelledby="leadTitle">
+    <div class="container">
+      <h2 class="lead-title" id="leadTitle">Janelia Senior Leadership</h2>
+    </div>
+    <div class="lead-viewport">
+      <div class="lead-track">
+        <div class="lead-set" style="display:flex">
+          <div class="lcell"><button class="person" type="button" aria-haspopup="dialog" data-leader="0">
+            <img src="assets/leadership/nelson-spruston.webp" alt="Nelson Spruston" width="560" height="560" loading="lazy">
+            <span class="person-name">Nelson Spruston</span>
+            <span class="person-title">Vice President &amp; Executive Director, Janelia Research Campus</span>
+          </button></div>
+          <div class="lcell"><button class="person" type="button" aria-haspopup="dialog" data-leader="1">
+            <img src="assets/leadership/gerry-rubin.webp" alt="Gerry Rubin" width="560" height="560" loading="lazy">
+            <span class="person-name">Gerry Rubin</span>
+            <span class="person-title">Head of Biology and Senior Group Leader</span>
+          </button></div>
+          <div class="lcell"><button class="person" type="button" aria-haspopup="dialog" data-leader="2">
+            <img src="assets/leadership/stephan-saalfeld.webp" alt="Stephan Saalfeld" width="560" height="560" loading="lazy">
+            <span class="person-name">Stephan Saalfeld</span>
+            <span class="person-title">Head of AI@HHMI and Senior Group Leader</span>
+          </button></div>
+          <div class="lcell"><button class="person" type="button" aria-haspopup="dialog" data-leader="3">
+            <img src="assets/leadership/luke-lavis.webp" alt="Luke Lavis" width="560" height="560" loading="lazy">
+            <span class="person-name">Luke Lavis</span>
+            <span class="person-title">Head of Tools@HHMI and Senior Group Leader</span>
+          </button></div>
+          <div class="lcell"><button class="person" type="button" aria-haspopup="dialog" data-leader="4">
+            <img src="assets/leadership/ann-hermundstad.webp" alt="Ann Hermundstad" width="560" height="560" loading="lazy">
+            <span class="person-name">Ann Hermundstad</span>
+            <span class="person-title">Head of Theory@HHMI and Group Leader</span>
+          </button></div>
+          <div class="lcell"><button class="person" type="button" aria-haspopup="dialog" data-leader="5">
+            <img src="assets/leadership/reed-george.webp" alt="Reed George" width="560" height="560" loading="lazy">
+            <span class="person-name">Reed George</span>
+            <span class="person-title">Managing Director, Janelia Scientific Operations</span>
+          </button></div>
+          <div class="lcell"><button class="person" type="button" aria-haspopup="dialog" data-leader="6">
+            <img src="assets/leadership/wyatt-korff.webp" alt="Wyatt Korff" width="560" height="560" loading="lazy">
+            <span class="person-name">Wyatt Korff</span>
+            <span class="person-title">Senior Director, Project Teams</span>
+          </button></div>
+          <div class="lcell"><button class="person" type="button" aria-haspopup="dialog" data-leader="7">
+            <img src="assets/leadership/zarixia-zavala-ruiz.webp" alt="Zarixia Zavala-Ruiz" width="560" height="560" loading="lazy">
+            <span class="person-name">Zarixia Zavala-Ruiz</span>
+            <span class="person-title">Senior Director, Scientific Programs &amp; Training</span>
+          </button></div>
+        </div>
+        <div class="lead-set lead-set--copy" style="display:flex" aria-hidden="true">
+          <div class="lcell"><button class="person" type="button" aria-haspopup="dialog" data-leader="0" tabindex="-1">
+            <img src="assets/leadership/nelson-spruston.webp" alt="" width="560" height="560" loading="lazy">
+            <span class="person-name">Nelson Spruston</span>
+            <span class="person-title">Vice President &amp; Executive Director, Janelia Research Campus</span>
+          </button></div>
+          <div class="lcell"><button class="person" type="button" aria-haspopup="dialog" data-leader="1" tabindex="-1">
+            <img src="assets/leadership/gerry-rubin.webp" alt="" width="560" height="560" loading="lazy">
+            <span class="person-name">Gerry Rubin</span>
+            <span class="person-title">Head of Biology and Senior Group Leader</span>
+          </button></div>
+          <div class="lcell"><button class="person" type="button" aria-haspopup="dialog" data-leader="2" tabindex="-1">
+            <img src="assets/leadership/stephan-saalfeld.webp" alt="" width="560" height="560" loading="lazy">
+            <span class="person-name">Stephan Saalfeld</span>
+            <span class="person-title">Head of AI@HHMI and Senior Group Leader</span>
+          </button></div>
+          <div class="lcell"><button class="person" type="button" aria-haspopup="dialog" data-leader="3" tabindex="-1">
+            <img src="assets/leadership/luke-lavis.webp" alt="" width="560" height="560" loading="lazy">
+            <span class="person-name">Luke Lavis</span>
+            <span class="person-title">Head of Tools@HHMI and Senior Group Leader</span>
+          </button></div>
+          <div class="lcell"><button class="person" type="button" aria-haspopup="dialog" data-leader="4" tabindex="-1">
+            <img src="assets/leadership/ann-hermundstad.webp" alt="" width="560" height="560" loading="lazy">
+            <span class="person-name">Ann Hermundstad</span>
+            <span class="person-title">Head of Theory@HHMI and Group Leader</span>
+          </button></div>
+          <div class="lcell"><button class="person" type="button" aria-haspopup="dialog" data-leader="5" tabindex="-1">
+            <img src="assets/leadership/reed-george.webp" alt="" width="560" height="560" loading="lazy">
+            <span class="person-name">Reed George</span>
+            <span class="person-title">Managing Director, Janelia Scientific Operations</span>
+          </button></div>
+          <div class="lcell"><button class="person" type="button" aria-haspopup="dialog" data-leader="6" tabindex="-1">
+            <img src="assets/leadership/wyatt-korff.webp" alt="" width="560" height="560" loading="lazy">
+            <span class="person-name">Wyatt Korff</span>
+            <span class="person-title">Senior Director, Project Teams</span>
+          </button></div>
+          <div class="lcell"><button class="person" type="button" aria-haspopup="dialog" data-leader="7" tabindex="-1">
+            <img src="assets/leadership/zarixia-zavala-ruiz.webp" alt="" width="560" height="560" loading="lazy">
+            <span class="person-name">Zarixia Zavala-Ruiz</span>
+            <span class="person-title">Senior Director, Scientific Programs &amp; Training</span>
+          </button></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <dialog class="lmodal" aria-labelledby="lmName" tabindex="-1">
+    <div class="deco lm-band" aria-hidden="true"><div></div><div></div><div></div><div></div></div>
+    <div class="lm-bar">
+      <button class="lm-close" type="button" aria-label="Close">
+        <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M3 3l14 14M17 3L3 17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </button>
+      <button class="lm-close lm-copy" type="button" aria-label="Copy link to full profile">
+        <svg class="lm-copy-link" width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M8.5 11.5a3.5 3.5 0 0 0 5 0l2.5-2.5a3.5 3.5 0 0 0-5-5l-1 1M11.5 8.5a3.5 3.5 0 0 0-5 0L4 11a3.5 3.5 0 0 0 5 5l1-1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <svg class="lm-copy-done" width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 10.5l4 4 8-9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <span class="visually-hidden lm-copy-status" aria-live="polite"></span>
+      <a class="lm-close lm-ext" href="#" target="_blank" rel="noopener" aria-label="Open full profile in a new window">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M11 3h6v6M17 3l-8 8M14 11v5a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
+    <div class="lm-body"></div>
+    <div class="deco lm-band" aria-hidden="true"><div></div><div></div><div></div><div></div></div>
+  </dialog>
+
+  <section class="hs" aria-labelledby="hsTitle">
+    <div class="container">
+      <h2 class="hs-title-main" id="hsTitle">Highlighted Stories</h2>
+    </div>
+    <div class="hs-viewport" id="hsViewport">
+      <div class="hs-track">
+        <article class="hs-card">
+          <a class="hs-link" href="https://www.hhmi.org/news/wholistic-whole-organism-cellular-imaging-zebrafish" target="_blank" rel="noopener">
+            <img class="hs-img" src="assets/stories/thumb-wholistic.webp" alt="" width="1000" height="667" loading="lazy" draggable="false">
+            <h3 class="hs-title">A ‘WHOLISTIC’ View of Cellular Communication Across an Entire Animal</h3>
+            <time class="hs-date" datetime="2026-09-10">September 10, 2026</time>
+          </a>
+        </article>
+        <article class="hs-card">
+          <a class="hs-link" href="https://www.hhmi.org/news/scientists-complete-full-map-fruit-fly-brain-connectome" target="_blank" rel="noopener">
+            <img class="hs-img" src="assets/stories/thumb-connectome.webp" alt="" width="1000" height="667" loading="lazy" draggable="false">
+            <h3 class="hs-title">Completing the Connectome: How Pursuing a Map of the Fly Brain Rewired Neuroscience</h3>
+            <time class="hs-date" datetime="2026-09-03">September 3, 2026</time>
+          </a>
+        </article>
+        <article class="hs-card">
+          <a class="hs-link" href="https://www.hhmi.org/news/how-one-postdocs-problem-solving-changing-way-scientists-work" target="_blank" rel="noopener">
+            <img class="hs-img" src="assets/stories/thumb-postdoc.webp" alt="" width="1000" height="667" loading="lazy" draggable="false">
+            <h3 class="hs-title">How One Postdoc’s Problem Solving is Changing the Way Scientists Work</h3>
+            <time class="hs-date" datetime="2026-08-27">August 27, 2026</time>
+          </a>
+        </article>
+        <article class="hs-card">
+          <a class="hs-link" href="https://www.hhmi.org/news/meet-ann-hermundstad-leader-janelias-newest-research-area-theory" target="_blank" rel="noopener">
+            <img class="hs-img" src="assets/stories/thumb-hermundstad.webp" alt="" width="1000" height="667" loading="lazy" draggable="false">
+            <h3 class="hs-title">Meet Ann Hermundstad, Leader of HHMI Janelia’s Newest Initiative, Theory@HHMI</h3>
+            <time class="hs-date" datetime="2026-08-10">August 10, 2026</time>
+          </a>
+        </article>
+        <article class="hs-card">
+          <a class="hs-link" href="https://www.hhmi.org/news/janelias-two-big-bets-decoding-brain-and-reinventing-how-science-done" target="_blank" rel="noopener">
+            <img class="hs-img" src="assets/stories/thumb-two-big-bets.webp" alt="" width="1000" height="667" loading="lazy" draggable="false">
+            <h3 class="hs-title">Janelia’s Two Big Bets: Decoding the Brain and Reinventing How Science is Done</h3>
+            <time class="hs-date" datetime="2026-06-16">June 16, 2026</time>
+          </a>
+        </article>
+        <article class="hs-card">
+          <a class="hs-link" href="https://www.hhmi.org/news/bigger-rewards-speed-up-learning-dopamine-study" target="_blank" rel="noopener">
+            <img class="hs-img" src="assets/stories/thumb-bigger-reward.webp" alt="" width="1000" height="667" loading="lazy" draggable="false">
+            <h3 class="hs-title">The Bigger the Reward, the Faster We Learn</h3>
+            <time class="hs-date" datetime="2026-05-21">May 21, 2026</time>
+          </a>
+        </article>
+        <article class="hs-card">
+          <a class="hs-link" href="https://www.hhmi.org/news/ai-protein-design-fluorescent-imaging-probes-novotag" target="_blank" rel="noopener">
+            <img class="hs-img" src="assets/stories/thumb-novotag.webp" alt="" width="1000" height="667" loading="lazy" draggable="false">
+            <h3 class="hs-title">AI@HHMI: Lighting Up Life Inside Cells With AI-Designed Proteins</h3>
+            <time class="hs-date" datetime="2026-05-13">May 13, 2026</time>
+          </a>
+        </article>
+        <article class="hs-card">
+          <a class="hs-link" href="https://www.hhmi.org/news/blood-brain-barrier-proteins-drug-delivery" target="_blank" rel="noopener">
+            <img class="hs-img" src="assets/stories/thumb-bouncer.webp" alt="" width="1000" height="667" loading="lazy" draggable="false">
+            <h3 class="hs-title">In or Out? Researchers Uncover New Controls on the Brain’s ‘Bouncer’</h3>
+            <time class="hs-date" datetime="2026-04-09">April 9, 2026</time>
+          </a>
+        </article>
+        <article class="hs-card">
+          <a class="hs-link" href="https://www.hhmi.org/news/how-ai-is-advancing-cryo-electron-tomography" target="_blank" rel="noopener">
+            <img class="hs-img" src="assets/stories/thumb-cryo-et.webp" alt="" width="1000" height="667" loading="lazy" draggable="false">
+            <h3 class="hs-title">AI@HHMI: AI Takes Imaging to the Molecular Level</h3>
+            <time class="hs-date" datetime="2026-04-02">April 2, 2026</time>
+          </a>
+        </article>
+        <article class="hs-card">
+          <a class="hs-link" href="https://www.hhmi.org/news/david-clapham-ion-channels-life-in-science" target="_blank" rel="noopener">
+            <img class="hs-img" src="assets/stories/thumb-clapham.webp" alt="" width="1000" height="667" loading="lazy" draggable="false">
+            <h3 class="hs-title">David Clapham: A Life in Science Chasing Ion Channels</h3>
+            <time class="hs-date" datetime="2026-02">February 2026</time>
+          </a>
+        </article>
+        <article class="hs-card">
+          <a class="hs-link" href="https://www.hhmi.org/news/ai-hhmi-accelerates-biosensor-development" target="_blank" rel="noopener">
+            <img class="hs-img" src="assets/stories/thumb-biosensors.webp" alt="" width="1000" height="667" loading="lazy" draggable="false">
+            <h3 class="hs-title">AI@HHMI: Accelerating the Development of New Biological Sensors</h3>
+            <time class="hs-date" datetime="2026-01-22">January 22, 2026</time>
+          </a>
+        </article>
+      </div>
+    </div>
+    <div class="hs-dots" id="hsDots" role="group" aria-label="Choose story"></div>
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+      <filter id="hsGoo"><feGaussianBlur in="SourceGraphic" stdDeviation="5" result="b"/><feColorMatrix in="b" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 22 -9" result="g"/><feComposite in="SourceGraphic" in2="g" operator="atop"/></filter>
+    </svg>
+  </section>
+
+  <section class="nl" aria-label="Stay connected">
+    <div class="nlx" id="nlx">
+      <span class="deco ue-bar--l" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
+      <button class="nlx-label" type="button" aria-expanded="false" aria-controls="nlxPanel">Stay Connected with HHMI</button>
+      <div class="nlx-panel" id="nlxPanel">
+        <a class="nlx-join"><span>Join<br>Newsletter</span><svg class="nlx-arrow" viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        <span class="nlx-rule" aria-hidden="true"></span>
+        <div class="nlx-social">
+          <p class="nlx-h">Stay Social</p>
+          <ul class="nlx-icons"><li><a class="nlx-ic" href="https://bsky.app/profile/hhmi-science.bsky.social" target="_blank" rel="noopener" aria-label="HHMI on Bluesky (opens in a new tab)"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M5.202 2.857C7.954 4.922 10.913 9.11 12 11.358c1.087-2.247 4.046-6.436 6.798-8.501C20.783 1.366 24 .213 24 3.883c0 .732-.42 6.156-.667 7.037-.856 3.061-3.978 3.842-6.755 3.37 4.854.826 6.089 3.562 3.422 6.299-5.065 5.196-7.28-1.304-7.847-2.97-.104-.305-.152-.448-.153-.327 0-.121-.05.022-.153.327-.568 1.666-2.782 8.166-7.847 2.97-2.667-2.737-1.432-5.473 3.422-6.3-2.777.473-5.899-.308-6.755-3.369C.42 10.04 0 4.615 0 3.883c0-3.67 3.217-2.517 5.202-1.026"/></svg></a></li><li><a class="nlx-ic" href="https://www.instagram.com/hhmi_science" target="_blank" rel="noopener" aria-label="HHMI on Instagram (opens in a new tab)"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7.0301.084c-1.2768.0602-2.1487.264-2.911.5634-.7888.3075-1.4575.72-2.1228 1.3877-.6652.6677-1.075 1.3368-1.3802 2.127-.2954.7638-.4956 1.6365-.552 2.914-.0564 1.2775-.0689 1.6882-.0626 4.947.0062 3.2586.0206 3.6671.0825 4.9473.061 1.2765.264 2.1482.5635 2.9107.308.7889.72 1.4573 1.388 2.1228.6679.6655 1.3365 1.0743 2.1285 1.38.7632.295 1.6361.4961 2.9134.552 1.2773.056 1.6884.069 4.9462.0627 3.2578-.0062 3.668-.0207 4.9478-.0814 1.28-.0607 2.147-.2652 2.9098-.5633.7889-.3086 1.4578-.72 2.1228-1.3881.665-.6682 1.0745-1.3378 1.3795-2.1284.2957-.7632.4966-1.636.552-2.9124.056-1.2809.0692-1.6898.063-4.948-.0063-3.2583-.021-3.6668-.0817-4.9465-.0607-1.2797-.264-2.1487-.5633-2.9117-.3084-.7889-.72-1.4568-1.3876-2.1228C21.2982 1.33 20.628.9208 19.8378.6165 19.074.321 18.2017.1197 16.9244.0645 15.6471.0093 15.236-.005 11.977.0014 8.718.0076 8.31.0215 7.0301.0839m.1402 21.6932c-1.17-.0509-1.8053-.2453-2.2287-.408-.5606-.216-.96-.4771-1.3819-.895-.422-.4178-.6811-.8186-.9-1.378-.1644-.4234-.3624-1.058-.4171-2.228-.0595-1.2645-.072-1.6442-.079-4.848-.007-3.2037.0053-3.583.0607-4.848.05-1.169.2456-1.805.408-2.2282.216-.5613.4762-.96.895-1.3816.4188-.4217.8184-.6814 1.3783-.9003.423-.1651 1.0575-.3614 2.227-.4171 1.2655-.06 1.6447-.072 4.848-.079 3.2033-.007 3.5835.005 4.8495.0608 1.169.0508 1.8053.2445 2.228.408.5608.216.96.4754 1.3816.895.4217.4194.6816.8176.9005 1.3787.1653.4217.3617 1.056.4169 2.2263.0602 1.2655.0739 1.645.0796 4.848.0058 3.203-.0055 3.5834-.061 4.848-.051 1.17-.245 1.8055-.408 2.2294-.216.5604-.4763.96-.8954 1.3814-.419.4215-.8181.6811-1.3783.9-.4224.1649-1.0577.3617-2.2262.4174-1.2656.0595-1.6448.072-4.8493.079-3.2045.007-3.5825-.006-4.848-.0608M16.953 5.5864A1.44 1.44 0 1 0 18.39 4.144a1.44 1.44 0 0 0-1.437 1.4424M5.8385 12.012c.0067 3.4032 2.7706 6.1557 6.173 6.1493 3.4026-.0065 6.157-2.7701 6.1506-6.1733-.0065-3.4032-2.771-6.1565-6.174-6.1498-3.403.0067-6.156 2.771-6.1496 6.1738M8 12.0077a4 4 0 1 1 4.008 3.9921A3.9996 3.9996 0 0 1 8 12.0077"/></svg></a></li><li><a class="nlx-ic" href="https://www.linkedin.com/company/howard-hughes-medical-institute" target="_blank" rel="noopener" aria-label="HHMI on LinkedIn (opens in a new tab)"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a></li><li><a class="nlx-ic" href="https://x.com/hhmi_science" target="_blank" rel="noopener" aria-label="HHMI on X (opens in a new tab)"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M14.234 10.162 22.977 0h-2.072l-7.591 8.824L7.251 0H.258l9.168 13.343L.258 24H2.33l8.016-9.318L16.749 24h6.993zm-2.837 3.299-.929-1.329L3.076 1.56h3.182l5.965 8.532.929 1.329 7.754 11.09h-3.182z"/></svg></a></li><li><a class="nlx-ic" href="https://www.facebook.com/HowardHughesMed" target="_blank" rel="noopener" aria-label="HHMI on Facebook (opens in a new tab)"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M9.101 23.691v-7.98H6.627v-3.667h2.474v-1.58c0-4.085 1.848-5.978 5.858-5.978.401 0 .955.042 1.468.103a8.68 8.68 0 0 1 1.141.195v3.325a8.623 8.623 0 0 0-.653-.036 26.805 26.805 0 0 0-.733-.009c-.707 0-1.259.096-1.675.309a1.686 1.686 0 0 0-.679.622c-.258.42-.374.995-.374 1.752v1.297h3.919l-.386 2.103-.287 1.564h-3.246v8.245C19.396 23.238 24 18.179 24 12.044c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.628 3.874 10.35 9.101 11.647Z"/></svg></a></li><li><a class="nlx-ic" href="https://www.youtube.com/c/HHMI" target="_blank" rel="noopener" aria-label="HHMI on YouTube (opens in a new tab)"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></a></li></ul>
+        </div>
+      </div>
+      <span class="deco ue-bar--r" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
+    </div>
+  </section>
+
+  <footer class="mfoot" id="mfoot"><div class="in">
+    <nav class="mf-box" aria-label="Footer">
+      <div class="mf-cols" id="mfcols">
+      <div class="mf-col"><h3>Janelia Research Campus</h3><ul><li><a><span class="t">Overview</span></a></li><li><a><span class="t">Biology</span></a></li><li><a><span class="t">AI@HHMI</span></a></li><li><a><span class="t">Theory@HHMI</span></a></li><li><a><span class="t">Tools@HHMI</span></a></li><li><a><span class="t">Senior Leadership</span></a></li><li><a><span class="t">20th Anniversary</span></a></li><li><a><span class="t">Group Leaders</span></a></li><li><a><span class="t">Leader Labs</span></a></li><li><a><span class="t">Project &amp; Support Teams</span></a></li><li><a><span class="t">Careers &amp; Opportunities</span></a></li><li><a><span class="t">Tools and Resources</span></a></li></ul></div>
+      <div class="mf-col"><h3>Inside HHMI</h3><ul><li><a><span class="t">About</span></a></li><li><a><span class="t">HHMI Senior Leadership</span></a></li><li><a><span class="t">HHMI Board of Trustees</span></a></li><li><a><span class="t">Medical Advisory Board</span></a></li><li><a><span class="t">Scientific Review Board</span></a></li></ul></div>
+      <div class="mf-col"><h3>Opportunities for Scientists</h3><ul><li class="sub">Science Programs</li><li><a class="mf-pair"><span class="t">Mid-Career &amp; Senior Faculty</span><span class="t">HHMI Investigator Program</span></a></li><li><a class="mf-pair"><span class="t">Early Career Faculty</span><span class="t">Freeman Hrabowski Scholars</span></a></li><li><a class="mf-pair"><span class="t">Postdoc-Faculty Transition</span><span class="t">Hanna Gray Fellows</span></a></li><li><a class="mf-pair"><span class="t">PhD &amp; Postdoc Transition</span><span class="t">Gilliam Fellows Program</span></a></li></ul></div>
+      <div class="mf-col"><h3>For Educators &amp; Students</h3><ul><li class="sub">Educators</li><li><a><span class="t">BioInteractive</span></a></li><li><a><span class="t">Science Education Alliance (SEA)</span></a></li><li><a><span class="t">Success in Science</span></a></li><li class="sub">Students</li><li><a><span class="t">Cech Fellows Program</span></a></li><li><a><span class="t">Undergraduate Science Scholars Program</span></a></li></ul></div>
+      <div class="mf-col"><h3>Our Scientists</h3><ul><li class="sub">Program Scientists</li><li><a class="mf-pair"><span class="t">Mid-Career &amp; Senior Faculty</span><span class="t">HHMI Investigator Program</span></a></li><li><a class="mf-pair"><span class="t">Early Career Faculty</span><span class="t">Freeman Hrabowski Scholars</span></a></li><li><a class="mf-pair"><span class="t">Postdoc-Faculty Transition</span><span class="t">Hanna Gray Fellows</span></a></li><li><a class="mf-pair"><span class="t">PhD &amp; Postdoc Transition</span><span class="t">Gilliam Fellows Program</span></a></li></ul></div>
+
+      </div>
+      <div class="mf-top"><a class="totop" href="#" id="totop" aria-label="Back to top"><svg viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
+    </nav>
+    <div class="mf-box mf-box--links">
+      <div class="mf-half">
+        <ul class="mf-legal"><li><a href="https://www.hhmi.org/about/doing-business-with-hhmi">Doing Business with HHMI</a></li><li><a href="https://www.hhmi.org/about/for-host-institutions">For Host Institutions</a></li><li><a href="https://www.hhmi.org/news/press-room">Press Room</a></li><li><a href="https://www.hhmi.org/about/policies">Policies</a></li><li><a href="https://www.hhmi.org/careers">Careers</a></li><li><a href="https://www.hhmi.org/contact-us">Contact Us</a></li><li><a href="https://www.hhmi.org/privacy-policy">Privacy Policy &amp; Cookie Notice</a></li><li><a href="https://www.hhmi.org/terms-of-use">Terms of Use</a></li></ul>
+      </div>
+      <div class="mf-half mf-half--copy"><p class="mf-copy">© Howard Hughes Medical Institute 2026</p></div>
+    </div>
+  </div></footer>
+</main>
+<div class="mf-reveal" id="mfReveal" aria-hidden="true"></div>
+<div class="mf-stage"><svg id="mfLogo" hidden width="113" height="34" viewBox="0 0 128 38" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><g fill="currentColor" fill-rule="evenodd"><path d="M0,0 L10.6326783,0 L10.6326783,13.3585568 L10.7405466,13.3585568 C12.5660116,11.2287875 14.9303817,9.68631694 19.4398916,9.68631694 C24.4354642,9.68631694 29,12.719323 29,19.0532334 L29,38 L18.3673217,38 L18.3673217,23.5222432 C18.3673217,20.3299697 17.9908742,18.0954648 14.8753558,18.0954648 C13.0498908,18.0954648 10.6326783,18.9991344 10.6326783,23.4175076 L10.6326783,38 L0,38 L0,0"/><path d="M33,0 L43.6324017,0 L43.6324017,13.3585568 L43.7402717,13.3585568 C45.5657641,11.2287875 47.9301699,9.68631694 52.4419312,9.68631694 C57.4353955,9.68631694 62,12.719323 62,19.0532334 L62,38 L51.3671616,38 L51.3671616,23.5222432 C51.3671616,20.3299697 50.9907084,18.0954648 47.8751431,18.0954648 C46.0500873,18.0954648 43.6324017,18.9991344 43.6324017,23.4175076 L43.6324017,38 L33,38 L33,0"/><path d="M66,10.6843569 L76.2404845,10.6843569 L76.2404845,14.3158571 L76.3481689,14.3158571 C78.4913943,11.1568585 81.6011638,10 85.4612366,10 C88.4637577,10 91.6794677,11.5257864 92.9673213,14.2619302 C93.3958791,13.9469292 95.5391046,10 102.456195,10 C109.586474,10 112,14.8422855 112,19.2617162 L112,38 L101.38371,38 L101.38371,23.2103574 C101.38371,20.6317141 101.115589,18.3141451 97.8998787,18.3141451 C95.2182311,18.3141451 94.3079271,20.3684999 94.3079271,23.2103574 L94.3079271,38 L83.691637,38 L83.691637,23.2103574 C83.691637,20.6317141 83.4235158,18.3141451 80.2078057,18.3141451 C77.5261582,18.3141451 76.6162901,20.3684999 76.6162901,23.2103574 L76.6162901,38 L66,38 L66,10.6843569"/><polygon points="116 38 127 38 127 10 116 10"/><path d="M127.750439,7 C127.911577,6.50960867 128,5.98823666 128,5.45015141 C128,2.43931982 125.314083,0 121.999327,0 C118.686366,0 116,2.43931982 116,5.45015141 C116,5.98823666 116.088872,6.50960867 116.250009,7 L127.750439,7"/></g></svg><canvas id="mfParticles" role="img" aria-label="HHMI"></canvas></div>
+
+<script>
+  /* Reduced motion: decorative panel videos show their still frame instead of playing */
+  if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    document.querySelectorAll('.unit-media video, .unit-figure video').forEach(function (v) { v.removeAttribute('autoplay'); v.pause(); });
+  }
+
+  /* Touch screens: a tap toggles the H; tapping anywhere else turns it back */
+  (function () {
+    var btn = document.querySelector('.explore');
+    btn.addEventListener('pointerup', function (e) {
+      if (e.pointerType !== 'mouse') btn.classList.toggle('is-h');
+    });
+    document.addEventListener('pointerdown', function (e) {
+      if (!btn.contains(e.target)) btn.classList.remove('is-h');
+    });
+  })();
+
+(function () {
+  var hero  = document.getElementById('hero');
+  var frame = document.getElementById('heroFrame');
+  var video = document.getElementById('heroVideo');
+  var watch = document.getElementById('heroWatch');
+  var UNMASK = 300, TOP = 72, RADIUS = 6;
+  var ticking = false;
+  var watchT = 0, watchFrom = 0, watchTo = 0, watchStart = 0, WATCH_MS = 600;
+
+  // Animate the Watch full-bleed amount (0 = inset, 1 = full screen).
+  function animateWatch(to) {
+    watchFrom = watchT; watchTo = to; watchStart = performance.now();
+    requestAnimationFrame(function step(now) {
+      var p = Math.min((now - watchStart) / WATCH_MS, 1);
+      var e = p < .5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2;   // ease in-out
+      watchT = watchFrom + (watchTo - watchFrom) * e;
+      layout();
+      if (p < 1 && watchTo === to) requestAnimationFrame(step);
+    });
+  }
+
+  function lerp(a, b, t) { return a + (b - a) * t; }
+
+  // Scroll-linked unmask: inset 16:9 box -> full screen over the first 80px.
+  function layout() {
+    ticking = false;
+    var vw = document.documentElement.clientWidth;
+    var vh = hero.querySelector('.hero-stage').clientHeight;
+    var share = vw < 576 ? 0.92 : vw < 992 ? 0.80 : 0.72;   // phone / tablet / desktop
+    var ratio = vw < 576 ? 5 / 4 : 9 / 16;  // height / width: phones 4:5 portrait, else 16:9
+    var w0 = vw * share, h0 = w0 * ratio;
+    var maxH = vh - TOP - 24;               // keep the inset box on screen
+    if (h0 > maxH) { h0 = maxH; w0 = h0 / ratio; }
+    var x0 = (vw - w0) / 2;
+    // Vertically centred, never under the header; phones keep it near the top.
+    var y0 = vw < 576 ? TOP : Math.max(TOP, (vh - h0) / 2);
+    var t = Math.min(Math.max(window.scrollY / UNMASK, 0), 1);
+    t = t * t * (3 - 2 * t);                // smoothstep easing
+    t = Math.max(t, watchT);                // Watch can take it full bleed too
+    frame.style.left   = lerp(x0, 0, t) + 'px';
+    frame.style.top    = lerp(y0, 0, t) + 'px';
+    frame.style.width  = lerp(w0, vw, t) + 'px';
+    frame.style.height = lerp(h0, vh, t) + 'px';
+    frame.style.borderRadius = lerp(RADIUS, 0, t) + 'px';
+  }
+  function request() { if (!ticking) { ticking = true; requestAnimationFrame(layout); } }
+  window.addEventListener('scroll', request, { passive: true });
+  window.addEventListener('resize', request);
+  layout();
+
+  // Back to the dimmed, muted loop.
+  function reset() {
+    if (!hero.classList.contains('is-watching')) return;
+    hero.classList.remove('is-watching');
+    animateWatch(0);
+    video.muted = true;
+    video.loop = true;
+    video.play().catch(function () {});
+  }
+
+  // Watch: restart from the beginning, unmuted, full brightness, play once.
+  // While playing, the same button reads Stop and returns to the dimmed loop.
+  watch.addEventListener('click', function () {
+    if (hero.classList.contains('is-watching')) { reset(); return; }
+    hero.classList.add('is-watching');
+    animateWatch(1);
+    video.loop = false;
+    video.currentTime = 0;
+    video.muted = false;
+    video.play().catch(function () { reset(); });
+  });
+  video.addEventListener('ended', reset);
+
+  // Scrolling the hero mostly out of view also returns it to the dimmed loop.
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) { if (e.intersectionRatio < 0.4) reset(); });
+    }, { threshold: [0, 0.4] }).observe(hero);
+  }
+})();
+
+// Units tabs: each tab shows its own panel; arrow keys, Home and End move between tabs.
+(function () {
+  var tabs = Array.prototype.slice.call(document.querySelectorAll('.units-tab'));
+  function select(tab) {
+    tabs.forEach(function (t) {
+      var on = t === tab;
+      t.setAttribute('aria-selected', on);
+      t.tabIndex = on ? 0 : -1;
+      var panel = document.getElementById(t.getAttribute('aria-controls'));
+      panel.hidden = !on;
+      // Play the shown panel's videos, pause the hidden ones (unless reduced motion)
+      panel.querySelectorAll('video').forEach(function (v) {
+        if (on && !reduceMotion) v.play().catch(function () {}); else v.pause();
+      });
+    });
+  }
+  var reduceMotion = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  tabs.forEach(function (tab, i) {
+    tab.addEventListener('click', function () { select(tab); });
+    tab.addEventListener('keydown', function (e) {
+      var n = { ArrowRight: i + 1, ArrowLeft: i - 1, Home: 0, End: tabs.length - 1 }[e.key];
+      if (n === undefined) return;
+      e.preventDefault();
+      var next = tabs[(n + tabs.length) % tabs.length];
+      select(next); next.focus();
+    });
+  });
+})();
+
+// CTA hover: reassign the four .deco colours to the squares in a random
+// order every 0.8s (always a new order); restore the original on leave.
+// DECO_STEP sets the speed for every CTA on the page.
+(function () {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var DECO_STEP = 800;   // ms between colour changes
+  function shuffle(a) {
+    for (var i = a.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1)), t = a[i]; a[i] = a[j]; a[j] = t;
+    }
+    return a;
+  }
+  // Also the "Explore" buttons, whose two side bars shuffle independently.
+  document.querySelectorAll('.cta, .unit-explore, .nlx').forEach(function (cta) {
+    var decos = Array.prototype.slice.call(cta.querySelectorAll('.deco')).map(function (d) {
+      return { el: d, cells: Array.prototype.slice.call(d.children), last: '' };
+    }).filter(function (d) { return d.cells.length === 4; });
+    if (!decos.length) return;
+    var timer = null;
+    function step() {
+      decos.forEach(function (d) {
+        var cs = getComputedStyle(d.el);
+        var colours = [1, 2, 3, 4].map(function (n) { return cs.getPropertyValue('--deco-' + n).trim(); });
+        var order;
+        do { order = shuffle(colours.slice()); } while (order.join() === d.last || order.join() === colours.join());
+        d.last = order.join();
+        d.cells.forEach(function (c, i) { c.style.backgroundColor = order[i]; });
+      });
+    }
+    function start() { if (!timer) { step(); timer = setInterval(step, DECO_STEP); } }
+    function stop() {
+      clearInterval(timer); timer = null;
+      decos.forEach(function (d) { d.last = ''; d.cells.forEach(function (c) { c.style.backgroundColor = ''; }); });
+    }
+    if (cta.classList.contains('nlx')) {   // Stay Connected: shuffles while its panel is open (click to open)
+      cta.addEventListener('deco:start', start);
+      cta.addEventListener('deco:stop', stop);
+      return;
+    }
+    cta.addEventListener('mouseenter', start);
+    cta.addEventListener('mouseleave', stop);
+    cta.addEventListener('focus', function () { if (cta.matches(':focus-visible')) start(); });
+    cta.addEventListener('blur', stop);
+  });
+})();
+
+// Video Grid and Schema (from studies/grid.html): videos play only while on
+// screen; the grid pins for 150px of scrolling while the facts fade in, then unlocks.
+(function () {
+  var band = document.querySelector('.vs');
+  if (!band) return;
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var videos = band.querySelectorAll('.vcell video');
+  videos.forEach(function (v) { if (reduce) { v.removeAttribute('autoplay'); v.pause(); v.controls = true; } });
+  if (!reduce && 'IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) { var p = e.target.play(); if (p) p.catch(function () {}); }
+        else e.target.pause();
+      });
+    }, { threshold: 0.1 });
+    videos.forEach(function (v) { io.observe(v); });
+  }
+  function countUp(grid) {
+    var figs = grid.querySelectorAll('[data-count]');
+    if (reduce) return;
+    // data-prefix / data-suffix stay fixed around the number; data-commas adds thousands separators
+    function show(el, n) {
+      var num = el.hasAttribute('data-commas') ? n.toLocaleString('en-US') : String(n);
+      el.textContent = (el.dataset.prefix || '') + num + (el.dataset.suffix || '');
+    }
+    var start = performance.now(), dur = 1000;
+    figs.forEach(function (el) { show(el, 0); });
+    (function tick(now) {
+      var t = Math.min(1, (now - start) / dur), e = 1 - Math.pow(1 - t, 3);
+      figs.forEach(function (el) { show(el, Math.round(+el.dataset.count * e)); });
+      if (t < 1) requestAnimationFrame(tick);
+    })(start);
+  }
+  var pin = band.querySelector('.vs-pin');
+  var stage = band.querySelector('.vs-stage');
+  var grid = document.getElementById('vs-content');
+  var PIN = 150, BASE_PAD = 200, shown = false, queued = false;
+  function pinTop() { return Math.max(0, (window.innerHeight - stage.offsetHeight) / 2); }
+  function update() {
+    queued = false;
+    var p = (pinTop() - pin.getBoundingClientRect().top) / PIN;   // 0 at lock, 1 at unlock
+    p = Math.max(0, Math.min(1, p));
+    band.style.setProperty('--vs-p', p.toFixed(3));
+    var on = p > 0;
+    if (on !== shown) { shown = on; if (on) countUp(grid); }
+    grid.inert = p < 0.5;
+  }
+  function fit() {
+    band.style.setProperty('--vs-h', stage.offsetHeight + 'px');
+    var need = window.innerHeight - pinTop() - stage.offsetHeight + 16;   // room so the pin can finish
+    band.style.paddingBottom = Math.max(BASE_PAD, need) + 'px';
+    update();
+  }
+  window.addEventListener('scroll', function () { if (!queued) { queued = true; requestAnimationFrame(update); } }, { passive: true });
+  window.addEventListener('resize', fit);
+  if ('ResizeObserver' in window) new ResizeObserver(fit).observe(stage);
+  fit();
+})();
+
+// Mission / Journey: "Read More" buttons expand their extra paragraphs (and switch to "Read Less").
+document.querySelectorAll('button.mj-more').forEach(function (btn) {
+  var panel = document.getElementById(btn.getAttribute('aria-controls'));
+  panel.inert = true;                                   // hidden text is skipped while collapsed
+  btn.addEventListener('click', function () {
+    var open = btn.getAttribute('aria-expanded') !== 'true';
+    btn.setAttribute('aria-expanded', String(open));
+    panel.classList.toggle('is-open', open);
+    panel.inert = !open;
+    btn.querySelector('.mj-more-label').textContent = open ? 'Read Less' : 'Read More';
+  });
+});
+
+// Video & Grid: the video plays only while on screen (reduced motion: still frame).
+(function () {
+  var band = document.querySelector('.fwimg');
+  if (!band) return;
+  var v = band.querySelector('.fw-video');
+  if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) { v.removeAttribute('autoplay'); v.pause(); return; }
+  if (!('IntersectionObserver' in window)) return;
+  new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) { if (e.isIntersecting) { var p = v.play(); if (p) p.catch(function () {}); } else v.pause(); });
+  }, { threshold: 0 }).observe(band);
+})();
+
+// Call for Applicants drum (from studies/call-for-applicants.html), inside the HHMI frame.
+(function () {
+  var WORDS = [
+    "Technologists", "Futurists", "Engineers", "Undergraduates", "Physician Scientists",
+    "Chemists", "AI Scientists", "Biologists", "Physicists", "PhDs", "Postdocs",
+    "Data Scientists", "Optimists", "Investigators", "Scholars", "Faculty", "Creative Minds"
+  ];
+  var START_INDEX = 3;          // word centred on load ("Undergraduates")
+  var SECONDS_PER_WORD = 1.8;   // time for one word to move up one row
+  var VISIBLE_ROWS = 7;         // rows visible in the drum (odd)
+  var LINE = 1.2;               // row height as a multiple of font size
+  var MIN_SIZE = 18, MAX_SIZE = 72;
+
+  var root = document.querySelector("[data-cfa]");
+  if (!root) return;
+  var drum = root.querySelector(".cfa-drum");
+  var frame = root.closest(".hframe");
+  root.querySelector(".cfa-sr").textContent = "Looking for: " + WORDS.join(", ") + ".";
+
+  var items = [];
+  var copies = Math.max(1, Math.ceil((VISIBLE_ROWS + 3) / WORDS.length));
+  for (var c = 0; c < copies; c++) {
+    WORDS.forEach(function (w) {
+      var el = document.createElement("span");
+      el.className = "cfa-word";
+      el.textContent = w;
+      drum.appendChild(el);
+      items.push(el);
+    });
+  }
+  var row = 48;
+  var phase = START_INDEX - VISIBLE_ROWS / 2 - 0.5;
+
+  // Fit the longest word to the drum's width, and the 7 rows to the frame's height.
+  var canvas = document.createElement("canvas").getContext("2d");
+  function measure() {
+    canvas.font = '400 100px "ABC Diatype", "Helvetica Neue", Arial, sans-serif';
+    var widest = 0;
+    WORDS.forEach(function (w) {
+      var width = canvas.measureText(w).width - w.length * 2;   // letter-spacing -0.02em
+      if (width > widest) widest = width;
+    });
+    var byWidth = (drum.clientWidth * 0.97) / (widest / 100);
+    var byHeight = frame ? (frame.clientHeight - 48) / (VISIBLE_ROWS * LINE) : MAX_SIZE;
+    var size = Math.max(MIN_SIZE, Math.min(MAX_SIZE, byWidth, byHeight));
+    row = size * LINE;
+    drum.style.setProperty("--cfa-size", size.toFixed(2) + "px");
+    drum.style.setProperty("--cfa-row", row.toFixed(2) + "px");
+  }
+  // Light background: the centre word is black; neighbours ease to grey 72%,
+  // farther words lighten toward the background.
+  function colour(d) {
+    if (d <= 0.3) return "hsl(0 0% 0%)";
+    if (d < 1) {
+      var t = (d - 0.3) / 0.7, k = t * t * (3 - 2 * t);
+      return "hsl(0 0% " + (72 * k).toFixed(1) + "%)";
+    }
+    return "hsl(0 0% " + Math.min(88, 72 + (d - 1) * 5).toFixed(1) + "%)";
+  }
+  function render() {
+    var total = items.length * row, center = (row * VISIBLE_ROWS) / 2, off = phase * row;
+    for (var i = 0; i < items.length; i++) {
+      var y = (((i * row - off) % total) + total) % total - row;
+      var d = Math.abs(y + row / 2 - center) / row;
+      items[i].style.transform = "translate3d(0," + y.toFixed(2) + "px,0)";
+      items[i].style.color = colour(d);
+    }
+  }
+  var reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
+  var last = null, raf = 0, visible = false;
+  function tick(now) {
+    if (last !== null) {
+      var dt = Math.min(0.1, (now - last) / 1000);
+      phase = (phase + dt / SECONDS_PER_WORD) % items.length;
+    }
+    last = now; render();
+    raf = requestAnimationFrame(tick);
+  }
+  function start() {
+    cancelAnimationFrame(raf); last = null;
+    if (reduce.matches || !visible) { render(); return; }   // static list, middle word white
+    raf = requestAnimationFrame(tick);
+  }
+  if (reduce.addEventListener) reduce.addEventListener("change", start);
+  // Only animate while on screen.
+  if ("IntersectionObserver" in window) {
+    new IntersectionObserver(function (e) { visible = e[0].isIntersecting; start(); }).observe(root);
+  } else { visible = true; }
+  measure(); render(); start();
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { measure(); render(); });
+  if ("ResizeObserver" in window) new ResizeObserver(function () { measure(); render(); }).observe(drum);
+  else window.addEventListener("resize", function () { measure(); render(); });
+})();
+
+// Senior Leadership carousel: auto-drift + swipe / scroll / drag, endless both ways.
+(function () {
+  var vp = document.querySelector('.lead-viewport');
+  if (!vp) return;
+  var set = vp.querySelector('.lead-set');
+  var SPEED = 44;                         // px per second
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var pos = 0, last = null, hover = false, holdUntil = 0;
+  function half() { return set.offsetWidth; }   // width of one set of 8 cards
+  function wrap() {
+    var h = half();
+    if (vp.scrollLeft >= h) { vp.scrollLeft -= h; }
+    else if (vp.scrollLeft <= 0) { vp.scrollLeft += h; }
+    pos = vp.scrollLeft;
+  }
+  function touched() { holdUntil = performance.now() + 800; }    // resume 0.8s after the last interaction
+  function tick(now) {
+    if (last !== null && !hover && now > holdUntil && !reduce && !document.documentElement.classList.contains('lm-open')) {
+      pos += SPEED * Math.min(0.1, (now - last) / 1000);
+      if (pos >= half()) pos -= half();
+      vp.scrollLeft = pos;
+    }
+    last = now;
+    requestAnimationFrame(tick);
+  }
+  vp.addEventListener('scroll', function () {
+    if (Math.abs(vp.scrollLeft - pos) < 2) return;   // our own drift
+    touched(); wrap();                    // the visitor scrolled, swiped or dragged
+  }, { passive: true });
+  vp.addEventListener('mouseenter', function () { hover = true; });
+  vp.addEventListener('mouseleave', function () { hover = false; });
+  vp.addEventListener('touchstart', touched, { passive: true });
+  vp.addEventListener('touchmove', touched, { passive: true });
+  vp.addEventListener('wheel', touched, { passive: true });
+  // Mouse drag to scroll
+  var dragX = null, startLeft = 0, dragged = false;
+  vp.addEventListener('pointerdown', function (e) {
+    if (e.pointerType !== 'mouse' || e.button !== 0) return;
+    dragX = e.clientX; startLeft = vp.scrollLeft; dragged = false;
+  });
+  vp.addEventListener('pointermove', function (e) {
+    if (dragX === null) return;
+    if (!dragged && Math.abs(e.clientX - dragX) > 5) {      // a real drag, not a click
+      dragged = true; vp.classList.add('is-dragging'); vp.setPointerCapture(e.pointerId);
+    }
+    if (dragged) vp.scrollLeft = startLeft - (e.clientX - dragX);
+  });
+  // A drag must not also open a card.
+  // A click is ignored only if the press that produced it became a drag;
+  // every new press (pointerdown) starts clean.
+  vp.addEventListener('click', function (e) {
+    if (dragged) { e.preventDefault(); e.stopPropagation(); }
+  }, true);
+  function endDrag() { dragX = null; vp.classList.remove('is-dragging'); touched(); }
+  vp.addEventListener('pointerup', endDrag);
+  vp.addEventListener('pointercancel', endDrag);
+  vp.scrollLeft = 1; pos = 1;
+  requestAnimationFrame(tick);
+})();
+
+// Senior Leadership modal: each card opens a right-hand panel with that person's profile.
+(function () {
+  var dlg = document.querySelector('.lmodal');
+  if (!dlg || !dlg.showModal) return;
+  var body = dlg.querySelector('.lm-body');
+  var LEADERS = [
+    { name: 'Nelson Spruston', role: 'Vice President and Executive Director, Janelia Research Campus',
+      photo: 'assets/leadership/nelson-spruston.webp', credit: 'Credit: James Kegley / HHMI',
+      url: 'https://www.hhmi.org/about/senior-leadership/nelson-spruston',
+      bio: [
+        'Nelson Spruston became the Executive Director of HHMI’s Janelia Research Campus in August 2024.',
+        'As Executive Director of the Janelia Research Campus and Vice President, Nelson Spruston is responsible for implementing the strategic vision of HHMI’s biomedical research complex in Ashburn, Virginia. Spruston oversees integrated, highly collaborative teams of biologists, computational and data scientists, and tool-builders who are using innovative methods to pursue a wide range of scientific questions.',
+        'In 2011, Spruston came to Janelia to lead the research campus’s science and training team. In 2022, he became Janelia’s Chief of Scientific Operations and Programs. Spruston also <a href="https://www.janelia.org/lab/spruston-lab" target="_blank" rel="noopener">leads a lab at Janelia<span class="visually-hidden"> (opens in a new tab)</span></a> exploring the role of the hippocampus in learning and memory. In addition to investigating the neurobiological mechanisms of memory, Spruston is passionate about training and mentoring the next generation of scientists both within his lab and beyond.',
+        'Before joining HHMI, Spruston spent 16 years on the faculty at Northwestern University, where he was chair of the department of neurobiology and physiology. Prior to Northwestern, Spruston was a postdoctoral researcher at the Max Planck Institute for Medical Research in Heidelberg, Germany.',
+        'Spruston received a PhD in neuroscience from the Baylor College of Medicine and a BS in physiology from the University of British Columbia.'
+      ],
+      societies: ['Fellow at American Association for the Advancement of Science', 'Society for Neuroscience', 'American Physiological Society'],
+      awards: ['Martin J. and Patricia Koldyke Outstanding Teaching Professor', 'NARSAD Distinguished Investigator Award, Brain and Behavior Research Foundation', 'National Science Foundation CAREER Award', 'Klingenstein Fellowship Award in the Neurosciences'],
+      stories: [
+        { date: 'August 27, 2026', title: 'How One Postdoc’s Problem Solving is Changing the Way Scientists Work' },
+        { date: 'June 15, 2026', title: 'Janelia’s Two Big Bets: Decoding the Brain and Reinventing How Science is Done' },
+        { date: 'August 12, 2024', title: 'HHMI Invests $500 Million in AI-Driven Life Sciences Research' },
+        { date: 'October 27, 2017', title: '300 Neurons Traced in Extensive Brain Wiring Map' }
+      ] },
+    { name: 'Gerry Rubin', role: 'Head of Biology and Senior Group Leader', photo: 'assets/leadership/gerry-rubin.webp',
+      url: 'https://www.hhmi.org/research/janelia/gerald-rubin',
+      bio: [
+        'Gerald M. Rubin is Head of Biology and a Senior Group Leader at HHMI’s Janelia Research Campus, a role he took on in 2026. He was Janelia’s first director, leading the campus from 2003 until January 2020.',
+        'Rubin earned his bachelor’s degree at MIT and his PhD at the University of Cambridge in 1974, after working at the MRC Laboratory of Molecular Biology. Following postdoctoral work at Stanford, he held faculty positions at Harvard Medical School and the Carnegie Institution of Washington, and joined UC Berkeley in 1983 as the John D. MacArthur Professor. He became an HHMI Investigator in 1987 and HHMI’s Vice President for Biomedical Research in 2000.',
+        'His work spans genetics, genomics, connectomics, and developmental biology in <i>Drosophila</i>. In 1982, he and Allan Spradling developed methods for making transgenic flies; his Berkeley lab identified components of signaling pathways downstream of tyrosine kinases; and he led the public effort to sequence the <i>Drosophila</i> genome, completed in 2000 together with Celera Genomics. At Janelia, he has led work on the fly connectome, published in 2026, and on genetic tools for manipulating individual cell types.'
+      ],
+      societies: ['National Academy of Sciences', 'National Academy of Medicine', 'American Academy of Arts and Sciences', 'Royal Society (London), Foreign Member'],
+      awards: ['American Chemical Society Eli Lilly Award in Biological Chemistry', 'National Academy of Sciences U.S. Steel Foundation Award in Molecular Biology', 'Genetics Society of America Medal', 'Gruber Foundation Neuroscience Prize', 'Wiley Prize in Biomedical Sciences'],
+      stories: [
+        { date: 'June 15, 2026', title: 'Janelia’s Two Big Bets: Decoding the Brain and Reinventing How Science is Done' },
+        { date: 'January 22, 2020', title: 'Unveiling the Biggest and Most Detailed Map of the Fly Brain Yet' }
+      ] },
+    { name: 'Stephan Saalfeld', role: 'Head of AI@HHMI and Senior Group Leader', photo: 'assets/leadership/stephan-saalfeld.webp',
+      url: 'https://www.hhmi.org/research/janelia/stephan-saalfeld',
+      bio: [
+        'Stephan Saalfeld is Head of AI@HHMI and a Senior Group Leader at HHMI’s Janelia Research Campus. He was named Head of AI@HHMI in 2026.',
+        'Saalfeld earned a diploma in computer science and media at Technische Universität Dresden and a PhD in computer science at the International Max Planck Research School for Molecular Cell Biology and Bioengineering in 2013. That year he was a postdoctoral fellow with his PhD advisor, Pavel Tomančák, at the Max Planck Institute of Molecular Cell Biology and Genetics, before joining Janelia as a group leader.',
+        'His group builds scalable data-analysis methods to reveal the principles behind the structure and dynamics of complex biological systems — from tools and infrastructure for acquiring, processing, and managing data, to machine learning–based image analysis and visualization, physics-informed AI, and graph neural networks.'
+      ] },
+    { name: 'Luke Lavis', role: 'Head of Tools@HHMI and Senior Group Leader', photo: 'assets/leadership/luke-lavis.webp',
+      url: 'https://www.hhmi.org/research/janelia/luke-lavis',
+      bio: [
+        'Luke Lavis is Head of Tools@HHMI and a Senior Group Leader at HHMI’s Janelia Research Campus. He was named Head of Molecular Tools & Imaging, the forerunner of Tools@HHMI, in 2017.',
+        'After earning his bachelor’s degree at Oregon State University in 2000, Lavis worked in research and development at Molecular Probes and Molecular Devices. He then completed a PhD in Ronald Raines’s laboratory at the University of Wisconsin–Madison in 2008, developing methods to image biomolecular trafficking in living cells, and started his lab at Janelia.',
+        'His lab designs and synthesizes fluorescent dyes for advanced imaging experiments. Lavis is best known for the Janelia Fluor dyes, which are used in labs around the world.'
+      ],
+      stories: [
+        { date: 'September 4, 2017', title: 'New Fluorescent Dyes Could Advance Biological Imaging' }
+      ] },
+    { name: 'Ann Hermundstad', role: 'Head of Theory@HHMI and Group Leader', photo: 'assets/leadership/ann-hermundstad.webp',
+      url: 'https://www.hhmi.org/research/janelia/ann-hermundstad',
+      bio: [
+        'Ann Hermundstad is Head of Theory@HHMI and a Group Leader at HHMI’s Janelia Research Campus. She was named Head of Theory@HHMI in 2026.',
+        'Hermundstad earned a bachelor’s degree in engineering physics at the Colorado School of Mines and a PhD in statistical physics at the University of California, Santa Barbara. After postdoctoral work in theoretical neuroscience at the École Normale Supérieure in Paris and the University of Pennsylvania, she joined Janelia as a group leader in 2016.',
+        'Her research asks how brains help animals make sense of their surroundings and act effectively when the world is uncertain and changing. She uses theory and computation to study how neural circuits manage this efficiently and flexibly, and works closely with experimentalists to test these ideas in behaving animals.'
+      ] },
+    { name: 'Reed George', role: 'Managing Director, Janelia Scientific Operations', photo: 'assets/leadership/reed-george.webp',
+      url: 'https://www.hhmi.org/research/janelia/reed-george',
+      bio: [
+        'Reed George is Managing Director of Janelia Research Campus Scientific Operations. He oversees the operations that support the campus’s cross-disciplinary research and directs Janelia’s shared resource laboratories, including the microscopy facilities, the instrument design facility, and the molecular biology laboratory.',
+        'George joined HHMI in 2005 from the Berkeley Drosophila Genome Project, where, as a senior program manager, he ran the project’s DNA-sequencing operations and its technology development group. Before moving into the life sciences, he was a Principal Staff Engineer at Motorola.',
+        'He holds a Master of Technology Management from the University of Phoenix and a BS in mechanical engineering from the University of South Florida.'
+      ] },
+    { name: 'Wyatt Korff', role: 'Senior Director, Project Teams', photo: 'assets/leadership/wyatt-korff.webp',
+      url: 'https://www.hhmi.org/research/janelia/wyatt-korff',
+      bio: [
+        'Wyatt Korff is Senior Director of Project Teams at HHMI’s Janelia Research Campus — cross-disciplinary groups that take on large, experimentally challenging research projects. His research background spans neuroscience, biomechanics, evolution, and team science.',
+        'Korff joined HHMI in 2009 as a project scientist leading one of Janelia’s first Project Teams, following a postdoc at the California Institute of Technology. He holds a PhD in integrative biology from the University of California, Berkeley, and a BS in biology from Vassar College.'
+      ],
+      stories: [
+        { date: 'October 6, 2021', title: 'Machine Learning Helps Reveal Cells’ Inner Structures in New Detail' },
+        { date: 'October 27, 2017', title: '300 Neurons Traced in Extensive Brain Wiring Map' }
+      ] },
+    { name: 'Zarixia Zavala-Ruiz', role: 'Senior Director, Scientific Programs & Training', photo: 'assets/leadership/zarixia-zavala-ruiz.webp',
+      url: 'https://www.hhmi.org/research/janelia/zarixia-zavala-ruiz',
+      bio: [
+        'Zarixia Zavala-Ruiz is Senior Director of the Scientific Programs and Training group at HHMI’s Janelia Research Campus. She oversees Janelia’s Visiting Scientist Program, lab head competitions and appointment reviews, professional development, student programs, and conferences and seminars.',
+        'Zavala-Ruiz joined HHMI in 2011 from the University of Puerto Rico, Río Piedras, where she was a tenured assistant professor of chemistry and biochemistry and co-director of the Macromolecular X-ray Crystallography Facility. As a professor, she studied immune responses associated with breast cancer in Hispanic women.',
+        'She earned a PhD in biological chemistry from the Massachusetts Institute of Technology and a BS in chemistry from the University of Puerto Rico, Río Piedras.'
+      ] }
+  ];
+  var ext = dlg.querySelector('.lm-ext'), copyBtn = dlg.querySelector('.lm-copy'), copyStatus = dlg.querySelector('.lm-copy-status');
+  function slug(p) { return p.photo.split('/').pop().replace(/\.\w+$/, ''); }   // e.g. nelson-spruston
+  function esc(t) { return t.replace(/&/g, '&amp;').replace(/</g, '&lt;'); }
+  function list(label, items) {
+    if (!items || !items.length) return '';
+    return '<section class="lm-sec"><h3 class="lm-label">' + label + '</h3><ul>' +
+      items.map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</ul></section>';
+  }
+  function render(p) {
+    var h = '<div class="lm-head"><figure class="lm-photo m-0"><img src="' + p.photo + '" alt="' + esc(p.name) + '" width="560" height="560">' +
+      (p.credit ? '<figcaption class="lm-credit">' + esc(p.credit) + '</figcaption>' : '') + '</figure>' +
+      '<div><h2 class="lm-name" id="lmName">' + esc(p.name) + '</h2><p class="lm-role">' + esc(p.role) + '</p><div class="lm-actions"></div></div></div>' +
+      '<div class="lm-bio">' + p.bio.map(function (t) { return '<p>' + t + '</p>'; }).join('') + '</div>' +
+      '<p class="lm-media">For any media inquiries, please contact <a href="mailto:pressroom@hhmi.org">pressroom@hhmi.org</a>.</p>' +
+      list('Honorary &amp; Professional Societies', p.societies) +
+      list('Selected Awards', p.awards);
+    if (p.stories && p.stories.length) {
+      h += '<section class="lm-sec"><h3 class="lm-label">Related Stories</h3><div class="lm-stories">' +
+        p.stories.map(function (st) {
+          return '<article class="lm-story"><span class="lm-story-img" aria-hidden="true"></span>' +
+            '<span class="lm-story-date">' + esc(st.date) + '</span><span class="lm-story-title">' + esc(st.title) + '</span></article>';
+        }).join('') + '</div></section>';
+    }
+    body.innerHTML = h;
+    body.querySelector('.lm-actions').append(copyBtn, copyStatus, ext);   // copy link + open in new window, under the title
+    ext.hidden = !p.url;
+    if (p.url) ext.href = p.url;
+    copyBtn.dataset.url = location.href.split('#')[0] + '#' + slug(p);   // this modal's own link
+    copyBtn.classList.remove('is-copied');
+    var row = body.querySelector('.lm-stories');
+    if (row) dragScroll(row);
+  }
+  // Mouse drag to scroll a row sideways (touch and trackpad scroll natively).
+  function dragScroll(el) {
+    var x0 = null, left0 = 0, moved = false;
+    el.addEventListener('pointerdown', function (e) {
+      if (e.pointerType !== 'mouse' || e.button !== 0) return;
+      x0 = e.clientX; left0 = el.scrollLeft; moved = false;
+    });
+    el.addEventListener('pointermove', function (e) {
+      if (x0 === null) return;
+      if (!moved && Math.abs(e.clientX - x0) > 5) { moved = true; el.classList.add('is-dragging'); el.setPointerCapture(e.pointerId); }
+      if (moved) el.scrollLeft = left0 - (e.clientX - x0);
+    });
+    function end() {
+      if (x0 === null) return;
+      x0 = null;
+      if (moved) {                                   // let it settle onto the nearest card
+        var l = el.scrollLeft; el.classList.remove('is-dragging'); el.scrollLeft = l;
+        var max = el.scrollWidth - el.clientWidth, stops = [max];           // card edges, plus the very end
+        for (var x = 0; x < max; x += 250) stops.push(x);
+        var to = stops.reduce(function (a, b) { return Math.abs(b - l) < Math.abs(a - l) ? b : a; });
+        el.scrollTo({ left: to, behavior: reduce ? 'auto' : 'smooth' });
+      }
+    }
+    el.addEventListener('pointerup', end);
+    el.addEventListener('pointercancel', end);
+    el.addEventListener('click', function (e) { if (moved) { e.preventDefault(); e.stopPropagation(); } }, true);
+  }
+  var opener = null, reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // Copy link: puts the profile URL on the clipboard and shows a tick for 1.5s.
+  var copyTimer = 0;
+  copyBtn.addEventListener('click', function () {
+    var url = copyBtn.dataset.url;
+    function done() {
+      copyBtn.classList.add('is-copied'); copyStatus.textContent = 'Link copied';
+      clearTimeout(copyTimer);
+      copyTimer = setTimeout(function () { copyBtn.classList.remove('is-copied'); copyStatus.textContent = ''; }, 1500);
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(url).then(done, fallback);
+    } else fallback();
+    function fallback() {                          // older browsers / blocked clipboard API
+      var t = document.createElement('textarea'); t.value = url; t.setAttribute('readonly', '');
+      t.style.position = 'fixed'; t.style.opacity = '0'; dlg.appendChild(t); t.select();
+      try { document.execCommand('copy'); done(); } catch (e) {}
+      t.remove();
+    }
+  });
+  function open(i, btn) {
+    render(LEADERS[i]); opener = btn;
+    history.replaceState(null, '', '#' + slug(LEADERS[i]));       // the address bar shows this modal's link
+    document.documentElement.classList.add('lm-open');
+    dlg.showModal(); dlg.focus({ preventScroll: true }); dlg.scrollTop = 0;   // focus the panel, not the X
+    requestAnimationFrame(function () { requestAnimationFrame(function () { dlg.classList.add('is-in'); }); });
+  }
+  function close() {
+    if (!dlg.open) return;
+    dlg.classList.remove('is-in');
+    var done = function () {
+      dlg.close(); document.documentElement.classList.remove('lm-open');
+      if (/^#/.test(location.hash) && LEADERS.some(function (p) { return '#' + slug(p) === location.hash; }))
+        history.replaceState(null, '', location.pathname + location.search);
+      if (opener) (opener.closest('.lead-set--copy') ? document.querySelector('.lead-set:not(.lead-set--copy) [data-leader="' + opener.dataset.leader + '"]') : opener).focus({ preventScroll: true });
+    };
+    if (reduce) done(); else setTimeout(done, 450);
+  }
+  document.querySelectorAll('.lead .person[data-leader]').forEach(function (btn) {
+    btn.addEventListener('click', function () { open(+btn.dataset.leader, btn); });
+  });
+  dlg.querySelector('.lm-close:not(.lm-copy):not(.lm-ext)').addEventListener('click', close);
+  // Arriving with (or changing to) #slug opens that person's modal.
+  function fromHash() {
+    var h = location.hash.slice(1);
+    for (var i = 0; i < LEADERS.length; i++) {
+      if (slug(LEADERS[i]) === h) {
+        if (dlg.open) { render(LEADERS[i]); dlg.scrollTop = 0; return; }
+        document.querySelector('.lead').scrollIntoView();                 // the section sits behind the panel
+        open(i, document.querySelector('.lead-set:not(.lead-set--copy) [data-leader="' + i + '"]'));
+        return;
+      }
+    }
+  }
+  window.addEventListener('hashchange', fromHash);
+  if (document.readyState === 'complete') fromHash(); else window.addEventListener('load', fromHash);
+  dlg.addEventListener('cancel', function (e) { e.preventDefault(); close(); });         // Esc
+  dlg.addEventListener('click', function (e) {                                           // click on the dimmed page
+    var r = dlg.getBoundingClientRect();
+    if (e.clientX < r.left) close();
+  });
+})();
+
+// Desktop: the "Explore" label fades once the hero has scrolled away (icon stays).
+(function () {
+  var btn = document.querySelector('.explore'), hero = document.getElementById('hero');
+  if (!btn || !hero || !('IntersectionObserver' in window)) return;
+  new IntersectionObserver(function (e) {
+    btn.classList.toggle('is-compact', !e[0].isIntersecting);
+  }, { rootMargin: '-80px 0px 0px 0px' }).observe(hero);   // gone once the hero's bottom passes under the header
+})();
+</script>
+
+<script>
+/* Footer: columns are the sidebar menu's content (static markup above). */
+(function(){
+  document.getElementById('totop').addEventListener('click',function(e){
+    e.preventDefault();
+    window.scrollTo({top:0,behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});
+  });
+})();
+/* Particle wordmark. The page above lifts away like a curtain to uncover it; the wordmark is already in place and reacts to the pointer. */
+(function(){
+  var COLORS=['#8B8B8B','#8B8B8B','#8B8B8B','#8B8B8B','#8B8B8B']; // h, h, m, i stem, i dot (document order)
+  var PATHS=[].map.call(document.querySelectorAll('#mfLogo path, #mfLogo polygon'),function(el){
+    return new Path2D(el.tagName.toLowerCase()==='polygon'?'M'+el.getAttribute('points').trim().split(/\s+/).join(' ').replace(/(\S+ \S+) /g,'$1 L')+' Z':el.getAttribute('d'));
+  });
+  var VB_W=128,VB_H=38,FILL=.75;
+  var cv=document.getElementById('mfParticles'),ctx=cv.getContext('2d'),spacer=document.getElementById('mfReveal');
+  var reduce=matchMedia('(prefers-reduced-motion: reduce)');
+  var P=[],G=[],W=0,H=0,r=1.5,DPR=1,img=null,buf=null,R=80,lastW=-1,raf=0,visible=false;
+  var mouse={x:-1e4,y:-1e4,on:false,f:4,base:4};
+
+  function dot(){return 1}   // particle size in CSS px, all screens
+  function layout(){
+    var w=document.documentElement.clientWidth;
+    var pad=Math.max(40,Math.min(120,w*.06)),lw=w*FILL,lh=lw*VB_H/VB_W,h=Math.round(lh+pad*2);
+    document.documentElement.style.setProperty('--stage-h',h+'px');
+    if(w===lastW)return;lastW=w;W=w;H=h;
+    var dpr=Math.min(window.devicePixelRatio||1,2);
+    cv.width=Math.round(W*dpr);cv.height=Math.round(H*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);
+    DPR=dpr;img=ctx.createImageData(cv.width,cv.height);buf=new Uint32Array(img.data.buffer);
+    var d=dot(w),gap=3,s=lw/VB_W,ox=(W-lw)/2,oy=(H-lh)/2;
+    r=d/2;R=Math.max(50,W*.06);
+    var t=document.createElement('canvas').getContext('2d');
+    var groups={};P=[];
+    for(var y=gap/2;y<lh;y+=gap)for(var x=gap/2;x<lw;x+=gap){
+      for(var i=0;i<PATHS.length;i++){
+        if(t.isPointInPath(PATHS[i],x/s,y/s)){
+          var p={hx:x+ox,hy:y+oy,x:x+ox,y:y+oy,vx:0,vy:0,e:.7+Math.random()*.6};
+          (groups[COLORS[i]]=groups[COLORS[i]]||[]).push(p);P.push(p);break;
+        }
+      }
+    }
+    G=Object.keys(groups).map(function(c){return {c:c,p:groups[c]}});
+    draw();
+  }
+  function step(){
+    var moving=0,R2=R*R,m=mouse.on,k=.045;
+    mouse.f+=(mouse.base-mouse.f)*.06;
+    for(var i=0;i<P.length;i++){
+      var p=P[i],ax=(p.hx-p.x)*k*p.e,ay=(p.hy-p.y)*k*p.e;
+      if(m){var dx=p.x-mouse.x,dy=p.y-mouse.y,d2=dx*dx+dy*dy;
+        if(d2<R2&&d2>.01){var d=Math.sqrt(d2),f=(1-d/R)*mouse.f/d;ax+=dx*f;ay+=dy*f}}
+      p.vx=(p.vx+ax)*.86;p.vy=(p.vy+ay)*.86;p.x+=p.vx;p.y+=p.vy;
+      if(Math.abs(p.vx)+Math.abs(p.vy)>.03||Math.abs(p.hx-p.x)+Math.abs(p.hy-p.y)>.4)moving++;
+    }
+    return moving;
+  }
+  // Packs a #RRGGBB color into one 32-bit pixel (canvas pixels are RGBA bytes, read little-endian).
+  function px(hex){var n=parseInt(hex.slice(1),16);return (0xFF000000|((n&255)<<16)|(n&0xFF00)|(n>>16))>>>0}
+  function draw(){
+    if(r<=.75){ // 1px dots: write squares straight into the pixel buffer (much faster than drawing shapes)
+      var cw=cv.width,ch=cv.height,sz=Math.max(1,Math.round(r*2*DPR));
+      buf.fill(0);
+      for(var g=0;g<G.length;g++){
+        var a=G[g].p,c=px(G[g].c);
+        for(var i=0;i<a.length;i++){
+          var x0=Math.round((a[i].x-r)*DPR),y0=Math.round((a[i].y-r)*DPR);
+          if(x0<0||y0<0||x0+sz>cw||y0+sz>ch)continue;
+          for(var yy=0;yy<sz;yy++){var o=(y0+yy)*cw+x0;for(var xx=0;xx<sz;xx++)buf[o+xx]=c}
+        }
+      }
+      ctx.putImageData(img,0,0);
+      return;
+    }
+    ctx.clearRect(0,0,W,H);
+    for(var g=0;g<G.length;g++){
+      var a=G[g].p;ctx.fillStyle=G[g].c;ctx.beginPath();
+      for(var i=0;i<a.length;i++){var p=a[i];ctx.moveTo(p.x+r,p.y);ctx.arc(p.x,p.y,r,0,6.2832)}
+      ctx.fill();
+    }
+  }
+  function frame(){
+    raf=0;var moving=step();draw();
+    if(visible&&(moving||mouse.on||mouse.f>mouse.base+.1))raf=requestAnimationFrame(frame);
+  }
+  function kick(){if(!raf&&visible&&!reduce.matches)raf=requestAnimationFrame(frame)}
+
+  new IntersectionObserver(function(es){visible=es[es.length-1].isIntersecting;kick()},{threshold:0}).observe(spacer);
+
+  function at(e){var b=cv.getBoundingClientRect();mouse.x=e.clientX-b.left;mouse.y=e.clientY-b.top}
+  cv.addEventListener('pointermove',function(e){at(e);mouse.on=true;kick()});
+  cv.addEventListener('pointerleave',function(e){if(e.pointerType==='mouse'){mouse.on=false;mouse.x=mouse.y=-1e4}});
+  cv.addEventListener('pointerdown',function(e){at(e);mouse.on=true;mouse.f=16;kick()});   // click or tap: bigger burst
+  function lift(e){if(e.pointerType!=='mouse')setTimeout(function(){mouse.on=false},300)}
+  cv.addEventListener('pointerup',lift);cv.addEventListener('pointercancel',lift);
+
+  var rq=0;window.addEventListener('resize',function(){if(rq)return;rq=requestAnimationFrame(function(){rq=0;layout();kick()})});
+  layout();
+})();
+</script>
+<script>
+/* Highlighted Stories: one dot per page of cards (4 per view on desktop:
+   8 cards = 2 dots; phones: one per card). Dots, swipe, mouse drag. */
+(function () {
+  var vp = document.getElementById('hsViewport'), dots = document.getElementById('hsDots');
+  if (!vp) return;
+  var cards = [].slice.call(vp.querySelectorAll('.hs-card'));
+  var reduce = matchMedia('(prefers-reduced-motion: reduce)');
+  var stops = [], btns = [];
+  function pos(c) { return c.getBoundingClientRect().left - vp.getBoundingClientRect().left + vp.scrollLeft - 12; }
+  function max() { return vp.scrollWidth - vp.clientWidth; }
+  // Eased glide to a position (snap is switched off while it runs, so the
+  // browser's own snapping can't fight the animation).
+  var raf = 0;
+  function stopGlide() { if (raf) { cancelAnimationFrame(raf); raf = 0; } }
+  function go(x) {
+    x = Math.max(0, Math.min(x, max()));
+    stopGlide();
+    var from = vp.scrollLeft, d = x - from;
+    if (reduce.matches || Math.abs(d) < 1) { vp.scrollLeft = x; vp.classList.remove('is-dragging', 'is-gliding'); return; }
+    var dur = Math.min(750, 320 + Math.abs(d) * 0.35), t0 = performance.now();
+    vp.classList.remove('is-dragging'); vp.classList.add('is-gliding');
+    (function frame(now) {
+      var t = Math.min(1, (now - t0) / dur), e = 1 - Math.pow(1 - t, 3);   // ease-out cubic
+      vp.scrollLeft = from + d * e;
+      if (t < 1) raf = requestAnimationFrame(frame);
+      else { raf = 0; vp.classList.remove('is-gliding'); }
+    })(t0);
+  }
+  function build() {
+    var per = Math.max(1, Math.round((vp.clientWidth - 24) / cards[0].getBoundingClientRect().width));
+    var pages = Math.ceil(cards.length / per);
+    stops = [];
+    for (var k = 0; k < pages; k++) stops.push(Math.min(pos(cards[k * per]), max()));
+    dots.innerHTML = '';
+    goo = document.createElement('div'); goo.className = 'hs-goo'; goo.setAttribute('aria-hidden', 'true');
+    btns = stops.map(function (x, k) {
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.setAttribute('aria-label', 'Page ' + (k + 1) + ' of ' + pages);
+      b.addEventListener('click', function () { go(stops[k]); });
+      var dot = document.createElement('i'); goo.appendChild(dot);
+      b.addEventListener('mouseenter', function () { dot.classList.add('is-hover'); });
+      b.addEventListener('mouseleave', function () { dot.classList.remove('is-hover'); });
+      dots.appendChild(b);
+      return b;
+    });
+    blob = document.createElement('b'); goo.appendChild(blob);
+    dots.insertBefore(goo, dots.firstChild);
+    dots.hidden = pages < 2;
+    sync();
+  }
+  var goo = null, blob = null;
+  function sync() {
+    var cur = 0, d = 1e9, x = vp.scrollLeft;
+    stops.forEach(function (sx, k) { var e = Math.abs(sx - x); if (e < d) { d = e; cur = k; } });
+    btns.forEach(function (b, k) { b.setAttribute('aria-current', k === cur ? 'true' : 'false'); });
+    if (!blob || !btns.length) return;
+    // Position along the dots: piecewise between page stops, so the blob
+    // travels dot to dot as the cards scroll; it slims a little mid-way.
+    var f = 0;
+    for (var k = 0; k < stops.length - 1; k++) {
+      if (x >= stops[k + 1]) { f = k + 1; continue; }
+      var span = stops[k + 1] - stops[k];
+      f = k + (span > 0 ? Math.max(0, x - stops[k]) / span : 0);
+      break;
+    }
+    var i = Math.min(Math.floor(f), btns.length - 1), t = f - i;
+    var a = btns[i], c = btns[Math.min(i + 1, btns.length - 1)];
+    var ax = a.offsetLeft + a.offsetWidth / 2, cx = c.offsetLeft + c.offsetWidth / 2;
+    blob.style.setProperty('--bx', (ax + (cx - ax) * t) + 'px');
+    blob.style.setProperty('--blob', (19 - 6 * Math.sin(Math.PI * t)) + 'px');
+  }
+  vp.addEventListener('scroll', function () { requestAnimationFrame(sync); }, { passive: true });
+  var rq = 0;
+  window.addEventListener('resize', function () { if (rq) return; rq = requestAnimationFrame(function () { rq = 0; build(); }); });
+  build();
+  // Mouse drag with momentum: the track follows the pointer 1:1; on release
+  // it keeps the throw's speed and glides (ease-out) to the card nearest to
+  // where that momentum would carry it. Touch uses the native swipe + snap.
+  var down = false, x0 = 0, s0 = 0, moved = false, samples = [];
+  vp.addEventListener('pointerdown', function (e) {
+    if (e.pointerType !== 'mouse' || e.button !== 0) return;
+    stopGlide();
+    down = true; moved = false; x0 = e.clientX; s0 = vp.scrollLeft;
+    vp.classList.add('is-holding');
+    samples = [{ x: e.clientX, t: e.timeStamp }];
+  });
+  window.addEventListener('pointermove', function (e) {
+    if (!down) return;
+    var dx = e.clientX - x0;
+    if (!moved && Math.abs(dx) > 4) { moved = true; vp.classList.add('is-dragging'); }
+    if (!moved) return;
+    vp.scrollLeft = s0 - dx;
+    samples.push({ x: e.clientX, t: e.timeStamp });
+    if (samples.length > 6) samples.shift();
+  });
+  window.addEventListener('pointerup', function (e) {
+    if (!down) return; down = false;
+    vp.classList.remove('is-holding');
+    if (!moved) return;
+    // Throw speed (px/ms) over the last ~100ms of movement
+    var last = samples[samples.length - 1], first = samples[0];
+    for (var i = samples.length - 1; i >= 0; i--) { if (last.t - samples[i].t > 100) break; first = samples[i]; }
+    var v = (last.t - first.t) > 0 ? (last.x - first.x) / (last.t - first.t) : 0;
+    if (e.timeStamp - last.t > 80) v = 0;                   // held still before letting go: no throw
+    var target = vp.scrollLeft - v * 260;                    // where the momentum would carry it
+    var best = 0, d = 1e9;
+    cards.map(pos).concat(max()).forEach(function (x) { var k = Math.abs(x - target); if (k < d) { d = k; best = x; } });
+    go(best);
+  });
+  vp.addEventListener('click', function (e) { if (moved) { e.preventDefault(); e.stopPropagation(); moved = false; } }, true);
+})();
+</script>
+<script>
+/* Sidebar menu: Explore opens it instantly;
+   H button, Esc or a click on the dimmed page closes it. "Main" slides
+   the main menu in from the left. The switch turns the
+   sidebar light; the choice is remembered in this browser. */
+(function () {
+  var dlg = document.getElementById('smenu'), btn = document.querySelector('.explore');
+  if (!dlg || !btn) return;
+  var mode = dlg.querySelector('.sm-mode');
+  function setLight(on) { dlg.classList.toggle('is-light', on); mode.setAttribute('aria-checked', on ? 'true' : 'false'); }
+  try { setLight(localStorage.getItem('hhmiMenuLight') === '1'); } catch (e) {}
+  mode.addEventListener('click', function () {
+    var on = mode.getAttribute('aria-checked') !== 'true';
+    setLight(on);
+    try { localStorage.setItem('hhmiMenuLight', on ? '1' : '0'); } catch (e) {}
+  });
+  var closeBtn = dlg.querySelector('.sm-close'), top = dlg.querySelector('.sm-top');
+  // Put the close H exactly where the header's Explore icon is; centre the
+  // switch on the same line.
+  function place() {
+    var r = btn.querySelector('.explore-icon').getBoundingClientRect(), d = dlg.getBoundingClientRect();
+    closeBtn.style.left = r.left + 'px';
+    closeBtn.style.top = r.top + 'px';
+    top.style.height = (2 * (r.top + r.height / 2 - d.top)) + 'px';
+  }
+  window.addEventListener('resize', function () { if (dlg.open) place(); });
+  function open() {
+    if (dlg.open) return;
+    document.documentElement.classList.add('sm-open');   // lock first, then measure
+    dlg.showModal();
+    place();
+    btn.setAttribute('aria-expanded', 'true');
+  }
+  function close() {
+    if (!dlg.open) return;
+    dlg.close();
+    document.documentElement.classList.remove('sm-open');
+    btn.setAttribute('aria-expanded', 'false');
+    btn.classList.remove('is-h');
+    btn.focus({ preventScroll: true });
+  }
+  btn.addEventListener('click', open);
+  dlg.querySelector('.sm-close').addEventListener('click', close);
+  dlg.addEventListener('cancel', function (e) { e.preventDefault(); close(); });
+  dlg.addEventListener('click', function (e) {
+    if (e.target !== dlg) return;
+    var r = dlg.getBoundingClientRect();
+    if (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom) close();
+  });
+  // Two panels: Janelia (default) and Main. "Main" slides the main panel in
+  // from the left; "Back" (same spot) slides back. The stage
+  // takes the height of the panel showing, so News & Updates follows it.
+  var stage = dlg.querySelector('.sm-stage'), mainP = dlg.querySelector('.sm-panel--main'), jrcP = dlg.querySelector('.sm-panel--jrc');
+  var mainBtn = dlg.querySelector('.sm-main:not(.sm-back)'), backBtn = dlg.querySelector('.sm-back');
+  function fit() { stage.style.height = (dlg.classList.contains('is-main') ? mainP : jrcP).offsetHeight + 'px'; }
+  function show(main, focus) {
+    dlg.classList.toggle('is-main', main);
+    mainP.inert = !main; jrcP.inert = main;
+    mainBtn.hidden = main; backBtn.hidden = !main;
+    fit();
+    if (focus) (main ? backBtn : mainBtn).focus({ preventScroll: true });
+  }
+  mainBtn.addEventListener('click', function () { show(true, true); });
+  backBtn.addEventListener('click', function () { show(false, true); });
+  window.addEventListener('resize', function () { if (dlg.open) fit(); });
+  btn.addEventListener('click', function () { show(false, false); });   // always opens on the Janelia panel
+  [].forEach.call(dlg.querySelectorAll('.sm-row[aria-controls]'), function (row) {
+    var sub = document.getElementById(row.getAttribute('aria-controls'));
+    row.addEventListener('click', function () {
+      var on = row.getAttribute('aria-expanded') !== 'true';
+      row.setAttribute('aria-expanded', on ? 'true' : 'false');
+      sub.hidden = !on;
+      fit();
+    });
+  });
+})();
+</script>
+<script>
+/* Stay Connected: a click / tap (or Enter) opens the panel; a click or tap
+   outside, Esc, or tabbing out of it closes it. No hover opening. */
+(function () {
+  var box = document.getElementById('nlx'); if (!box) return;
+  var btn = box.querySelector('.nlx-label');
+  function set(on) {
+    if (box.classList.contains('is-open') === on) return;
+    box.classList.toggle('is-open', on);
+    btn.setAttribute('aria-expanded', on ? 'true' : 'false');
+    box.dispatchEvent(new Event(on ? 'deco:start' : 'deco:stop'));   // colour bars shuffle while open
+  }
+  btn.addEventListener('click', function () {
+    set(!box.classList.contains('is-open'));
+  });
+  box.addEventListener('focusout', function (e) { if (!box.contains(e.relatedTarget) && e.relatedTarget) set(false); });
+  document.addEventListener('pointerdown', function (e) {   // pointerdown: iOS doesn't send clicks from plain areas
+    if (box.contains(e.target)) return;
+    set(false);
+    if (box.contains(document.activeElement)) document.activeElement.blur();
+  });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && box.classList.contains('is-open')) { set(false); btn.focus(); } });
+})();
+</script>
+</body>
+</html>
