@@ -892,8 +892,9 @@
     .unit-media--stack { aspect-ratio: auto; }
     .unit-media--stack video { aspect-ratio: 16 / 9; height: auto; }
   }
-  .qa { border-top: 1px solid #5a5a5a; }
-  .qa-item { border-bottom: 1px solid #5a5a5a; }
+  .qa-lead { margin: 0 0 18px; font: 400 20px/1.25 var(--font-sans); }   /* plain line above the questions, no answer */
+  .qa-item { border-bottom: 1px solid #fff; }
+  .qa-lead + .qa-item { border-top: 1px solid #fff; }
   .qa-h { margin: 0; font: inherit; }
   .qa-q {
     display: flex; align-items: center; justify-content: space-between; gap: 24px;
@@ -1780,6 +1781,7 @@
         <div class="col-lg-6 unit-col">
           <p class="unit-desc"><span class="unit-name">Biology</span> pursues the question at the center of Janelia’s mission: How does a vertebrate brain generate behavior? Answering it means connecting molecules, cells, and neural circuits to behavior, across scales, animal models, and scientific disciplines.</p>
           <div class="qa">
+            <p class="qa-lead">How do neural circuits process information and guide behavior?</p>
             <div class="qa-item">
               <h3 class="qa-h"><button class="qa-q" type="button" aria-expanded="false" aria-controls="bioQ1"><span>What does a circuit actually compute?</span><svg viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round"/></svg></button></h3>
               <div class="mj-extra qa-a" id="bioQ1"><div><p>Knowing which neurons fire during a behavior is not the same as knowing what they compute. For each brain circuit, we want to determine the algorithm it implements, the input–output transformation it performs, and the problem it solves for the animal.</p></div></div>
