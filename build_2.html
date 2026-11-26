@@ -775,10 +775,11 @@
     border-left: 1px solid #000;
   }
   .mj-row2 .mj-more-box { border-bottom: 1px solid #000; }   /* last row has no row line below */
-  .mj-more-box svg { width: 24px; height: 25px; transform: rotate(90deg); }   /* flips instantly, no spin */
-  .mj-more[aria-expanded="true"] .mj-more-box svg { transform: rotate(-90deg); }   /* up: collapse */
+  /* Plus (the grid crosshair, as in the Biology Q&A); open = minus */
+  .mj-more-box .qa-x { width: 20px; height: 20px; overflow: visible; }
+  .mj-more-box .qa-x path { stroke: currentColor; stroke-width: 1; vector-effect: non-scaling-stroke; }
+  .mj-more[aria-expanded="true"] .qa-x-v { display: none; }
   .mj-more:hover, .mj-more:focus-visible { color: #006b2a; }   /* darker green on hover, as before */
-  .mj-more:hover .mj-more-box svg path, .mj-more:focus-visible .mj-more-box svg path { stroke: #006b2a; }
   /* Expandable extra paragraphs: height animates 0 -> auto via grid rows */
   .mj-extra { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .45s ease; }
   .mj-extra > div { overflow: hidden; }
@@ -1940,7 +1941,7 @@
               <p>Seizing the moment requires exactly what Janelia was built to provide: sustained support, shared infrastructure, interdisciplinary teams, and the time to ask the hard questions.</p>
             </div>
           </div>
-          <button class="mj-more" type="button" aria-expanded="false" aria-controls="journeyMore"><span class="mj-more-label">Read More</span><span class="visually-hidden"> about the journey</span><span class="mj-more-box" aria-hidden="true"><svg viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke="black" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round" stroke="black"/></svg></span></button>
+          <button class="mj-more" type="button" aria-expanded="false" aria-controls="journeyMore"><span class="mj-more-label">Read More</span><span class="visually-hidden"> about the journey</span><span class="mj-more-box" aria-hidden="true"><svg class="qa-x" viewBox="-10 -10 20 20" fill="none" aria-hidden="true" shape-rendering="crispEdges"><path class="qa-x-v" d="M0 -10V-2.25M0 2.25V10"/><path d="M-10 0H-2.25M2.25 0H10"/></svg></span></button>
         </div>
         <div class="col-12 col-lg-4 mj-cell mj-head mj-row2"><h3 class="mj-title">Why</h3></div>
         <div class="col-12 col-lg-8 mj-cell mj-body mj-row2">
@@ -1951,7 +1952,7 @@
               <p>Janelia’s three lead scientist roles — Principal Scientists, AI Scientists, and Group Leaders — bring complementary forms of scientific leadership and take intellectual responsibility for their work. All three feature stable internal funding and minimal administrative duties. Each spends their time doing science and working with collaborators across campus.</p>
             </div>
           </div>
-          <button class="mj-more" type="button" aria-expanded="false" aria-controls="whyMore"><span class="mj-more-label">Read More</span><span class="visually-hidden"> about why Janelia</span><span class="mj-more-box" aria-hidden="true"><svg viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke="black" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round" stroke="black"/></svg></span></button>
+          <button class="mj-more" type="button" aria-expanded="false" aria-controls="whyMore"><span class="mj-more-label">Read More</span><span class="visually-hidden"> about why Janelia</span><span class="mj-more-box" aria-hidden="true"><svg class="qa-x" viewBox="-10 -10 20 20" fill="none" aria-hidden="true" shape-rendering="crispEdges"><path class="qa-x-v" d="M0 -10V-2.25M0 2.25V10"/><path d="M-10 0H-2.25M2.25 0H10"/></svg></span></button>
         </div>
       </div>
     </div>
