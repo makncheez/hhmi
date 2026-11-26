@@ -893,7 +893,10 @@
   @media (max-width: 991.98px) { .unit-media { position: relative; } }
   /* Biology panel (Build 2): two videos stacked in the right half; the
      Explore CTA is hidden for now; Q&A list under the paragraph. */
-  #panel-biology .unit-explore { z-index: 10; }   /* centred over the two videos, above everything in the panel */
+  #panel-biology .unit-explore { z-index: 10; }
+  /* Touch: a plain 240 x 64 target (no grow), instant press feedback, no grey tap flash */
+  .unit-explore { -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+  @media (hover: none) { .unit-explore:active { background: #7DE050; } }   /* centred over the two videos, above everything in the panel */
   .unit-media--stack { display: grid; grid-template-rows: 1fr 1fr; }
   .unit-media--stack video { min-height: 0; }
   @media (max-width: 991.98px) {
