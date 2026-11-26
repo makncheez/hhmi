@@ -893,7 +893,7 @@
   @media (max-width: 991.98px) { .unit-media { position: relative; } }
   /* Biology panel (Build 2): two videos stacked in the right half; the
      Explore CTA is hidden for now; Q&A list under the paragraph. */
-  .unit-explore[hidden] { display: none; }
+  #panel-biology .unit-explore { z-index: 10; }   /* centred over the two videos, above everything in the panel */
   .unit-media--stack { display: grid; grid-template-rows: 1fr 1fr; }
   .unit-media--stack video { min-height: 0; }
   @media (max-width: 991.98px) {
@@ -1848,7 +1848,7 @@
                autoplay muted loop playsinline preload="metadata"></video>
         <video aria-hidden="true" src="assets/video/danionella_eye_crop.mp4" poster="assets/danionella_eye_crop-poster.jpg"
                autoplay muted loop playsinline preload="metadata"></video>
-        <a class="unit-explore" hidden>
+        <a class="unit-explore">
           <span class="deco ue-bar--l" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
           <span>Explore Biology</span>
           <svg viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke="black" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round" stroke="black"/></svg>
