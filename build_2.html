@@ -334,12 +334,11 @@
     color: #fff; font: 400 15px/1 var(--font-sans); letter-spacing: 0.12em; text-transform: uppercase;
     cursor: pointer; transition: color .2s ease;
   }
-  .ul-more svg { width: 13px; height: 14px; transform: rotate(90deg); transition: transform .35s ease; }
+  .ul-more svg { width: 18px; height: 19px; transform: rotate(90deg); }   /* flips instantly, no spin */
   .ul-more svg path { stroke: currentColor; }
   .ul-more[aria-expanded="true"] svg { transform: rotate(-90deg); }
   .ul-more:hover, .ul-more:focus-visible { color: #7DE050; }
   .ul-more:focus-visible { outline: 2px solid #7DE050; outline-offset: 4px; }
-  @media (prefers-reduced-motion: reduce) { .ul-more svg { transition: none; } }          /* uses the global body paragraph style */
   .units-tabs {                      /* tab labels at the heading's size; tabs scale with it (em) */
     display: grid;
     grid-auto-flow: column;
@@ -768,7 +767,7 @@
     border-left: 1px solid #000;
   }
   .mj-row2 .mj-more-box { border-bottom: 1px solid #000; }   /* last row has no row line below */
-  .mj-more-box svg { width: 24px; height: 25px; transform: rotate(90deg); transition: transform .35s ease; }
+  .mj-more-box svg { width: 24px; height: 25px; transform: rotate(90deg); }   /* flips instantly, no spin */
   .mj-more[aria-expanded="true"] .mj-more-box svg { transform: rotate(-90deg); }   /* up: collapse */
   .mj-more:hover, .mj-more:focus-visible { color: #006b2a; }   /* darker green on hover, as before */
   .mj-more:hover .mj-more-box svg path, .mj-more:focus-visible .mj-more-box svg path { stroke: #006b2a; }
@@ -780,7 +779,6 @@
   .mj-extra--cont p:first-child { margin-top: 0; }   /* continues the visible sentence's paragraph */
   @media (prefers-reduced-motion: reduce) { .mj-extra { transition: none; } }
   .mj-more:focus-visible { outline: 2px solid #006b2a; outline-offset: 4px; }
-  @media (prefers-reduced-motion: reduce) { .mj-more-box svg { transition: none; } }
   @media (max-width: 991.98px) {
     .mj-head { align-items: flex-start; text-align: left; padding-bottom: 16px; }
     .mj-head::before { content: none; }          /* heading and its text read as one block */
