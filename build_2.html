@@ -895,15 +895,16 @@
     .unit-media--stack { aspect-ratio: auto; }
     .unit-media--stack video { aspect-ratio: 16 / 9; height: auto; }
   }
-  .qa-lead { margin: 0 0 18px; font: 400 20px/1.25 var(--font-sans); }   /* plain line above the questions, no answer */
+  .qa-lead { margin: 0 0 18px; font: 400 17px/1.35 var(--font-sans); }   /* paragraph size */   /* plain line above the questions, no answer */
   .qa-item { border-bottom: 1px solid #fff; }
   .qa-lead + .qa-item { border-top: 1px solid #fff; }
-  .qa-group + .qa-group { margin-top: 48px; }   /* each group: a plain line, then its questions */
+  .qa-group + .qa-group, .qa-more .qa-group:first-child { margin-top: 48px; }
+  .qa-more-btn { margin-top: 28px; }   /* Read More: reveals the second and third groups */   /* each group: a plain line, then its questions */
   .qa-h { margin: 0; font: inherit; }
   .qa-q {
     display: flex; align-items: center; justify-content: space-between; gap: 24px;
     width: 100%; padding: 18px 0; border: 0; background: none;
-    color: #fff; font: 400 20px/1.25 var(--font-sans); text-align: left; cursor: pointer;
+    color: #fff; font: 400 17px/1.35 var(--font-sans); text-align: left; cursor: pointer;   /* paragraph size */
     transition: color .2s ease;
   }
   .qa-q svg { flex: none; width: 24px; height: 25px; transform: rotate(90deg); }   /* down; flips up when open, no spin */
@@ -1800,40 +1801,43 @@
                 <div class="mj-extra qa-a" id="bioQ3"><div><p>The brain keeps an internal sense of heading that must align with what it sees in a changing environment. We want to know which neuromodulators and plasticity rules change synapses in the fly’s internal compass, how cells and synapses implement them, and whether the process holds in vertebrates.</p></div></div>
               </div>
             </div>
-            <div class="qa-group">
-              <p class="qa-lead">How do cells and molecules process and store information?</p>
-              <div class="qa-item">
-                <h3 class="qa-h"><button class="qa-q" type="button" aria-expanded="false" aria-controls="bioQ4"><span>What changes inside a neuron when a memory forms?</span><svg viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round"/></svg></button></h3>
-                <div class="mj-extra qa-a" id="bioQ4"><div><p>We want to trace a memory from behavior to circuit to synaptic molecules. What molecular machinery changes when a memory forms, and how do these changes connect quantitatively to circuit-level learning algorithms?</p></div></div>
+            <div class="mj-extra qa-more" id="bioMore"><div>
+              <div class="qa-group">
+                <p class="qa-lead">How do cells and molecules process and store information?</p>
+                <div class="qa-item">
+                  <h3 class="qa-h"><button class="qa-q" type="button" aria-expanded="false" aria-controls="bioQ4"><span>What changes inside a neuron when a memory forms?</span><svg viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round"/></svg></button></h3>
+                  <div class="mj-extra qa-a" id="bioQ4"><div><p>We want to trace a memory from behavior to circuit to synaptic molecules. What molecular machinery changes when a memory forms, and how do these changes connect quantitatively to circuit-level learning algorithms?</p></div></div>
+                </div>
+                <div class="qa-item">
+                  <h3 class="qa-h"><button class="qa-q" type="button" aria-expanded="false" aria-controls="bioQ5"><span>What cellular and synaptic properties underlie the neural compass?</span><svg viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round"/></svg></button></h3>
+                  <div class="mj-extra qa-a" id="bioQ5"><div><p>We know what the fly’s heading circuit computes, but we don’t yet know how these circuit dynamics link to cellular properties, including ion channels, feedback loops, intracellular calcium dynamics, and synaptic structures.</p></div></div>
+                </div>
+                <div class="qa-item">
+                  <h3 class="qa-h"><button class="qa-q" type="button" aria-expanded="false" aria-controls="bioQ6"><span>How can a single experience create a memory?</span><svg viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round"/></svg></button></h3>
+                  <div class="mj-extra qa-a" id="bioQ6"><div><p>Most familiar forms of synaptic plasticity work over milliseconds and require repetition. In mammals, behavioral timescale synaptic plasticity (BTSP) allows hippocampal neurons to form place fields in a single experience, over a period of seconds. What are the molecular and signaling mechanisms driving BTSP?</p></div></div>
+                </div>
               </div>
-              <div class="qa-item">
-                <h3 class="qa-h"><button class="qa-q" type="button" aria-expanded="false" aria-controls="bioQ5"><span>What cellular and synaptic properties underlie the neural compass?</span><svg viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round"/></svg></button></h3>
-                <div class="mj-extra qa-a" id="bioQ5"><div><p>We know what the fly’s heading circuit computes, but we don’t yet know how these circuit dynamics link to cellular properties, including ion channels, feedback loops, intracellular calcium dynamics, and synaptic structures.</p></div></div>
+              <div class="qa-group">
+                <p class="qa-lead">How does a whole vertebrate brain and body generate behavior?</p>
+                <div class="qa-item">
+                  <h3 class="qa-h"><button class="qa-q" type="button" aria-expanded="false" aria-controls="bioQ7"><span>How does the brain transform sensory input into movement?</span><svg viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round"/></svg></button></h3>
+                  <div class="mj-extra qa-a" id="bioQ7"><div><p>In larval zebrafish, we can now produce single-cell-resolution recordings of neural activity during behavior. That makes it possible to observe what happens across the brain during sensorimotor events and how motor learning rewrites brain-wide activity patterns. What can we learn in larval zebrafish that can be applied to adult Danionella, a small fish that stays transparent into adulthood?</p></div></div>
+                </div>
+                <div class="qa-item">
+                  <h3 class="qa-h"><button class="qa-q" type="button" aria-expanded="false" aria-controls="bioQ8"><span>How do internal states arise from and affect whole-brain activity?</span><svg viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round"/></svg></button></h3>
+                  <div class="mj-extra qa-a" id="bioQ8"><div><p>The same animal responds differently to the same situation depending on its internal state: anger, arousal, hunger, passivity. Can we use behavioral paradigms, whole-brain recordings, and computational approaches to determine the brain basis for affective states and how they affect the brain and body?</p></div></div>
+                </div>
+                <div class="qa-item">
+                  <h3 class="qa-h"><button class="qa-q" type="button" aria-expanded="false" aria-controls="bioQ9"><span>How does a brain generate complex social behavior?</span><svg viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round"/></svg></button></h3>
+                  <div class="mj-extra qa-a" id="bioQ9"><div><p>What brain-wide activity patterns underlie a social decision, and how do environment and internal state affect it? Janelia’s 10-year goal is a mechanistic account of how a vertebrate brain generates a complex behavior. Candidate behaviors include courtship, social interaction, navigation, and other natural behaviors.</p></div></div>
+                </div>
+                <div class="qa-item">
+                  <h3 class="qa-h"><button class="qa-q" type="button" aria-expanded="false" aria-controls="bioQ10"><span>Which circuit principles and molecular mechanisms translate from fly to fish?</span><svg viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round"/></svg></button></h3>
+                  <div class="mj-extra qa-a" id="bioQ10"><div><p>What generalizes across the invertebrate–vertebrate divide? We want to determine which circuit principles and molecular mechanisms found in flies also hold in vertebrate brains, and what is uniquely vertebrate.</p></div></div>
+                </div>
               </div>
-              <div class="qa-item">
-                <h3 class="qa-h"><button class="qa-q" type="button" aria-expanded="false" aria-controls="bioQ6"><span>How can a single experience create a memory?</span><svg viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round"/></svg></button></h3>
-                <div class="mj-extra qa-a" id="bioQ6"><div><p>Most familiar forms of synaptic plasticity work over milliseconds and require repetition. In mammals, behavioral timescale synaptic plasticity (BTSP) allows hippocampal neurons to form place fields in a single experience, over a period of seconds. What are the molecular and signaling mechanisms driving BTSP?</p></div></div>
-              </div>
-            </div>
-            <div class="qa-group">
-              <p class="qa-lead">How does a whole vertebrate brain and body generate behavior?</p>
-              <div class="qa-item">
-                <h3 class="qa-h"><button class="qa-q" type="button" aria-expanded="false" aria-controls="bioQ7"><span>How does the brain transform sensory input into movement?</span><svg viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round"/></svg></button></h3>
-                <div class="mj-extra qa-a" id="bioQ7"><div><p>In larval zebrafish, we can now produce single-cell-resolution recordings of neural activity during behavior. That makes it possible to observe what happens across the brain during sensorimotor events and how motor learning rewrites brain-wide activity patterns. What can we learn in larval zebrafish that can be applied to adult Danionella, a small fish that stays transparent into adulthood?</p></div></div>
-              </div>
-              <div class="qa-item">
-                <h3 class="qa-h"><button class="qa-q" type="button" aria-expanded="false" aria-controls="bioQ8"><span>How do internal states arise from and affect whole-brain activity?</span><svg viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round"/></svg></button></h3>
-                <div class="mj-extra qa-a" id="bioQ8"><div><p>The same animal responds differently to the same situation depending on its internal state: anger, arousal, hunger, passivity. Can we use behavioral paradigms, whole-brain recordings, and computational approaches to determine the brain basis for affective states and how they affect the brain and body?</p></div></div>
-              </div>
-              <div class="qa-item">
-                <h3 class="qa-h"><button class="qa-q" type="button" aria-expanded="false" aria-controls="bioQ9"><span>How does a brain generate complex social behavior?</span><svg viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round"/></svg></button></h3>
-                <div class="mj-extra qa-a" id="bioQ9"><div><p>What brain-wide activity patterns underlie a social decision, and how do environment and internal state affect it? Janelia’s 10-year goal is a mechanistic account of how a vertebrate brain generates a complex behavior. Candidate behaviors include courtship, social interaction, navigation, and other natural behaviors.</p></div></div>
-              </div>
-              <div class="qa-item">
-                <h3 class="qa-h"><button class="qa-q" type="button" aria-expanded="false" aria-controls="bioQ10"><span>Which circuit principles and molecular mechanisms translate from fly to fish?</span><svg viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round"/></svg></button></h3>
-                <div class="mj-extra qa-a" id="bioQ10"><div><p>What generalizes across the invertebrate–vertebrate divide? We want to determine which circuit principles and molecular mechanisms found in flies also hold in vertebrate brains, and what is uniquely vertebrate.</p></div></div>
-              </div>
-            </div>
+            </div></div>
+            <button class="ul-more qa-more-btn" type="button" aria-expanded="false" aria-controls="bioMore"><span class="mj-more-label">Read More</span><span class="visually-hidden"> Biology questions</span><svg viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
           </div>
         </div>
       </div></div>
