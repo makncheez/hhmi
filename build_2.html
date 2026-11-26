@@ -882,7 +882,36 @@
      focus) grows it into a large black box with a white
      label + arrow and .deco colour bars on both sides. Touch screens keep
      the resting button; reduced motion switches without the growth. */
-  @media (max-width: 991.98px) { .unit-media { position: relative; } }   /* desktop: already absolute */
+  @media (max-width: 991.98px) { .unit-media { position: relative; } }
+  /* Biology panel (Build 2): two videos stacked in the right half; the
+     Explore CTA is hidden for now; Q&A list under the paragraph. */
+  .unit-explore[hidden] { display: none; }
+  .unit-media--stack { display: grid; grid-template-rows: 1fr 1fr; }
+  .unit-media--stack video { min-height: 0; }
+  @media (max-width: 991.98px) {
+    .unit-media--stack { aspect-ratio: auto; }
+    .unit-media--stack video { aspect-ratio: 16 / 9; height: auto; }
+  }
+  .qa { border-top: 1px solid #5a5a5a; }
+  .qa-item { border-bottom: 1px solid #5a5a5a; }
+  .qa-h { margin: 0; font: inherit; }
+  .qa-q {
+    display: flex; align-items: center; justify-content: space-between; gap: 24px;
+    width: 100%; padding: 18px 0; border: 0; background: none;
+    color: #fff; font: 400 20px/1.25 var(--font-sans); text-align: left; cursor: pointer;
+    transition: color .2s ease;
+  }
+  .qa-q svg { flex: none; width: 24px; height: 25px; transform: rotate(90deg); }   /* down; flips up when open, no spin */
+  .qa-q svg path { stroke: currentColor; }
+  .qa-q[aria-expanded="true"] svg { transform: rotate(-90deg); }
+  .qa-q:hover, .qa-q:focus-visible { color: #7DE050; }
+  .qa-q:focus-visible { outline: 2px solid #7DE050; outline-offset: 2px; }
+  .qa-a p { margin: 0; padding: 0 48px 22px 0; }   /* paragraph style, 17px / 1.35 */
+  @media (min-width: 992px) {
+    .unit-split .qa { grid-row: 2; align-self: start; margin: 0 24px 0 48px; max-width: 560px; }
+  }
+  @media (max-width: 991.98px) { .qa { margin-top: 32px; } }
+   /* desktop: already absolute */
   .unit-explore {
     position: absolute;
     top: 50%; left: 50%;
@@ -1749,17 +1778,25 @@
     <div class="units-panel unit-split" role="tabpanel" id="panel-biology" aria-labelledby="tab-biology">
       <div class="container-fluid px-0"><div class="row g-0">
         <div class="col-lg-6 unit-col">
-          <p class="unit-desc"><span class="unit-name">Biology</span> pursues the central scientific research questions at the heart of Janelia’s mission.</p>
-          <figure class="unit-figure">
-            <img src="assets/biology-research-area-work-square.jpg" width="750" height="750" loading="lazy"
-                 alt="A researcher at a microscope rig, with a brain imaging scan on the monitor.">
-          </figure>
+          <p class="unit-desc"><span class="unit-name">Biology</span> pursues the question at the center of Janelia’s mission: How does a vertebrate brain generate behavior? Answering it means connecting molecules, cells, and neural circuits to behavior, across scales, animal models, and scientific disciplines.</p>
+          <div class="qa">
+            <div class="qa-item">
+              <h3 class="qa-h"><button class="qa-q" type="button" aria-expanded="false" aria-controls="bioQ1"><span>What does a circuit actually compute?</span><svg viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round"/></svg></button></h3>
+              <div class="mj-extra qa-a" id="bioQ1"><div><p>Knowing which neurons fire during a behavior is not the same as knowing what they compute. For each brain circuit, we want to determine the algorithm it implements, the input–output transformation it performs, and the problem it solves for the animal.</p></div></div>
+            </div>
+            <div class="qa-item">
+              <h3 class="qa-h"><button class="qa-q" type="button" aria-expanded="false" aria-controls="bioQ2"><span>Which neurons contribute to behavior?</span><svg viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round"/></svg></button></h3>
+              <div class="mj-extra qa-a" id="bioQ2"><div><p>We want to determine which neurons participate in behaviorally relevant visual computations. We know a lot about how flies detect motion, but we still do not know how hundreds of different cell types in the fly visual system contribute to the detection of color, objects, looming threats, polarized light, and social cues.</p></div></div>
+            </div>
+          </div>
         </div>
       </div></div>
-      <div class="unit-media">
+      <div class="unit-media unit-media--stack">
         <video aria-hidden="true" src="assets/video/zebrafish_brain_imaging.mp4" poster="assets/zebrafish_brain_imaging-poster.jpg"
                autoplay muted loop playsinline preload="metadata"></video>
-        <a class="unit-explore">
+        <video aria-hidden="true" src="assets/video/danionella_eye_crop.mp4" poster="assets/danionella_eye_crop-poster.jpg"
+               autoplay muted loop playsinline preload="metadata"></video>
+        <a class="unit-explore" hidden>
           <span class="deco ue-bar--l" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
           <span>Explore Biology</span>
           <svg viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke="black" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round" stroke="black"/></svg>
@@ -2497,6 +2534,18 @@
   if ('ResizeObserver' in window) new ResizeObserver(fit).observe(stage);
   fit();
 })();
+
+// Biology Q&A: each question opens / closes its answer (arrow down -> up).
+document.querySelectorAll('.qa-q').forEach(function (q) {
+  var a = document.getElementById(q.getAttribute('aria-controls'));
+  a.inert = true;
+  q.addEventListener('click', function () {
+    var open = q.getAttribute('aria-expanded') !== 'true';
+    q.setAttribute('aria-expanded', String(open));
+    a.classList.toggle('is-open', open);
+    a.inert = !open;
+  });
+});
 
 // Mission / Journey: "Read More" buttons expand their extra paragraphs (and switch to "Read Less").
 document.querySelectorAll('button.mj-more, button.ul-more').forEach(function (btn) {   // also the units intro's Read More
