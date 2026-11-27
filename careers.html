@@ -387,7 +387,7 @@
   .roles { position: relative; padding: 0 0 160px; }
   .roles .roles-intro { padding: 56px 0 72px; }
   .roles .roles-title { max-width: 900px; margin-bottom: 0; }
-  @media (max-width: 991.98px) { .roles-row { row-gap: 48px; } }
+  .roles-row { row-gap: 48px; }   /* 2 x 2 (1 per row on phones), gray grid between the rows */
 
 
   /* ---------- Footer (from studies/footer.html) ----------
@@ -789,12 +789,14 @@
   </section>
 
   <section class="roles" aria-labelledby="rolesTitle">
-    <div class="container-fluid px-0">   <!-- full window width, directly under the Join Janelia box -->
+    <div class="container">
+     <div class="row">
+      <div class="col-12 col-lg-10 offset-lg-1">   <!-- same width as the Join Janelia box -->
       <div class="roles-intro">
         <h2 class="roles-title" id="rolesTitle">Janelia offers a wide range of career opportunities for scientists and professionals at many stages.</h2>
       </div>
       <div class="row g-0 roles-row">
-        <div class="col-md-6 col-lg-3">
+        <div class="col-md-6">
           <article class="role">
             <h3>Lab heads</h3>
             <ul>
@@ -802,7 +804,7 @@
             </ul>
           </article>
         </div>
-        <div class="col-md-6 col-lg-3">
+        <div class="col-md-6">
           <article class="role">
             <h3>Research and technical roles</h3>
             <ul>
@@ -810,7 +812,7 @@
             </ul>
           </article>
         </div>
-        <div class="col-md-6 col-lg-3">
+        <div class="col-md-6">
           <article class="role">
             <h3>Postdocs and training programs</h3>
             <ul>
@@ -818,7 +820,7 @@
             </ul>
           </article>
         </div>
-        <div class="col-md-6 col-lg-3">
+        <div class="col-md-6">
           <article class="role">
             <h3>Operational &amp; campus roles</h3>
             <ul>
@@ -827,6 +829,8 @@
           </article>
         </div>
       </div>
+      </div>
+     </div>
     </div>
   </section>
 </div>
