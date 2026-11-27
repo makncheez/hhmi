@@ -397,17 +397,14 @@
 
 
   /* Role cards: first two sentences, then "Read More" on the next line opens the
-     rest in place. Same control as Build 2's Biology panel (label + arrow that
-     points down, up once open), in dark ink with the light-page green hover. */
+     rest in place. Text only, styled like Build 2's Biology panel label,
+     in dark ink with the light-page green hover. */
   .ul-more {
     display: flex; align-items: center; gap: 12px;
     margin-top: 16px; padding: 0; border: 0; background: none;
     color: #000d42; font: 400 15px/1 var(--font-sans); letter-spacing: 0.12em; text-transform: uppercase;
     cursor: pointer; transition: color .2s ease;
   }
-  .ul-more svg { width: 24px; height: 25px; transform: rotate(90deg); margin-block: -5px; }
-  .ul-more svg path { stroke: currentColor; }
-  .ul-more[aria-expanded="true"] svg { transform: rotate(-90deg); }
   .ul-more:hover, .ul-more:focus-visible { color: #006b2a; }
   .ul-more:focus-visible { outline: 2px solid #006b2a; outline-offset: 4px; }
   .mj-extra { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .45s ease; }
@@ -833,7 +830,7 @@
         <ul>
           <li>Janelia’s research is led by scientists who work in different ways. Principal Scientists bring deep expertise and hands-on skill to problems central to our grand challenge: understanding how a vertebrate brain generates behavior.
             <div class="mj-extra mj-extra--cont" id="labMore"><div><p>AI Scientists lead the development of methods and systems for AI-in-the-Loop discovery, where AI is a partner in science. Group Leaders run small labs that take on big questions in biology, AI, theory, and tool building that support Janelia’s mission. Explore scientific leadership careers at Janelia.</p></div></div>
-            <button class="ul-more" type="button" aria-expanded="false" aria-controls="labMore"><span class="mj-more-label">Read More</span><span class="visually-hidden"> about Lab heads</span><svg viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+            <button class="ul-more" type="button" aria-expanded="false" aria-controls="labMore"><span class="mj-more-label">Read More</span><span class="visually-hidden"> about Lab heads</span></button>
           </li>
         </ul>
       </article>
@@ -844,7 +841,7 @@
         <ul>
           <li>Staff scientists, engineers, laboratory researchers, and specialists in imaging, computation, AI, and instrumentation work hands-on with teams across Janelia. Their roles in labs, Project Teams, and shared resources enable discovery across campus.
             <div class="mj-extra mj-extra--cont" id="techMore"><div><p>They operate cryo-electron microscopes for researchers across HHMI, write software that enables lab instruments to work together, and help transform biological sensors into tools used in labs worldwide. Their judgment and expertise shape the experiments that Janelia scientists run and the tools they build.</p></div></div>
-            <button class="ul-more" type="button" aria-expanded="false" aria-controls="techMore"><span class="mj-more-label">Read More</span><span class="visually-hidden"> about Research and technical roles</span><svg viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+            <button class="ul-more" type="button" aria-expanded="false" aria-controls="techMore"><span class="mj-more-label">Read More</span><span class="visually-hidden"> about Research and technical roles</span></button>
           </li>
         </ul>
       </article>
@@ -855,7 +852,7 @@
         <ul>
           <li>Postdocs work closely with lab heads and alongside Janelia’s shared resource and technical teams. The Theory Fellow Program offers early-career researchers an alternative to a classical training position.
             <div class="mj-extra mj-extra--cont" id="postdocMore"><div><p>Summer internships place undergraduates and local high school students in Janelia labs for hands-on research. These programs are designed to support scientific growth, exploration, and collaboration.</p></div></div>
-            <button class="ul-more" type="button" aria-expanded="false" aria-controls="postdocMore"><span class="mj-more-label">Read More</span><span class="visually-hidden"> about Postdocs and training programs</span><svg viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+            <button class="ul-more" type="button" aria-expanded="false" aria-controls="postdocMore"><span class="mj-more-label">Read More</span><span class="visually-hidden"> about Postdocs and training programs</span></button>
           </li>
         </ul>
       </article>
@@ -866,7 +863,7 @@
         <ul>
           <li>It takes a whole campus to do science at this scale. Teams focused on scientific programs and training, environmental health and safety, facilities, security, information technology, campus life, and administration keep labs running, projects on track, and people supported.
             <div class="mj-extra mj-extra--cont" id="opsMore"><div><p>Every role plays an essential part in advancing Janelia’s mission.</p></div></div>
-            <button class="ul-more" type="button" aria-expanded="false" aria-controls="opsMore"><span class="mj-more-label">Read More</span><span class="visually-hidden"> about Operational &amp; campus roles</span><svg viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+            <button class="ul-more" type="button" aria-expanded="false" aria-controls="opsMore"><span class="mj-more-label">Read More</span><span class="visually-hidden"> about Operational &amp; campus roles</span></button>
           </li>
         </ul>
       </article>
