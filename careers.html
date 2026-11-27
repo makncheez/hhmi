@@ -282,6 +282,34 @@
     .nlx-join, .nlx-h { font-size: 15px; }
   }
   @media (prefers-reduced-motion: reduce) { .nlx, .nlx .deco, .nlx-label, .nlx-panel { transition: none; } }
+  /* ---------- Join Janelia: lime box in the container, heading hangs out on the left ----------
+     Box spans the middle 10 of 12 columns. Measured from the 1282px comp:
+     heading ~46px starting 72px left of the box; copy starts at 40% of the box. */
+  .jn { position: relative; padding: 0 0 160px; }
+  .jn-box {
+    container-type: inline-size;
+    display: grid;
+    grid-template-columns: 40% 1fr;
+    align-items: center;
+    padding: 62px 44px 62px 0;
+    background: #a5f300;
+    color: #000d42;
+  }
+  .jn-title {
+    margin: 0 0 0 -7.7cqw;            /* 72px outside the box at 935px */
+    padding-right: 32px;
+    font: 400 clamp(30px, 4.9cqw, 60px)/1.18 var(--font-sans);
+    letter-spacing: -0.01em;
+  }
+  .jn-copy h3 { margin: 0 0 22px; font: 400 clamp(19px, 2.25cqw, 24px)/1.25 var(--font-sans); }
+  .jn-copy p { margin: 0 0 22px; font-size: 17px; line-height: 1.35; }
+  .jn-copy p:last-child { margin-bottom: 0; }
+  @media (max-width: 767.98px) {
+    .jn { padding-bottom: 96px; }
+    .jn-box { grid-template-columns: 1fr; padding: 40px 24px 44px; }
+    .jn-title { margin: 0 0 28px -12px; padding-right: 0; font-size: clamp(30px, 8.5cqw, 40px); }
+  }
+
   /* ---------- Footer (from studies/footer.html) ----------
      Black mega footer: one column per site section, then "Back to top".
      The page lifts away like a curtain to uncover a particle HHMI wordmark
@@ -494,20 +522,24 @@
   body.page-careers { background: #dadada; }
   .page-careers .explore { color: #111; }                 /* EXPLORE label readable on the light grid */
 
-  .ch {
+  .cgrid {                         /* gray crosshair surface shared by the hero and "Join Janelia" */
     --row: 100px;
     --col: calc((100% - 56px) / 12);
     --step: 1;
     --xhair: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' stroke='%23000' stroke-width='1' shape-rendering='crispEdges'%3E%3Csvg x='50%25' y='50%25' overflow='visible'%3E%3Cpath d='M0 -10V-2.25M0 2.25V10M-10 0H-2.25M2.25 0H10'/%3E%3C/svg%3E%3C/svg%3E");
     position: relative;
-    container-type: inline-size;
     background: #dadada;
     color: #000d42;
+    overflow: clip;
+  }
+  .ch {
+    position: relative;
+    container-type: inline-size;
     padding: max(calc(var(--bar-h) + 40px), 7.8cqw) 0 20.9cqw;
     overflow: clip;
   }
   /* Static gray crosshairs on the Bootstrap container's column lines, rows every 100px */
-  .ch::before {
+  .cgrid::before {
     content: "";
     position: absolute;
     inset: 0;
@@ -519,12 +551,12 @@
             mask-position: round(nearest, 50%, 1px) 0;
   }
   /* Same column spacing as Build 2's grid section; phones and small tablets: every 3rd line */
-  @media (min-width: 576px)  { .ch { --col: 43px; } }
-  @media (min-width: 768px)  { .ch { --col: 58px; } }
-  @media (min-width: 992px)  { .ch { --col: 78px; } }
-  @media (min-width: 1200px) { .ch { --col: 93px; } }
-  @media (min-width: 1400px) { .ch { --col: 108px; } }
-  @media (max-width: 767.98px) { .ch { --step: 3; } }
+  @media (min-width: 576px)  { .cgrid { --col: 43px; } }
+  @media (min-width: 768px)  { .cgrid { --col: 58px; } }
+  @media (min-width: 992px)  { .cgrid { --col: 78px; } }
+  @media (min-width: 1200px) { .cgrid { --col: 93px; } }
+  @media (min-width: 1400px) { .cgrid { --col: 108px; } }
+  @media (max-width: 767.98px) { .cgrid { --step: 3; } }
 
   /* The collage */
   .ch-stage {
@@ -645,6 +677,7 @@
 
 <main>
   <!-- Careers hero: grid background + photo collage (fades in on load) -->
+<div class="cgrid">
   <section class="ch" aria-labelledby="chTitle">
     <div id="careersHero">
       <div class="ch-stage">
@@ -656,6 +689,25 @@
       </div>
     </div>
   </section>
+
+  <section class="jn" aria-labelledby="jnTitle">
+    <div class="container">
+      <div class="row">
+        <div class="col-12 col-lg-10 offset-lg-1">
+          <div class="jn-box">
+            <h2 class="jn-title" id="jnTitle">Find your place in our community.</h2>
+            <div class="jn-copy">
+              <h3>Join Janelia.</h3>
+              <p>HHMI’s Janelia Research Campus in Ashburn, Virginia is a cross-disciplinary community where biologists, AI scientists, tool-builders, theorists, and more collaborate to pursue biology’s biggest questions and build the tools that make answers possible.</p>
+              <p>With internal funding, expert technical teams, and world-class facilities all on one campus, Janelia scientists have the intellectual freedom to take on big risks and the sustained support to see them through. That work takes people in many roles: scientists and engineers, postdocs and trainees, and the operational teams that keep the campus running.</p>
+              <p>Engineer sensors that show how cells interact. Generate models that create meaning from complex biological data. Design experiments that reveal how neural circuits shape behavior. Run the operations that enable discovery. Join us and make your impact.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
 
   <section class="nl" aria-label="Stay connected">
     <div class="nlx" id="nlx">
