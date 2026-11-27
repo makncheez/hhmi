@@ -970,17 +970,92 @@
 })();
 </script>
 <script>
-/* Careers hero: once the photos are decoded, they fade in and rise slightly
-   into place, one after another (timing in the CSS: .ch-stage.is-in).
-   Shown after 2.5s regardless, so they never stay hidden. */
+/* Careers hero.
+   1. Shuffle (screens 576px and wider): on every load the three small photos
+      get new spots. Rules:
+        - each sits on the aerial photo, overlapping it by at least half,
+        - each comes out of a different edge (left, right or bottom; never the
+          top), by 20-45% of its own width or height,
+        - none comes within 24px of the label,
+        - they overlap each other by no more than 3% of the smaller photo,
+        - nothing goes past the edge of the page.
+      Sizes stay as designed. Positions are stored in % so they scale with the
+      window. If no layout fits, the designed layout from the comp is kept.
+      Phones keep the designed layout.
+   2. Then the photos fade in and rise slightly (timing in the CSS: .is-in). */
 (function () {
   var stage = document.querySelector('.ch-stage');
   if (!stage) return;
-  var go = function () { stage.classList.add('is-in'); };
+  var label = stage.querySelector('.ch-label');
+  var photos = [].slice.call(stage.querySelectorAll('.ch-sculpt, .ch-tweez, .ch-people'));
+  var phone = matchMedia('(max-width: 575.98px)');
+  var GAP = 24, PAGE_PAD = 12, MAX_SHARED = 0.03;
+
+  function rect(x, y, w, h) { return { x: x, y: y, w: w, h: h }; }
+  function inter(a, b) {
+    var w = Math.min(a.x + a.w, b.x + b.w) - Math.max(a.x, b.x);
+    var h = Math.min(a.y + a.h, b.y + b.h) - Math.max(a.y, b.y);
+    return w > 0 && h > 0 ? w * h : 0;
+  }
+  function rnd(a, b) { return a + Math.random() * (b - a); }
+  function shuffle(a) {
+    for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)), t = a[i]; a[i] = a[j]; a[j] = t; }
+    return a;
+  }
+
+  function place() {
+    photos.forEach(function (el) { el.style.left = el.style.top = ''; });   // back to the designed spots
+    if (phone.matches) return;
+    var W = stage.offsetWidth, H = stage.offsetHeight;
+    var room = stage.getBoundingClientRect().left - PAGE_PAD;               // space beside the aerial photo
+    var main = rect(0, 0, W, H);
+    var lab = rect(label.offsetLeft - GAP, label.offsetTop - GAP, label.offsetWidth + 2 * GAP, label.offsetHeight + 2 * GAP);
+    var sizes = photos.map(function (el) { return { w: el.offsetWidth, h: el.offsetHeight }; });
+
+    for (var tries = 0; tries < 400; tries++) {
+      var edges = shuffle(['left', 'right', 'bottom']), boxes = [], ok = true;
+      for (var i = 0; i < photos.length && ok; i++) {
+        var w = sizes[i].w, h = sizes[i].h, e = edges[i], x, y, o;
+        if (e === 'left' || e === 'right') {
+          o = rnd(0.20, 0.45) * w;
+          if (o > room) { ok = false; break; }
+          x = e === 'left' ? -o : W - w + o;
+          y = rnd(0, Math.max(0, H - h));
+        } else {
+          o = rnd(0.20, 0.45) * h;
+          y = H - h + o;
+          x = rnd(0, W - w);
+        }
+        var r = rect(x, y, w, h);
+        if (inter(r, main) < 0.5 * w * h) ok = false;                      // sits on the aerial photo
+        else if (inter(r, lab) > 0) ok = false;                            // clear of the label
+        else boxes.forEach(function (b) {                                  // not piled on another photo
+          if (inter(r, b) > MAX_SHARED * Math.min(w * h, b.w * b.h)) ok = false;
+        });
+        boxes.push(r);
+      }
+      if (!ok) continue;
+      photos.forEach(function (el, i) {
+        el.style.left = (boxes[i].x / W * 100).toFixed(3) + '%';
+        el.style.top  = (boxes[i].y / H * 100).toFixed(3) + '%';
+      });
+      return;
+    }
+    // nothing fit: keep the designed layout
+  }
+
+  // Place once the label's font has loaded (its size is part of the rules), then reveal.
+  var fonts = document.fonts && document.fonts.ready ? document.fonts.ready : null;
   var decoded = Promise.all([].map.call(stage.querySelectorAll('img'), function (img) {
     return img.decode ? img.decode().catch(function () {}) : null;
   }));
-  Promise.race([decoded, new Promise(function (r) { setTimeout(r, 2500); })]).then(go);
+  var timeout = new Promise(function (r) { setTimeout(r, 2500); });
+  Promise.race([Promise.all([fonts, decoded]), timeout]).then(function () {
+    place();
+    stage.classList.add('is-in');
+  });
+  // Switching between phone and wider layouts re-applies the right one.
+  (phone.addEventListener ? phone.addEventListener.bind(phone, 'change') : phone.addListener.bind(phone))(place);
 })();
 </script>
 </body>
