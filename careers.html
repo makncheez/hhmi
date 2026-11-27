@@ -393,8 +393,36 @@
   .roles { position: relative; padding: 0 0 160px; }
   .roles .roles-intro { padding: 56px 0 72px; }
   .roles .roles-title { max-width: 900px; margin-bottom: 0; }
-  .roles-row { row-gap: 48px; }   /* 2 x 2 (1 per row on phones), 48px between rows */
+  .roles-row { row-gap: 48px; }   /* 4 across on desktop; 2 x 2 on tablets, 1 per row on phones */
 
+
+  /* Role cards: first two sentences, then "Read More" opens the rest in place
+     (same control as Build 2's Mission / Journey). */
+  .role .mj-more { margin-top: auto; padding-top: 28px; align-self: flex-end; }
+  .mj-more {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    border: 0;
+    background: none;
+    color: #000;
+    font: 400 15px/1 var(--font-sans);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+  .mj-more-box { display: grid; place-items: center; width: 50px; height: 50px; border: 1px solid #000; }
+  .mj-more-box .qa-x { width: 20px; height: 20px; overflow: visible; }
+  .mj-more-box .qa-x path { stroke: currentColor; stroke-width: 1; vector-effect: non-scaling-stroke; }
+  .mj-more[aria-expanded="true"] .qa-x-v { display: none; }
+  .mj-more:hover, .mj-more:focus-visible { color: #006b2a; }
+  .mj-more:focus-visible { outline: 2px solid #006b2a; outline-offset: 4px; }
+  .mj-extra { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .45s ease; }
+  .mj-extra > div { overflow: hidden; }
+  .mj-extra.is-open { grid-template-rows: 1fr; }
+  .mj-extra p { margin: 1.35em 0 0; }
+  .mj-extra--cont p:first-child { margin-top: 0; }
+  @media (prefers-reduced-motion: reduce) { .mj-extra { transition: none; } }
 
   /* ---------- Footer (from studies/footer.html) ----------
      Black mega footer: one column per site section, then "Back to top".
@@ -797,47 +825,59 @@
 
   <section class="roles" aria-labelledby="rolesTitle">
     <div class="container">
-     <div class="row">
-      <div class="col-12 col-lg-10 offset-lg-1">   <!-- same width as the Join Janelia box -->
-      <div class="roles-intro">
-        <h2 class="roles-title" id="rolesTitle">Janelia offers a wide range of career opportunities for scientists and professionals at many stages.</h2>
-      </div>
-      <div class="row g-0 roles-row">
-        <div class="col-md-6">
-          <article class="role">
-            <h3>Lab heads</h3>
-            <ul>
-              <li>Janelia’s research is led by scientists who work in different ways. Principal Scientists bring deep expertise and hands-on skill to problems central to our grand challenge: understanding how a vertebrate brain generates behavior. AI Scientists lead the development of methods and systems for AI-in-the-Loop discovery, where AI is a partner in science. Group Leaders run small labs that take on big questions in biology, AI, theory, and tool building that support Janelia’s mission. Explore scientific leadership careers at Janelia.</li>
-            </ul>
-          </article>
-        </div>
-        <div class="col-md-6">
-          <article class="role">
-            <h3>Research and technical roles</h3>
-            <ul>
-              <li>Staff scientists, engineers, laboratory researchers, and specialists in imaging, computation, AI, and instrumentation work hands-on with teams across Janelia. Their roles in labs, Project Teams, and shared resources enable discovery across campus. They operate cryo-electron microscopes for researchers across HHMI, write software that enables lab instruments to work together, and help transform biological sensors into tools used in labs worldwide. Their judgment and expertise shape the experiments that Janelia scientists run and the tools they build.</li>
-            </ul>
-          </article>
-        </div>
-        <div class="col-md-6">
-          <article class="role">
-            <h3>Postdocs and training programs</h3>
-            <ul>
-              <li>Postdocs work closely with lab heads and alongside Janelia’s shared resource and technical teams. The Theory Fellow Program offers early-career researchers an alternative to a classical training position. Summer internships place undergraduates and local high school students in Janelia labs for hands-on research. These programs are designed to support scientific growth, exploration, and collaboration.</li>
-            </ul>
-          </article>
-        </div>
-        <div class="col-md-6">
-          <article class="role">
-            <h3>Operational &amp; campus roles</h3>
-            <ul>
-              <li>It takes a whole campus to do science at this scale. Teams focused on scientific programs and training, environmental health and safety, facilities, security, information technology, campus life, and administration keep labs running, projects on track, and people supported. Every role plays an essential part in advancing Janelia’s mission.</li>
-            </ul>
-          </article>
+      <div class="row">
+        <div class="col-12 col-lg-10 offset-lg-1">   <!-- heading: same width as the Join Janelia box -->
+          <div class="roles-intro">
+            <h2 class="roles-title" id="rolesTitle">Janelia offers a wide range of career opportunities for scientists and professionals at many stages.</h2>
+          </div>
         </div>
       </div>
-      </div>
-     </div>
+    </div>
+    <div class="row g-0 roles-row">   <!-- cards: full window width, one row on desktop -->
+    <div class="col-md-6 col-lg-3">
+      <article class="role">
+        <h3>Lab heads</h3>
+        <ul>
+          <li>Janelia’s research is led by scientists who work in different ways. Principal Scientists bring deep expertise and hands-on skill to problems central to our grand challenge: understanding how a vertebrate brain generates behavior.
+            <div class="mj-extra mj-extra--cont" id="labMore"><div><p>AI Scientists lead the development of methods and systems for AI-in-the-Loop discovery, where AI is a partner in science. Group Leaders run small labs that take on big questions in biology, AI, theory, and tool building that support Janelia’s mission. Explore scientific leadership careers at Janelia.</p></div></div>
+          </li>
+        </ul>
+        <button class="mj-more" type="button" aria-expanded="false" aria-controls="labMore"><span class="mj-more-label">Read More</span><span class="visually-hidden"> about Lab heads</span><span class="mj-more-box" aria-hidden="true"><svg class="qa-x" viewBox="-10 -10 20 20" fill="none" aria-hidden="true" shape-rendering="crispEdges"><path class="qa-x-v" d="M0 -10V-2.25M0 2.25V10"/><path d="M-10 0H-2.25M2.25 0H10"/></svg></span></button>
+      </article>
+    </div>
+    <div class="col-md-6 col-lg-3">
+      <article class="role">
+        <h3>Research and technical roles</h3>
+        <ul>
+          <li>Staff scientists, engineers, laboratory researchers, and specialists in imaging, computation, AI, and instrumentation work hands-on with teams across Janelia. Their roles in labs, Project Teams, and shared resources enable discovery across campus.
+            <div class="mj-extra mj-extra--cont" id="techMore"><div><p>They operate cryo-electron microscopes for researchers across HHMI, write software that enables lab instruments to work together, and help transform biological sensors into tools used in labs worldwide. Their judgment and expertise shape the experiments that Janelia scientists run and the tools they build.</p></div></div>
+          </li>
+        </ul>
+        <button class="mj-more" type="button" aria-expanded="false" aria-controls="techMore"><span class="mj-more-label">Read More</span><span class="visually-hidden"> about Research and technical roles</span><span class="mj-more-box" aria-hidden="true"><svg class="qa-x" viewBox="-10 -10 20 20" fill="none" aria-hidden="true" shape-rendering="crispEdges"><path class="qa-x-v" d="M0 -10V-2.25M0 2.25V10"/><path d="M-10 0H-2.25M2.25 0H10"/></svg></span></button>
+      </article>
+    </div>
+    <div class="col-md-6 col-lg-3">
+      <article class="role">
+        <h3>Postdocs and training programs</h3>
+        <ul>
+          <li>Postdocs work closely with lab heads and alongside Janelia’s shared resource and technical teams. The Theory Fellow Program offers early-career researchers an alternative to a classical training position.
+            <div class="mj-extra mj-extra--cont" id="postdocMore"><div><p>Summer internships place undergraduates and local high school students in Janelia labs for hands-on research. These programs are designed to support scientific growth, exploration, and collaboration.</p></div></div>
+          </li>
+        </ul>
+        <button class="mj-more" type="button" aria-expanded="false" aria-controls="postdocMore"><span class="mj-more-label">Read More</span><span class="visually-hidden"> about Postdocs and training programs</span><span class="mj-more-box" aria-hidden="true"><svg class="qa-x" viewBox="-10 -10 20 20" fill="none" aria-hidden="true" shape-rendering="crispEdges"><path class="qa-x-v" d="M0 -10V-2.25M0 2.25V10"/><path d="M-10 0H-2.25M2.25 0H10"/></svg></span></button>
+      </article>
+    </div>
+    <div class="col-md-6 col-lg-3">
+      <article class="role">
+        <h3>Operational &amp; campus roles</h3>
+        <ul>
+          <li>It takes a whole campus to do science at this scale. Teams focused on scientific programs and training, environmental health and safety, facilities, security, information technology, campus life, and administration keep labs running, projects on track, and people supported.
+            <div class="mj-extra mj-extra--cont" id="opsMore"><div><p>Every role plays an essential part in advancing Janelia’s mission.</p></div></div>
+          </li>
+        </ul>
+        <button class="mj-more" type="button" aria-expanded="false" aria-controls="opsMore"><span class="mj-more-label">Read More</span><span class="visually-hidden"> about Operational &amp; campus roles</span><span class="mj-more-box" aria-hidden="true"><svg class="qa-x" viewBox="-10 -10 20 20" fill="none" aria-hidden="true" shape-rendering="crispEdges"><path class="qa-x-v" d="M0 -10V-2.25M0 2.25V10"/><path d="M-10 0H-2.25M2.25 0H10"/></svg></span></button>
+      </article>
+    </div>
     </div>
   </section>
 </div>
@@ -1242,6 +1282,20 @@
   // Switching between phone and wider layouts re-applies the right one.
   (phone.addEventListener ? phone.addEventListener.bind(phone, 'change') : phone.addListener.bind(phone))(place);
 })();
+</script>
+<script>
+/* Role cards: "Read More" opens the rest of the description in place ("Read Less" closes it). */
+document.querySelectorAll('button.mj-more').forEach(function (btn) {
+  var panel = document.getElementById(btn.getAttribute('aria-controls'));
+  panel.inert = true;                                   // hidden text is skipped while collapsed
+  btn.addEventListener('click', function () {
+    var open = btn.getAttribute('aria-expanded') !== 'true';
+    btn.setAttribute('aria-expanded', String(open));
+    panel.classList.toggle('is-open', open);
+    panel.inert = !open;
+    btn.querySelector('.mj-more-label').textContent = open ? 'Read Less' : 'Read More';
+  });
+});
 </script>
 </body>
 </html>
