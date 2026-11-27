@@ -285,7 +285,7 @@
   /* ---------- Join Janelia: lime box in the container, heading hangs out on the left ----------
      Box spans the middle 10 of 12 columns. Measured from the 1282px comp:
      heading ~46px starting 72px left of the box; copy starts at 40% of the box. */
-  .jn { position: relative; padding: 0 0 160px; }
+  .jn { position: relative; padding: 0 0 120px; }
   .jn-box {
     container-type: inline-size;
     display: grid;
@@ -301,7 +301,7 @@
     font: 400 clamp(30px, 4.9cqw, 60px)/1.18 var(--font-sans);
     letter-spacing: -0.01em;
   }
-  .jn-copy h3 { margin: 0 0 22px; font: 400 clamp(19px, 2.25cqw, 24px)/1.25 var(--font-sans); }
+  .jn-copy h3 { margin: 0 0 1.35em; font: 400 17px/1.35 var(--font-sans); }   /* same as the paragraphs */
   .jn-copy p { margin: 0 0 22px; font-size: 17px; line-height: 1.35; }
   .jn-copy p:last-child { margin-bottom: 0; }
   @media (max-width: 767.98px) {
@@ -309,6 +309,87 @@
     .jn-box { grid-template-columns: 1fr; padding: 40px 24px 44px; }
     .jn-title { margin: 0 0 28px -12px; padding-right: 0; font-size: clamp(30px, 8.5cqw, 40px); }
   }
+
+  /* ---------- Roles: "Find Your Scientific Role" with three columns ----------
+     Each column has a colour bar on its left edge behind the text, the role
+     name, three points between dotted rules and an optional mono footnote. */
+  .roles-title {
+    margin: 0 0 16px;
+    color: #021341;
+    font: 400 clamp(25px, 2.35vw, 40px)/1.15 var(--font-sans);
+    letter-spacing: -0.005em;
+    text-align: left;
+  }
+  .roles-lead {                      /* global paragraph style, 17px / 1.35 */
+    position: relative;
+    max-width: 640px;
+    margin: 0;
+    color: #021341;
+  }
+  /* Intro block: container width, #FBFBFB, with a full-width .deco band on top */
+  .roles-intro {
+    position: relative;              /* paints above the crosshair grid */
+    margin-bottom: 0;
+    padding-bottom: 100px;
+    background: #fbfbfb;             /* same as the section; still covers the crosshair grid */
+  }
+  .roles-intro .deco {
+    --deco-w: 100%;
+    --deco-h: 14px;                  /* two 7px rows */
+    --deco-1: #00ac1d;               /* top-left: green */
+    --deco-2: #3fc2cd;               /* top-right: cyan */
+    --deco-3: #a5f300;               /* bottom-left: lime */
+    --deco-4: #000d42;               /* bottom-right: navy */
+    margin-bottom: 32px;
+  }
+  .roles-intro .roles-title,
+  .roles-intro .roles-lead { margin-inline: 24px; }   /* same 24px inset as the role columns' text */
+  .role {
+    --bar: #a5f300;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 32px 24px 40px;
+    background: #fbfbfb;           /* covers the grid behind the column */
+    color: #021341;
+  }
+  .role::before {                    /* colour bar behind the text */
+    content: "";
+    position: absolute;
+    top: 0; bottom: 0; left: 0;
+    width: 20%;
+    background: var(--bar);
+  }
+  .role > * { position: relative; }
+  .role--ai    { --bar: #66bec9; }
+  .role--group { --bar: #d8d8d8; }
+  .role h3 {
+    margin: 0 0 22px;
+    font: 400 clamp(25px, 2.3vw, 40px)/1.1 var(--font-sans);
+    letter-spacing: -0.005em;
+  }
+  .role ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-top: 1px dotted #021341;
+  }
+  .role li {
+    padding: 16px 0 22px;
+    border-bottom: 1px dotted #021341;
+    font: 400 clamp(15px, 1.2vw, 19px)/1.35 var(--font-sans);
+    letter-spacing: 0.01em;
+  }
+  .role-note {
+    margin: 16px 0 0;
+    font: 400 12px/1.4 "ABC Diatype Semi-Mono", ui-monospace, monospace;
+    letter-spacing: 0.02em;
+  }
+  /* Careers: 4 across on desktop, 2 on tablets, 1 on phones */
+  .roles { position: relative; padding: 0 0 160px; }
+  @media (max-width: 991.98px) { .roles-row { row-gap: 48px; } }
+
 
   /* ---------- Footer (from studies/footer.html) ----------
      Black mega footer: one column per site section, then "Back to top".
@@ -535,7 +616,7 @@
   .ch {
     position: relative;
     container-type: inline-size;
-    padding: max(calc(var(--bar-h) + 40px), 7.8cqw) 0 20.9cqw;
+    padding: max(calc(var(--bar-h) + 40px), 7.8cqw) 0 calc(10.6cqw + 64px);   /* lowest photo + 64px */
     overflow: clip;
   }
   /* Static gray crosshairs on the Bootstrap container's column lines, rows every 100px */
@@ -703,6 +784,88 @@
               <p>Engineer sensors that show how cells interact. Generate models that create meaning from complex biological data. Design experiments that reveal how neural circuits shape behavior. Run the operations that enable discovery. Join us and make your impact.</p>
             </div>
           </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="roles" aria-labelledby="rolesTitle">
+    <div class="container">
+      <div class="roles-intro">
+        <div class="deco" aria-hidden="true"><div></div><div></div><div></div><div></div></div>
+        <h2 class="roles-title" id="rolesTitle">Janelia’s three lead scientist roles</h2>
+        <p class="roles-lead">Janelia’s ambitious mission needs scientists who work in different ways.</p>
+      </div>
+      <div class="row g-0 roles-row">
+        <div class="col-md-6 col-lg-3">
+          <article class="role role--principal">
+            <h3>Principal Scientist</h3>
+            <ul>
+              <li>Develop approaches and contribute deep expertise to shared questions.</li>
+              <li>A distinct career centered on direct scientific contribution.</li>
+              <li>Contribute intellectual leadership across projects and disciplines.</li>
+            </ul>
+            <p class="role-note">On-Site / Internally funded / No postdoc required</p>
+            <div class="role-cta">
+              <a class="cta">
+                <span class="deco" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
+                <span>Learn more<span class="visually-hidden"> about Principal Scientist roles</span></span>
+                <svg class="cta-arrow" viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke="black" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round" stroke="black"/></svg>
+              </a>
+            </div>
+          </article>
+        </div>
+        <div class="col-md-6 col-lg-3">
+          <article class="role role--ai">
+            <h3>AI Scientist</h3>
+            <ul>
+              <li>Develop AI methods and systems connected to scientific experiments.</li>
+              <li>Computational research, modeling, and scientific systems.</li>
+              <li>Connect computational approaches with biologists, theorists, and tool builders.</li>
+            </ul>
+            <div class="role-cta">
+              <a class="cta">
+                <span class="deco" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
+                <span>Learn more<span class="visually-hidden"> about AI Scientist roles</span></span>
+                <svg class="cta-arrow" viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke="black" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round" stroke="black"/></svg>
+              </a>
+            </div>
+          </article>
+        </div>
+        <div class="col-md-6 col-lg-3">
+          <article class="role role--group">
+            <h3>Group Leader</h3>
+            <ul>
+              <li>Build a laboratory around broad questions and a portfolio of projects.</li>
+              <li>The balance of research and team leadership depends on the role and program.</li>
+              <li>Lead a lab and collaborate across the shared scientific enterprise.</li>
+            </ul>
+            <div class="role-cta">
+              <a class="cta">
+                <span class="deco" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
+                <span>Learn more<span class="visually-hidden"> about Group Leader roles</span></span>
+                <svg class="cta-arrow" viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke="black" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round" stroke="black"/></svg>
+              </a>
+            </div>
+          </article>
+        </div>
+        <div class="col-md-6 col-lg-3">
+          <article class="role role--principal">
+            <h3>Principal Scientist</h3>
+            <ul>
+              <li>Develop approaches and contribute deep expertise to shared questions.</li>
+              <li>A distinct career centered on direct scientific contribution.</li>
+              <li>Contribute intellectual leadership across projects and disciplines.</li>
+            </ul>
+            <p class="role-note">On-Site / Internally funded / No postdoc required</p>
+            <div class="role-cta">
+              <a class="cta">
+                <span class="deco" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
+                <span>Learn more<span class="visually-hidden"> about Principal Scientist roles</span></span>
+                <svg class="cta-arrow" viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke="black" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round" stroke="black"/></svg>
+              </a>
+            </div>
+          </article>
         </div>
       </div>
     </div>
