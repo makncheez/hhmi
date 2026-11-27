@@ -1,0 +1,1040 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Careers &amp; Opportunities · HHMI Janelia</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+<link rel="preload" href="assets/ABCDiatype-Regular.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/fonts.css">
+<style>
+  :root {
+    --page-bg: #000;               /* page background */
+    --tile: #000;
+    --ink: #fff;
+    --green-1: #a5f300;            /* menu icon: lime */
+    --green-2: #00ac1d;            /* menu icon: mid green */
+    --green-3: #006b2a;            /* menu icon: dark green */
+    --bar-h: 56px;
+    --font-sans: "ABC Diatype", "Helvetica Neue", Arial, sans-serif;
+    --font-mono: "ABC Diatype Semi-Mono", ui-monospace, Menlo, monospace;
+    color-scheme: light;
+  }
+  body {
+    margin: 0;
+    background: var(--page-bg);
+    color: var(--ink);
+    font: 400 17px/1.35 var(--font-sans);   /* global body paragraph: ABC Diatype Regular 17px, line-height 1.35em (~23px) */
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ---------- Fixed menu bar (transparent, stays transparent on scroll) ---------- */
+  .site-bar {
+    position: fixed;
+    inset: 0 0 auto 0;
+    z-index: 1030;
+    height: var(--bar-h);
+    padding: 0 24px 0 8px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: transparent;
+    pointer-events: none;          /* clicks pass through the empty middle */
+  }
+  .site-bar > * { pointer-events: auto; }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    color: var(--ink);
+  }
+  .brand-tile {
+    display: flex;
+    align-items: center;
+    height: 48px;
+    background: var(--tile);
+    border-radius: 4px;
+    color: var(--ink);
+  }
+  .brand-logo { padding: 0 6px; }
+  .brand-logo svg { display: block; width: 78px; height: auto; }
+  .brand-campus {
+    padding: 0 12px;
+    font-size: 21px;
+    line-height: 1;
+    letter-spacing: 0.005em;
+    white-space: nowrap;
+  }
+
+  .explore {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 0 8px 8px;
+    border: 0;
+    background: none;
+    color: var(--ink);
+    font: 400 15px/1 var(--font-sans);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+  .explore-label { font-size: 12px; transition: opacity .3s ease, visibility .3s; }
+  .explore.is-compact .explore-label { opacity: 0; visibility: hidden; }   /* past the hero: icon only */
+  .explore-icon {
+    position: relative;
+    width: 32px;
+    height: 27px;
+  }
+  .explore-icon i {
+    position: absolute;
+    left: 0;
+    width: 32px;
+    height: 2px;
+    transition: transform .35s cubic-bezier(.65,0,.35,1);
+  }
+  .explore-icon i:nth-child(1) { top: 0;      background: var(--green-1); transform-origin: 1px 1px; }   /* pivots on its left end */
+  .explore-icon i:nth-child(2) { top: 12.5px; background: var(--green-2); transform-origin: 31px 1px; }  /* pivots on its right end */
+  .explore-icon i:nth-child(3) { top: 25px;   background: var(--green-3); transform-origin: 0 1px; }
+  .explore:focus-visible { outline: 2px solid var(--green-1); outline-offset: 2px; }
+
+  /* "H" state: hover (mouse), keyboard focus, or tap on touch screens (.is-h).
+     Lines stay 2px thick throughout: top swings down into the left upright,
+     middle swings into the right upright, bottom rises and shortens into the crossbar. */
+  .explore.is-h .explore-icon i:nth-child(1),
+  .explore:focus-visible .explore-icon i:nth-child(1) { transform: rotate(90deg) scaleX(.84375); }
+  .explore.is-h .explore-icon i:nth-child(2),
+  .explore:focus-visible .explore-icon i:nth-child(2) { transform: translateY(-12.5px) rotate(-90deg) scaleX(.84375); }
+  .explore.is-h .explore-icon i:nth-child(3),
+  .explore:focus-visible .explore-icon i:nth-child(3) { transform: translate(5px, -12.5px) scaleX(.6875);   /* 22px crossbar, 3px gaps */ }
+  @media (hover: hover) {
+    .explore:hover .explore-icon i:nth-child(1) { transform: rotate(90deg) scaleX(.84375); }
+    .explore:hover .explore-icon i:nth-child(2) { transform: translateY(-12.5px) rotate(-90deg) scaleX(.84375); }
+    .explore:hover .explore-icon i:nth-child(3) { transform: translate(5px, -12.5px) scaleX(.6875);   /* 22px crossbar, 3px gaps */ }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .explore-icon i { transition: none; }
+  }
+
+  @media (max-width: 575.98px) {
+    .site-bar { padding-right: 12px; }
+    .brand-tile { height: 40px; }
+    .brand-logo svg { width: 64px; }
+    .brand-campus { font-size: 15px; padding: 0 10px; }
+    .explore-label { display: none; }
+  }
+
+  /* ---------- Decorative block: 4 divs in a 2 x 2 grid (reusable) ----------
+     Usage: <div class="deco"><div></div><div></div><div></div><div></div></div>
+     Order: top-left, top-right, bottom-left, bottom-right.
+     Override --deco-w / --deco-h (whole block) or --deco-1..4 per instance. */
+  .deco {
+    --deco-w: 17px;
+    --deco-h: 172px;
+    --deco-1: #3fc2cd;   /* top-left: cyan */
+    --deco-2: #000d42;   /* top-right: navy */
+    --deco-3: #00ac1d;   /* bottom-left: green */
+    --deco-4: #a5f300;   /* bottom-right: lime */
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    width: var(--deco-w);
+    height: var(--deco-h);
+    flex: none;
+  }
+  .deco > :nth-child(1) { background: var(--deco-1); }
+  .deco > :nth-child(2) { background: var(--deco-2); }
+  .deco > :nth-child(3) { background: var(--deco-3); }
+  .deco > :nth-child(4) { background: var(--deco-4); }
+
+  .hero-deco {
+    position: absolute;
+    top: 45%;
+    transform: translateY(-50%);
+    z-index: 1;
+  }
+  .hero-deco--left  { left: 0; }
+  .hero-deco--right { right: 0; }
+  @media (max-width: 575.98px) {
+    .hero-deco {
+      --deco-w: 10px; --deco-h: 100px;
+      top: calc(72px + 57.5vw);      /* level with the headline: centre of the 4:5 video box */
+    }
+  }
+
+  /* ---------- CTA arrow label (reusable): 4-square .deco + label + arrow, 30px tall ---------- */
+  .cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 18px;
+    height: 30px;
+    color: #021341;
+    text-decoration: none;
+    font: 400 14px/1 var(--font-sans);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .cta:hover, .cta:focus-visible { color: #021341; }
+  .cta:focus-visible { outline: 2px solid #021341; outline-offset: 4px; }
+  .cta .deco {                       /* square: navy / lime over cyan / green */
+    --deco-w: 24px;
+    --deco-h: 24px;
+    --deco-1: #000d42;
+    --deco-2: #a5f300;
+    --deco-3: #3fc2cd;
+    --deco-4: #00ac1d;
+  }
+  .cta-arrow { width: 26px; height: 27px; margin-left: -3px; flex: none; overflow: visible; }
+  .cta, .unit-explore { cursor: pointer; }   /* placeholder CTAs have no href yet; keep the hand cursor */
+
+  /* Hover / focus: the four colours are reshuffled at random every 0.8s
+     (script at the end of the page). Reduced motion: no shuffle. */
+
+  .role-cta { margin-top: auto; padding-top: 40px; text-align: right; }   /* bottom right of the column */
+
+  /* ---------- Newsletter banner (after Highlighted Stories, before the footer) ----------
+     Full width, 180px tall, black with one row of colour-wave crosshairs,
+     the white "Join Newsletter" button centred. On hover it grows to the
+     banner's height and shows "Stay Connected with HHMI" underneath. */
+  .nl {
+    --col: 78px;
+    position: relative;
+    height: 180px;
+    background: #000;
+  }
+  .nl::before {
+    content: ""; position: absolute; inset: 0; pointer-events: none;
+    /* Same drifting colour wave as the other crosshair grids (dark-section
+       variant with white, as in Project Teams), every 10s. */
+    background: repeating-linear-gradient(135deg,
+      #111    calc(var(--wave) + 0px),
+      #A5F300 calc(var(--wave) + 800px),
+      #00AC1D calc(var(--wave) + 1600px),
+      #FFFFFF calc(var(--wave) + 2400px),
+      #111    calc(var(--wave) + 3200px));
+    animation: xhair-wave 10s linear infinite;
+    opacity: .7;
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' stroke='%23000' stroke-width='1' shape-rendering='crispEdges'%3E%3Csvg x='50%25' y='50%25' overflow='visible'%3E%3Cpath d='M0 -10V-2.25M0 2.25V10M-10 0H-2.25M2.25 0H10'/%3E%3C/svg%3E%3C/svg%3E") center center / var(--col) 100% repeat-x;
+            mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' stroke='%23000' stroke-width='1' shape-rendering='crispEdges'%3E%3Csvg x='50%25' y='50%25' overflow='visible'%3E%3Cpath d='M0 -10V-2.25M0 2.25V10M-10 0H-2.25M2.25 0H10'/%3E%3C/svg%3E%3C/svg%3E") center center / var(--col) 100% repeat-x;
+  }
+  @media (prefers-reduced-motion: reduce) { .nl::before { animation: none; background: #fff; opacity: .5; } }
+  @media (min-width: 1200px) { .nl { --col: 93px; } }
+  @media (min-width: 1400px) { .nl { --col: 108px; } }
+  @media (max-width: 767.98px) { .nl { --col: 58px; } }
+
+  /* Colour-wave crosshair animation (shared with Build 2) */
+  @property --wave { syntax: "<length>"; inherits: false; initial-value: 0px; }
+  @keyframes xhair-wave { to { --wave: 3200px; } }
+  /* Side colour bars on the Stay Connected button */
+  .ue-bar--l { left: 0;  --deco-1: #000d42; --deco-2: #a5f300; --deco-3: #3fc2cd; --deco-4: #00ac1d; }
+  .ue-bar--r { right: 0; --deco-1: #00ac1d; --deco-2: #3fc2cd; --deco-3: #a5f300; --deco-4: #000d42; }
+  /* "Stay Connected with HHMI": a white button at rest. Hover (or tap on
+     touch screens) grows it into a light panel inside the 180px banner:
+     "Join Newsletter" + arrow on the left, a thin rule, and "Stay Social"
+     with six round social icons on the right. Colour bars shuffle on the
+     sides. Links and icons turn #00AC1D on hover / focus. */
+  .nlx {
+    position: absolute; top: 50%; left: 50%; z-index: 1;
+    width: 320px; height: 64px;
+    transform: translate(-50%, -50%);
+    background: #fff; color: #000;
+    transition: width .45s cubic-bezier(.65,0,.35,1), height .45s cubic-bezier(.65,0,.35,1), background-color .3s ease;
+  }
+  .nlx .deco { --deco-w: 17px; --deco-h: 70%; position: absolute; top: 50%; transform: translateY(-50%); opacity: 0; transition: opacity .3s ease; }
+  .nlx-label {
+    position: absolute; inset: 0; width: 100%;
+    padding: 0; border: 0; background: none; color: inherit; cursor: pointer;
+    font: 400 18px/1 var(--font-mono); letter-spacing: .02em; white-space: nowrap;
+    transition: opacity .2s ease;
+  }
+  .nlx-panel {
+    position: absolute; inset: 0;
+    display: grid; grid-template-columns: 1fr 1px 1fr; align-items: center;
+    padding: 14px 40px;
+    opacity: 0; visibility: hidden;
+    transition: opacity .25s ease, visibility 0s linear .25s;
+  }
+  .nlx.is-open { width: min(560px, 92%); height: 172px; background: #FBFBFB; }   /* opens on hover (mouse) or tap (touch) */
+  .nlx.is-open .deco { opacity: 1; transition-delay: .2s; }
+  .nlx.is-open .nlx-label { opacity: 0; pointer-events: none; }
+  .nlx.is-open .nlx-panel { opacity: 1; visibility: visible; transition: opacity .3s ease .2s, visibility 0s; }
+  .nlx-join { display: flex; flex-direction: column; align-items: center; gap: 14px; color: inherit; text-decoration: none; cursor: pointer; text-align: center; font: 400 18px/1.25 var(--font-mono); letter-spacing: .02em; transition: color .2s ease; }
+  .nlx-arrow { width: 26px; height: 27px; overflow: visible; }
+  .nlx-arrow path { stroke: currentColor; }
+  .nlx-rule { align-self: stretch; margin: 8px 0; background: currentColor; }
+  .nlx-social { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+  .nlx-h { margin: 0; font: 400 18px/1 var(--font-mono); letter-spacing: .02em; }
+  .nlx-icons { display: grid; grid-template-columns: repeat(3, 40px); gap: 8px 16px; margin: 0; padding: 0; list-style: none; }
+  .nlx-ic { display: grid; place-items: center; width: 40px; height: 40px; border: 1px solid currentColor; border-radius: 50%; color: #000; transition: color .2s ease; }
+  .nlx-ic svg { width: 18px; height: 18px; }   /* Simple Icons (CC0) brand marks, filled in currentColor */
+  .nl .nlx-join:hover, .nl .nlx-join:focus-visible, .nl .nlx-ic:hover, .nl .nlx-ic:focus-visible { color: #00AC1D; }
+  .nlx :focus-visible { outline: 2px solid #00AC1D; outline-offset: 3px; }
+  @media (max-width: 575.98px) {
+    .nlx.is-open { width: 94%; }
+    .nlx-panel { padding: 14px 24px; }
+    .nlx-icons { grid-template-columns: repeat(3, 34px); gap: 8px 10px; }
+    .nlx-ic { width: 34px; height: 34px; }
+    .nlx-ic svg { width: 15px; height: 15px; }
+    .nlx-join, .nlx-h { font-size: 15px; }
+  }
+  @media (prefers-reduced-motion: reduce) { .nlx, .nlx .deco, .nlx-label, .nlx-panel { transition: none; } }
+  /* ---------- Footer (from studies/footer.html) ----------
+     Black mega footer: one column per site section, then "Back to top".
+     The page lifts away like a curtain to uncover a particle HHMI wordmark
+     fixed underneath, which scatters from the pointer. Fonts: ABC Diatype. */
+  main { position: relative; z-index: 1; background: var(--page-bg); }   /* the curtain */
+  .mfoot { --dim: #9a9a9a; --soft: #cfcfcf; --rule: #2b2b2b; background: #000; color: #fff; font: 400 15px/1.4 var(--font-sans); }   /* no border */
+  .mfoot a { color: inherit; text-decoration: none; cursor: pointer; }
+  .mfoot .in { padding: 64px 12px 0; }   /* the Schema boxes run full width, 12px in from each side */
+  /* Footer menu inside one Schema cell (1 x 1): the box's lines break at
+     the corners like the Janelia at a Glance grid (top/bottom stop 12px short
+     of the sides, sides stop 10px short of top/bottom). The menu's five groups
+     sit in columns inside; Back to top in the bottom-right corner. */
+  .mf-box { position: relative; padding: 48px 22px 40px; }   /* 22px in from the lines, like the Highlighted Stories cards */
+  .mf-box:not(.mf-box--links) { padding-bottom: 100px; }   /* room for the Back to top box */
+  .mf-box::before, .mf-box::after { content: ""; position: absolute; pointer-events: none; border: 0 solid #fff; }   /* white grid */
+  .mf-box::before { top: 0; bottom: 0; left: 12px; right: 12px; border-bottom-width: 1px; }   /* no top line; the bottom line is the row line */
+  .mf-box::after  { top: 10px; bottom: 10px; left: 0; right: 0; border-left-width: 1px; border-right-width: 1px; }
+  .mf-cols { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 48px 32px; }
+  /* Back to top: a 50px corner box like Read More's (.mj-more-box), tucked
+     into the bottom-right corner of the menu box: lines on its top and left. */
+  .mf-top { position: absolute; right: 1px; bottom: 0; }   /* tucked against the frame's right line */
+  /* Second row of the Schema (1 col): shares the first box's bottom line,
+     so only its own bottom line is drawn; its sides break at the row line. */
+  .mf-box--links { display: grid; grid-template-columns: 1fr 1fr; padding: 0; }   /* 2 cells: links | copyright */
+  .mf-half { position: relative; padding: 28px 22px; }
+  /* Middle line + where it meets the row line: a three-armed crosshair
+     (left, right, down) with a 6px gap at the centre, like the frame's
+     crosshairs: the row line is cut 6px either side, the middle line starts
+     6px below. Open at the bottom. */
+  .mf-half--copy::before { content: ""; position: absolute; left: -.5px; top: 6px; bottom: 0; border-left: 1px solid #fff; }
+  .mf-half--copy::after { content: ""; position: absolute; left: -6px; top: -1.5px; width: 12px; height: 3px; background: #000; }   /* cuts the row line at the junction */
+  .mf-box--links::before { border-bottom-width: 0; }   /* last row: no bottom line */
+  .mf-box:not(.mf-box--links)::after { top: 0; }   /* open outer edges, as in the Schema: sides run to the top / bottom */
+  .mf-box--links::after { bottom: 0; }
+  .mf-legal { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 10px 28px; font-size: 15px; }
+  .mfoot .mf-legal a { color: inherit; text-decoration: none; }
+  .mfoot .mf-legal a:hover { text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 1px; }
+  .mf-copy { margin: 0; font-size: 15px; color: var(--dim); }
+  .mf-col .mf-pair .t { display: block; }
+  .mf-col li + li > .mf-pair { margin-top: 6px; }
+  .mf-col { min-width: 0; }
+  .mf-col h3 { font: 400 15px/1.3 var(--font-sans); color: var(--dim); margin: 0 0 16px; }   /* regular Diatype, 15px like everything in the footer */
+  .mf-col h3 a:hover { color: #fff; }
+  .mf-col ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 1px; }
+  .mf-col li > a { display: block; padding: 5px 0; line-height: 1.3; font-size: 15px; }
+  .mf-col a:hover .t { text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 1px; }
+  .mf-col .sub { margin-top: 14px; padding-bottom: 2px; font: 400 15px/1.3 var(--font-sans); color: var(--dim); }
+  .mf-col .sub:first-child { margin-top: 0; }
+  .mf-col .sel .t { text-decoration: underline; text-underline-offset: 4px; }
+  .mfoot .totop { display: grid; place-items: center; width: 50px; height: 50px; border-top: 1px solid #fff; border-left: 1px solid #fff; }   /* right side = the frame line (breaks 10px above the row line); bottom = the row line */
+  .mfoot .totop svg { width: 24px; height: 25px; transform: rotate(-90deg); overflow: visible; }
+  .mfoot .totop svg path { stroke: #fff; transition: stroke .2s ease; }
+  .mfoot .totop:hover svg path { stroke: #7DE050; }
+  .mfoot :focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
+  .mf-stage { position: fixed; left: 0; right: 0; bottom: 0; z-index: 0; height: var(--stage-h, calc(22.3vw + 80px)); background: #000; }
+  .mf-stage canvas { display: block; width: 100%; height: 100%; touch-action: pan-y; }
+  .mf-reveal { height: var(--stage-h, calc(22.3vw + 80px)); }
+  @media (max-width: 1199.98px) { .mf-cols { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+  @media (max-width: 575.98px) {
+    .mf-box { padding: 32px 22px 24px; }
+    .mf-box--links { grid-template-columns: 1fr; padding: 0; }
+    .mf-half { padding: 24px 22px; }
+    .mf-half--copy::before { left: 12px; right: 12px; top: -.5px; bottom: auto; border-left: 0; border-top: 1px solid #fff; }
+    .mf-half--copy::after { display: none; }   /* stacked: a row line between, stopping short of the sides */
+    .mf-cols { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 36px 20px; }
+  }
+  /* ---------- Sidebar menu (opened by Explore) ----------
+     A <dialog> flush right: 480px on desktop, full width on phones. It
+     appears instantly over a dimmed page (no fade, no movement). Dark by default; the switch
+     in the top-left turns the sidebar (only) light, remembered per browser.
+     Rows use the CTA arrow: down for sections (up when open), right for updates. */
+  .smenu {
+    position: fixed; inset: 0 0 0 auto;
+    width: 480px; max-width: 100%; height: 100%; max-height: none;
+    margin: 0; padding: 0; border: 0;
+    background: #000; color: #fff;
+    transition: background-color .3s ease, color .3s ease;
+    font-family: var(--font-sans);
+  }
+  .smenu::backdrop { background: rgba(0,0,0,.5); }
+  .smenu.is-light { background: #fff; color: #000; }
+  html.sm-open { overflow: hidden; }
+  html { scrollbar-gutter: stable; }   /* locking the scroll never shifts the header, so the close H stays on the Explore H */
+  .sm-in { display: flex; flex-direction: column; min-height: 100%; padding: 0 24px 40px; }
+  .sm-top { position: sticky; top: 0; z-index: 1; display: flex; align-items: center; justify-content: space-between; height: 96px; background: inherit; }   /* stays put while the list scrolls under it */
+  .sm-in { background: inherit; }
+  .smenu button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+  .smenu :focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
+  .smenu svg path { stroke: currentColor; }
+
+  /* Light-mode switch */
+  .smenu .sm-mode { display: inline-flex; align-items: center; gap: 10px; font: 400 12px/1 var(--font-sans); letter-spacing: .2em; text-transform: uppercase; }
+  .sm-track { position: relative; width: 40px; height: 22px; border: 1px solid currentColor; border-radius: 11px; }
+  .sm-track::after { content: ""; position: absolute; top: 3px; left: 3px; width: 14px; height: 14px; border-radius: 50%; background: currentColor; transition: transform .25s ease; }
+  .sm-mode[aria-checked="true"] .sm-track::after { transform: translateX(18px); }
+
+  /* Close: the Explore icon itself in its "H" (hover) state, placed by JS
+     exactly over the header's Explore icon. */
+  .sm-close { position: fixed; z-index: 1; display: block; padding: 0; line-height: 0; }
+  .sm-close .explore-icon { display: block; }   /* a real 32x27 hit area (an inline span had none) */
+  .sm-close .explore-icon i { transition: none; }
+  .sm-close .explore-icon i:nth-child(1) { transform: rotate(90deg) scaleX(.84375); }
+  .sm-close .explore-icon i:nth-child(2) { transform: translateY(-12.5px) rotate(-90deg) scaleX(.84375); }
+  .sm-close .explore-icon i:nth-child(3) { transform: translate(5px, -12.5px) scaleX(.6875); }
+
+  /* Two panels side by side in .sm-slide (200% wide). Default shows the
+     Janelia panel (right); "Main" slides the main panel in from the left.
+     Each panel's rules bleed past the side the other panel lives on. */
+  .sm-in { padding: 0; }   /* no bottom padding: the News colour bars sit flush on the sidebar's bottom edge */
+  .sm-top { padding: 0 24px; }
+  /* The line under the top bar belongs to the (sticky) bar, so it stays put
+     while the menu scrolls. It still bleeds toward the other panel: off the
+     right edge on the Janelia panel, off the left edge on the main panel,
+     and slides across with the panels. */
+  .sm-top::after {
+    content: ""; position: absolute; bottom: 0; left: var(--sm-pad); right: 0;
+    border-top: 1px solid currentColor;
+    transition: left .45s cubic-bezier(.65,0,.35,1), right .45s cubic-bezier(.65,0,.35,1);
+  }
+  .smenu.is-main .sm-top::after { left: 0; right: var(--sm-pad); }
+  @media (prefers-reduced-motion: reduce) { .sm-top::after { transition: none; } }
+  .sm-stage { flex: none; margin-bottom: 96px; overflow: hidden; transition: height .45s cubic-bezier(.65,0,.35,1); }
+  .sm-slide { display: flex; align-items: flex-start; width: 200%; transform: translateX(-50%); transition: transform .45s cubic-bezier(.65,0,.35,1); }
+  .smenu.is-main .sm-slide { transform: none; }
+  .smenu { --sm-pad: 24px; }
+  @media (max-width: 575.98px) { .smenu { --sm-pad: 11px; } }
+  .sm-panel { flex: 0 0 50%; padding: 0 var(--sm-pad); }
+  /* "Main →" / "← Back" share the top-left slot */
+  .smenu .sm-main { display: inline-flex; align-items: center; gap: 18px; font-size: 26px; line-height: 1; transition: opacity .3s ease, color .2s ease; }
+  .sm-main svg { width: 32px; height: 34px; }
+  .sm-back svg { transform: rotate(180deg); }
+  .smenu .sm-back { white-space: nowrap; }
+  @media (max-width: 575.98px) {   /* the longer label fits beside the close H on phones */
+    .smenu .sm-back { gap: 12px; font-size: clamp(16px, 5.3vw, 26px); }
+    .sm-back svg { width: 26px; height: 28px; }
+  }   /* "← Janelia Research Campus": shown in place of "Main" on the main panel */
+  /* Janelia panel */
+  .sm-jrc { margin-right: calc(-1 * var(--sm-pad)); padding: 28px var(--sm-pad) 40px 0; }
+  .sm-jh { margin: 0 0 18px; font: 400 26px/1.15 var(--font-sans); }
+  /* Main panel */
+  .sm-nav { list-style: none; margin: 0 0 0 calc(-1 * var(--sm-pad)); padding: 0; }
+  .sm-nav > li { margin-left: var(--sm-pad); }
+  .sm-nav > li + li { border-top: 1px solid currentColor; }
+  .smenu .sm-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; width: 100%; min-height: 76px; padding: 14px 0; text-align: left; font-size: 26px; line-height: 1.15; color: inherit; text-decoration: none; cursor: pointer; }
+  .sm-row svg { flex: none; width: 32px; height: 34px; transform: rotate(90deg); transition: transform .35s ease; }
+  .sm-nav > li:last-child .sm-row { padding-bottom: 40px; }
+  /* Search: looks exactly like the other rows; click it and you can type
+     (a stand-in for now, nothing is submitted). */
+  .sm-search { cursor: text; }
+  .sm-search input {
+    width: 100%; min-width: 0; margin: 0; padding: 0;
+    border: 0; border-radius: 0; background: none; outline: none;
+    font: inherit; color: inherit; caret-color: currentColor;
+    -webkit-appearance: none; appearance: none;
+  }
+  .smenu .sm-search input:focus-visible { outline: none; }   /* no box: the caret shows it's active */
+  .sm-search input::placeholder { color: inherit; opacity: 1; }
+  .sm-search input:focus::placeholder { opacity: .35; }
+  .sm-search input::-webkit-search-cancel-button { -webkit-appearance: none; }
+  .sm-row[aria-expanded="true"] svg { transform: rotate(-90deg); }
+  /* Sub-menus (open under a section): green group headings, links indented */
+  .sm-sub { list-style: none; margin: 0; padding: 0 0 36px; }
+  .sm-sub[hidden] { display: none; }
+  .sm-group + .sm-group { margin-top: 28px; }
+  .sm-gh { margin: 4px 0 14px; font: 400 17px/1.25 var(--font-sans); color: #7DE050; }
+  .smenu.is-light .sm-gh { color: var(--green-3); }
+  .sm-list, .sm-links { list-style: none; margin: 0; padding: 0 0 0 28px; }   /* Janelia links share the sub-menu style */
+  .sm-list a, .sm-links a { display: block; padding: 2px 0; color: inherit; text-decoration: none; cursor: pointer; font-size: 17px; line-height: 1.3; }
+  .sm-list--pairs li + li { margin-top: 12px; }
+  .sm-list--pairs a span { display: block; }
+  /* News & Updates: framed by colour bars and corner crosshairs; follows the menu */
+  .sm-news[hidden] { display: none; }
+  .sm-in:has(.sm-news[hidden]) .sm-stage { margin-bottom: 24px; }
+  .sm-news { position: relative; margin-top: auto; padding: 50px 0 0; }   /* pushed to the bottom; follows the menu when it is longer */
+  /* News sits inside the careers section's HHMI frame (.hframe): edges,
+     long corner crosshairs and H / H / M / I at the corners, drawn here in
+     the sidebar's ink (white in dark, black in light). */
+  .sm-frame { --hf-ink: currentColor; display: block; aspect-ratio: auto; margin: 0 40px 56px; padding: 40px 28px; }   /* 56px below: room for the M / I letters before the switch */
+  .sm-frame .hf-x { background: currentColor;
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' stroke='%23000' stroke-width='1' shape-rendering='crispEdges'%3E%3Csvg x='50%25' y='50%25' overflow='visible'%3E%3Cpath d='M0 -30V-6M0 6V30M-30 0H-6M6 0H30'/%3E%3C/svg%3E%3C/svg%3E") no-repeat;
+            mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' stroke='%23000' stroke-width='1' shape-rendering='crispEdges'%3E%3Csvg x='50%25' y='50%25' overflow='visible'%3E%3Cpath d='M0 -30V-6M0 6V30M-30 0H-6M6 0H30'/%3E%3C/svg%3E%3C/svg%3E") no-repeat; }
+  /* Dark/light switch: bottom-left corner of the sidebar, always in view
+     (sticks to the bottom while the menu scrolls). */
+  .sm-foot { position: sticky; bottom: 0; z-index: 1; margin-top: auto; padding: 16px var(--sm-pad) 20px; background: inherit; }
+  .smenu .sm-mode { display: flex; }   /* dark/light switch: just above the News box, top right */
+  .sm-label { margin: 0 0 40px; font: 400 14px/1 var(--font-sans); letter-spacing: .2em; text-transform: uppercase; }
+  .sm-up { list-style: none; margin: 0; padding: 0; }
+  .sm-up li + li { margin-top: 40px; }
+  .sm-up a { display: block; color: inherit; text-decoration: none; cursor: pointer; font-size: 17px; line-height: 1.12; }
+  /* Hover colour by mode: lime in dark, dark green in light. Text and arrows
+     both pick it up (arrows draw in currentColor); nothing moves. */
+  .smenu { --sm-hover: #7DE050; scrollbar-width: none; }
+  .smenu::-webkit-scrollbar { display: none; }   /* rules and colour bars run to the edge */
+  .smenu.is-light { --sm-hover: #006B2A; }
+  .smenu .sm-links a[aria-current="page"] { color: var(--sm-hover); }   /* current page (Overview): lime in dark, #006B2A in light */
+  .smenu .sm-row, .smenu .sm-links a, .smenu .sm-list a, .smenu .sm-up a { transition: color .2s ease; }
+  .smenu .sm-row:hover, .smenu .sm-main:hover, .smenu .sm-links a:hover, .smenu .sm-nav .sm-list a:hover, .smenu .sm-news .sm-up a:hover { color: var(--sm-hover); }   /* beats Bootstrap's a:not([href]):not([class]):hover */
+  /* Close H: white in dark mode, black in light (not the header's greens) */
+  .smenu .sm-close .explore-icon i { background: currentColor; }
+  .smenu .sm-close:hover { color: var(--sm-hover); }
+  @media (max-width: 575.98px) { .smenu { width: 100%; } }   /* the visible width (100vw would include a scrollbar gutter and push the panel off the left edge) */
+  @media (prefers-reduced-motion: reduce) { .smenu, .sm-row svg, .sm-track::after { transition: none; } }
+  /* Real links in the footer columns keep the footer colours */
+  .mf-col li > a[href] { color: inherit; text-decoration: none; }
+  /* ---------- Careers hero: grid background + parallax collage ----------
+     Section is a size container; every collage measurement is in cqw so the
+     whole composition scales with the window, as measured from the 1668px comp.
+     The aerial photo is always centered (margin: auto); the label and three
+     photos are absolutely positioned on top of it in % of its box. */
+  body.page-careers { background: #dadada; }
+  .page-careers .explore { color: #111; }                 /* EXPLORE label readable on the light grid */
+
+  .ch {
+    --row: 100px;
+    --col: calc((100% - 56px) / 12);
+    --step: 1;
+    --xhair: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' stroke='%23000' stroke-width='1' shape-rendering='crispEdges'%3E%3Csvg x='50%25' y='50%25' overflow='visible'%3E%3Cpath d='M0 -10V-2.25M0 2.25V10M-10 0H-2.25M2.25 0H10'/%3E%3C/svg%3E%3C/svg%3E");
+    position: relative;
+    container-type: inline-size;
+    background: #dadada;
+    color: #000d42;
+    padding: max(calc(var(--bar-h) + 40px), 7.8cqw) 0 20.9cqw;
+    overflow: clip;
+  }
+  /* Static gray crosshairs on the Bootstrap container's column lines, rows every 100px */
+  .ch::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: #8f8f8f;
+    -webkit-mask: var(--xhair) center 0 / calc(var(--col) * var(--step)) var(--row) repeat;
+            mask: var(--xhair) center 0 / calc(var(--col) * var(--step)) var(--row) repeat;
+    -webkit-mask-position: round(nearest, 50%, 1px) 0;
+            mask-position: round(nearest, 50%, 1px) 0;
+  }
+  /* Same column spacing as Build 2's grid section; phones and small tablets: every 3rd line */
+  @media (min-width: 576px)  { .ch { --col: 43px; } }
+  @media (min-width: 768px)  { .ch { --col: 58px; } }
+  @media (min-width: 992px)  { .ch { --col: 78px; } }
+  @media (min-width: 1200px) { .ch { --col: 93px; } }
+  @media (min-width: 1400px) { .ch { --col: 108px; } }
+  @media (max-width: 767.98px) { .ch { --step: 3; } }
+
+  /* The collage. Everything is a layer; React moves the layers. */
+  .ch-stage {
+    position: relative;
+    width: 77.76cqw;               /* 1297 / 1668 */
+    aspect-ratio: 1297 / 655;
+    margin: 0 auto;                /* the big image is always centered */
+  }
+  .ch-layer {
+    position: absolute;
+    will-change: transform;
+    transform: translate3d(0,0,0);
+  }
+  .ch-layer img { display: block; width: 100%; height: 100%; object-fit: cover; }
+  .ch-main   { inset: 0;                                                 z-index: 1; }
+  .ch-sculpt { left: -9.64%; top: 28.24%; width: 37.01%; height: 43.51%; z-index: 2; }
+  .ch-tweez  { left: 87.43%; top:  8.24%; width: 22.05%; height: 35.27%; z-index: 3; }
+  .ch-tweez img { object-position: 62% 70%; }      /* keep the tips and the cylinder in frame */
+  .ch-people { left: 57.44%; top: 61.07%; width: 32.61%; height: 60.00%; z-index: 4; }
+  .ch-people img { object-position: 50% 40%; }
+  .ch-label  { left: -10.41%; top: -8.09%; min-width: 29.53%; min-height: 25.34%; z-index: 5; }
+
+  .ch-title {
+    margin: 0;
+    background: #a5f300;
+    color: #000d42;
+    font: 400 clamp(18px, 2.64cqw, 64px)/1.18 var(--font-sans);   /* 44px at 1668px */
+    letter-spacing: -0.005em;
+    padding: .68em 1.6em .62em .5em;
+    white-space: nowrap;
+    height: 100%;
+  }
+
+  /* Phones: a bigger aerial photo so the pieces stay legible */
+  @media (max-width: 575.98px) {
+    .ch { padding-top: calc(var(--bar-h) + 56px); padding-bottom: 28cqw; }
+    .ch-stage { width: 86cqw; }
+    .ch-label { left: -4%; top: -22%; }
+    .ch-sculpt { left: -5%; }
+    .ch-tweez { left: 80%; }
+  }
+</style>
+</head>
+<body class="page-careers">
+
+<header class="site-bar">
+  <a class="brand" href="#" aria-label="HHMI Janelia Research Campus home">
+    <span class="brand-tile brand-logo">
+      <svg viewBox="0 0 128 38" role="img" aria-label="HHMI">
+        <g fill="currentColor" fill-rule="evenodd"><path d="M0,0 L10.6326783,0 L10.6326783,13.3585568 L10.7405466,13.3585568 C12.5660116,11.2287875 14.9303817,9.68631694 19.4398916,9.68631694 C24.4354642,9.68631694 29,12.719323 29,19.0532334 L29,38 L18.3673217,38 L18.3673217,23.5222432 C18.3673217,20.3299697 17.9908742,18.0954648 14.8753558,18.0954648 C13.0498908,18.0954648 10.6326783,18.9991344 10.6326783,23.4175076 L10.6326783,38 L0,38 L0,0"/><path d="M33,0 L43.6324017,0 L43.6324017,13.3585568 L43.7402717,13.3585568 C45.5657641,11.2287875 47.9301699,9.68631694 52.4419312,9.68631694 C57.4353955,9.68631694 62,12.719323 62,19.0532334 L62,38 L51.3671616,38 L51.3671616,23.5222432 C51.3671616,20.3299697 50.9907084,18.0954648 47.8751431,18.0954648 C46.0500873,18.0954648 43.6324017,18.9991344 43.6324017,23.4175076 L43.6324017,38 L33,38 L33,0"/><path d="M66,10.6843569 L76.2404845,10.6843569 L76.2404845,14.3158571 L76.3481689,14.3158571 C78.4913943,11.1568585 81.6011638,10 85.4612366,10 C88.4637577,10 91.6794677,11.5257864 92.9673213,14.2619302 C93.3958791,13.9469292 95.5391046,10 102.456195,10 C109.586474,10 112,14.8422855 112,19.2617162 L112,38 L101.38371,38 L101.38371,23.2103574 C101.38371,20.6317141 101.115589,18.3141451 97.8998787,18.3141451 C95.2182311,18.3141451 94.3079271,20.3684999 94.3079271,23.2103574 L94.3079271,38 L83.691637,38 L83.691637,23.2103574 C83.691637,20.6317141 83.4235158,18.3141451 80.2078057,18.3141451 C77.5261582,18.3141451 76.6162901,20.3684999 76.6162901,23.2103574 L76.6162901,38 L66,38 L66,10.6843569"/><path d="M127.750439,7 C127.911577,6.50960867 128,5.98823666 128,5.45015141 C128,2.43931982 125.314083,0 121.999327,0 C118.686366,0 116,2.43931982 116,5.45015141 C116,5.98823666 116.088872,6.50960867 116.250009,7 L127.750439,7"/><polygon points="116 38 127 38 127 10 116 10"/></g>
+      </svg>
+    </span>
+    <span class="brand-tile brand-campus">Janelia Research Campus</span>
+  </a>
+  <button class="explore" type="button" aria-label="Explore menu" aria-expanded="false" aria-controls="smenu" aria-haspopup="dialog">
+    <span class="explore-label">Explore</span>
+    <span class="explore-icon" aria-hidden="true"><i></i><i></i><i></i></span>
+  </button>
+</header>
+
+<dialog class="smenu" id="smenu" aria-label="Menu">
+  <div class="sm-in">
+    <div class="sm-top">
+      <button class="sm-main" type="button" aria-controls="smMain"><span>Main</span><svg viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <button class="sm-main sm-back" type="button" aria-controls="smJrc" hidden><svg viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Janelia Research Campus</span></button>
+      <button class="sm-close" type="button" aria-label="Close menu"><span class="explore-icon" aria-hidden="true"><i></i><i></i><i></i></span></button>
+    </div>
+    <div class="sm-stage">
+      <div class="sm-slide">
+        <!-- Main menu (left; slides in from the left when "Main" is clicked) -->
+        <nav class="sm-panel sm-panel--main" id="smMain" aria-label="Main menu" inert>
+          <ul class="sm-nav">
+            <li><button class="sm-row" type="button" aria-expanded="false" aria-controls="smSub1"><span>Inside HHMI</span><svg viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round"/></svg></button><ul class="sm-sub" id="smSub1" hidden><li><ul class="sm-list"><li><a>About</a></li><li><a>HHMI Senior Leadership</a></li><li><a>HHMI Board of Trustees</a></li><li><a>Medical Advisory Board</a></li><li><a>Scientific Review Board</a></li></ul></li></ul></li>
+            <li><button class="sm-row" type="button" aria-expanded="false" aria-controls="smSub2"><span>Opportunities for Scientists</span><svg viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round"/></svg></button><ul class="sm-sub" id="smSub2" hidden><li class="sm-group"><p class="sm-gh">Science Programs</p><ul class="sm-list sm-list--pairs"><li><a><span>Mid-Career &amp; Senior Faculty</span><span>HHMI Investigator Program</span></a></li><li><a><span>Early Career Faculty</span><span>Freeman Hrabowski Scholars</span></a></li><li><a><span>Postdoc-Faculty Transition</span><span>Hanna Gray Fellows</span></a></li><li><a><span>PhD &amp; Postdoc Transition</span><span>Gilliam Fellows Program</span></a></li></ul></li></ul></li>
+            <li><button class="sm-row" type="button" aria-expanded="false" aria-controls="smSub3"><span>For Educators &amp; Students</span><svg viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round"/></svg></button><ul class="sm-sub" id="smSub3" hidden><li class="sm-group"><p class="sm-gh">Educators</p><ul class="sm-list"><li><a>BioInteractive</a></li><li><a>Science Education Alliance (SEA)</a></li><li><a>Success in Science</a></li></ul></li><li class="sm-group"><p class="sm-gh">Students</p><ul class="sm-list"><li><a>Cech Fellows Program</a></li><li><a>Undergraduate Science Scholars Program</a></li></ul></li></ul></li>
+            <li><button class="sm-row" type="button" aria-expanded="false" aria-controls="smSub4"><span>Our Scientists</span><svg viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round"/></svg></button><ul class="sm-sub" id="smSub4" hidden><li class="sm-group"><p class="sm-gh">Program Scientists</p><ul class="sm-list sm-list--pairs"><li><a><span>Mid-Career &amp; Senior Faculty</span><span>HHMI Investigator Program</span></a></li><li><a><span>Early Career Faculty</span><span>Freeman Hrabowski Scholars</span></a></li><li><a><span>Postdoc-Faculty Transition</span><span>Hanna Gray Fellows</span></a></li><li><a><span>PhD &amp; Postdoc Transition</span><span>Gilliam Fellows Program</span></a></li></ul></li></ul></li>
+            <li><label class="sm-row sm-search"><input type="search" placeholder="Search" aria-label="Search" autocomplete="off" spellcheck="false"></label></li>
+          </ul>
+        </nav>
+        <!-- Janelia Research Campus (default) -->
+        <nav class="sm-panel sm-panel--jrc" id="smJrc" aria-label="Janelia Research Campus">
+          <div class="sm-jrc">
+            <p class="sm-jh">Janelia Research Campus</p>
+            <ul class="sm-links"><li><a href="build_2.html">Overview</a></li><li><a>Biology</a></li><li><a>AI@HHMI</a></li><li><a>Theory@HHMI</a></li><li><a>Tools@HHMI</a></li><li><a>Senior Leadership</a></li><li><a>20th Anniversary</a></li><li><a>Group Leaders</a></li><li><a>Leader Labs</a></li><li><a>Project &amp; Support Teams</a></li><li><a href="careers.html" aria-current="page">Careers &amp; Opportunities</a></li><li><a>Tools and Resources</a></li></ul>
+          </div>
+        </nav>
+      </div>
+    </div>
+    <section class="sm-news" aria-label="News and updates" hidden>   <!-- hidden for now: remove "hidden" to bring News & Updates (and the mode switch) back -->
+      <div class="hframe sm-frame">
+        <span aria-hidden="true" class="hf-edge hf-t"></span><span aria-hidden="true" class="hf-edge hf-b"></span>
+        <span aria-hidden="true" class="hf-edge hf-l"></span><span aria-hidden="true" class="hf-edge hf-r"></span>
+        <span aria-hidden="true" class="hf-x hf-tl"></span><span aria-hidden="true" class="hf-x hf-tr"></span>
+        <span aria-hidden="true" class="hf-x hf-bl"></span><span aria-hidden="true" class="hf-x hf-br"></span>
+        <span aria-hidden="true" class="hf-ch hf-ch-tl">H</span><span aria-hidden="true" class="hf-ch hf-ch-tr">H</span>
+        <span aria-hidden="true" class="hf-ch hf-ch-bl">M</span><span aria-hidden="true" class="hf-ch hf-ch-br">I</span>
+        <p class="sm-label">News &amp; Updates</p>
+        <ul class="sm-up">
+          <li><a>Applications are now open for Freeman Hrabowski Scholars Program. Apply Now!</a></li>
+          <li><a>Applications are now open for Hanna Gray Fellows Program. Apply Now!</a></li>
+        </ul>
+      </div>
+    </section>
+    <div class="sm-foot">
+      <button class="sm-mode" type="button" role="switch" aria-checked="false" aria-label="Light mode"><span class="sm-track" aria-hidden="true"></span></button>
+    </div>
+  </div>
+</dialog>
+
+<main>
+  <!-- Careers hero: grid background + collage. The static markup below is what shows
+       without JavaScript; React re-renders the same structure and adds the parallax. -->
+  <section class="ch" aria-labelledby="chTitle">
+    <div id="careersHero">
+      <div class="ch-stage">
+        <div class="ch-layer ch-main"><img src="assets/careers/campus-aerial.webp" alt="Aerial view of the Janelia Research Campus: the curved, terraced main building beside a pond, surrounded by woods and meadows" fetchpriority="high"></div>
+        <div class="ch-layer ch-sculpt"><img src="assets/careers/sculpture-pond.webp" alt="A red ribbon sculpture on the lawn by the pond, with the Janelia building behind it"></div>
+        <div class="ch-layer ch-tweez"><img src="assets/careers/tweezers.webp" alt="Fine tweezers lowering toward a tiny metal cylinder in a lab"></div>
+        <div class="ch-layer ch-people"><img src="assets/careers/team-window.webp" alt="Three Janelia scientists talking in front of a window with molecules sketched on the glass"></div>
+        <div class="ch-layer ch-label"><h1 class="ch-title" id="chTitle">Careers<br>&amp; Opportunities</h1></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="nl" aria-label="Stay connected">
+    <div class="nlx" id="nlx">
+      <span class="deco ue-bar--l" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
+      <button class="nlx-label" type="button" aria-expanded="false" aria-controls="nlxPanel">Stay Connected with HHMI</button>
+      <div class="nlx-panel" id="nlxPanel">
+        <a class="nlx-join"><span>Join<br>Newsletter</span><svg class="nlx-arrow" viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        <span class="nlx-rule" aria-hidden="true"></span>
+        <div class="nlx-social">
+          <p class="nlx-h">Stay Social</p>
+          <ul class="nlx-icons"><li><a class="nlx-ic" href="https://bsky.app/profile/hhmi-science.bsky.social" target="_blank" rel="noopener" aria-label="HHMI on Bluesky (opens in a new tab)"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M5.202 2.857C7.954 4.922 10.913 9.11 12 11.358c1.087-2.247 4.046-6.436 6.798-8.501C20.783 1.366 24 .213 24 3.883c0 .732-.42 6.156-.667 7.037-.856 3.061-3.978 3.842-6.755 3.37 4.854.826 6.089 3.562 3.422 6.299-5.065 5.196-7.28-1.304-7.847-2.97-.104-.305-.152-.448-.153-.327 0-.121-.05.022-.153.327-.568 1.666-2.782 8.166-7.847 2.97-2.667-2.737-1.432-5.473 3.422-6.3-2.777.473-5.899-.308-6.755-3.369C.42 10.04 0 4.615 0 3.883c0-3.67 3.217-2.517 5.202-1.026"/></svg></a></li><li><a class="nlx-ic" href="https://www.instagram.com/hhmi_science" target="_blank" rel="noopener" aria-label="HHMI on Instagram (opens in a new tab)"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7.0301.084c-1.2768.0602-2.1487.264-2.911.5634-.7888.3075-1.4575.72-2.1228 1.3877-.6652.6677-1.075 1.3368-1.3802 2.127-.2954.7638-.4956 1.6365-.552 2.914-.0564 1.2775-.0689 1.6882-.0626 4.947.0062 3.2586.0206 3.6671.0825 4.9473.061 1.2765.264 2.1482.5635 2.9107.308.7889.72 1.4573 1.388 2.1228.6679.6655 1.3365 1.0743 2.1285 1.38.7632.295 1.6361.4961 2.9134.552 1.2773.056 1.6884.069 4.9462.0627 3.2578-.0062 3.668-.0207 4.9478-.0814 1.28-.0607 2.147-.2652 2.9098-.5633.7889-.3086 1.4578-.72 2.1228-1.3881.665-.6682 1.0745-1.3378 1.3795-2.1284.2957-.7632.4966-1.636.552-2.9124.056-1.2809.0692-1.6898.063-4.948-.0063-3.2583-.021-3.6668-.0817-4.9465-.0607-1.2797-.264-2.1487-.5633-2.9117-.3084-.7889-.72-1.4568-1.3876-2.1228C21.2982 1.33 20.628.9208 19.8378.6165 19.074.321 18.2017.1197 16.9244.0645 15.6471.0093 15.236-.005 11.977.0014 8.718.0076 8.31.0215 7.0301.0839m.1402 21.6932c-1.17-.0509-1.8053-.2453-2.2287-.408-.5606-.216-.96-.4771-1.3819-.895-.422-.4178-.6811-.8186-.9-1.378-.1644-.4234-.3624-1.058-.4171-2.228-.0595-1.2645-.072-1.6442-.079-4.848-.007-3.2037.0053-3.583.0607-4.848.05-1.169.2456-1.805.408-2.2282.216-.5613.4762-.96.895-1.3816.4188-.4217.8184-.6814 1.3783-.9003.423-.1651 1.0575-.3614 2.227-.4171 1.2655-.06 1.6447-.072 4.848-.079 3.2033-.007 3.5835.005 4.8495.0608 1.169.0508 1.8053.2445 2.228.408.5608.216.96.4754 1.3816.895.4217.4194.6816.8176.9005 1.3787.1653.4217.3617 1.056.4169 2.2263.0602 1.2655.0739 1.645.0796 4.848.0058 3.203-.0055 3.5834-.061 4.848-.051 1.17-.245 1.8055-.408 2.2294-.216.5604-.4763.96-.8954 1.3814-.419.4215-.8181.6811-1.3783.9-.4224.1649-1.0577.3617-2.2262.4174-1.2656.0595-1.6448.072-4.8493.079-3.2045.007-3.5825-.006-4.848-.0608M16.953 5.5864A1.44 1.44 0 1 0 18.39 4.144a1.44 1.44 0 0 0-1.437 1.4424M5.8385 12.012c.0067 3.4032 2.7706 6.1557 6.173 6.1493 3.4026-.0065 6.157-2.7701 6.1506-6.1733-.0065-3.4032-2.771-6.1565-6.174-6.1498-3.403.0067-6.156 2.771-6.1496 6.1738M8 12.0077a4 4 0 1 1 4.008 3.9921A3.9996 3.9996 0 0 1 8 12.0077"/></svg></a></li><li><a class="nlx-ic" href="https://www.linkedin.com/company/howard-hughes-medical-institute" target="_blank" rel="noopener" aria-label="HHMI on LinkedIn (opens in a new tab)"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a></li><li><a class="nlx-ic" href="https://x.com/hhmi_science" target="_blank" rel="noopener" aria-label="HHMI on X (opens in a new tab)"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M14.234 10.162 22.977 0h-2.072l-7.591 8.824L7.251 0H.258l9.168 13.343L.258 24H2.33l8.016-9.318L16.749 24h6.993zm-2.837 3.299-.929-1.329L3.076 1.56h3.182l5.965 8.532.929 1.329 7.754 11.09h-3.182z"/></svg></a></li><li><a class="nlx-ic" href="https://www.facebook.com/HowardHughesMed" target="_blank" rel="noopener" aria-label="HHMI on Facebook (opens in a new tab)"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M9.101 23.691v-7.98H6.627v-3.667h2.474v-1.58c0-4.085 1.848-5.978 5.858-5.978.401 0 .955.042 1.468.103a8.68 8.68 0 0 1 1.141.195v3.325a8.623 8.623 0 0 0-.653-.036 26.805 26.805 0 0 0-.733-.009c-.707 0-1.259.096-1.675.309a1.686 1.686 0 0 0-.679.622c-.258.42-.374.995-.374 1.752v1.297h3.919l-.386 2.103-.287 1.564h-3.246v8.245C19.396 23.238 24 18.179 24 12.044c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.628 3.874 10.35 9.101 11.647Z"/></svg></a></li><li><a class="nlx-ic" href="https://www.youtube.com/c/HHMI" target="_blank" rel="noopener" aria-label="HHMI on YouTube (opens in a new tab)"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></a></li></ul>
+        </div>
+      </div>
+      <span class="deco ue-bar--r" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
+    </div>
+  </section>
+
+  <footer class="mfoot" id="mfoot"><div class="in">
+    <nav class="mf-box" aria-label="Footer">
+      <div class="mf-cols" id="mfcols">
+      <div class="mf-col"><h3>Janelia Research Campus</h3><ul><li><a href="build_2.html"><span class="t">Overview</span></a></li><li><a><span class="t">Biology</span></a></li><li><a><span class="t">AI@HHMI</span></a></li><li><a><span class="t">Theory@HHMI</span></a></li><li><a><span class="t">Tools@HHMI</span></a></li><li><a><span class="t">Senior Leadership</span></a></li><li><a><span class="t">20th Anniversary</span></a></li><li><a><span class="t">Group Leaders</span></a></li><li><a><span class="t">Leader Labs</span></a></li><li><a><span class="t">Project &amp; Support Teams</span></a></li><li><a href="careers.html"><span class="t">Careers &amp; Opportunities</span></a></li><li><a><span class="t">Tools and Resources</span></a></li></ul></div>
+      <div class="mf-col"><h3>Inside HHMI</h3><ul><li><a><span class="t">About</span></a></li><li><a><span class="t">HHMI Senior Leadership</span></a></li><li><a><span class="t">HHMI Board of Trustees</span></a></li><li><a><span class="t">Medical Advisory Board</span></a></li><li><a><span class="t">Scientific Review Board</span></a></li></ul></div>
+      <div class="mf-col"><h3>Opportunities for Scientists</h3><ul><li class="sub">Science Programs</li><li><a class="mf-pair"><span class="t">Mid-Career &amp; Senior Faculty</span><span class="t">HHMI Investigator Program</span></a></li><li><a class="mf-pair"><span class="t">Early Career Faculty</span><span class="t">Freeman Hrabowski Scholars</span></a></li><li><a class="mf-pair"><span class="t">Postdoc-Faculty Transition</span><span class="t">Hanna Gray Fellows</span></a></li><li><a class="mf-pair"><span class="t">PhD &amp; Postdoc Transition</span><span class="t">Gilliam Fellows Program</span></a></li></ul></div>
+      <div class="mf-col"><h3>For Educators &amp; Students</h3><ul><li class="sub">Educators</li><li><a><span class="t">BioInteractive</span></a></li><li><a><span class="t">Science Education Alliance (SEA)</span></a></li><li><a><span class="t">Success in Science</span></a></li><li class="sub">Students</li><li><a><span class="t">Cech Fellows Program</span></a></li><li><a><span class="t">Undergraduate Science Scholars Program</span></a></li></ul></div>
+      <div class="mf-col"><h3>Our Scientists</h3><ul><li class="sub">Program Scientists</li><li><a class="mf-pair"><span class="t">Mid-Career &amp; Senior Faculty</span><span class="t">HHMI Investigator Program</span></a></li><li><a class="mf-pair"><span class="t">Early Career Faculty</span><span class="t">Freeman Hrabowski Scholars</span></a></li><li><a class="mf-pair"><span class="t">Postdoc-Faculty Transition</span><span class="t">Hanna Gray Fellows</span></a></li><li><a class="mf-pair"><span class="t">PhD &amp; Postdoc Transition</span><span class="t">Gilliam Fellows Program</span></a></li></ul></div>
+
+      </div>
+      <div class="mf-top"><a class="totop" href="#" id="totop" aria-label="Back to top"><svg viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
+    </nav>
+    <div class="mf-box mf-box--links">
+      <div class="mf-half">
+        <ul class="mf-legal"><li><a href="https://www.hhmi.org/about/doing-business-with-hhmi">Doing Business with HHMI</a></li><li><a href="https://www.hhmi.org/about/for-host-institutions">For Host Institutions</a></li><li><a href="https://www.hhmi.org/news/press-room">Press Room</a></li><li><a href="https://www.hhmi.org/about/policies">Policies</a></li><li><a href="https://www.hhmi.org/careers">Careers</a></li><li><a href="https://www.hhmi.org/contact-us">Contact Us</a></li><li><a href="https://www.hhmi.org/privacy-policy">Privacy Policy &amp; Cookie Notice</a></li><li><a href="https://www.hhmi.org/terms-of-use">Terms of Use</a></li></ul>
+      </div>
+      <div class="mf-half mf-half--copy"><p class="mf-copy">© Howard Hughes Medical Institute 2026</p></div>
+    </div>
+  </div></footer>
+</main>
+<div class="mf-reveal" id="mfReveal" aria-hidden="true"></div>
+<div class="mf-stage"><svg id="mfLogo" hidden width="113" height="34" viewBox="0 0 128 38" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><g fill="currentColor" fill-rule="evenodd"><path d="M0,0 L10.6326783,0 L10.6326783,13.3585568 L10.7405466,13.3585568 C12.5660116,11.2287875 14.9303817,9.68631694 19.4398916,9.68631694 C24.4354642,9.68631694 29,12.719323 29,19.0532334 L29,38 L18.3673217,38 L18.3673217,23.5222432 C18.3673217,20.3299697 17.9908742,18.0954648 14.8753558,18.0954648 C13.0498908,18.0954648 10.6326783,18.9991344 10.6326783,23.4175076 L10.6326783,38 L0,38 L0,0"/><path d="M33,0 L43.6324017,0 L43.6324017,13.3585568 L43.7402717,13.3585568 C45.5657641,11.2287875 47.9301699,9.68631694 52.4419312,9.68631694 C57.4353955,9.68631694 62,12.719323 62,19.0532334 L62,38 L51.3671616,38 L51.3671616,23.5222432 C51.3671616,20.3299697 50.9907084,18.0954648 47.8751431,18.0954648 C46.0500873,18.0954648 43.6324017,18.9991344 43.6324017,23.4175076 L43.6324017,38 L33,38 L33,0"/><path d="M66,10.6843569 L76.2404845,10.6843569 L76.2404845,14.3158571 L76.3481689,14.3158571 C78.4913943,11.1568585 81.6011638,10 85.4612366,10 C88.4637577,10 91.6794677,11.5257864 92.9673213,14.2619302 C93.3958791,13.9469292 95.5391046,10 102.456195,10 C109.586474,10 112,14.8422855 112,19.2617162 L112,38 L101.38371,38 L101.38371,23.2103574 C101.38371,20.6317141 101.115589,18.3141451 97.8998787,18.3141451 C95.2182311,18.3141451 94.3079271,20.3684999 94.3079271,23.2103574 L94.3079271,38 L83.691637,38 L83.691637,23.2103574 C83.691637,20.6317141 83.4235158,18.3141451 80.2078057,18.3141451 C77.5261582,18.3141451 76.6162901,20.3684999 76.6162901,23.2103574 L76.6162901,38 L66,38 L66,10.6843569"/><polygon points="116 38 127 38 127 10 116 10"/><path d="M127.750439,7 C127.911577,6.50960867 128,5.98823666 128,5.45015141 C128,2.43931982 125.314083,0 121.999327,0 C118.686366,0 116,2.43931982 116,5.45015141 C116,5.98823666 116.088872,6.50960867 116.250009,7 L127.750439,7"/></g></svg><canvas id="mfParticles" role="img" aria-label="HHMI"></canvas></div>
+
+<script>
+
+  /* Touch screens: a tap toggles the H; tapping anywhere else turns it back */
+  (function () {
+    var btn = document.querySelector('.explore');
+    btn.addEventListener('pointerup', function (e) {
+      if (e.pointerType !== 'mouse') btn.classList.toggle('is-h');
+    });
+    document.addEventListener('pointerdown', function (e) {
+      if (!btn.contains(e.target)) btn.classList.remove('is-h');
+    });
+  })();
+
+(function () {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var DECO_STEP = 800;   // ms between colour changes
+  function shuffle(a) {
+    for (var i = a.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1)), t = a[i]; a[i] = a[j]; a[j] = t;
+    }
+    return a;
+  }
+  // Also the "Explore" buttons, whose two side bars shuffle independently.
+  document.querySelectorAll('.cta, .unit-explore, .nlx').forEach(function (cta) {
+    var decos = Array.prototype.slice.call(cta.querySelectorAll('.deco')).map(function (d) {
+      return { el: d, cells: Array.prototype.slice.call(d.children), last: '' };
+    }).filter(function (d) { return d.cells.length === 4; });
+    if (!decos.length) return;
+    var timer = null;
+    function step() {
+      decos.forEach(function (d) {
+        var cs = getComputedStyle(d.el);
+        var colours = [1, 2, 3, 4].map(function (n) { return cs.getPropertyValue('--deco-' + n).trim(); });
+        var order;
+        do { order = shuffle(colours.slice()); } while (order.join() === d.last || order.join() === colours.join());
+        d.last = order.join();
+        d.cells.forEach(function (c, i) { c.style.backgroundColor = order[i]; });
+      });
+    }
+    function start() { if (!timer) { step(); timer = setInterval(step, DECO_STEP); } }
+    function stop() {
+      clearInterval(timer); timer = null;
+      decos.forEach(function (d) { d.last = ''; d.cells.forEach(function (c) { c.style.backgroundColor = ''; }); });
+    }
+    if (cta.classList.contains('nlx') || cta.classList.contains('unit-explore')) {   // Stay Connected / Explore: shuffle while open (click to open)
+      cta.addEventListener('deco:start', start);
+      cta.addEventListener('deco:stop', stop);
+      return;
+    }
+    cta.addEventListener('mouseenter', start);
+    cta.addEventListener('mouseleave', stop);
+    cta.addEventListener('focus', function () { if (cta.matches(':focus-visible')) start(); });
+    cta.addEventListener('blur', stop);
+  });
+})();
+
+// Video Grid and Schema (from studies/grid.html): videos play only while on
+
+(function () {
+  var btn = document.querySelector('.explore'), hero = document.querySelector('.ch');
+  if (!btn || !hero || !('IntersectionObserver' in window)) return;
+  new IntersectionObserver(function (e) {
+    btn.classList.toggle('is-compact', !e[0].isIntersecting);
+  }, { rootMargin: '-80px 0px 0px 0px' }).observe(hero);   // gone once the hero's bottom passes under the header
+})();
+</script>
+<script>
+/* Footer: columns are the sidebar menu's content (static markup above). */
+(function(){
+  document.getElementById('totop').addEventListener('click',function(e){
+    e.preventDefault();
+    window.scrollTo({top:0,behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});
+  });
+})();
+/* Particle wordmark. The page above lifts away like a curtain to uncover it; the wordmark is already in place and reacts to the pointer. */
+(function(){
+  var COLORS=['#8B8B8B','#8B8B8B','#8B8B8B','#8B8B8B','#8B8B8B']; // h, h, m, i stem, i dot (document order)
+  var PATHS=[].map.call(document.querySelectorAll('#mfLogo path, #mfLogo polygon'),function(el){
+    return new Path2D(el.tagName.toLowerCase()==='polygon'?'M'+el.getAttribute('points').trim().split(/\s+/).join(' ').replace(/(\S+ \S+) /g,'$1 L')+' Z':el.getAttribute('d'));
+  });
+  var VB_W=128,VB_H=38,FILL=.75;
+  var cv=document.getElementById('mfParticles'),ctx=cv.getContext('2d'),spacer=document.getElementById('mfReveal');
+  var reduce=matchMedia('(prefers-reduced-motion: reduce)');
+  var P=[],G=[],W=0,H=0,r=1.5,DPR=1,img=null,buf=null,R=80,lastW=-1,raf=0,visible=false;
+  var mouse={x:-1e4,y:-1e4,on:false,f:4,base:4};
+
+  function dot(){return 1}   // particle size in CSS px, all screens
+  function layout(){
+    var w=document.documentElement.clientWidth;
+    var pad=Math.max(40,Math.min(120,w*.06)),lw=w*FILL,lh=lw*VB_H/VB_W,h=Math.round(lh+pad*2);
+    document.documentElement.style.setProperty('--stage-h',h+'px');
+    if(w===lastW)return;lastW=w;W=w;H=h;
+    var dpr=Math.min(window.devicePixelRatio||1,2);
+    cv.width=Math.round(W*dpr);cv.height=Math.round(H*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);
+    DPR=dpr;img=ctx.createImageData(cv.width,cv.height);buf=new Uint32Array(img.data.buffer);
+    var d=dot(w),gap=3,s=lw/VB_W,ox=(W-lw)/2,oy=(H-lh)/2;
+    r=d/2;R=Math.max(50,W*.06);
+    var t=document.createElement('canvas').getContext('2d');
+    var groups={};P=[];
+    for(var y=gap/2;y<lh;y+=gap)for(var x=gap/2;x<lw;x+=gap){
+      for(var i=0;i<PATHS.length;i++){
+        if(t.isPointInPath(PATHS[i],x/s,y/s)){
+          var p={hx:x+ox,hy:y+oy,x:x+ox,y:y+oy,vx:0,vy:0,e:.7+Math.random()*.6};
+          (groups[COLORS[i]]=groups[COLORS[i]]||[]).push(p);P.push(p);break;
+        }
+      }
+    }
+    G=Object.keys(groups).map(function(c){return {c:c,p:groups[c]}});
+    draw();
+  }
+  function step(){
+    var moving=0,R2=R*R,m=mouse.on,k=.045;
+    mouse.f+=(mouse.base-mouse.f)*.06;
+    for(var i=0;i<P.length;i++){
+      var p=P[i],ax=(p.hx-p.x)*k*p.e,ay=(p.hy-p.y)*k*p.e;
+      if(m){var dx=p.x-mouse.x,dy=p.y-mouse.y,d2=dx*dx+dy*dy;
+        if(d2<R2&&d2>.01){var d=Math.sqrt(d2),f=(1-d/R)*mouse.f/d;ax+=dx*f;ay+=dy*f}}
+      p.vx=(p.vx+ax)*.86;p.vy=(p.vy+ay)*.86;p.x+=p.vx;p.y+=p.vy;
+      if(Math.abs(p.vx)+Math.abs(p.vy)>.03||Math.abs(p.hx-p.x)+Math.abs(p.hy-p.y)>.4)moving++;
+    }
+    return moving;
+  }
+  // Packs a #RRGGBB color into one 32-bit pixel (canvas pixels are RGBA bytes, read little-endian).
+  function px(hex){var n=parseInt(hex.slice(1),16);return (0xFF000000|((n&255)<<16)|(n&0xFF00)|(n>>16))>>>0}
+  function draw(){
+    if(r<=.75){ // 1px dots: write squares straight into the pixel buffer (much faster than drawing shapes)
+      var cw=cv.width,ch=cv.height,sz=Math.max(1,Math.round(r*2*DPR));
+      buf.fill(0);
+      for(var g=0;g<G.length;g++){
+        var a=G[g].p,c=px(G[g].c);
+        for(var i=0;i<a.length;i++){
+          var x0=Math.round((a[i].x-r)*DPR),y0=Math.round((a[i].y-r)*DPR);
+          if(x0<0||y0<0||x0+sz>cw||y0+sz>ch)continue;
+          for(var yy=0;yy<sz;yy++){var o=(y0+yy)*cw+x0;for(var xx=0;xx<sz;xx++)buf[o+xx]=c}
+        }
+      }
+      ctx.putImageData(img,0,0);
+      return;
+    }
+    ctx.clearRect(0,0,W,H);
+    for(var g=0;g<G.length;g++){
+      var a=G[g].p;ctx.fillStyle=G[g].c;ctx.beginPath();
+      for(var i=0;i<a.length;i++){var p=a[i];ctx.moveTo(p.x+r,p.y);ctx.arc(p.x,p.y,r,0,6.2832)}
+      ctx.fill();
+    }
+  }
+  function frame(){
+    raf=0;var moving=step();draw();
+    if(visible&&(moving||mouse.on||mouse.f>mouse.base+.1))raf=requestAnimationFrame(frame);
+  }
+  function kick(){if(!raf&&visible&&!reduce.matches)raf=requestAnimationFrame(frame)}
+
+  new IntersectionObserver(function(es){visible=es[es.length-1].isIntersecting;kick()},{threshold:0}).observe(spacer);
+
+  function at(e){var b=cv.getBoundingClientRect();mouse.x=e.clientX-b.left;mouse.y=e.clientY-b.top}
+  cv.addEventListener('pointermove',function(e){at(e);mouse.on=true;kick()});
+  cv.addEventListener('pointerleave',function(e){if(e.pointerType==='mouse'){mouse.on=false;mouse.x=mouse.y=-1e4}});
+  cv.addEventListener('pointerdown',function(e){at(e);mouse.on=true;mouse.f=16;kick()});   // click or tap: bigger burst
+  function lift(e){if(e.pointerType!=='mouse')setTimeout(function(){mouse.on=false},300)}
+  cv.addEventListener('pointerup',lift);cv.addEventListener('pointercancel',lift);
+
+  var rq=0;window.addEventListener('resize',function(){if(rq)return;rq=requestAnimationFrame(function(){rq=0;layout();kick()})});
+  layout();
+})();
+</script>
+<script>
+/* Sidebar menu: Explore opens it instantly;
+   H button, Esc or a click on the dimmed page closes it. "Main" slides
+   the main menu in from the left. The switch turns the
+   sidebar light; the choice is remembered in this browser. */
+(function () {
+  var dlg = document.getElementById('smenu'), btn = document.querySelector('.explore');
+  if (!dlg || !btn) return;
+  var mode = dlg.querySelector('.sm-mode');
+  function setLight(on) { dlg.classList.toggle('is-light', on); mode.setAttribute('aria-checked', on ? 'true' : 'false'); }
+  try { setLight(localStorage.getItem('hhmiMenuLight') === '1'); } catch (e) {}
+  mode.addEventListener('click', function () {
+    var on = mode.getAttribute('aria-checked') !== 'true';
+    setLight(on);
+    try { localStorage.setItem('hhmiMenuLight', on ? '1' : '0'); } catch (e) {}
+  });
+  var closeBtn = dlg.querySelector('.sm-close'), top = dlg.querySelector('.sm-top');
+  // Put the close H exactly where the header's Explore icon is; centre the
+  // switch on the same line.
+  function place() {
+    var r = btn.querySelector('.explore-icon').getBoundingClientRect(), d = dlg.getBoundingClientRect();
+    closeBtn.style.left = r.left + 'px';
+    closeBtn.style.top = r.top + 'px';
+    top.style.height = (2 * (r.top + r.height / 2 - d.top)) + 'px';
+  }
+  window.addEventListener('resize', function () { if (dlg.open) place(); });
+  function open() {
+    if (dlg.open) return;
+    document.documentElement.classList.add('sm-open');   // lock first, then measure
+    dlg.showModal();
+    place();
+    btn.setAttribute('aria-expanded', 'true');
+  }
+  function close() {
+    if (!dlg.open) return;
+    dlg.close();
+    document.documentElement.classList.remove('sm-open');
+    btn.setAttribute('aria-expanded', 'false');
+    btn.classList.remove('is-h');
+    btn.focus({ preventScroll: true });
+  }
+  btn.addEventListener('click', open);
+  dlg.querySelector('.sm-close').addEventListener('click', close);
+  dlg.addEventListener('cancel', function (e) { e.preventDefault(); close(); });
+  dlg.addEventListener('click', function (e) {
+    if (e.target !== dlg) return;
+    var r = dlg.getBoundingClientRect();
+    if (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom) close();
+  });
+  // Two panels: Janelia (default) and Main. "Main" slides the main panel in
+  // from the left; "Back" (same spot) slides back. The stage
+  // takes the height of the panel showing, so News & Updates follows it.
+  var stage = dlg.querySelector('.sm-stage'), mainP = dlg.querySelector('.sm-panel--main'), jrcP = dlg.querySelector('.sm-panel--jrc');
+  var mainBtn = dlg.querySelector('.sm-main:not(.sm-back)'), backBtn = dlg.querySelector('.sm-back');
+  function fit() { stage.style.height = (dlg.classList.contains('is-main') ? mainP : jrcP).offsetHeight + 'px'; }
+  function show(main, focus) {
+    dlg.classList.toggle('is-main', main);
+    mainP.inert = !main; jrcP.inert = main;
+    mainBtn.hidden = main; backBtn.hidden = !main;
+    fit();
+    if (focus) (main ? backBtn : mainBtn).focus({ preventScroll: true });
+  }
+  mainBtn.addEventListener('click', function () { show(true, true); });
+  backBtn.addEventListener('click', function () { show(false, true); });
+  window.addEventListener('resize', function () { if (dlg.open) fit(); });
+  btn.addEventListener('click', function () { show(false, false); });   // always opens on the Janelia panel
+  [].forEach.call(dlg.querySelectorAll('.sm-row[aria-controls]'), function (row) {
+    var sub = document.getElementById(row.getAttribute('aria-controls'));
+    row.addEventListener('click', function () {
+      var on = row.getAttribute('aria-expanded') !== 'true';
+      row.setAttribute('aria-expanded', on ? 'true' : 'false');
+      sub.hidden = !on;
+      fit();
+    });
+  });
+})();
+</script>
+<script>
+/* Stay Connected. Desktop (mouse): opens on hover, closes when the pointer
+   leaves. Touch screens: a tap opens it; a tap outside closes it. Keyboard:
+   Enter opens; Esc or tabbing out closes. */
+(function () {
+  var box = document.getElementById('nlx'); if (!box) return;
+  var btn = box.querySelector('.nlx-label');
+  function set(on) {
+    if (box.classList.contains('is-open') === on) return;
+    box.classList.toggle('is-open', on);
+    btn.setAttribute('aria-expanded', on ? 'true' : 'false');
+    box.dispatchEvent(new Event(on ? 'deco:start' : 'deco:stop'));   // colour bars shuffle while open
+  }
+  var hover = matchMedia('(hover: hover) and (pointer: fine)'), leaveT;
+  btn.addEventListener('click', function () {
+    if (hover.matches && box.classList.contains('is-open')) return;   // mouse: hover already opened it
+    set(!box.classList.contains('is-open'));
+  });
+  box.addEventListener('mouseenter', function () { if (hover.matches) { clearTimeout(leaveT); set(true); } });
+  box.addEventListener('mouseleave', function () {
+    if (hover.matches) leaveT = setTimeout(function () { if (!box.contains(document.activeElement) || !document.activeElement.matches(':focus-visible')) set(false); }, 150);
+  });
+  box.addEventListener('focusout', function (e) { if (!box.contains(e.relatedTarget) && e.relatedTarget) set(false); });
+  document.addEventListener('pointerdown', function (e) {   // pointerdown: iOS doesn't send clicks from plain areas
+    if (box.contains(e.target)) return;
+    set(false);
+    if (box.contains(document.activeElement)) document.activeElement.blur();
+  });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && box.classList.contains('is-open')) { set(false); btn.focus(); } });
+})();
+</script>
+<script src="https://cdn.jsdelivr.net/npm/react@18.3.1/umd/react.production.min.js" crossorigin></script>
+<script src="https://cdn.jsdelivr.net/npm/react-dom@18.3.1/umd/react-dom.production.min.js" crossorigin></script>
+<script>
+/* Careers hero collage (React, no build step).
+   Layers move against the cursor at their own depth, and drift at their own
+   speed while the page scrolls, so the pieces separate from the aerial photo.
+   Depths are in px at a 1297px-wide aerial photo and scale with it.
+   Off on touch screens and with reduced motion: the collage stays still.
+   Without JavaScript the static markup already in #careersHero shows as is. */
+(function () {
+  var root = document.getElementById('careersHero');
+  if (!root || !window.React || !window.ReactDOM) return;
+  var h = React.createElement, useRef = React.useRef, useEffect = React.useEffect;
+
+  // [class, image or null, alt, mouse depth px, scroll speed (share of scrollY)]
+  var LAYERS = [
+    ['ch-main',   'assets/careers/campus-aerial.webp',  'Aerial view of the Janelia Research Campus: the curved, terraced main building beside a pond, surrounded by woods and meadows', 6,  0],
+    ['ch-sculpt', 'assets/careers/sculpture-pond.webp', 'A red ribbon sculpture on the lawn by the pond, with the Janelia building behind it', 22, 0.10],
+    ['ch-tweez',  'assets/careers/tweezers.webp',       'Fine tweezers lowering toward a tiny metal cylinder in a lab', 30, 0.22],
+    ['ch-people', 'assets/careers/team-window.webp',    'Three Janelia scientists talking in front of a window with molecules sketched on the glass', 36, 0.30],
+    ['ch-label',  null, '', 44, 0.16]
+  ];
+
+  function Collage() {
+    var refs = useRef([]);
+    useEffect(function () {
+      var still = matchMedia('(prefers-reduced-motion: reduce)').matches || matchMedia('(hover: none)').matches;
+      if (still) return;
+      var stage = root.querySelector('.ch-stage');
+      var tx = 0, ty = 0, cx = 0, cy = 0, sy = 0, cs = 0, raf = 0, visible = true;
+
+      function onMove(e) {                    // -1 … 1 from the centre of the window
+        tx = e.clientX / innerWidth * 2 - 1;
+        ty = e.clientY / innerHeight * 2 - 1;
+        kick();
+      }
+      function onLeave() { tx = ty = 0; kick(); }
+      function onScroll() { sy = scrollY; kick(); }
+      function kick() { if (!raf && visible) raf = requestAnimationFrame(frame); }
+      function frame() {
+        raf = 0;
+        cx += (tx - cx) * 0.08; cy += (ty - cy) * 0.08; cs += (sy - cs) * 0.12;
+        var k = stage.offsetWidth / 1297;
+        refs.current.forEach(function (el, i) {
+          if (!el) return;
+          var d = LAYERS[i][3] * k, s = LAYERS[i][4];
+          el.style.transform = 'translate3d(' + (-cx * d).toFixed(2) + 'px,' + (-cy * d - cs * s).toFixed(2) + 'px,0)';
+        });
+        if (Math.abs(tx - cx) > 0.001 || Math.abs(ty - cy) > 0.001 || Math.abs(sy - cs) > 0.5) raf = requestAnimationFrame(frame);
+      }
+      var io = new IntersectionObserver(function (e) { visible = e[0].isIntersecting; if (visible) kick(); });
+      io.observe(root);
+      addEventListener('pointermove', onMove, { passive: true });
+      document.documentElement.addEventListener('pointerleave', onLeave);
+      addEventListener('scroll', onScroll, { passive: true });
+      onScroll();
+      return function () {
+        io.disconnect(); cancelAnimationFrame(raf);
+        removeEventListener('pointermove', onMove);
+        document.documentElement.removeEventListener('pointerleave', onLeave);
+        removeEventListener('scroll', onScroll);
+      };
+    }, []);
+
+    return h('div', { className: 'ch-stage' }, LAYERS.map(function (l, i) {
+      var set = function (el) { refs.current[i] = el; };
+      if (!l[1]) return h('div', { key: i, ref: set, className: 'ch-layer ' + l[0] },
+        h('h1', { className: 'ch-title', id: 'chTitle' }, 'Careers', h('br'), '& Opportunities'));
+      return h('div', { key: i, ref: set, className: 'ch-layer ' + l[0] },
+        h('img', { src: l[1], alt: l[2], decoding: 'async', fetchpriority: i === 0 ? 'high' : 'auto' }));
+    }));
+  }
+
+  ReactDOM.createRoot(root).render(h(Collage));
+})();
+</script>
+</body>
+</html>
