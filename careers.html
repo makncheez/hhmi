@@ -285,7 +285,7 @@
   /* ---------- Join Janelia: lime box in the container, heading hangs out on the left ----------
      Box spans the middle 10 of 12 columns. Measured from the 1282px comp:
      heading ~46px starting 72px left of the box; copy starts at 40% of the box. */
-  .jn { position: relative; padding: 0 0 120px; }
+  .jn { position: relative; padding: 0; }   /* the roles block sits directly under the box */
   .jn-box {
     container-type: inline-size;
     display: grid;
@@ -305,7 +305,6 @@
   .jn-copy p { margin: 0 0 22px; font-size: 17px; line-height: 1.35; }
   .jn-copy p:last-child { margin-bottom: 0; }
   @media (max-width: 767.98px) {
-    .jn { padding-bottom: 96px; }
     .jn-box { grid-template-columns: 1fr; padding: 40px 24px 44px; }
     .jn-title { margin: 0 0 28px -12px; padding-right: 0; font-size: clamp(30px, 8.5cqw, 40px); }
   }
@@ -388,6 +387,8 @@
   }
   /* Careers: 4 across on desktop, 2 on tablets, 1 on phones */
   .roles { position: relative; padding: 0 0 160px; }
+  .roles .roles-intro { padding: 56px 0 72px; }
+  .roles .roles-title { max-width: 900px; margin-bottom: 0; }
   @media (max-width: 991.98px) { .roles-row { row-gap: 48px; } }
 
 
@@ -790,11 +791,9 @@
   </section>
 
   <section class="roles" aria-labelledby="rolesTitle">
-    <div class="container">
+    <div class="container-fluid px-0">   <!-- full window width, directly under the Join Janelia box -->
       <div class="roles-intro">
-        <div class="deco" aria-hidden="true"><div></div><div></div><div></div><div></div></div>
-        <h2 class="roles-title" id="rolesTitle">Janelia’s three lead scientist roles</h2>
-        <p class="roles-lead">Janelia’s ambitious mission needs scientists who work in different ways.</p>
+        <h2 class="roles-title" id="rolesTitle">Janelia offers a wide range of career opportunities for scientists and professionals at many stages.</h2>
       </div>
       <div class="row g-0 roles-row">
         <div class="col-md-6 col-lg-3">
