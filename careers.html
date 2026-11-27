@@ -284,7 +284,8 @@
   /* ---------- Join Janelia: lime box in the container, heading hangs out on the left ----------
      Box spans the middle 10 of 12 columns. Measured from the 1282px comp:
      heading ~46px starting 72px left of the box; copy starts at 40% of the box. */
-  .jn { position: relative; padding: 0 0 120px; }   /* gap above the roles block */
+  .below-hero { background: #fbfbfb; color: #000d42; }   /* plain, no crosshair grid */
+  .jn { position: relative; padding: 64px 0 120px; }   /* 64px below the grid; gap above the roles block */
   .jn-box {
     container-type: inline-size;
     display: grid;
@@ -304,7 +305,7 @@
   .jn-copy p { margin: 0 0 22px; font-size: 17px; line-height: 1.35; }
   .jn-copy p:last-child { margin-bottom: 0; }
   @media (max-width: 767.98px) {
-    .jn { padding-bottom: 80px; }
+    .jn { padding-top: 48px; padding-bottom: 80px; }
     .jn-box { grid-template-columns: 1fr; padding: 40px 24px 44px; }
     .jn-title { margin: 0 0 28px -12px; padding-right: 0; font-size: clamp(30px, 8.5cqw, 40px); }
   }
@@ -344,7 +345,7 @@
   .roles-intro .roles-title,
   .roles-intro .roles-lead { margin-inline: 24px; }   /* same 24px inset as the role columns' text */
   .role {
-    --bar: #a5f300;
+    --bar: #66bec9;                  /* all four cards: cyan */
     position: relative;
     display: flex;
     flex-direction: column;
@@ -387,7 +388,7 @@
   .roles { position: relative; padding: 0 0 160px; }
   .roles .roles-intro { padding: 56px 0 72px; }
   .roles .roles-title { max-width: 900px; margin-bottom: 0; }
-  .roles-row { row-gap: 48px; }   /* 2 x 2 (1 per row on phones), gray grid between the rows */
+  /* 2 x 2 (1 per row on phones); rows touch */
 
 
   /* ---------- Footer (from studies/footer.html) ----------
@@ -615,7 +616,7 @@
   .ch {
     position: relative;
     container-type: inline-size;
-    padding: max(calc(var(--bar-h) + 40px), 7.8cqw) 0 calc(10.6cqw + 64px);   /* lowest photo + 64px */
+    padding: max(calc(var(--bar-h) + 40px), 7.8cqw) 0 calc(10.6cqw + 40px);   /* lowest photo + 40px of grid */
     overflow: clip;
   }
   /* Static gray crosshairs on the Bootstrap container's column lines, rows every 100px */
@@ -769,7 +770,8 @@
       </div>
     </div>
   </section>
-
+</div>
+<div class="below-hero">
   <section class="jn" aria-labelledby="jnTitle">
     <div class="container">
       <div class="row">
