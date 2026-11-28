@@ -904,8 +904,10 @@
   .unit-media--stack video { min-height: 0; }
   .unit-media--stack video[src*="lens_of_eye"] { object-position: 50% 0%; }   /* top-aligned: the lens' outer curved edge stays in view */
   @media (max-width: 991.98px) {
-    .unit-media--stack { aspect-ratio: auto; }
-    .unit-media--stack video { aspect-ratio: 16 / 9; height: auto; }
+    /* Below desktop: the stack is half the desktop height (698px / 2 = 349px),
+       two videos of 174.5px each, cropped to fill like on desktop. */
+    .unit-media--stack { aspect-ratio: auto; height: 349px; }
+    .unit-media--stack video { height: 100%; }
   }
   .qa .qa-lead { margin: 0; padding: 0 0 18px; font: 700 17px/1.35 var(--font-sans); }   /* bold, paragraph size; same spacing in every group (beats .mj-extra p) */   /* plain line above the questions, no answer */
   .qa-item { border-bottom: 1px solid #fff; }
