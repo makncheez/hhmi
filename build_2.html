@@ -750,12 +750,15 @@
   }
   .mj-text { margin: 0; }            /* paragraph font: global 17px / 1.35 */
   .mj-text + .mj-text { margin-top: 1.35em; }   /* blank line between paragraphs */
-  /* Read More: inline at the end of the visible paragraph, like a word in the
-     sentence. Biology-panel label (15px uppercase, letter-spaced) + the Build 2
-     arrow pointing down; open = "Read Less", arrow up. It stays in place. */
+  /* Read More: on the line below the visible paragraph; it sits after the hidden
+     text, so once open "Read Less" follows the last paragraph. Biology-panel
+     label (15px uppercase, letter-spaced) + the Build 2 arrow: down to open, up to close. */
   .mj-inline-more {
-    display: inline;
-    margin-left: .3em;
+    display: flex;
+    align-items: center;
+    align-self: flex-start;          /* left-aligned with the text */
+    width: fit-content;
+    margin: 16px auto 0 0;
     padding: 0;
     border: 0;
     background: none;
@@ -763,11 +766,11 @@
     font: 400 15px/1 var(--font-sans);
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    white-space: nowrap;             /* label and arrow wrap together */
+    white-space: nowrap;
     cursor: pointer;
     transition: color .2s ease;
   }
-  .mj-inline-more svg { width: 18px; height: 19px; margin-left: 8px; vertical-align: -4px; transform: rotate(90deg); overflow: visible; }
+  .mj-inline-more svg { width: 18px; height: 19px; margin-left: 8px; margin-block: -2px; transform: rotate(90deg); overflow: visible; }
   .mj-inline-more svg path { stroke: currentColor; }
   .mj-inline-more[aria-expanded="true"] svg { transform: rotate(-90deg); }
   .mj-inline-more:hover, .mj-inline-more:focus-visible { color: #006b2a; }   /* dark green on the light background */
@@ -2103,7 +2106,7 @@
         </div>
         <div class="col-12 col-lg-4 mj-cell mj-head mj-rowm"><h3 class="mj-title">Journey</h3></div>
         <div class="col-12 col-lg-8 mj-cell mj-body mj-rowm">
-          <p class="mj-text">After centuries of investigation, scientists still cannot explain how the brain integrates sensory information, internal states, memories, and physiology to produce behaviors. Understanding the fundamental function of the brain is vital not only in its own right, but as the key to making real progress against brain disorders, like Alzheimer’s disease and depression, that impact hundreds of millions of people worldwide. <button class="mj-inline-more" type="button" aria-expanded="false" aria-controls="journeyMore"><span class="mj-more-label">Read More</span><span class="visually-hidden"> about the journey</span><svg viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round"/></svg></button></p>
+          <p class="mj-text">After centuries of investigation, scientists still cannot explain how the brain integrates sensory information, internal states, memories, and physiology to produce behaviors. Understanding the fundamental function of the brain is vital not only in its own right, but as the key to making real progress against brain disorders, like Alzheimer’s disease and depression, that impact hundreds of millions of people worldwide.</p>
           <div class="mj-extra mj-extra--cont" id="journeyMore">
             <div>
               <p>Janelia’s grand challenge is to build a mechanistic account connecting molecules, neural circuits, brain activity, and complex behavior in a whole animal in motion.</p>
@@ -2111,16 +2114,18 @@
               <p>Seizing the moment requires exactly what Janelia was built to provide: sustained support, shared infrastructure, interdisciplinary teams, and the time to ask the hard questions.</p>
             </div>
           </div>
+          <button class="mj-inline-more" type="button" aria-expanded="false" aria-controls="journeyMore"><span class="mj-more-label">Read More</span><span class="visually-hidden"> about the journey</span><svg viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
         </div>
         <div class="col-12 col-lg-4 mj-cell mj-head mj-row2"><h3 class="mj-title">Why</h3></div>
         <div class="col-12 col-lg-8 mj-cell mj-body mj-row2">
-          <p class="mj-text">With small labs and large ambitions, Janelia welcomes biologists, AI scientists, physicists, chemists, engineers, theorists, and computational scientists to work side by side on groundbreaking research. <button class="mj-inline-more" type="button" aria-expanded="false" aria-controls="whyMore"><span class="mj-more-label">Read More</span><span class="visually-hidden"> about why Janelia</span><svg viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round"/></svg></button></p>
+          <p class="mj-text">With small labs and large ambitions, Janelia welcomes biologists, AI scientists, physicists, chemists, engineers, theorists, and computational scientists to work side by side on groundbreaking research.</p>
           <div class="mj-extra mj-extra--cont" id="whyMore">
             <div>
               <p>Internal funding, expert technical teams, and world-class facilities are all on one campus, giving Janelia scientists the intellectual freedom to take on big risks, and the sustained support to see them through.</p>
               <p>Janelia’s three lead scientist roles — Principal Scientists, AI Scientists, and Group Leaders — bring complementary forms of scientific leadership and take intellectual responsibility for their work. All three feature stable internal funding and minimal administrative duties. Each spends their time doing science and working with collaborators across campus.</p>
             </div>
           </div>
+          <button class="mj-inline-more" type="button" aria-expanded="false" aria-controls="whyMore"><span class="mj-more-label">Read More</span><span class="visually-hidden"> about why Janelia</span><svg viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
         </div>
       </div>
     </div>
