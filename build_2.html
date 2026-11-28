@@ -750,16 +750,12 @@
   }
   .mj-text { margin: 0; }            /* paragraph font: global 17px / 1.35 */
   .mj-text + .mj-text { margin-top: 1.35em; }   /* blank line between paragraphs */
-  /* Read More: label + a 72px square arrow box tucked into the cell's
-     bottom-right corner (its right and bottom edges are the grid lines).
-     The arrow points down to expand and turns up to collapse. */
-  .mj-body:has(.mj-more) { padding-bottom: 90px; }   /* room for the corner box */
-  .mj-more {
-    position: absolute;
-    right: 0; bottom: 0;
-    display: flex;
-    align-items: center;
-    gap: 20px;
+  /* Read More: inline at the end of the visible paragraph, like a word in the
+     sentence. Biology-panel label (15px uppercase, letter-spaced) + the Build 2
+     arrow pointing down; open = "Read Less", arrow up. It stays in place. */
+  .mj-inline-more {
+    display: inline;
+    margin-left: .3em;
     padding: 0;
     border: 0;
     background: none;
@@ -767,21 +763,15 @@
     font: 400 15px/1 var(--font-sans);
     letter-spacing: 0.12em;
     text-transform: uppercase;
+    white-space: nowrap;             /* label and arrow wrap together */
     cursor: pointer;
+    transition: color .2s ease;
   }
-  .mj-more-box {
-    display: grid;
-    place-items: center;
-    width: 50px; height: 50px;
-    border-top: 1px solid #000;
-    border-left: 1px solid #000;
-  }
-  .mj-row2 .mj-more-box { border-bottom: 1px solid #000; }   /* last row has no row line below */
-  /* Plus (the grid crosshair, as in the Biology Q&A); open = minus */
-  .mj-more-box .qa-x { width: 20px; height: 20px; overflow: visible; }
-  .mj-more-box .qa-x path { stroke: currentColor; stroke-width: 1; vector-effect: non-scaling-stroke; }
-  .mj-more[aria-expanded="true"] .qa-x-v { display: none; }
-  .mj-more:hover, .mj-more:focus-visible { color: #006b2a; }   /* dark green on the light background */
+  .mj-inline-more svg { width: 18px; height: 19px; margin-left: 8px; vertical-align: -4px; transform: rotate(90deg); overflow: visible; }
+  .mj-inline-more svg path { stroke: currentColor; }
+  .mj-inline-more[aria-expanded="true"] svg { transform: rotate(-90deg); }
+  .mj-inline-more:hover, .mj-inline-more:focus-visible { color: #006b2a; }   /* dark green on the light background */
+  .mj-inline-more:focus-visible { outline: 2px solid #006b2a; outline-offset: 4px; }
   /* Expandable extra paragraphs: height animates 0 -> auto via grid rows */
   .mj-extra { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .45s ease; }
   .mj-extra > div { overflow: hidden; }
@@ -789,7 +779,6 @@
   .mj-extra p { margin: 1.35em 0 0; }   /* one blank line between paragraphs */
   .mj-extra--cont p:first-child { margin-top: 0; }   /* continues the visible sentence's paragraph */
   @media (prefers-reduced-motion: reduce) { .mj-extra { transition: none; } }
-  .mj-more:focus-visible { outline: 2px solid #006b2a; outline-offset: 4px; }
   @media (max-width: 991.98px) {
     .mj-head { align-items: flex-start; text-align: left; padding-bottom: 16px; }
     .mj-head::before { content: none; }          /* heading and its text read as one block */
@@ -2114,7 +2103,7 @@
         </div>
         <div class="col-12 col-lg-4 mj-cell mj-head mj-rowm"><h3 class="mj-title">Journey</h3></div>
         <div class="col-12 col-lg-8 mj-cell mj-body mj-rowm">
-          <p class="mj-text">After centuries of investigation, scientists still cannot explain how the brain integrates sensory information, internal states, memories, and physiology to produce behaviors. Understanding the fundamental function of the brain is vital not only in its own right, but as the key to making real progress against brain disorders, like Alzheimer’s disease and depression, that impact hundreds of millions of people worldwide.</p>
+          <p class="mj-text">After centuries of investigation, scientists still cannot explain how the brain integrates sensory information, internal states, memories, and physiology to produce behaviors. Understanding the fundamental function of the brain is vital not only in its own right, but as the key to making real progress against brain disorders, like Alzheimer’s disease and depression, that impact hundreds of millions of people worldwide. <button class="mj-inline-more" type="button" aria-expanded="false" aria-controls="journeyMore"><span class="mj-more-label">Read More</span><span class="visually-hidden"> about the journey</span><svg viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round"/></svg></button></p>
           <div class="mj-extra mj-extra--cont" id="journeyMore">
             <div>
               <p>Janelia’s grand challenge is to build a mechanistic account connecting molecules, neural circuits, brain activity, and complex behavior in a whole animal in motion.</p>
@@ -2122,18 +2111,16 @@
               <p>Seizing the moment requires exactly what Janelia was built to provide: sustained support, shared infrastructure, interdisciplinary teams, and the time to ask the hard questions.</p>
             </div>
           </div>
-          <button class="mj-more" type="button" aria-expanded="false" aria-controls="journeyMore"><span class="mj-more-label">Read More</span><span class="visually-hidden"> about the journey</span><span class="mj-more-box" aria-hidden="true"><svg class="qa-x" viewBox="-10 -10 20 20" fill="none" aria-hidden="true" shape-rendering="crispEdges"><path class="qa-x-v" d="M0 -10V-2.25M0 2.25V10"/><path d="M-10 0H-2.25M2.25 0H10"/></svg></span></button>
         </div>
         <div class="col-12 col-lg-4 mj-cell mj-head mj-row2"><h3 class="mj-title">Why</h3></div>
         <div class="col-12 col-lg-8 mj-cell mj-body mj-row2">
-          <p class="mj-text">With small labs and large ambitions, Janelia welcomes biologists, AI scientists, physicists, chemists, engineers, theorists, and computational scientists to work side by side on groundbreaking research.</p>
+          <p class="mj-text">With small labs and large ambitions, Janelia welcomes biologists, AI scientists, physicists, chemists, engineers, theorists, and computational scientists to work side by side on groundbreaking research. <button class="mj-inline-more" type="button" aria-expanded="false" aria-controls="whyMore"><span class="mj-more-label">Read More</span><span class="visually-hidden"> about why Janelia</span><svg viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round"/></svg></button></p>
           <div class="mj-extra mj-extra--cont" id="whyMore">
             <div>
               <p>Internal funding, expert technical teams, and world-class facilities are all on one campus, giving Janelia scientists the intellectual freedom to take on big risks, and the sustained support to see them through.</p>
               <p>Janelia’s three lead scientist roles — Principal Scientists, AI Scientists, and Group Leaders — bring complementary forms of scientific leadership and take intellectual responsibility for their work. All three feature stable internal funding and minimal administrative duties. Each spends their time doing science and working with collaborators across campus.</p>
             </div>
           </div>
-          <button class="mj-more" type="button" aria-expanded="false" aria-controls="whyMore"><span class="mj-more-label">Read More</span><span class="visually-hidden"> about why Janelia</span><span class="mj-more-box" aria-hidden="true"><svg class="qa-x" viewBox="-10 -10 20 20" fill="none" aria-hidden="true" shape-rendering="crispEdges"><path class="qa-x-v" d="M0 -10V-2.25M0 2.25V10"/><path d="M-10 0H-2.25M2.25 0H10"/></svg></span></button>
         </div>
       </div>
     </div>
@@ -2813,7 +2800,7 @@ document.querySelectorAll('.qa-q').forEach(function (q) {
 });
 
 // Mission / Journey: "Read More" buttons expand their extra paragraphs (and switch to "Read Less").
-document.querySelectorAll('button.mj-more, button.ul-more').forEach(function (btn) {   // also the units intro's Read More
+document.querySelectorAll('button.mj-inline-more, button.ul-more').forEach(function (btn) {   // Journey / Why, and the units' Read More
   var panel = document.getElementById(btn.getAttribute('aria-controls'));
   panel.inert = true;                                   // hidden text is skipped while collapsed
   btn.addEventListener('click', function () {
