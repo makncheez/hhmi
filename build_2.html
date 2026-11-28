@@ -907,7 +907,10 @@
     /* Below desktop: the stack is half the desktop height (698px / 2 = 349px),
        two videos of 174.5px each, cropped to fill like on desktop. */
     .unit-media--stack { aspect-ratio: auto; height: 349px; }
-    .unit-media--stack video { height: 100%; }
+    .unit-media--stack video { height: 100%; }    /* Below desktop: the videos come first, flush with the panel's top edge
+       (the frame's corner lines draw over them), then 56px, then the text. */
+    .unit-split { display: flex; flex-direction: column; padding-top: 0; padding-bottom: 56px; }
+    .unit-split > .unit-media { order: -1; margin-top: 0; margin-bottom: 56px; }
   }
   .qa .qa-lead { margin: 0; padding: 0 0 18px; font: 700 17px/1.35 var(--font-sans); }   /* bold, paragraph size; same spacing in every group (beats .mj-extra p) */   /* plain line above the questions, no answer */
   .qa-item { border-bottom: 1px solid #fff; }
