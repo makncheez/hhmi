@@ -330,19 +330,15 @@
   .units-lead { margin: 0; }
   .units-lead + .units-lead { margin-top: 1em; }
   .units-extra .units-lead { margin: 1em 0 0; }
-  .units-intro-cols { row-gap: 8px; }   /* stacked below 992px: heading, then text */
-  @media (min-width: 992px) { .units-intro-cols .units-title { margin-bottom: 0; } }
-  /* Read More: same label as the Mission/Journey one, with a small arrow
-     pointing down (up once open) and no box. */
+  .units-intro-cols { row-gap: 8px; }   /* stacked below 576px: heading, then text */
+  @media (min-width: 576px) { .units-intro-cols .units-title { margin-bottom: 0; } }
+  /* Read More (site rule): text only, no arrow or box. Read More / Read Less. */
   .ul-more {
     display: inline-flex; align-items: center; gap: 12px;
     margin-top: 22px; padding: 0; border: 0; background: none;
     color: #fff; font: 400 15px/1 var(--font-sans); letter-spacing: 0.12em; text-transform: uppercase;
     cursor: pointer; transition: color .2s ease;
   }
-  .ul-more svg { width: 24px; height: 25px; transform: rotate(90deg); margin-block: -5px; }   /* negative margin: the bigger arrow doesn't shift the label off the tabs' baseline */   /* flips instantly, no spin */
-  .ul-more svg path { stroke: currentColor; }
-  .ul-more[aria-expanded="true"] svg { transform: rotate(-90deg); }
   .ul-more:hover, .ul-more:focus-visible { color: #7DE050; }
   .ul-more:focus-visible { outline: 2px solid #7DE050; outline-offset: 4px; }
   .units-tabs {                      /* tab labels at the heading's size; tabs scale with it (em) */
@@ -754,7 +750,7 @@
   .mj-text + .mj-text { margin-top: 1.35em; }   /* blank line between paragraphs */
   /* Read More: on the line below the visible paragraph; it sits after the hidden
      text, so once open "Read Less" follows the last paragraph. Biology-panel
-     label (15px uppercase, letter-spaced) + the Build 2 arrow: down to open, up to close. */
+     label (15px uppercase, letter-spaced), text only (site rule: no arrow). */
   .mj-inline-more {
     display: flex;
     align-items: center;
@@ -772,9 +768,6 @@
     cursor: pointer;
     transition: color .2s ease;
   }
-  .mj-inline-more svg { width: 18px; height: 19px; margin-left: 8px; margin-block: -2px; transform: rotate(90deg); overflow: visible; }
-  .mj-inline-more svg path { stroke: currentColor; }
-  .mj-inline-more[aria-expanded="true"] svg { transform: rotate(-90deg); }
   .mj-inline-more:hover, .mj-inline-more:focus-visible { color: #006b2a; }   /* dark green on the light background */
   .mj-inline-more:focus-visible { outline: 2px solid #006b2a; outline-offset: 4px; }
   /* Expandable extra paragraphs: height animates 0 -> auto via grid rows */
@@ -1794,18 +1787,18 @@
         </div>
     </div></div>
     <div class="container units-intro-wrap"><div class="row">
-        <div class="col-12 col-lg-8 offset-lg-2 units-intro">   <!-- same 8 columns, split in two: heading | text -->
+        <div class="col-12 col-lg-8 offset-lg-2 units-intro">   <!-- same 8 columns, split in two from 576px: heading | text -->
           <div class="row units-intro-cols">
-            <div class="col-12 col-lg-6">
+            <div class="col-12 col-sm-6">
               <h2 class="units-title" id="unitsTitle">Four units.<br>Connected scientific work.</h2>
             </div>
-            <div class="col-12 col-lg-6">
+            <div class="col-12 col-sm-6">
               <p class="units-lead">Integrated teams of biologists, theorists, tool builders and AI researchers work together to pursue Janelia’s overarching mission and move biological discoveries forward across HHMI and in the larger scientific community.</p>
               <div class="mj-extra units-extra" id="unitsMore"><div>
                 <p class="units-lead">Biology pursues the central scientific research questions at the heart of Janelia’s mission. Theory@HHMI guides these questions, developing conceptual frameworks that can be tested in the lab. Tools@HHMI enables this work, building the microscopes, molecular tools, and instruments that drive biological discovery. AI@HHMI powers this research, creating AI systems that help scientists analyze and understand their data and eventually design and run experiments as well.</p>
                 <p class="units-lead">Theory, Tools, and AI set their research priorities in dialogue with Biology’s scientific questions, and with one another. Together, they operate as a single, integrated enterprise united by and working toward a common vision.</p>
               </div></div>
-              <button class="ul-more" type="button" aria-expanded="false" aria-controls="unitsMore"><span class="mj-more-label">Read More</span><span class="visually-hidden"> about the four units</span><svg viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+              <button class="ul-more" type="button" aria-expanded="false" aria-controls="unitsMore"><span class="mj-more-label">Read More</span><span class="visually-hidden"> about the four units</span></button>
             </div>
           </div>
         </div>
@@ -1875,7 +1868,7 @@
               </div>
             </div></div>
             <div class="qa-foot">
-              <button class="ul-more qa-more-btn" type="button" aria-expanded="false" aria-controls="bioMore"><span class="mj-more-label">Read More</span><span class="visually-hidden"> Biology questions</span><svg viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+              <button class="ul-more qa-more-btn" type="button" aria-expanded="false" aria-controls="bioMore"><span class="mj-more-label">Read More</span><span class="visually-hidden"> Biology questions</span></button>
               <a class="qa-roles">View Open Roles<span class="visually-hidden"> in Biology</span></a>
             </div>
           </div>
@@ -1950,7 +1943,7 @@
               </div>
             </div></div>
             <div class="qa-foot">
-              <button class="ul-more qa-more-btn" type="button" aria-expanded="false" aria-controls="aiMore"><span class="mj-more-label">Read More</span><span class="visually-hidden"> AI@HHMI questions</span><svg viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+              <button class="ul-more qa-more-btn" type="button" aria-expanded="false" aria-controls="aiMore"><span class="mj-more-label">Read More</span><span class="visually-hidden"> AI@HHMI questions</span></button>
               <a class="qa-roles">View Open Roles<span class="visually-hidden"> in AI@HHMI</span></a>
             </div>
           </div>
@@ -2018,7 +2011,7 @@
               </div>
             </div></div>
             <div class="qa-foot">
-              <button class="ul-more qa-more-btn" type="button" aria-expanded="false" aria-controls="toolMore"><span class="mj-more-label">Read More</span><span class="visually-hidden"> Tools@HHMI questions</span><svg viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+              <button class="ul-more qa-more-btn" type="button" aria-expanded="false" aria-controls="toolMore"><span class="mj-more-label">Read More</span><span class="visually-hidden"> Tools@HHMI questions</span></button>
               <a class="qa-roles">View Open Roles<span class="visually-hidden"> in Tools@HHMI</span></a>
             </div>
           </div>
@@ -2093,7 +2086,7 @@
               </div>
             </div></div>
             <div class="qa-foot">
-              <button class="ul-more qa-more-btn" type="button" aria-expanded="false" aria-controls="theoryMore"><span class="mj-more-label">Read More</span><span class="visually-hidden"> Theory@HHMI questions</span><svg viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+              <button class="ul-more qa-more-btn" type="button" aria-expanded="false" aria-controls="theoryMore"><span class="mj-more-label">Read More</span><span class="visually-hidden"> Theory@HHMI questions</span></button>
               <a class="qa-roles">View Open Roles<span class="visually-hidden"> in Theory@HHMI</span></a>
             </div>
           </div>
@@ -2131,7 +2124,7 @@
               <p>Seizing the moment requires exactly what Janelia was built to provide: sustained support, shared infrastructure, interdisciplinary teams, and the time to ask the hard questions.</p>
             </div>
           </div>
-          <button class="mj-inline-more" type="button" aria-expanded="false" aria-controls="journeyMore"><span class="mj-more-label">Read More</span><span class="visually-hidden"> about the journey</span><svg viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          <button class="mj-inline-more" type="button" aria-expanded="false" aria-controls="journeyMore"><span class="mj-more-label">Read More</span><span class="visually-hidden"> about the journey</span></button>
         </div>
         <div class="col-12 col-lg-4 mj-cell mj-head mj-row2"><h3 class="mj-title">Why</h3></div>
         <div class="col-12 col-lg-8 mj-cell mj-body mj-row2">
@@ -2142,7 +2135,7 @@
               <p>Janelia’s three lead scientist roles — Principal Scientists, AI Scientists, and Group Leaders — bring complementary forms of scientific leadership and take intellectual responsibility for their work. All three feature stable internal funding and minimal administrative duties. Each spends their time doing science and working with collaborators across campus.</p>
             </div>
           </div>
-          <button class="mj-inline-more" type="button" aria-expanded="false" aria-controls="whyMore"><span class="mj-more-label">Read More</span><span class="visually-hidden"> about why Janelia</span><svg viewBox="0 0 34 36" fill="none" aria-hidden="true"><path d="M0.79 18H23" stroke-width="1.58073" stroke-linecap="round"/><path transform="translate(15 0.18)" d="M0.790405 0.790186L17.8133 17.8131L0.790405 34.8359" stroke-width="1.58073" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          <button class="mj-inline-more" type="button" aria-expanded="false" aria-controls="whyMore"><span class="mj-more-label">Read More</span><span class="visually-hidden"> about why Janelia</span></button>
         </div>
       </div>
     </div>
